@@ -1,44 +1,37 @@
 package com.sahur.fitptadmin.db.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Getter
-@Builder
-@Table(name = "trainer")
 @Entity
+@Table(name = "trainer")
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Trainer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "trainer_id", nullable = false)
-    private Long id;
+    @Column(name = "trainer_id")
+    private Long trainerId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "gym_id", nullable = false)
-    private Gym gym;
+    @JoinColumn(name = "admin_id", nullable = false)
+    private Admin admin;
 
-    @Size(max = 255)
-    @NotNull
     @Column(name = "trainer_name", nullable = false)
     private String trainerName;
 
-    @Size(max = 255)
-    @NotNull
     @Column(name = "trainer_login_id", nullable = false)
     private String trainerLoginId;
 
-    @Size(max = 255)
-    @NotNull
     @Column(name = "trainer_pw", nullable = false)
     private String trainerPw;
 
-    @OneToMany(mappedBy = "users")
-    private List<Users> users;
-
+    @OneToMany(mappedBy = "trainer")
+    private List<Member> members = new ArrayList<>();
 }

@@ -12,48 +12,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "composition_log")
+@Table(name = "report")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CompositionLog {
+public class Report {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "composition_log_id")
-    private Long compositionLogId;
+    @Column(name = "report_id")
+    private Long reportId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "composition_log_id", nullable = false)
+    private CompositionLog compositionLog;
+
+    @Column(name = "report_context")
+    private String reportContext;
+
     @CreationTimestamp
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @Column(name = "protein")
-    private Float protein;
-
-    @Column(name = "bmr")
-    private Float bmr;
-
-    @Column(name = "mineral")
-    private Float mineral;
-
-    @Column(name = "body_age")
-    private Integer bodyAge;
-
-    @Column(name = "smm")
-    private Float smm;
-
-    @Column(name = "icw")
-    private Float icw;
-
-    @Column(name = "ecw")
-    private Float ecw;
-
-    @Column(name = "bfm")
-    private Float bfm;
-
-    @Column(name = "bfp")
-    private Float bfp;
+    @Column(name = "exercise")
+    private String exercise;
 }
