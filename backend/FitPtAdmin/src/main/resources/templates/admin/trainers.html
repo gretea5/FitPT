@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+
+<head>
+    <title>트레이너 목록</title>
+    <style>
+
+        * {
+            caret-color: transparent;   /* 커서 깜빡임 제거 */
+            user-select: none;          /* 텍스트 드래그 방지 */
+        }
+
+        h2 {
+            font-weight: 700;
+            font-size: 1.75rem;
+            color: #343a40;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #D24726;
+            padding-bottom: 0.5rem;
+        }
+
+        .table thead {
+            background-color: #f1f1f1;
+        }
+
+        .table th {
+            color: #6c757d;
+            font-weight: 600;
+        }
+
+        td {
+            user-select: none;         /* 텍스트 드래그 금지 */
+            caret-color: transparent;  /* 커서 색 제거 → 커서 숨김 효과 */
+        }
+        td:focus {
+            outline: none;             /* 포커스 시 외곽선 제거 */
+        }
+
+        .table-hover tbody tr:hover {
+            background-color: rgba(210, 71, 38, 0.08); /* #D24726 약한 강조 */
+        }
+
+        .no-data {
+            text-align: center;
+            color: #888;
+            padding: 40px 0;
+            font-style: italic;
+        }
+
+        @media (max-width: 576px) {
+            .table thead {
+                display: none;
+            }
+
+            .table tbody td {
+                display: block;
+                width: 100%;
+                text-align: left;
+                padding-left: 50%;
+                position: relative;
+            }
+
+            .table tbody td::before {
+                position: absolute;
+                left: 1rem;
+                top: 0.75rem;
+                font-weight: bold;
+                white-space: nowrap;
+            }
+
+            .table tbody tr td:nth-child(1)::before {
+                content: "번호";
+            }
+            .table tbody tr td:nth-child(2)::before {
+                content: "트레이너 이름";
+            }
+            .table tbody tr td:nth-child(3)::before {
+                content: "로그인 아이디";
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<section layout:fragment="content">
+    <h2>트레이너 목록</h2>
+
+    <div th:if="${#lists.isEmpty(trainers)}" class="no-data">
+        등록된 트레이너가 없습니다.
+    </div>
+
+    <div th:if="${not #lists.isEmpty(trainers)}" class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead class="table-light">
+            <tr>
+                <th scope="col">번호</th>
+                <th scope="col">트레이너 이름</th>
+                <th scope="col">로그인 아이디</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="trainer, iterStat : ${trainers}">
+                <td th:text="${iterStat.index + 1}"></td>
+                <td th:text="${trainer.trainerName}"></td>
+                <td th:text="${trainer.trainerLoginId}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+</body>
+</html>
