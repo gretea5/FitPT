@@ -3,6 +3,7 @@ package com.sahur.fitptadmin.db.entity;
 import com.sahur.fitptadmin.domain.trainer.dto.TrainerUpdateRequestDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -15,6 +16,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Trainer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

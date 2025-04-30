@@ -1,7 +1,10 @@
 package com.sahur.fitptadmin.domain.trainer.service;
 
+import com.sahur.fitptadmin.db.entity.Admin;
 import com.sahur.fitptadmin.db.entity.Trainer;
+import com.sahur.fitptadmin.db.repository.AdminRepository;
 import com.sahur.fitptadmin.db.repository.TrainerRepository;
+import com.sahur.fitptadmin.domain.trainer.dto.TrainerRegisterDto;
 import com.sahur.fitptadmin.domain.trainer.dto.TrainerResponseDto;
 import com.sahur.fitptadmin.domain.trainer.dto.TrainerUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +21,7 @@ import java.util.List;
 public class TrainerServiceImpl implements TrainerService {
 
     private final TrainerRepository trainerRepository;
+    private final AdminRepository adminRepository;
 
     @Override
     public List<TrainerResponseDto> getTrainers(Long adminId) {
@@ -31,6 +35,31 @@ public class TrainerServiceImpl implements TrainerService {
                         .trainerBirthday(trainer.getTrainerBirthDate()) // 필드명이 DTO에 맞게 수정
                         .build())
                 .toList();
+    }
+
+    @Override
+    public Long registerTrainer(TrainerRegisterDto trainerRegisterDto) {
+
+        // 트레이너 ID 중복 검사
+        if (trainerRepository.existsByTrainerLoginId(trainerRegisterDto.getTrainerLoginId())) {
+            throw new IllegalArgumentException("이미 존재하는 로그인 ID입니다.");
+        }
+
+        // 관리자 조회
+        Admin admin = adminRepository.findById(trainerRegisterDto.getAdminId())
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 관리자입니다."));
+
+        Trainer trainer = Trainer.builder()
+                .trainerLoginId(trainerRegisterDto.getTrainerLoginId())
+                .trainerPw(trainerRegisterDto.getTrainerPw())
+                .trainerName(trainerRegisterDto.getTrainerName())
+                .trainerBirthDate(trainerRegisterDto.getTrainerBirthDay())
+                .admin(admin)
+                .build();
+
+        trainerRepository.save(trainer);
+
+        return trainer.getTrainerId();
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.sahur.fitptadmin.domain.trainer.controller;
 
 import com.sahur.fitptadmin.core.constant.SessionConst;
 import com.sahur.fitptadmin.db.entity.Trainer;
+import com.sahur.fitptadmin.domain.trainer.dto.TrainerRegisterDto;
 import com.sahur.fitptadmin.domain.trainer.dto.TrainerResponseDto;
 import com.sahur.fitptadmin.domain.trainer.dto.TrainerUpdateRequestDto;
 import com.sahur.fitptadmin.domain.trainer.service.TrainerService;
@@ -39,6 +40,19 @@ public class TrainerController {
 
         // trainers.html 뷰로 이동
         return "admin/trainers";
+    }
+
+    @PostMapping("/trainers")
+    public String registerTrainer(@ModelAttribute TrainerRegisterDto trainerRegisterDto) {
+        Long adminId = (Long) session.getAttribute(SessionConst.LOGIN_ADMIN_ID);
+
+        if (adminId == null) {
+            throw new IllegalStateException("로그인된 관리자 정보가 없습니다.");
+        }
+
+        trainerRegisterDto.setAdminId(adminId);
+        trainerService.registerTrainer(trainerRegisterDto);
+        return "redirect:/admin/trainers";
     }
 
     @PostMapping("/trainers/{trainerId}")

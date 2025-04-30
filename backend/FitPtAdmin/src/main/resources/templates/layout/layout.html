@@ -4,16 +4,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>관리자 페이지</title>
+    <link rel="icon" type="image/png" th:href="@{/favicon.png}" />
+    <title>FitPT 관리자</title>
 
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <!-- Custom 스타일 -->
     <style>
         :root {
             --main-color: #D24726;
             --main-hover: #b63e21;
+            --sub-color: #FEEADF;
         }
 
         body {
@@ -72,7 +75,11 @@
 
 <nav class="navbar navbar-expand-lg navbar-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">FitPt 관리자</a>
+        <a class="navbar-brand d-flex align-items-center" href="#">
+            <i class="fas fa-dumbbell me-2"></i>
+            FitPt 관리자
+        </a>
+
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
                 aria-label="Toggle navigation">

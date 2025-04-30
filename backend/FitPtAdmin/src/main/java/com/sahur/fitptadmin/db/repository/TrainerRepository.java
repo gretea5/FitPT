@@ -10,4 +10,6 @@ import java.util.List;
 public interface TrainerRepository extends JpaRepository<Trainer,Long> {
 
     List<Trainer> findByAdmin_AdminId(Long adminId);
+
+    boolean existsByTrainerLoginId(String trainerLoginId);
 }

@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/layout}">
+<meta charset="UTF-8">
 
 <head>
     <title>트레이너 목록</title>
@@ -103,7 +104,49 @@
 <body>
 
 <section layout:fragment="content">
-    <h2>트레이너 목록</h2>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="mb-0">트레이너 목록</h2>
+        <button type="button" class="btn btn-primary px-4"
+                style="background-color: #D24726; border: none;"
+                data-bs-toggle="modal" data-bs-target="#createTrainerModal">
+            + 신규 트레이너 등록
+        </button>
+    </div>
+
+    <!-- 신규 등록 모달 -->
+    <div class="modal fade" id="createTrainerModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content rounded-4 border-0 shadow">
+                <form th:action="@{/admin/trainers}" method="post">
+                    <div class="modal-header">
+                        <h5 class="modal-title">트레이너 등록</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label">이름</label>
+                            <input type="text" name="trainerName" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">생년월일</label>
+                            <input type="date" name="trainerBirthDay" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">로그인 ID</label>
+                            <input type="text" name="trainerLoginId" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">비밀번호</label>
+                            <input type="password" name="trainerPw" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" style="background-color: #D24726;">등록</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
     <div th:if="${#lists.isEmpty(trainers)}" class="no-data">
         등록된 트레이너가 없습니다.
