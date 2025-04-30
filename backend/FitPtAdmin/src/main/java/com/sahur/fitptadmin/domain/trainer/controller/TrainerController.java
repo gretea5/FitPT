@@ -3,16 +3,18 @@ package com.sahur.fitptadmin.domain.trainer.controller;
 import com.sahur.fitptadmin.core.constant.SessionConst;
 import com.sahur.fitptadmin.db.entity.Trainer;
 import com.sahur.fitptadmin.domain.trainer.dto.TrainerResponseDto;
+import com.sahur.fitptadmin.domain.trainer.dto.TrainerUpdateRequestDto;
 import com.sahur.fitptadmin.domain.trainer.service.TrainerService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @Controller
 @RequestMapping("/admin")
 @RequiredArgsConstructor
@@ -39,4 +41,11 @@ public class TrainerController {
         return "admin/trainers";
     }
 
+    @PostMapping("/trainers/{trainerId}")
+    public String updateTrainer(@PathVariable Long trainerId,
+                                @ModelAttribute TrainerUpdateRequestDto dto) {
+
+        trainerService.updateTrainerInfo(trainerId, dto);
+        return "redirect:/admin/trainers";
+    }
 }

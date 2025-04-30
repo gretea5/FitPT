@@ -1,5 +1,6 @@
 package com.sahur.fitptadmin.db.entity;
 
+import com.sahur.fitptadmin.domain.trainer.dto.TrainerUpdateRequestDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -33,9 +34,15 @@ public class Trainer {
     @Column(name = "trainer_pw", nullable = false)
     private String trainerPw;
 
-    @Column(name = "trainer_birth_date")  // ✅ 생년월일 필드
+    @Column(name = "trainer_birth_date")
     private LocalDate trainerBirthDate;
 
     @OneToMany(mappedBy = "trainer")
     private List<Member> members = new ArrayList<>();
+
+    public void updateTrainerInfo(String trainerName, LocalDate birthDate) {
+        this.trainerName = trainerName;
+        this.trainerBirthDate = birthDate;
+    }
+
 }
