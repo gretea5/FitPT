@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "trainer")
 @Getter
@@ -28,4 +31,7 @@ public class Trainer {
 
     @Column(name = "trainer_pw", nullable = false)
     private String trainerPw;
+
+    @OneToMany(mappedBy = "trainer")
+    private List<Schedule> schedules = new ArrayList<>();
 }

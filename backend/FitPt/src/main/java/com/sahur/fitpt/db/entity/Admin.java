@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "admin")
 @Getter
@@ -27,4 +30,10 @@ public class Admin {
 
     @Column(name = "gym_addr")
     private String gymAddr;
+
+    @OneToMany(mappedBy = "admin")
+    private List<Schedule> trainers = new ArrayList<>();
+
+    @OneToMany(mappedBy = "admin")
+    private List<Schedule> members = new ArrayList<>();
 }

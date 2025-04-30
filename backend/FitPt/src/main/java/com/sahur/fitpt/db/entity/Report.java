@@ -8,6 +8,8 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "report")
@@ -31,11 +33,13 @@ public class Report {
     @Column(name = "report_context")
     private String reportContext;
 
-    @ColumnDefault("CURRENT_TIMESTAMP")
     @CreationTimestamp
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     @Column(name = "exercise")
     private String exercise;
+
+    @OneToMany(mappedBy = "report")
+    private List<FcmToken> reportExercises = new ArrayList<>();
 }

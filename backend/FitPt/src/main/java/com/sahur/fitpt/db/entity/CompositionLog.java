@@ -24,7 +24,6 @@ public class CompositionLog {
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
-    @ColumnDefault("CURRENT_TIMESTAMP")
     @CreationTimestamp
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
@@ -55,4 +54,5 @@ public class CompositionLog {
 
     @Column(name = "bfp")
     private Float bfp;
+
 }
