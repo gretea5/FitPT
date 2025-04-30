@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "report_detail")
+@Table(name = "report_exercise")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,7 +17,7 @@ public class ReportExercise {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "report_exercise_id", nullable = false)
-    private Long muscleExerciseId;
+    private Long reportExerciseId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "report_id", nullable = false)
@@ -26,11 +26,11 @@ public class ReportExercise {
     @Column(name = "exercise_name")
     private String exerciseName;
 
-    @Column(name = "exercise_level")
-    private Integer exerciseLevel;
+    @Column(name = "exercise_levelachievement")
+    private Integer exerciseAchievement;
 
-    @Column(name = "exercise_explanation")
-    private String exerciseExplanation;
+    @Column(name = "exercise_comment")
+    private String exerciseComment;
 
     @OneToMany(mappedBy = "reportExercise")
     private List<WorkoutMuscle> workoutMuscles = new ArrayList<>();

@@ -16,9 +16,9 @@ public class WorkoutMuscle {
     private Long workMuscleId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "report_exercise_id", nullable = false)
+    @JoinColumn(name = "report_exercise_id")
     private ReportExercise reportExercise;
 
-    @Column(name = "activation_muscle_id" , nullable = false)
+    @Column(name = "activation_muscle_id")
     private Long activationMuscleId;
 }

@@ -32,8 +32,8 @@ public class Admin {
     private String gymAddr;
 
     @OneToMany(mappedBy = "admin")
-    private List<Schedule> trainers = new ArrayList<>();
+    private List<Trainer> trainers = new ArrayList<>();
 
     @OneToMany(mappedBy = "admin")
-    private List<Schedule> members = new ArrayList<>();
+    private List<Member> members = new ArrayList<>();
 }

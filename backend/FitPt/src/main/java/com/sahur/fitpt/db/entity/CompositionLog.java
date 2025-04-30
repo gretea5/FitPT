@@ -54,5 +54,4 @@ public class CompositionLog {
 
     @Column(name = "bfp")
     private Float bfp;
-
 }

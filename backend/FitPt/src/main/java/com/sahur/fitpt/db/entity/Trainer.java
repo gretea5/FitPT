@@ -20,7 +20,7 @@ public class Trainer {
     private Long trainerId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "admin_id", nullable = false)
+    @JoinColumn(name = "admin_id")
     private Admin admin;
 
     @Column(name = "trainer_name", nullable = false)

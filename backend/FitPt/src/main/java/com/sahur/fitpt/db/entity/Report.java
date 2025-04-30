@@ -30,16 +30,13 @@ public class Report {
     @JoinColumn(name = "composition_log_id", nullable = false)
     private CompositionLog compositionLog;
 
-    @Column(name = "report_context")
-    private String reportContext;
+    @Column(name = "report_comment")
+    private String reportComment;
 
     @CreationTimestamp
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @Column(name = "exercise")
-    private String exercise;
-
     @OneToMany(mappedBy = "report")
-    private List<FcmToken> reportExercises = new ArrayList<>();
+    private List<ReportExercise> reportExercises = new ArrayList<>();
 }
