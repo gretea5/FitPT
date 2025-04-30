@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +32,9 @@ public class Trainer {
 
     @Column(name = "trainer_pw", nullable = false)
     private String trainerPw;
+
+    @Column(name = "trainer_birth_date")  // ✅ 생년월일 필드
+    private LocalDate trainerBirthDate;
 
     @OneToMany(mappedBy = "trainer")
     private List<Member> members = new ArrayList<>();

@@ -2,6 +2,7 @@ package com.sahur.fitptadmin.domain.trainer.controller;
 
 import com.sahur.fitptadmin.core.constant.SessionConst;
 import com.sahur.fitptadmin.db.entity.Trainer;
+import com.sahur.fitptadmin.domain.trainer.dto.TrainerResponseDto;
 import com.sahur.fitptadmin.domain.trainer.service.TrainerService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +31,7 @@ public class TrainerController {
             return "admin/login";
         }
         // 소속 트레이너 리스트 조회
-        List<Trainer> trainerList = trainerService.getTrainers(adminId);
+        List<TrainerResponseDto> trainerList = trainerService.getTrainers(adminId);
 
         model.addAttribute("trainers", trainerList);
 

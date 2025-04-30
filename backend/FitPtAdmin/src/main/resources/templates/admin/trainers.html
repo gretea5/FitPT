@@ -8,8 +8,8 @@
     <style>
 
         * {
-            caret-color: transparent;   /* 커서 깜빡임 제거 */
-            user-select: none;          /* 텍스트 드래그 방지 */
+            caret-color: transparent; /* 커서 깜빡임 제거 */
+            user-select: none; /* 텍스트 드래그 방지 */
         }
 
         h2 {
@@ -31,11 +31,12 @@
         }
 
         td {
-            user-select: none;         /* 텍스트 드래그 금지 */
-            caret-color: transparent;  /* 커서 색 제거 → 커서 숨김 효과 */
+            user-select: none; /* 텍스트 드래그 금지 */
+            caret-color: transparent; /* 커서 색 제거 → 커서 숨김 효과 */
         }
+
         td:focus {
-            outline: none;             /* 포커스 시 외곽선 제거 */
+            outline: none; /* 포커스 시 외곽선 제거 */
         }
 
         .table-hover tbody tr:hover {
@@ -73,13 +74,29 @@
             .table tbody tr td:nth-child(1)::before {
                 content: "번호";
             }
+
             .table tbody tr td:nth-child(2)::before {
                 content: "트레이너 이름";
             }
+
             .table tbody tr td:nth-child(3)::before {
                 content: "로그인 아이디";
             }
         }
+
+        .modal-content {
+            transition: transform 0.3s ease;
+        }
+
+        .modal-content:hover {
+            transform: scale(1.01);
+        }
+
+        .form-control:focus {
+            border-color: #D24726;
+            box-shadow: 0 0 0 0.2rem rgba(210, 71, 38, 0.25);
+        }
+
     </style>
 </head>
 
@@ -98,14 +115,84 @@
             <tr>
                 <th scope="col">번호</th>
                 <th scope="col">트레이너 이름</th>
-                <th scope="col">로그인 아이디</th>
+                <th scope="col">생년월일</th>
+                <th scope="col">관리</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="trainer, iterStat : ${trainers}">
                 <td th:text="${iterStat.index + 1}"></td>
                 <td th:text="${trainer.trainerName}"></td>
-                <td th:text="${trainer.trainerLoginId}"></td>
+                <td th:text="${trainer.trainerBirthday}"></td>
+                <td>
+                    <div class="d-flex gap-2">
+                        <!-- 수정 버튼 (모달 오픈) -->
+                        <button type="button"
+                                class="btn btn-sm btn-outline-primary"
+                                data-bs-toggle="modal"
+                                th:attr="data-bs-target='#editTrainerModal__' + ${trainer.trainerId}">
+                            수정
+                        </button>
+
+                        <!-- 삭제 -->
+                        <form th:action="@{/admin/trainers/{id}/delete(id=${trainer.trainerId})}" method="post"
+                              onsubmit="return confirm('정말 삭제하시겠습니까?')">
+                            <button type="submit" class="btn btn-sm btn-outline-danger">삭제</button>
+                        </form>
+                    </div>
+
+                    <!-- 수정 모달 -->
+                    <div class="modal fade"
+                         th:id="'editTrainerModal__' + ${trainer.trainerId}"
+                         tabindex="-1"
+                         aria-labelledby="editTrainerLabel"
+                         aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content rounded-4 border-0 shadow">
+
+                                <form th:action="@{/admin/trainers/update}" method="post">
+                                    <div class="modal-header border-bottom-0 pb-0">
+                                        <h5 class="modal-title fw-bold text-dark">트레이너 정보 수정</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="닫기"></button>
+                                    </div>
+
+                                    <div class="modal-body pt-1">
+                                        <!-- ID (hidden) -->
+                                        <input type="hidden" name="trainerId" th:value="${trainer.trainerId}"/>
+
+                                        <!-- 이름 -->
+                                        <div class="mb-3">
+                                            <label for="trainerName" class="form-label text-dark">이름</label>
+                                            <input type="text" class="form-control rounded-3"
+                                                   name="trainerName"
+                                                   th:value="${trainer.trainerName}" required>
+                                        </div>
+
+                                        <!-- 생년월일 -->
+                                        <div class="mb-3">
+                                            <label for="birthDate" class="form-label text-dark">생년월일</label>
+                                            <input type="date" class="form-control rounded-3"
+                                                   name="birthDate"
+                                                   th:value="${trainer.trainerBirthday}" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="modal-footer border-top-0 pt-0 d-flex justify-content-between">
+                                        <button type="button" class="btn btn-outline-secondary rounded-3 px-4"
+                                                data-bs-dismiss="modal">닫기
+                                        </button>
+                                        <button type="submit" class="btn btn-primary rounded-3 px-4"
+                                                style="background-color: #D24726; border: none;">
+                                            저장
+                                        </button>
+                                    </div>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                </td>
             </tr>
             </tbody>
         </table>
