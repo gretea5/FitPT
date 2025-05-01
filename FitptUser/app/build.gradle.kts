@@ -1,9 +1,16 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
 }
+
+val properties = Properties().apply {
+    load(rootProject.file("apikey.properties").inputStream())
+}
+val serverurl: String = properties.getProperty("base_url") ?: ""
 
 android {
     namespace = "com.ssafy.fitptuser"
@@ -17,6 +24,8 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "BASE_URL", serverurl)
     }
 
     buildTypes {

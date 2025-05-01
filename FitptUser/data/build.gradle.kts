@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
@@ -5,6 +7,12 @@ plugins {
     id("com.google.dagger.hilt.android")
     id("kotlin-parcelize")
 }
+
+val properties = Properties().apply {
+    load(rootProject.file("apikey.properties").inputStream())
+}
+
+val baseUrl: String = properties.getProperty("base_url") ?: ""
 
 android {
     namespace = "com.ssafy.data"
@@ -14,6 +22,8 @@ android {
         minSdk = 24
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+
+        buildConfigField("String", "BASE_URL", baseUrl)
     }
 
     buildTypes {
@@ -31,6 +41,9 @@ android {
     }
     kotlinOptions {
         jvmTarget = "11"
+    }
+    buildFeatures {
+        buildConfig = true
     }
 }
 
@@ -60,6 +73,10 @@ dependencies {
     //dagger와 hilt
     implementation("com.google.dagger:hilt-android:2.51.1")
     kapt("com.google.dagger:hilt-android-compiler:2.51.1")
+
+    // Logging-Interceptor
+    implementation("com.squareup.okhttp3:okhttp-urlconnection:4.10.0")
+    implementation ("com.squareup.okhttp3:logging-interceptor:4.10.0")
 }
 
 kapt {

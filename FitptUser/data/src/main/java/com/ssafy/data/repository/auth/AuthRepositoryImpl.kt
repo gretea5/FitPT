@@ -9,7 +9,7 @@ import com.ssafy.data.network.request.UserLoginRequest
 import com.ssafy.data.network.response.JwtTokenResponse.Companion.toDomainModel
 import com.ssafy.domain.model.auth.JwtToken
 import com.ssafy.domain.model.base.ResponseStatus
-import com.ssafy.domain.repository.AuthRepository
+import com.ssafy.domain.repository.auth.AuthRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.collect

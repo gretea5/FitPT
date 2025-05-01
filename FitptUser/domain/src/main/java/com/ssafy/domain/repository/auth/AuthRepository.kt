@@ -1,4 +1,4 @@
-package com.ssafy.domain.repository
+package com.ssafy.domain.repository.auth
 
 import com.ssafy.domain.model.auth.JwtToken
 import com.ssafy.domain.model.base.ResponseStatus
