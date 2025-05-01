@@ -10,5 +10,27 @@
         android:id="@+id/loginFragment"
         android:name="com.ssafy.presentation.login.LoginFragment"
         android:label="LoginFragment"
-        tools:layout="@layout/fragment_login"  />
+        tools:layout="@layout/fragment_login"  >
+        <action
+            android:id="@+id/action_loginFragment_to_registerUserInfoFragment"
+            app:destination="@id/registerUserInfoFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/registerUserInfoFragment"
+        android:name="com.ssafy.presentation.login.RegisterUserInfoFragment"
+        tools:layout="@layout/fragment_register_user_info"
+        android:label="RegisterUserInfoFragment" >
+        <action
+            android:id="@+id/action_registerUserInfoFragment_to_searchGymFragment"
+            app:destination="@id/searchGymFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/searchGymFragment"
+        android:name="com.ssafy.presentation.login.SearchGymFragment"
+        android:label="fragment_search_gym"
+        tools:layout="@layout/fragment_search_gym" >
+        <action
+            android:id="@+id/action_searchGymFragment_to_registerUserInfoFragment"
+            app:destination="@id/registerUserInfoFragment" />
+    </fragment>
 </navigation>
