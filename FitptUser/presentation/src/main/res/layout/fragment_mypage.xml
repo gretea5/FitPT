@@ -8,20 +8,19 @@
     tools:context=".mypage.MypageFragment">
 
 
-
-        <TextView
-            android:id="@+id/tv_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:letterSpacing="-0.02"
-            android:padding="16dp"
-            android:text="마이페이지"
-            android:textSize="16sp"
-            android:fontFamily="@font/pretendard_regular"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/iv_back"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/pretendard_regular"
+        android:letterSpacing="-0.02"
+        android:padding="16dp"
+        android:text="마이페이지"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cv_profile"
