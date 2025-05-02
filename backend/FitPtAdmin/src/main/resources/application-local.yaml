@@ -29,6 +29,6 @@ springdoc:
   swagger-ui:
     tags-sorter: alpha # 알파벳순
     operations-sorter: alpha
-  packages-to-scan: com.board.jamesboard
+  packages-to-scan: com.sahur.fitptadmin
   default-consumes-media-type: application/json
   default-produces-media-type: application/json
