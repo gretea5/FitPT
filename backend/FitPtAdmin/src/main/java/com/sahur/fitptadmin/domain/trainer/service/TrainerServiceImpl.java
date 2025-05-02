@@ -74,4 +74,16 @@ public class TrainerServiceImpl implements TrainerService {
 
         return trainer.getTrainerId();
     }
+
+    @Override
+    public Long deleteTrainer(Long trainerId) {
+
+        Trainer trainer = trainerRepository.findById(trainerId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 트레이너입니다."));
+
+        Long deletedTrainerId = trainer.getTrainerId();
+        trainerRepository.deleteById(deletedTrainerId);
+
+        return deletedTrainerId;
+    }
 }

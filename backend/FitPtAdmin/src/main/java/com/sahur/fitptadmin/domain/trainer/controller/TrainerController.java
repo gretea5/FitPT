@@ -62,4 +62,11 @@ public class TrainerController {
         trainerService.updateTrainerInfo(trainerId, dto);
         return "redirect:/admin/trainers";
     }
+
+    @PostMapping("/trainers/{trainerId}/delete")
+    public String deleteTrainer(@PathVariable Long trainerId) {
+        trainerService.deleteTrainer(trainerId);
+        return "redirect:/admin/trainers";
+    }
+
 }

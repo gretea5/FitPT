@@ -13,4 +13,6 @@ public interface TrainerService {
     Long registerTrainer(TrainerRegisterDto trainerRegisterDto);
 
     Long updateTrainerInfo(Long trainerId, TrainerUpdateRequestDto trainerUpdateRequestDto);
+
+    Long deleteTrainer(Long trainerId);
 }
