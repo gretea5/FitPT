@@ -2,7 +2,7 @@ package com.sahur.fitpt.domain.composition.controller;
 
 import com.sahur.fitpt.domain.composition.dto.CompositionRequestDto;
 import com.sahur.fitpt.domain.composition.dto.CompositionResponseDto;
-import com.sahur.fitpt.domain.composition.service.CompositionService;
+import com.sahur.fitpt.domain.composition.service.CompositionServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +14,7 @@ import java.util.List;
 @RequestMapping("/api/body-composition")
 @RequiredArgsConstructor
 public class CompositionController {
-    private final CompositionService compositionService;
+    private final CompositionServiceImpl compositionService;
 
     @GetMapping
     public ResponseEntity<List<CompositionResponseDto>> getCompositions(
