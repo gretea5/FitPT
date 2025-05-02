@@ -32,6 +32,10 @@ public class Report {
     @JoinColumn(name = "composition_log_id", nullable = false)
     private CompositionLog compositionLog;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "trainer_id", nullable = false)
+    private Trainer trainer;
+
     @Column(name = "report_comment")
     private String reportComment;
 

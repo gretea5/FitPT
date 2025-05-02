@@ -28,8 +28,8 @@ public class ReportExercise {
     @Column(name = "exercise_name")
     private String exerciseName;
 
-    @Column(name = "exercise_levelachievement")
-    private Integer exerciseAchievement;
+    @Column(name = "exercise_achievement")
+    private String exerciseAchievement;
 
     @Column(name = "exercise_comment")
     private String exerciseComment;
