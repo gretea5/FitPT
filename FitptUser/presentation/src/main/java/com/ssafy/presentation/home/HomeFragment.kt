@@ -49,16 +49,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
         initView()
     }
 
-    override fun onStop() {
-        super.onStop()
-        dialog?.dismiss()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        dialog?.dismiss()
-    }
-
     fun initEvent(){
         binding.ivNotificationMove.setOnClickListener {
             findNavController().navigate(R.id.action_home_fragment_to_notification_fragment)
