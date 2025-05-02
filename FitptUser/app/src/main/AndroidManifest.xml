@@ -5,9 +5,9 @@
 
     <application
         android:name=".ApplicationClass"
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:dataExtractionRules="@xml/data_extraction_rules"
-        android:fullBackupContent="@xml/backup_rules"
+        android:fullBackupContent="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -17,7 +17,8 @@
 
         <activity
             android:name="com.ssafy.presentation.login.LoginActivity"
-            android:exported="true">
+            android:exported="true"
+            android:screenOrientation="nosensor">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -26,7 +27,8 @@
 
         <activity
             android:name="com.ssafy.presentation.common.MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:screenOrientation="nosensor">
         </activity>
     </application>
 

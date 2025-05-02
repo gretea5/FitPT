@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.ViewGroup
 import android.view.Window
 import androidx.fragment.app.DialogFragment
+import com.ssafy.presentation.R
 import com.ssafy.presentation.databinding.FragmentLogoutDialogBinding
 import com.ssafy.presentation.login.LoginActivity
 
@@ -29,6 +30,8 @@ class LogoutDialogFragment : DialogFragment() {
                 addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
             }
             startActivity(intent)
+            requireActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+            requireActivity().finishAffinity()
         }
 
         binding.btnCancel.setOnClickListener {

@@ -31,6 +31,8 @@ class RegisterUserInfoFragment : BaseFragment<FragmentRegisterUserInfoBinding>(
             val intent = Intent(requireContext(), MainActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
+            requireActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+            requireActivity().finishAffinity()
         }
         binding.cvGym.setOnClickListener {
             Log.d("클릭체크", "cvGym 클릭됨")
