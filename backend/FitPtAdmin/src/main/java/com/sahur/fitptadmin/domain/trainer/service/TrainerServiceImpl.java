@@ -33,7 +33,6 @@ public class TrainerServiceImpl implements TrainerService {
                         .trainerLoginId(trainer.getTrainerLoginId())
                         .trainerPw(trainer.getTrainerPw())
                         .trainerName(trainer.getTrainerName())
-                        .trainerBirthday(trainer.getTrainerBirthDate()) // 필드명이 DTO에 맞게 수정
                         .build())
                 .toList();
     }
@@ -54,7 +53,6 @@ public class TrainerServiceImpl implements TrainerService {
                 .trainerLoginId(trainerRegisterDto.getTrainerLoginId())
                 .trainerPw(trainerRegisterDto.getTrainerPw())
                 .trainerName(trainerRegisterDto.getTrainerName())
-                .trainerBirthDate(trainerRegisterDto.getTrainerBirthDay())
                 .admin(admin)
                 .build();
 
@@ -71,7 +69,7 @@ public class TrainerServiceImpl implements TrainerService {
 
         log.info(trainerUpdateRequestDto.getTrainerName());
 
-        trainer.updateTrainerInfo(trainerUpdateRequestDto.getTrainerName(), trainerUpdateRequestDto.getTrainerBirthday());
+        trainer.updateTrainerInfo(trainerUpdateRequestDto.getTrainerName());
 
         return trainer.getTrainerId();
     }

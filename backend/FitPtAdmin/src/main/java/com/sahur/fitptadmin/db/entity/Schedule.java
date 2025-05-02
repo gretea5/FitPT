@@ -10,32 +10,29 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "notification")
+@Table(name = "schedule")
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Notification {
+public class Schedule {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "notification_id")
-    private Long notificationId;
+    private Long ScheduleId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "trainer_id")
+    private Trainer trainer;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "report_id", nullable = false)
-    private Report report;
+    @CreationTimestamp
+    @Column(name = "start_time")
+    private LocalDateTime startTime;
 
     @CreationTimestamp
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
-
-    @Column(name = "notification_message", nullable = false)
-    private String notificationMessage;
-
-    @Column(name = "is_read")
-    private Boolean isRead;
+    @Column(name = "end_time")
+    private LocalDateTime endTime;
 }

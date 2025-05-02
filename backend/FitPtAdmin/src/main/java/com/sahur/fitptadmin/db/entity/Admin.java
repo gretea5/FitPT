@@ -2,6 +2,7 @@ package com.sahur.fitptadmin.db.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -11,6 +12,7 @@ import java.util.List;
 @Entity
 @Table(name = "admin")
 @Getter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Admin {
@@ -33,4 +35,7 @@ public class Admin {
 
     @OneToMany(mappedBy = "admin")
     private List<Trainer> trainers = new ArrayList<>();
+
+    @OneToMany(mappedBy = "admin")
+    private List<Member> members = new ArrayList<>();
 }

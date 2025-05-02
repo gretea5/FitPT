@@ -14,5 +14,4 @@ public class TrainerResponseDto {
     private String trainerLoginId;
     private String trainerPw;
     private String trainerName;
-    private LocalDate trainerBirthday;
 }

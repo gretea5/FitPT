@@ -2,6 +2,7 @@ package com.sahur.fitptadmin.db.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -11,6 +12,7 @@ import java.util.List;
 @Entity
 @Table(name = "report_exercise")
 @Getter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class ReportExercise {
@@ -26,12 +28,12 @@ public class ReportExercise {
     @Column(name = "exercise_name")
     private String exerciseName;
 
-    @Column(name = "exercise_level")
-    private Integer exerciseLevel;
+    @Column(name = "exercise_achievement")
+    private String exerciseAchievement;
 
-    @Column(name = "exercise_explanation")
-    private String exerciseExplanation;
+    @Column(name = "exercise_comment")
+    private String exerciseComment;
 
     @OneToMany(mappedBy = "reportExercise")
-    private List<MusclePart> muscleParts = new ArrayList<>();
+    private List<WorkoutMuscle> workoutMuscles = new ArrayList<>();
 }

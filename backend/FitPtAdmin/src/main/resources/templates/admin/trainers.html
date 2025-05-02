@@ -79,7 +79,7 @@
             }
 
             .table tbody tr td:nth-child(3)::before {
-                content: "로그인 아이디";
+                content: "관리";
             }
         }
 
@@ -126,10 +126,6 @@
                             <input type="text" name="trainerName" class="form-control" required>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">생년월일</label>
-                            <input type="date" name="trainerBirthDay" class="form-control" required>
-                        </div>
-                        <div class="mb-3">
                             <label class="form-label">로그인 ID</label>
                             <input type="text" name="trainerLoginId" class="form-control" required>
                         </div>
@@ -156,7 +152,6 @@
             <tr>
                 <th scope="col">번호</th>
                 <th scope="col">트레이너 이름</th>
-                <th scope="col">생년월일</th>
                 <th scope="col">관리</th>
             </tr>
             </thead>
@@ -164,7 +159,6 @@
             <tr th:each="trainer, iterStat : ${trainers}">
                 <td th:text="${iterStat.index + 1}"></td>
                 <td th:text="${trainer.trainerName}"></td>
-                <td th:text="${trainer.trainerBirthday}"></td>
                 <td>
                     <div class="d-flex gap-2">
                         <!-- 상세 버튼 -->
@@ -201,11 +195,6 @@
                                             <input type="text" class="form-control rounded-3"
                                                    name="trainerName" th:value="${trainer.trainerName}" required>
                                         </div>
-                                        <div class="mb-3">
-                                            <label class="form-label text-dark">생년월일</label>
-                                            <input type="date" class="form-control rounded-3"
-                                                   name="trainerBirthday" th:value="${trainer.trainerBirthday}" required>
-                                        </div>
                                     </div>
                                     <div class="modal-footer border-top-0 pt-0 d-flex justify-content-between">
                                         <button type="button" class="btn btn-outline-secondary rounded-3 px-4"
@@ -237,9 +226,6 @@
 
                                         <dt class="col-sm-4">로그인 ID</dt>
                                         <dd class="col-sm-8" th:text="${trainer.trainerLoginId}">hong123</dd>
-
-                                        <dt class="col-sm-4">생년월일</dt>
-                                        <dd class="col-sm-8" th:text="${trainer.trainerBirthday}">1990-01-01</dd>
 
                                         <dt class="col-sm-4">비밀번호</dt>
                                         <dd class="col-sm-8" th:text="${trainer.trainerPw}"></dd>
