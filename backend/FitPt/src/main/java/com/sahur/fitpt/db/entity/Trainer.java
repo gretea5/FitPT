@@ -2,12 +2,17 @@ package com.sahur.fitpt.db.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "trainer")
 @Getter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Trainer {
@@ -17,7 +22,7 @@ public class Trainer {
     private Long trainerId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "admin_id", nullable = false)
+    @JoinColumn(name = "admin_id")
     private Admin admin;
 
     @Column(name = "trainer_name", nullable = false)
@@ -28,4 +33,10 @@ public class Trainer {
 
     @Column(name = "trainer_pw", nullable = false)
     private String trainerPw;
+
+    @OneToMany(mappedBy = "trainer")
+    private List<Schedule> schedules = new ArrayList<>();
+
+    @OneToMany(mappedBy = "trainer")
+    private List<Report> reports = new ArrayList<>();
 }

@@ -7,24 +7,20 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "fcm_token")
+@Table(name = "workout_muscle")
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class FcmToken {
+public class WorkoutMuscle {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "fcm_token_id")
-    private Long fcmTokenId;
+    private Long workMuscleId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id", nullable = false)
-    private Member member;
+    @JoinColumn(name = "report_exercise_id")
+    private ReportExercise reportExercise;
 
-    @Column(name = "token", nullable = false)
-    private String token;
-
-    @Column(name = "mac_addr")
-    private String macAddr;
+    @Column(name = "activation_muscle_id")
+    private Long activationMuscleId;
 }

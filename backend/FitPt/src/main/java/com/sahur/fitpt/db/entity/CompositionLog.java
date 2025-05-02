@@ -2,9 +2,9 @@ package com.sahur.fitpt.db.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "composition_log")
 @Getter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class CompositionLog {
@@ -24,7 +25,6 @@ public class CompositionLog {
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
-    @ColumnDefault("CURRENT_TIMESTAMP")
     @CreationTimestamp
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
@@ -55,4 +55,7 @@ public class CompositionLog {
 
     @Column(name = "bfp")
     private Float bfp;
+
+    @Column(name = "weight")
+    private Float weight;
 }
