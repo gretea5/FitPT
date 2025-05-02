@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/home"
+        android:icon="@drawable/logo_login_icon"
+        android:title="홈"
+        android:background="@android:color/transparent" />
+    <item
+        android:id="@+id/private_records"
+        android:icon="@drawable/logo_login_icon"
+        android:title="개인 측정"
+        android:background="@android:color/transparent" />
+    <item
+        android:id="@+id/measure"
+        android:icon="@drawable/logo_login_icon"
+        android:title="측정"
+        android:background="@android:color/transparent" />
+    <item
+        android:id="@+id/pt_report"
+        android:icon="@drawable/logo_login_icon"
+        android:title="pt보고서"
+        android:background="@android:color/transparent" />
+    <item
+        android:id="@+id/mypage"
+        android:icon="@drawable/logo_login_icon"
+        android:title="마이페이지"
+        android:background="@android:color/transparent" />
+</menu>

@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.lifecycle.Lifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ssafy.presentation.R;
@@ -19,5 +20,12 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(
 ) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initEvent()
+    }
+
+    fun initEvent(){
+        binding.ivKakaoMove.setOnClickListener {
+            findNavController().navigate(R.id.action_loginFragment_to_registerUserInfoFragment)
+        }
     }
 }
