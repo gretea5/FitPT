@@ -1,8 +1,10 @@
 package com.sahur.fitptadmin.domain.trainer.service;
 
 import com.sahur.fitptadmin.db.entity.Admin;
+import com.sahur.fitptadmin.db.entity.Member;
 import com.sahur.fitptadmin.db.entity.Trainer;
 import com.sahur.fitptadmin.db.repository.AdminRepository;
+import com.sahur.fitptadmin.db.repository.MemberRepository;
 import com.sahur.fitptadmin.db.repository.TrainerRepository;
 import com.sahur.fitptadmin.domain.trainer.dto.TrainerRegisterDto;
 import com.sahur.fitptadmin.domain.trainer.dto.TrainerResponseDto;
@@ -22,6 +24,7 @@ public class TrainerServiceImpl implements TrainerService {
 
     private final TrainerRepository trainerRepository;
     private final AdminRepository adminRepository;
+    private final MemberRepository memberRepository;
 
     @Override
     public List<TrainerResponseDto> getTrainers(Long adminId) {
@@ -77,6 +80,14 @@ public class TrainerServiceImpl implements TrainerService {
 
         Trainer trainer = trainerRepository.findById(trainerId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 트레이너입니다."));
+
+        List<Member> members = memberRepository.findByTrainerWithFetch(trainer);
+
+        for (Member member : members) {
+            member.updateTrainer(null);
+        }
+
+        memberRepository.saveAll(members);
 
         Long deletedTrainerId = trainer.getTrainerId();
         trainerRepository.deleteById(deletedTrainerId);

@@ -23,7 +23,7 @@ public class Member {
     private Long memberId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "trainer_id", nullable = false)
+    @JoinColumn(name = "trainer_id")
     private Trainer trainer;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -57,4 +57,9 @@ public class Member {
 
     @OneToMany(mappedBy = "member")
     private List<FcmToken> fcmTokens = new ArrayList<>();
+
+    public void updateTrainer(Trainer trainer) {
+        this.trainer = trainer;
+    }
+
 }

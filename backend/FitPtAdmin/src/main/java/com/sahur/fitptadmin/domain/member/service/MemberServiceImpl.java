@@ -31,7 +31,7 @@ public class MemberServiceImpl implements MemberService {
                         .memberBirth(member.getMemberBirth().toLocalDate()) // LocalDateTime → LocalDate 변환
                         .memberHeight(member.getMemberHeight())
                         .memberWeight(member.getMemberWeight())
-                        .trainerName(member.getTrainer().getTrainerName())
+                        .trainerName(member.getTrainer() != null ? member.getTrainer().getTrainerName() : "없음")
                         .build())
                 .toList();
     }
