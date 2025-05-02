@@ -30,7 +30,7 @@ public class Trainer {
     @Column(name = "trainer_name", nullable = false)
     private String trainerName;
 
-    @Column(name = "trainer_login_id", nullable = false)
+    @Column(name = "trainer_login_id", nullable = false, unique = true)
     private String trainerLoginId;
 
     @Column(name = "trainer_pw", nullable = false)

@@ -12,6 +12,7 @@ import java.time.LocalDate;
 public class TrainerResponseDto {
     private Long trainerId;
     private String trainerLoginId;
+    private String trainerPw;
     private String trainerName;
     private LocalDate trainerBirthday;
 }

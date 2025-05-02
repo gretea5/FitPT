@@ -2,15 +2,13 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/layout}">
-<meta charset="UTF-8">
-
 <head>
+    <meta charset="UTF-8">
     <title>트레이너 목록</title>
     <style>
-
         * {
-            caret-color: transparent; /* 커서 깜빡임 제거 */
-            user-select: none; /* 텍스트 드래그 방지 */
+            caret-color: transparent;
+            user-select: none;
         }
 
         h2 {
@@ -32,16 +30,16 @@
         }
 
         td {
-            user-select: none; /* 텍스트 드래그 금지 */
-            caret-color: transparent; /* 커서 색 제거 → 커서 숨김 효과 */
+            user-select: none;
+            caret-color: transparent;
         }
 
         td:focus {
-            outline: none; /* 포커스 시 외곽선 제거 */
+            outline: none;
         }
 
         .table-hover tbody tr:hover {
-            background-color: rgba(210, 71, 38, 0.08); /* #D24726 약한 강조 */
+            background-color: rgba(210, 71, 38, 0.08);
         }
 
         .no-data {
@@ -97,12 +95,9 @@
             border-color: #D24726;
             box-shadow: 0 0 0 0.2rem rgba(210, 71, 38, 0.25);
         }
-
     </style>
 </head>
-
 <body>
-
 <section layout:fragment="content">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2 class="mb-0">트레이너 목록</h2>
@@ -123,6 +118,9 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
+                        <div th:if="${registerErrorMsg}" class="alert alert-danger" role="alert"
+                             th:text="${registerErrorMsg}">
+                        </div>
                         <div class="mb-3">
                             <label class="form-label">이름</label>
                             <input type="text" name="trainerName" class="form-control" required>
@@ -169,15 +167,18 @@
                 <td th:text="${trainer.trainerBirthday}"></td>
                 <td>
                     <div class="d-flex gap-2">
-                        <!-- 수정 버튼 (모달 오픈) -->
+                        <!-- 상세 버튼 -->
                         <button type="button"
-                                class="btn btn-sm btn-outline-primary"
+                                class="btn btn-sm btn-outline-secondary"
+                                data-bs-toggle="modal"
+                                th:attr="data-bs-target='#detailTrainerModal__' + ${trainer.trainerId}">
+                            상세
+                        </button>
+                        <button type="button" class="btn btn-sm btn-outline-primary"
                                 data-bs-toggle="modal"
                                 th:attr="data-bs-target='#editTrainerModal__' + ${trainer.trainerId}">
                             수정
                         </button>
-
-                        <!-- 삭제 -->
                         <form th:action="@{/admin/trainers/{id}/delete(id=${trainer.trainerId})}" method="post"
                               onsubmit="return confirm('정말 삭제하시겠습니까?')">
                             <button type="submit" class="btn btn-sm btn-outline-danger">삭제</button>
@@ -192,38 +193,62 @@
                          aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content rounded-4 border-0 shadow">
-
                                 <form th:action="@{/admin/trainers/{id}(id=${trainer.trainerId})}" method="post">
-
                                     <div class="modal-body pt-1">
-                                        <!-- ID (hidden) -->
                                         <input type="hidden" name="trainerId" th:value="${trainer.trainerId}"/>
-
-                                        <!-- 이름 -->
                                         <div class="mb-3">
-                                            <label for="trainerName" class="form-label text-dark">이름</label>
+                                            <label class="form-label text-dark">이름</label>
                                             <input type="text" class="form-control rounded-3"
-                                                   name="trainerName"
-                                                   th:value="${trainer.trainerName}" required>
+                                                   name="trainerName" th:value="${trainer.trainerName}" required>
                                         </div>
-
-                                        <!-- 생년월일 -->
                                         <div class="mb-3">
-                                            <label for="birthDate" class="form-label text-dark">생년월일</label>
+                                            <label class="form-label text-dark">생년월일</label>
                                             <input type="date" class="form-control rounded-3"
-                                                   name="trainerBirthday"
-                                                   th:value="${trainer.trainerBirthday}" required>
+                                                   name="trainerBirthday" th:value="${trainer.trainerBirthday}" required>
                                         </div>
                                     </div>
-
                                     <div class="modal-footer border-top-0 pt-0 d-flex justify-content-between">
-                                        <button type="button" class="btn btn-outline-secondary rounded-3 px-4" data-bs-dismiss="modal">닫기</button>
-                                        <button type="submit" class="btn btn-primary rounded-3 px-4"
-                                                style="background-color: #D24726; border: none;">
-                                            저장
+                                        <button type="button" class="btn btn-outline-secondary rounded-3 px-4"
+                                                data-bs-dismiss="modal">닫기
                                         </button>
+                                        <button type="submit" class="btn btn-primary rounded-3 px-4"
+                                                style="background-color: #D24726; border: none;">저장</button>
                                     </div>
                                 </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal fade"
+                         th:id="'detailTrainerModal__' + ${trainer.trainerId}"
+                         tabindex="-1"
+                         aria-labelledby="detailTrainerLabel"
+                         aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content rounded-4 border-0 shadow">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="detailTrainerLabel">트레이너 상세 정보</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+
+                                <div class="modal-body">
+                                    <dl class="row">
+                                        <dt class="col-sm-4">이름</dt>
+                                        <dd class="col-sm-8" th:text="${trainer.trainerName}">홍길동</dd>
+
+                                        <dt class="col-sm-4">로그인 ID</dt>
+                                        <dd class="col-sm-8" th:text="${trainer.trainerLoginId}">hong123</dd>
+
+                                        <dt class="col-sm-4">생년월일</dt>
+                                        <dd class="col-sm-8" th:text="${trainer.trainerBirthday}">1990-01-01</dd>
+
+                                        <dt class="col-sm-4">비밀번호</dt>
+                                        <dd class="col-sm-8" th:text="${trainer.trainerPw}"></dd>
+                                    </dl>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">닫기</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -233,6 +258,5 @@
         </table>
     </div>
 </section>
-
 </body>
 </html>

@@ -43,7 +43,9 @@ public class TrainerController {
     }
 
     @PostMapping("/trainers")
-    public String registerTrainer(@ModelAttribute TrainerRegisterDto trainerRegisterDto) {
+    public String registerTrainer(@ModelAttribute TrainerRegisterDto trainerRegisterDto,
+                                  Model model,
+                                  HttpSession session) {
         Long adminId = (Long) session.getAttribute(SessionConst.LOGIN_ADMIN_ID);
 
         if (adminId == null) {
@@ -51,8 +53,17 @@ public class TrainerController {
         }
 
         trainerRegisterDto.setAdminId(adminId);
-        trainerService.registerTrainer(trainerRegisterDto);
-        return "redirect:/admin/trainers";
+
+        try {
+            trainerService.registerTrainer(trainerRegisterDto);
+            return "redirect:/admin/trainers";
+        } catch (IllegalArgumentException e) {
+            // 에러 메시지와 기존 목록 다시 전달
+            model.addAttribute("trainers", trainerService.getTrainers(adminId));
+            model.addAttribute("registerErrorMsg", e.getMessage());
+            model.addAttribute("openCreateModal", true); // 모달 자동 열기
+            return "admin/trainers";
+        }
     }
 
     @PostMapping("/trainers/{trainerId}")

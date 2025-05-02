@@ -31,6 +31,7 @@ public class TrainerServiceImpl implements TrainerService {
                 .map(trainer -> TrainerResponseDto.builder()
                         .trainerId(trainer.getTrainerId())
                         .trainerLoginId(trainer.getTrainerLoginId())
+                        .trainerPw(trainer.getTrainerPw())
                         .trainerName(trainer.getTrainerName())
                         .trainerBirthday(trainer.getTrainerBirthDate()) // 필드명이 DTO에 맞게 수정
                         .build())
