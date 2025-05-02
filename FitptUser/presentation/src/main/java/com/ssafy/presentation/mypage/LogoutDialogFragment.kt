@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.view.Window
 import androidx.fragment.app.DialogFragment
 import com.ssafy.presentation.databinding.FragmentLogoutDialogBinding
+import com.ssafy.presentation.login.LoginActivity
 
 class LogoutDialogFragment : DialogFragment() {
     private var _binding: FragmentLogoutDialogBinding? = null
@@ -24,7 +25,10 @@ class LogoutDialogFragment : DialogFragment() {
         dialog.setContentView(view)
 
         binding.btnLogout.setOnClickListener {
-            //performLogout()
+            val intent = Intent(requireContext(), LoginActivity::class.java).apply {
+                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
+            startActivity(intent)
         }
 
         binding.btnCancel.setOnClickListener {

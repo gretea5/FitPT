@@ -32,7 +32,11 @@
         android:id="@+id/edit_user_info_fragment"
         android:name="com.ssafy.presentation.mypage.EditUserInfoFragment"
         android:label="fragment_edit_user_info"
-        tools:layout="@layout/fragment_edit_user_info" />
+        tools:layout="@layout/fragment_edit_user_info" >
+        <action
+            android:id="@+id/action_edit_user_info_fragment_to_mypage_fragment"
+            app:destination="@id/mypage_fragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/mypage_fragment"
