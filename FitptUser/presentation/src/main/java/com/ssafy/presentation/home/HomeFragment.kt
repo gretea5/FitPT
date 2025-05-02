@@ -39,6 +39,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
     private val daysOfWeek = daysOfWeek(DayOfWeek.MONDAY)
     private val format = DateTimeFormatter.ofPattern("yyyy-MM-dd")
     val currentMonth = YearMonth.of(2025,5)
+    private lateinit var dialog: PtCalendarBottomSheetFragment
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -48,14 +49,21 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
         initView()
     }
 
+    override fun onStop() {
+        super.onStop()
+        dialog?.dismiss()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        dialog?.dismiss()
+    }
+
     fun initEvent(){
         binding.ivNotificationMove.setOnClickListener {
             findNavController().navigate(R.id.action_home_fragment_to_notification_fragment)
         }
     }
-
-
-
 
     private fun updateDayWeekColor() {
         for ((index, dayText) in daysOfWeek.withIndex()) {
@@ -72,6 +80,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
     private fun dateClicked(date: LocalDate) {
         binding.calendar.notifyDateChanged(selectedDate) // 이전 선택값 해제
         selectedDate = date
+        dialog.show(childFragmentManager, "payment")
         binding.calendar.notifyDateChanged(date) // 새로운 선택값
     }
 
@@ -92,7 +101,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
                         typeface = ResourcesCompat.getFont(context, fonts[1])
                     }
                 }
-
                 else -> {
                     dayText.apply {
                         setTextColor(resources.getColor(R.color.text))
@@ -109,6 +117,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
     fun initCalendar(){
         var downX = 0f
         var downY = 0f
+        dialog = PtCalendarBottomSheetFragment()
+
         binding.calendar.setOnTouchListener { _, event ->
             when (event.actionMasked) {
                 MotionEvent.ACTION_DOWN -> {
@@ -169,6 +179,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
         binding.calendar.setup(startMonth, endMonth, daysOfWeek.first())
         binding.calendar.scrollToMonth(currentMonth)
         updateDayWeekColor()
+
     }
 
 

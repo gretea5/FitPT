@@ -1,0 +1,119 @@
+package com.ssafy.presentation.home
+
+import android.app.Dialog
+import android.content.Context
+import android.os.Bundle
+import android.util.DisplayMetrics
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.ssafy.presentation.R
+import com.ssafy.presentation.common.MainActivity
+import com.ssafy.presentation.databinding.FragmentPtCalendarBottomSheetBinding
+import dagger.hilt.android.internal.managers.ViewComponentManager
+
+
+class PtCalendarBottomSheetFragment : BottomSheetDialogFragment() {
+    private var _binding : FragmentPtCalendarBottomSheetBinding? = null
+    private val binding get() = _binding!!
+    private var mContext : Context? = null
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mContext = context
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentPtCalendarBottomSheetBinding.inflate(layoutInflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initEvent()
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val dialog = BottomSheetDialog(mContext!!, R.style.CustomDialog)
+        dialog.window?.apply {
+            addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
+            setDimAmount(0.7f)
+        }
+        dialog.setOnShowListener {
+            val bottomSheetDialog = it as BottomSheetDialog
+            setupRatio(bottomSheetDialog)
+            dialog.setCanceledOnTouchOutside(true)
+        }
+        return dialog
+    }
+
+    private fun setupRatio(bottomSheetDialog: BottomSheetDialog) {
+        val bottomSheet = bottomSheetDialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as View
+        val behavior = BottomSheetBehavior.from(bottomSheet)
+        val layoutParams = bottomSheet.layoutParams
+
+        // MATCH_PARENT 대신 적당한 높이를 설정
+        layoutParams.height = getBottomSheetDialogDefaultHeight()
+        bottomSheet.layoutParams = layoutParams
+
+        behavior.peekHeight = getBottomSheetDialogDefaultHeight()
+        behavior.state = BottomSheetBehavior.STATE_COLLAPSED
+    }
+
+    private fun getBottomSheetDialogDefaultHeight(): Int {
+        return (getWindowHeight() * 0.6).toInt() // 전체 높이의 60%로 설정
+    }
+
+    private fun getWindowHeight(): Int {
+        val displayMetrics = DisplayMetrics()
+        (getActivityContext(requireContext()) as MainActivity).windowManager.defaultDisplay.getMetrics(displayMetrics)
+        return displayMetrics.heightPixels
+    }
+
+    override fun onStop() {
+        super.onStop()
+        dismissSmoothly()
+    }
+
+    fun getActivityContext(context: Context): Context {
+        return if (context is ViewComponentManager.FragmentContextWrapper) {
+            context.baseContext
+        } else {
+            context
+        }
+    }
+
+    fun dismissSmoothly() {
+        val bottomSheet = dialog?.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
+        val behavior = BottomSheetBehavior.from(bottomSheet!!)
+
+        behavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                if (newState == BottomSheetBehavior.STATE_HIDDEN) {
+                    dismiss()
+                }
+            }
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+                // 필요한 경우 추가 효과
+            }
+        })
+
+        // 상태를 HIDDEN으로 설정하여 자연스럽게 사라지도록 함
+        behavior.state = BottomSheetBehavior.STATE_HIDDEN
+    }
+
+    fun initEvent(){
+        binding.btnClose.setOnClickListener {
+            dismissSmoothly()
+        }
+    }
+}
