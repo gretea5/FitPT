@@ -67,9 +67,7 @@ public class TrainerServiceImpl implements TrainerService {
         Trainer trainer = trainerRepository.findById(trainerId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 트레이너입니다."));
 
-        log.info(trainerUpdateRequestDto.getTrainerName());
-
-        trainer.updateTrainerInfo(trainerUpdateRequestDto.getTrainerName());
+        trainer.updateTrainerInfo(trainerUpdateRequestDto.getTrainerName(), trainerUpdateRequestDto.getTrainerLoginId(), trainerUpdateRequestDto.getTrainerPw());
 
         return trainer.getTrainerId();
     }

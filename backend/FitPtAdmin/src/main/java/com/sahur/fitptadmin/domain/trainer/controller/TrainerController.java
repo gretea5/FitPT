@@ -68,9 +68,9 @@ public class TrainerController {
 
     @PostMapping("/trainers/{trainerId}")
     public String updateTrainer(@PathVariable Long trainerId,
-                                @ModelAttribute TrainerUpdateRequestDto dto) {
+                                @ModelAttribute TrainerUpdateRequestDto trainerUpdateRequestDto) {
 
-        trainerService.updateTrainerInfo(trainerId, dto);
+        trainerService.updateTrainerInfo(trainerId, trainerUpdateRequestDto);
         return "redirect:/admin/trainers";
     }
 

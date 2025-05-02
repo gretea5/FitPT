@@ -11,5 +11,6 @@ import java.time.LocalDate;
 @Builder
 public class TrainerUpdateRequestDto {
     private String trainerName;
-    private LocalDate trainerBirthday;
+    private String trainerLoginId;
+    private String trainerPw;
 }
