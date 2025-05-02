@@ -1,15 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/home_fragment"
-    tools:context=".home.notification.HomeFragment">
+    android:background="@color/white"
+    android:id="@+id/home_fragment">
 
-    <!-- TODO: Update blank fragment layout -->
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="80dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/ic_home_logo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/iv_notification_move"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:src="@drawable/ic_home_bell_off"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/imageView" />
+
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:id="@+id/tv_body_graph"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="김동현님의 체성분 그래프"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
-</FrameLayout>
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/chart_price_graph"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="20dp"
+        android:paddingBottom="20dp"
+        android:visibility="invisible"
+        app:layout_constraintDimensionRatio="1.3802:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_body_graph"
+        app:layout_constraintWidth_percent="0.87" />
+
+    <TextView
+        android:id="@+id/tv_pt_calendar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="김동현님의 PT 일정"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@+id/tv_body_graph"
+        app:layout_constraintTop_toBottomOf="@+id/chart_price_graph" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_calendar"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_pt_calendar">
+
+        <include
+            android:id="@+id/layout_dow"
+            layout="@layout/calendar_day_titles_container"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <com.kizitonwose.calendar.view.CalendarView
+            android:id="@+id/calendar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            app:cv_daySize="rectangle"
+            app:cv_dayViewResource="@layout/calendar_day"
+            app:cv_outDateStyle="endOfGrid"
+            app:cv_scrollPaged="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layout_dow" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
