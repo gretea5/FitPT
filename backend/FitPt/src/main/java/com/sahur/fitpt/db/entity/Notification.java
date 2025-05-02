@@ -2,9 +2,9 @@ package com.sahur.fitpt.db.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "notification")
 @Getter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Notification {
@@ -23,6 +24,10 @@ public class Notification {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "report_id", nullable = false)
+    private Report report;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false)

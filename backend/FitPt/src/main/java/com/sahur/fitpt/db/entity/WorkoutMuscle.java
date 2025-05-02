@@ -2,12 +2,14 @@ package com.sahur.fitpt.db.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "workout_muscle")
 @Getter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class WorkoutMuscle {

@@ -2,6 +2,7 @@ package com.sahur.fitpt.db.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -13,6 +14,7 @@ import java.util.List;
 @Entity
 @Table(name = "member")
 @Getter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Member {
@@ -43,20 +45,6 @@ public class Member {
 
     @Column(name = "member_weight")
     private Float memberWeight;
-
-    @Column(name = "member_systolic")
-    private Integer memberSystolic;
-
-    @Column(name = "member_diastolic")
-    private Integer memberDiastolic;
-
-    @CreationTimestamp
-    @Column(name = "member_start_date")
-    private LocalDateTime memberStartDate;
-
-    @CreationTimestamp
-    @Column(name = "member_end_date")
-    private LocalDateTime memberEndDate;
 
     @OneToMany(mappedBy = "member")
     private List<Schedule> schedules = new ArrayList<>();
