@@ -23,11 +23,11 @@ public class Member {
     private Long memberId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "trainer_id", nullable = false)
+    @JoinColumn(name = "trainer_id")
     private Trainer trainer;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "admin_id", nullable = false)
+    @JoinColumn(name = "admin_id")
     private Admin admin;
 
     @Column(name = "member_name")

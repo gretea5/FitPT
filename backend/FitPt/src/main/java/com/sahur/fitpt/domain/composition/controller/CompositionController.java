@@ -3,7 +3,6 @@ package com.sahur.fitpt.domain.composition.controller;
 import com.sahur.fitpt.domain.composition.dto.CompositionRequestDto;
 import com.sahur.fitpt.domain.composition.dto.CompositionResponseDto;
 import com.sahur.fitpt.domain.composition.service.CompositionService;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

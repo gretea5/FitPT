@@ -27,7 +27,6 @@ public class CompositionResponseDto {
     private Float bfp;
     private Float weight;
 
-    // 정적 팩토리 메서드 추가
     public static CompositionResponseDto fromEntity(CompositionLog entity) {
         CompositionResponseDto dto = new CompositionResponseDto();
         dto.compositionLogId = entity.getCompositionLogId();
