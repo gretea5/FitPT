@@ -27,5 +27,8 @@ class EditUserInfoFragment : BaseFragment<FragmentEditUserInfoBinding>(
         binding.btnNext.setOnClickListener {
             findNavController().navigate(R.id.action_edit_user_info_fragment_to_mypage_fragment)
         }
+        binding.btnNext.setOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 }

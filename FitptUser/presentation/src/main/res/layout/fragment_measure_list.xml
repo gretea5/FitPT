@@ -16,6 +16,7 @@
         android:letterSpacing="-0.02"
         android:padding="16dp"
         android:text="체성분 기록"
+        android:textColor="#000000"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
