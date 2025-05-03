@@ -2,27 +2,27 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/home"
-        android:icon="@drawable/logo_login_icon"
+        android:icon="@drawable/ic_navbar_home"
         android:title="홈"
         android:background="@android:color/transparent" />
     <item
         android:id="@+id/private_records"
-        android:icon="@drawable/logo_login_icon"
+        android:icon="@drawable/ic_navbar_user_measure"
         android:title="개인 측정"
         android:background="@android:color/transparent" />
     <item
         android:id="@+id/measure"
-        android:icon="@drawable/logo_login_icon"
+        android:icon="@drawable/ic_navbar_measure"
         android:title="측정"
         android:background="@android:color/transparent" />
     <item
         android:id="@+id/pt_report"
-        android:icon="@drawable/logo_login_icon"
+        android:icon="@drawable/ic_navbar_ptreport"
         android:title="pt보고서"
         android:background="@android:color/transparent" />
     <item
         android:id="@+id/mypage"
-        android:icon="@drawable/logo_login_icon"
+        android:icon="@drawable/ic_navbar_mypage"
         android:title="마이페이지"
         android:background="@android:color/transparent" />
 </menu>

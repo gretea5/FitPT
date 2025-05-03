@@ -1,4 +1,4 @@
-package com.ssafy.presentation.report.Adapter
+package com.ssafy.presentation.report.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

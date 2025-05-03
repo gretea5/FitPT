@@ -1,18 +1,14 @@
 package com.ssafy.presentation.report
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ssafy.domain.model.report.PtReportItem
 import com.ssafy.presentation.R
 import com.ssafy.presentation.base.BaseFragment
-import com.ssafy.presentation.databinding.FragmentEditUserInfoBinding
 import com.ssafy.presentation.databinding.FragmentReportListBinding
-import com.ssafy.presentation.report.Adapter.PtReportAdapter
+import com.ssafy.presentation.report.adapter.PtReportAdapter
 
 class ReportListFragment : BaseFragment<FragmentReportListBinding>(
     FragmentReportListBinding::bind,

@@ -270,7 +270,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:padding="10dp"
-            app:layout_constraintBottom_toTopOf="@+id/body_composition_recycler"
+            app:layout_constraintBottom_toTopOf="@+id/rv_body_composition"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"

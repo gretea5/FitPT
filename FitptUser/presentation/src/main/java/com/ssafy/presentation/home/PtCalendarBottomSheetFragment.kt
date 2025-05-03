@@ -4,7 +4,6 @@ import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.util.DisplayMetrics
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,7 +16,7 @@ import com.ssafy.domain.model.home.PtScheduleItem
 import com.ssafy.presentation.R
 import com.ssafy.presentation.common.MainActivity
 import com.ssafy.presentation.databinding.FragmentPtCalendarBottomSheetBinding
-import com.ssafy.presentation.home.Adapter.PtScheduleAdapter
+import com.ssafy.presentation.home.adapter.PtScheduleAdapter
 import dagger.hilt.android.internal.managers.ViewComponentManager
 
 
