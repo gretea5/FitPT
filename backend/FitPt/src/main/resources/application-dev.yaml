@@ -72,8 +72,10 @@ jwt:
 
 springdoc:
   swagger-ui:
+    path: /swagger
     tags-sorter: alpha # 알파벳순
     operations-sorter: alpha
-  packages-to-scan: com.board.jamesboard
+    groups-order: DESC
+  packages-to-scan: com.sahur.fitpt
   default-consumes-media-type: application/json
   default-produces-media-type: application/json
