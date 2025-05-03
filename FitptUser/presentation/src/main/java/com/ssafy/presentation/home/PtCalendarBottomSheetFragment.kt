@@ -9,12 +9,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.ssafy.domain.model.home.PtScheduleItem
 import com.ssafy.presentation.R
 import com.ssafy.presentation.common.MainActivity
 import com.ssafy.presentation.databinding.FragmentPtCalendarBottomSheetBinding
+import com.ssafy.presentation.home.Adapter.PtScheduleAdapter
 import dagger.hilt.android.internal.managers.ViewComponentManager
 
 
@@ -39,6 +42,7 @@ class PtCalendarBottomSheetFragment : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initEvent()
+        setupRecyclerView()
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -115,5 +119,18 @@ class PtCalendarBottomSheetFragment : BottomSheetDialogFragment() {
         binding.btnClose.setOnClickListener {
             dismissSmoothly()
         }
+    }
+
+    fun setupRecyclerView(){
+        val scheduleItems = listOf(
+            PtScheduleItem("권경탁 트레이너", "오후 8:00~9:00"),
+            PtScheduleItem("박장훈 트레이너", "오전 10:00~11:00")
+        )
+        val adapter = PtScheduleAdapter(scheduleItems) { item ->
+
+        }
+
+        binding.rvPayment.adapter = adapter
+        binding.rvPayment.layoutManager = LinearLayoutManager(requireContext())
     }
 }

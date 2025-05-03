@@ -38,7 +38,7 @@
         app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
     <com.github.mikephil.charting.charts.LineChart
-        android:id="@+id/chart_price_graph"
+        android:id="@+id/chart_body_graph"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="20dp"
@@ -56,8 +56,9 @@
         android:layout_height="wrap_content"
         android:text="김동현님의 PT 일정"
         android:textSize="20sp"
+        android:layout_marginTop="20dp"
         app:layout_constraintStart_toStartOf="@+id/tv_body_graph"
-        app:layout_constraintTop_toBottomOf="@+id/chart_price_graph" />
+        app:layout_constraintTop_toBottomOf="@+id/chart_body_graph" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_calendar"
