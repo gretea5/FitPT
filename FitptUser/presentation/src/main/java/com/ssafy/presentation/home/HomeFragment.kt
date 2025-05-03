@@ -70,8 +70,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
     private fun dateClicked(date: LocalDate) {
         binding.calendar.notifyDateChanged(selectedDate) // 이전 선택값 해제
         selectedDate = date
-        dialog.show(childFragmentManager, "payment")
-        binding.calendar.notifyDateChanged(date) // 새로운 선택값
+        val existingDialog = childFragmentManager.findFragmentByTag("payment")
+        if (existingDialog == null || !existingDialog.isAdded) {
+            dialog.show(childFragmentManager, "payment")
+        }
+        binding.calendar.notifyDateChanged(date)
     }
 
     private fun bindDate(

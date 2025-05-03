@@ -12,6 +12,7 @@
         android:id="@+id/tv_item_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
         android:text="몸무게"
         android:textColor="#757575"
         android:textSize="16sp"
@@ -24,19 +25,21 @@
         android:id="@+id/tv_item_value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
+        android:gravity="center"
         android:text="80.17 kg"
         android:textColor="#000000"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/status_layout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
         android:id="@+id/status_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -63,15 +66,10 @@
             android:id="@+id/iv_dropdown"
             android:layout_width="16dp"
             android:layout_height="16dp"
-            android:src="@drawable/ic_all_right_arrow"
-            android:contentDescription="더보기" />
+            android:contentDescription="더보기"
+            android:src="@drawable/ic_all_right_arrow" />
     </LinearLayout>
 
     <!-- 항목 구분선 -->
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#F5F5F5"
-        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

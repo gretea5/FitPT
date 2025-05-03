@@ -4,12 +4,14 @@
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
     android:paddingVertical="10dp"
+    android:paddingHorizontal="10dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ImageView
         android:id="@+id/iv_notification"
         android:layout_width="48dp"
         android:layout_height="48dp"
+        android:src="@drawable/ic_notification_pt"
         app:layout_constraintBottom_toBottomOf="@+id/tv_notification_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tv_notification_title" />
@@ -51,6 +53,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/pretendard_regular"
         android:textColor="@color/disabled"
+        android:layout_marginRight="15dp"
         android:letterSpacing="-0.02"
         android:textSize="13sp"
         app:layout_constraintBottom_toBottomOf="@+id/tv_notification_title"
