@@ -5,7 +5,7 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.ssafy.data.BuildConfig
 import com.ssafy.data.datasource.UserDataStoreSource
-import com.ssafy.data.interceptor.RequestInterceptor
+import com.ssafy.data.network.interceptor.RequestInterceptor
 import com.ssafy.locket.data.network.logger.FitptApiLogger
 import dagger.Provides
 import dagger.hilt.InstallIn

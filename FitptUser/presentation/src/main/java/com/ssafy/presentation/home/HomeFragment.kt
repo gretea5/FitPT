@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewConfiguration
+import android.widget.Button
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
@@ -47,6 +48,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
     val currentMonth = YearMonth.of(2025,5)
     private lateinit var dialog: PtCalendarBottomSheetFragment
     private lateinit var lineChart: LineChart
+    private var selectedButton: Button? = null
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -57,7 +59,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
         lineChart = binding.chartBodyGraph
         setupLineChart()
         setLineChartData()
-
+        setupTabButtons()
+        // 초기 선택 버튼 설정 (몸무게)
+        selectButton(binding.btnWeight)
         // 차트를 보이게 설정
         lineChart.visibility = View.VISIBLE
     }
@@ -216,6 +220,44 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
         binding.tvPtCalendar.text = spannableString2
     }
 
+    private fun setupTabButtons() {
+        val buttons = listOf(
+            binding.btnSkeletalMuscle,
+            binding.btnWeight,
+            binding.btnBmi,
+            binding.btnBodyFat
+        )
+
+        buttons.forEach { button ->
+            button.setOnClickListener {
+                selectButton(button)
+
+                // 여기에 각 버튼에 맞는 데이터/화면 변경 로직 추가
+                when (button.id) {
+                    R.id.btn_skeletal_muscle -> {
+                        // 골격근량 데이터 표시
+                    }
+                    R.id.btn_weight -> {
+                        // 몸무게 데이터 표시
+                    }
+                    R.id.btn_bmi -> {
+                        // BMI 데이터 표시
+                    }
+                    R.id.btn_body_fat -> {
+                        // 체지방량 데이터 표시
+                    }
+                }
+            }
+        }
+    }
+    private fun selectButton(button: Button) {
+        selectedButton?.isSelected = false
+        button.isSelected = true
+        selectedButton = button
+    }
+
+
+    //차트 관련한 코드
     private fun setupLineChart() {
         lineChart.apply {
             // 차트 설명 텍스트 숨기기
@@ -264,7 +306,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
             }
 
             // 애니메이션 설정
-            animateX(1000)
+            //animateX(1000)
         }
     }
 

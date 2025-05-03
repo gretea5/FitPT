@@ -1,4 +1,4 @@
-package com.ssafy.data.interceptor
+package com.ssafy.data.network.interceptor
 
 
 import com.ssafy.data.datasource.UserDataStoreSource

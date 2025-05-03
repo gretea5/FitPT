@@ -37,17 +37,86 @@
         app:layout_constraintStart_toStartOf="@+id/imageView"
         app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
+    <HorizontalScrollView
+        android:id="@+id/horizontal_scroll_graph"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fillViewport="true"
+        android:scrollbars="none"
+        android:overScrollMode="never"
+        android:paddingVertical="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/tv_body_graph"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingHorizontal="16dp">
+
+            <Button
+                android:id="@+id/btn_skeletal_muscle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="골격근량"
+                app:backgroundTint="@null"
+                android:textColor="@color/tab_button_selector"
+                android:background="@drawable/tab_button_selector"
+                android:textSize="16sp"
+                android:paddingHorizontal="20dp"
+                android:stateListAnimator="@null" />
+
+            <Button
+                android:id="@+id/btn_weight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="몸무게"
+                app:backgroundTint="@null"
+                android:textColor="@color/tab_button_selector"
+                android:background="@drawable/tab_button_selector"
+                android:textSize="16sp"
+                android:paddingHorizontal="20dp"
+                android:stateListAnimator="@null" />
+
+            <Button
+                android:id="@+id/btn_bmi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="BMI"
+                android:textColor="@color/tab_button_selector"
+                android:textSize="16sp"
+                app:backgroundTint="@null"
+                android:background="@drawable/tab_button_selector"
+                android:paddingHorizontal="20dp"
+                android:stateListAnimator="@null" />
+            <Button
+                android:id="@+id/btn_body_fat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="체지방량"
+                android:background="@drawable/tab_button_selector"
+                android:textColor="@color/tab_button_selector"
+                android:textSize="16sp"
+                app:backgroundTint="@null"
+                android:paddingHorizontal="20dp"
+                android:stateListAnimator="@null" />
+        </LinearLayout>
+    </HorizontalScrollView>
+
     <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/chart_body_graph"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="20dp"
         android:paddingBottom="20dp"
         android:visibility="invisible"
         app:layout_constraintDimensionRatio="1.3802:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_body_graph"
+        app:layout_constraintTop_toBottomOf="@+id/horizontal_scroll_graph"
         app:layout_constraintWidth_percent="0.87" />
 
     <TextView
