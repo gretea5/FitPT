@@ -2,6 +2,7 @@ package com.sahur.fitpt.domain.trainer.controller;
 
 import com.sahur.fitpt.domain.trainer.dto.TrainerLoginRequestDto;
 import com.sahur.fitpt.domain.trainer.dto.TrainerLogoutResponseDto;
+import com.sahur.fitpt.domain.trainer.dto.TrainerSignUpRequestDto;
 import com.sahur.fitpt.domain.trainer.service.TrainerService;
 
 import io.swagger.v3.oas.annotations.Parameter;
@@ -23,12 +24,18 @@ public class TrainerController {
         return ResponseEntity.ok().body(trainerId);
     }
 
+    @PostMapping
+    public ResponseEntity<Long> signup(@RequestBody TrainerSignUpRequestDto request) {
+        Long trainerId = trainerService.trainerSignUp(request);
+        return ResponseEntity.ok().body(trainerId);
+    }
+
     @PostMapping("/{trainerId}/logout")
     @Parameters({
             @Parameter(name = "trainerId", description = "트레이너 Id", example = "1"),
     })
     public ResponseEntity<TrainerLogoutResponseDto> logout(@PathVariable("trainerId") Long trainerId) {
         trainerService.trainerLogout(trainerId);
-        return ResponseEntity.ok(new TrainerLogoutResponseDto());
+        return ResponseEntity.ok().body(new TrainerLogoutResponseDto());
     }
 }
