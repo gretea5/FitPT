@@ -25,4 +25,13 @@ public class TrainerServiceImpl implements TrainerService {
 
         return trainer.getTrainerId();
     }
+
+    @Override
+    public void trainerLogout(Long trainerId) {
+        boolean loginIdExists = trainerRepository.existsByTrainerId(trainerId);
+
+        if (!loginIdExists) {
+            throw new CustomException(ErrorCode.TRAINER_LOGOUT_FAILED);
+        }
+    }
 }
