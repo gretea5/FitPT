@@ -16,5 +16,5 @@ public class ReportRequestDto {
     private Long compositionLogId;
     private Long trainerId;
     private String reportComment;
-    private List<ReportExerciseDto> reportExercises;
+    private List<ReportExerciseRequestDto> reportExercises;
 }

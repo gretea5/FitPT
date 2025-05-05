@@ -8,7 +8,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReportExerciseDto {
+public class ReportExerciseRequestDto {
     private String exerciseName;
     private String exerciseAchievement;
     private String exerciseComment;

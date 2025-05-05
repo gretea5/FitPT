@@ -3,9 +3,10 @@ package com.sahur.fitpt.domain.report.service;
 import com.sahur.fitpt.db.entity.*;
 import com.sahur.fitpt.db.repository.*;
 
-import com.sahur.fitpt.domain.report.dto.ReportExerciseDto;
+import com.sahur.fitpt.domain.report.dto.ReportExerciseRequestDto;
 import com.sahur.fitpt.domain.report.dto.ReportRequestDto;
 
+import com.sahur.fitpt.domain.report.dto.ReportResponseDto;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -63,7 +65,7 @@ public class ReportServiceImpl implements ReportService {
 
         List<ReportExercise> reportExercises = new ArrayList<>();
 
-        for (ReportExerciseDto exerciseDto : requestDto.getReportExercises()) {
+        for (ReportExerciseRequestDto exerciseDto : requestDto.getReportExercises()) {
             ReportExercise reportExercise = ReportExercise.builder()
                     .report(savedReport)
                     .exerciseName(exerciseDto.getExerciseName())
@@ -81,7 +83,7 @@ public class ReportServiceImpl implements ReportService {
 
         for (int i = 0; i < savedReportExercises.size(); i++) {
             ReportExercise savedExercise = savedReportExercises.get(i);
-            ReportExerciseDto exerciseDto = requestDto.getReportExercises().get(i);
+            ReportExerciseRequestDto exerciseDto = requestDto.getReportExercises().get(i);
 
             List<WorkoutMuscle> workoutMuscles = new ArrayList<>();
             for (Long muscleId : exerciseDto.getActivation_muscle_id()) {
@@ -130,7 +132,7 @@ public class ReportServiceImpl implements ReportService {
 
             reportExerciseRepository.deleteAllByReport(report);
 
-            for (ReportExerciseDto exerciseDto : requestDto.getReportExercises()) {
+            for (ReportExerciseRequestDto exerciseDto : requestDto.getReportExercises()) {
                 ReportExercise reportExercise = ReportExercise.builder()
                         .report(report)
                         .exerciseName(exerciseDto.getExerciseName())
@@ -155,5 +157,16 @@ public class ReportServiceImpl implements ReportService {
         }
 
         return reportId;
+    }
+
+    @Override
+    public List<ReportResponseDto> getAllReports(Long memberId) {
+        List<Report> reports = reportRepository.findAllByMemberIdWithExercises(memberId);
+
+        List<ReportExercise> exercises = reportExerciseRepository.findAllWithWorkoutMusclesByReportIn(reports);
+
+        return reports.stream()
+                .map(ReportResponseDto::toDto)
+                .collect(Collectors.toList());
     }
 }

@@ -13,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/reports")
 @RequiredArgsConstructor
@@ -32,5 +34,14 @@ public class ReportController {
             @PathVariable Long reportId,
             @RequestBody ReportRequestDto requestDto) {
         return new ResponseEntity<>(reportService.updateReport(reportId, requestDto), HttpStatus.OK);
+    }
+
+    @Parameters({
+            @Parameter(name = "memberId", description = "회원 Id", example = "1"),
+    })
+    @GetMapping
+    public ResponseEntity<List<ReportResponseDto>> getAllReports(@RequestParam(value = "memberId", required = false) Long memberId) {
+        List<ReportResponseDto> reports = reportService.getAllReports(memberId);
+        return new ResponseEntity<>(reports, HttpStatus.OK);
     }
 }

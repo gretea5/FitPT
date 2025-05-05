@@ -13,7 +13,7 @@ import java.util.List;
 @Builder
 public class ReportExerciseResponseDto {
     private String exerciseName;
-    private Integer exerciseAchievement;
+    private String exerciseAchievement;
     private String exerciseComment;
     private List<Long> activation_muscle_id;
 }
