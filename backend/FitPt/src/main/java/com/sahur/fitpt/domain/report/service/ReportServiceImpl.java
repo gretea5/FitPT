@@ -6,6 +6,7 @@ import com.sahur.fitpt.db.repository.*;
 import com.sahur.fitpt.domain.report.dto.ReportExerciseDto;
 import com.sahur.fitpt.domain.report.dto.ReportRequestDto;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +17,7 @@ import java.util.List;
 
 @Slf4j
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class ReportServiceImpl implements ReportService {
     private final ReportRepository reportRepository;
@@ -96,5 +98,62 @@ public class ReportServiceImpl implements ReportService {
         workOutMuscleRepository.saveAll(allWorkoutMuscles);
 
         return savedReport.getReportId();
+    }
+
+    @Override
+    public Long updateReport(Long reportId, ReportRequestDto requestDto) {
+        Report report = reportRepository.findById(reportId)
+                .orElseThrow(() -> new IllegalArgumentException("보고서를 찾을 수 없습니다."));
+
+        if (requestDto.getMemberId() != null) {
+            Member member = memberRepository.findById(requestDto.getMemberId())
+                    .orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
+            report.updateMember(member);
+        }
+
+        if (requestDto.getCompositionLogId() != null) {
+            CompositionLog compositionLog = compositionRepository.findById(requestDto.getCompositionLogId())
+                    .orElseThrow(() -> new IllegalArgumentException("체성분 로그를 찾을 수 없습니다."));
+            report.updateCompositionLog(compositionLog);
+        }
+
+        if (requestDto.getReportComment() != null) {
+            report.updateReportComment(requestDto.getReportComment());
+        }
+
+        if (requestDto.getReportExercises() != null && !requestDto.getReportExercises().isEmpty()) {
+            List<ReportExercise> existingExercises = reportExerciseRepository.findAllByReport(report);
+
+            for (ReportExercise exercise : existingExercises) {
+                workOutMuscleRepository.deleteAllByReportExercise(exercise);
+            }
+
+            reportExerciseRepository.deleteAllByReport(report);
+
+            for (ReportExerciseDto exerciseDto : requestDto.getReportExercises()) {
+                ReportExercise reportExercise = ReportExercise.builder()
+                        .report(report)
+                        .exerciseName(exerciseDto.getExerciseName())
+                        .exerciseAchievement(String.valueOf(exerciseDto.getExerciseAchievement()))
+                        .exerciseComment(exerciseDto.getExerciseComment())
+                        .workoutMuscles(new ArrayList<>())
+                        .build();
+
+                ReportExercise savedExercise = reportExerciseRepository.save(reportExercise);
+
+                List<WorkoutMuscle> workoutMuscles = new ArrayList<>();
+                for (Long muscleId : exerciseDto.getActivation_muscle_id()) {
+                    WorkoutMuscle workoutMuscle = WorkoutMuscle.builder()
+                            .reportExercise(savedExercise)
+                            .activationMuscleId(muscleId)
+                            .build();
+                    workoutMuscles.add(workoutMuscle);
+                }
+
+                workOutMuscleRepository.saveAll(workoutMuscles);
+            }
+        }
+
+        return reportId;
     }
 }

@@ -2,16 +2,16 @@ package com.sahur.fitpt.domain.report.controller;
 
 
 import com.sahur.fitpt.domain.report.dto.ReportRequestDto;
+import com.sahur.fitpt.domain.report.dto.ReportResponseDto;
 import com.sahur.fitpt.domain.report.service.ReportService;
 
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/reports")
@@ -21,8 +21,16 @@ public class ReportController {
 
     @PostMapping
     public ResponseEntity<Long> createReport(@RequestBody ReportRequestDto requestDto) {
-        Long reportId = reportService.createReport(requestDto);
+        return new ResponseEntity<>(reportService.createReport(requestDto), HttpStatus.CREATED);
+    }
 
-        return new ResponseEntity<>(reportId, HttpStatus.CREATED);
+    @Parameters({
+            @Parameter(name = "reportId", description = "보고서 Id", example = "1"),
+    })
+    @PatchMapping("/{reportId}")
+    public ResponseEntity<Long> updateReport(
+            @PathVariable Long reportId,
+            @RequestBody ReportRequestDto requestDto) {
+        return new ResponseEntity<>(reportService.updateReport(reportId, requestDto), HttpStatus.OK);
     }
 }
