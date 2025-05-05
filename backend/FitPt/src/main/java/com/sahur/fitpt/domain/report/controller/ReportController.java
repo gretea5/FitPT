@@ -1,6 +1,7 @@
 package com.sahur.fitpt.domain.report.controller;
 
 
+import com.sahur.fitpt.domain.report.dto.ReportDetailResponseDto;
 import com.sahur.fitpt.domain.report.dto.ReportRequestDto;
 import com.sahur.fitpt.domain.report.dto.ReportResponseDto;
 import com.sahur.fitpt.domain.report.service.ReportService;
@@ -40,8 +41,13 @@ public class ReportController {
             @Parameter(name = "memberId", description = "회원 Id", example = "1"),
     })
     @GetMapping
-    public ResponseEntity<List<ReportResponseDto>> getAllReports(@RequestParam(value = "memberId", required = false) Long memberId) {
+    public ResponseEntity<List<ReportResponseDto>> getAllReports(@RequestParam(value = "memberId") Long memberId) {
         List<ReportResponseDto> reports = reportService.getAllReports(memberId);
         return new ResponseEntity<>(reports, HttpStatus.OK);
+    }
+
+    @GetMapping("/{reportId}")
+    public ResponseEntity<ReportDetailResponseDto> getReport(@RequestParam(value = "reportId") Long reportId) {
+        return new ResponseEntity<>(reportService.getReport(reportId), HttpStatus.OK);
     }
 }

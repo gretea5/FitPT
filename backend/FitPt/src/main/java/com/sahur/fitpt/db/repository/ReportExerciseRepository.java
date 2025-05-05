@@ -13,7 +13,9 @@ public interface ReportExerciseRepository extends JpaRepository<ReportExercise, 
 
     void deleteAllByReport(Report report);
 
-    // ReportExercise와 WorkoutMuscles를 함께 가져오기
     @Query("SELECT DISTINCT re FROM ReportExercise re LEFT JOIN FETCH re.workoutMuscles WHERE re.report IN :reports")
     List<ReportExercise> findAllWithWorkoutMusclesByReportIn(@Param("reports") List<Report> reports);
+
+    @Query("SELECT DISTINCT re FROM ReportExercise re LEFT JOIN FETCH re.workoutMuscles WHERE re.report = :report")
+    List<ReportExercise> findAllWithWorkoutMusclesByReport(@Param("report") Report report);
 }

@@ -3,10 +3,9 @@ package com.sahur.fitpt.domain.report.service;
 import com.sahur.fitpt.db.entity.*;
 import com.sahur.fitpt.db.repository.*;
 
-import com.sahur.fitpt.domain.report.dto.ReportExerciseRequestDto;
-import com.sahur.fitpt.domain.report.dto.ReportRequestDto;
+import com.sahur.fitpt.domain.composition.dto.CompositionResponseDto;
+import com.sahur.fitpt.domain.report.dto.*;
 
-import com.sahur.fitpt.domain.report.dto.ReportResponseDto;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
@@ -168,5 +167,48 @@ public class ReportServiceImpl implements ReportService {
         return reports.stream()
                 .map(ReportResponseDto::toDto)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public ReportDetailResponseDto getReport(Long reportId) {
+        Report report = reportRepository.findById(reportId).orElseThrow(() ->
+            new IllegalArgumentException("보고서를 찾을 수 없습니다.")
+        );
+
+        CompositionLog compositionLog = compositionRepository.findById(report.getCompositionLog().getCompositionLogId())
+            .orElseThrow(() ->
+                    new IllegalArgumentException("체성분 정보를 찾을 수 없습니다.")
+            );
+
+        CompositionResponseDto compositionResponseDto = CompositionResponseDto.fromEntity(compositionLog);
+
+        List<ReportExercise> reportExercises = reportExerciseRepository.findAllWithWorkoutMusclesByReport(report);
+
+        ReportDetailResponseDto dto = new ReportDetailResponseDto();
+
+        dto.setReportId(report.getReportId());
+        dto.setMemberId(report.getMember().getMemberId());
+        dto.setTrainerName(report.getTrainer().getTrainerName());
+        dto.setReportComment(report.getReportComment());
+        dto.setCreatedAt(report.getCreatedAt().toString());
+        dto.setCompositionResponseDto(compositionResponseDto);
+        dto.setReportExercises(new ArrayList<>());
+
+        for (ReportExercise exercise : reportExercises) {
+            ReportExerciseResponseDto reportExerciseResponseDto = new ReportExerciseResponseDto();
+
+            reportExerciseResponseDto.setExerciseComment(exercise.getExerciseComment());
+            reportExerciseResponseDto.setExerciseName(exercise.getExerciseName());
+            reportExerciseResponseDto.setExerciseAchievement(exercise.getExerciseAchievement());
+            reportExerciseResponseDto.setActivation_muscle_id(new ArrayList<>());
+
+            for (WorkoutMuscle workoutMuscle : exercise.getWorkoutMuscles()) {
+                reportExerciseResponseDto.getActivation_muscle_id().add(workoutMuscle.getActivationMuscleId());
+            }
+
+            dto.getReportExercises().add(reportExerciseResponseDto);
+        }
+
+        return dto;
     }
 }
