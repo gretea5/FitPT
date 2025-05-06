@@ -1,0 +1,23 @@
+plugin: amazon.aws.aws_ec2
+regions:
+  - ap-northeast-2
+
+# EC2 태그 기반으로 그룹핑
+keyed_groups:
+  - key: tags.ansibleNodeType
+    prefix: ""
+
+# 인스턴스 상태가 running 이고, Owner 태그가 특정 값일 때만
+filters:
+  instance-state-name: running
+  tag:Owner: kkt3289  # ← 실제 적용된 Owner 태그 값으로 바꿔야 함
+
+# 인벤토리에서 사용할 주소 지정 (보통 public_ip_address, 내부망이면 private)
+compose:
+  ansible_host: public_ip_address
+
+# (옵션) 태그 기반으로 호스트 이름 설정 가능
+hostnames:
+  - tag:Name
+
+strict: False

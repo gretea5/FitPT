@@ -45,6 +45,12 @@ resource "aws_instance" "controller_etcd" {
   vpc_security_group_ids = ["${aws_security_group.kubernetes.id}"]
   key_name               = var.default_keypair_name
 
+  root_block_device {
+    volume_size           = 100          # 운영환경 기준 여유롭게
+    volume_type           = "gp3"
+    delete_on_termination = true
+  }
+
   tags = merge(
     local.common_tags,
     {
