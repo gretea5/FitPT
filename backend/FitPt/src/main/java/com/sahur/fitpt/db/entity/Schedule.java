@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 public class Schedule {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long ScheduleId;
+    private Long scheduleId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "trainer_id")
@@ -38,4 +38,15 @@ public class Schedule {
 
     @Column(name = "schedule_content", columnDefinition = "TEXT")
     private String scheduleContent;
+
+    public void update(Member member, Trainer trainer, LocalDateTime startTime,
+                       LocalDateTime endTime, String scheduleContent) {
+        this.member = member;
+        this.trainer = trainer;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.scheduleContent = scheduleContent;
+    }
 }
+
+

@@ -3,9 +3,7 @@ package com.sahur.fitpt.domain.schedule.service;
 import com.sahur.fitpt.db.entity.Member;
 import com.sahur.fitpt.db.entity.Schedule;
 import com.sahur.fitpt.db.entity.Trainer;
-import com.sahur.fitpt.db.repository.MemberRepository;
 import com.sahur.fitpt.db.repository.ScheduleRepository;
-import com.sahur.fitpt.db.repository.TrainerRepository;
 import com.sahur.fitpt.domain.schedule.dto.ScheduleRequestDto;
 import com.sahur.fitpt.domain.schedule.dto.ScheduleResponseDto;
 import com.sahur.fitpt.domain.schedule.validator.ScheduleValidator;
@@ -61,6 +59,58 @@ public class ScheduleServiceImpl implements ScheduleService {
                 startTime);
 
         return savedSchedule.getScheduleId();
+    }
+
+    @Override
+    @Transactional
+    public Long updateSchedule(Long scheduleId, ScheduleRequestDto requestDto) {
+        Schedule schedule = scheduleRepository.findById(scheduleId)
+                .orElseThrow(() -> new IllegalArgumentException("Schedule not found with ID: " + scheduleId));
+
+        Member member = scheduleValidator.validateAndGetMember(requestDto.getMemberId());
+        Trainer trainer = scheduleValidator.validateAndGetTrainer(requestDto.getTrainerId());
+
+        LocalDateTime startTime = requestDto.getStartTime();
+        LocalDateTime endTime = requestDto.getEndTime();
+
+        // 시간 유효성 검사
+        scheduleValidator.validateScheduleTime(startTime, endTime);
+
+        // 시간 중복 검사 (자기 자신 제외)
+        List<Schedule> trainerSchedules = scheduleRepository.findOverlappingSchedulesForTrainer(
+                        trainer.getTrainerId(), startTime, endTime).stream()
+                .filter(s -> !s.getScheduleId().equals(scheduleId))
+                .collect(Collectors.toList());
+        scheduleValidator.validateScheduleTimeOverlap(trainerSchedules, "Trainer");
+
+        List<Schedule> memberSchedules = scheduleRepository.findOverlappingSchedulesForMember(
+                        member.getMemberId(), startTime, endTime).stream()
+                .filter(s -> !s.getScheduleId().equals(scheduleId))
+                .collect(Collectors.toList());
+        scheduleValidator.validateScheduleTimeOverlap(memberSchedules, "Member");
+
+        schedule.update(member, trainer, startTime, endTime, requestDto.getScheduleContent());
+
+        log.info("Updated schedule: id={}, trainer={}, member={}, startTime={}",
+                schedule.getScheduleId(),
+                trainer.getTrainerId(),
+                member.getMemberId(),
+                startTime);
+
+        return schedule.getScheduleId();
+    }
+
+    @Override
+    @Transactional
+    public Long deleteSchedule(Long scheduleId) {
+        Schedule schedule = scheduleRepository.findById(scheduleId)
+                .orElseThrow(() -> new IllegalArgumentException("Schedule not found with ID: " + scheduleId));
+
+        scheduleRepository.delete(schedule);
+
+        log.info("Deleted schedule: id={}", scheduleId);
+
+        return scheduleId;
     }
 
 

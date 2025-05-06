@@ -50,6 +50,59 @@ public class ScheduleController {
         return ResponseEntity.ok(scheduleId);
     }
 
+    @PutMapping("/{scheduleId}")
+    @Operation(summary = "PT 일정 수정", description = "기존 PT 일정을 수정합니다.")
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "일정 수정 성공",
+                    content = @Content(schema = @Schema(implementation = Long.class))
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "잘못된 요청",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "일정을 찾을 수 없음",
+                    content = @Content
+            )
+    })
+    public ResponseEntity<Long> updateSchedule(
+            @Parameter(description = "수정할 일정 ID", required = true)
+            @PathVariable Long scheduleId,
+            @RequestBody
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "일정 수정 정보",
+                    required = true,
+                    content = @Content(schema = @Schema(implementation = ScheduleRequestDto.class))
+            ) ScheduleRequestDto requestDto) {
+        Long updatedScheduleId = scheduleService.updateSchedule(scheduleId, requestDto);
+        return ResponseEntity.ok(updatedScheduleId);
+    }
+
+    @DeleteMapping("/{scheduleId}")
+    @Operation(summary = "PT 일정 삭제", description = "PT 일정을 삭제합니다.")
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "일정 삭제 성공",
+                    content = @Content(schema = @Schema(implementation = Long.class))
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "일정을 찾을 수 없음",
+                    content = @Content
+            )
+    })
+    public ResponseEntity<Long> deleteSchedule(
+            @Parameter(description = "삭제할 일정 ID", required = true)
+            @PathVariable Long scheduleId) {
+        Long deletedScheduleId = scheduleService.deleteSchedule(scheduleId);
+        return ResponseEntity.ok(deletedScheduleId);
+    }
+
     @GetMapping
     @Operation(summary = "PT 일정 조회", description = "날짜/월별로 트레이너 또는 회원의 PT 일정을 조회합니다.")
     @ApiResponses({
