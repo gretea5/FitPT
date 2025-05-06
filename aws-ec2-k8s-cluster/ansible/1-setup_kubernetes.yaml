@@ -1,0 +1,150 @@
+- name: Setup single-node Kubernetes with Calico and DevOps tools
+  hosts: controller-etcd-0
+  become: true
+
+  tasks:
+    - name: Disable swap temporarily
+      command: swapoff -a
+
+    - name: Remove swap from /etc/fstab
+      replace:
+        path: /etc/fstab
+        regexp: '^.* swap .*$'
+        replace: ''
+
+    - name: Install required packages
+      apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - gnupg
+          - lsb-release
+        state: present
+        update_cache: yes
+
+    - name: Install Docker
+      apt:
+        name: docker.io
+        state: present
+
+    - name: Enable Docker
+      systemd:
+        name: docker
+        enabled: true
+        state: started
+
+    - name: Add ubuntu to docker group
+      user:
+        name: ubuntu
+        groups: docker
+        append: yes
+
+    - name: Add Kubernetes GPG key
+      shell: |
+        curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.29/deb/Release.key | \
+        gpg --dearmor -o /usr/share/keyrings/kubernetes-archive-keyring.gpg
+      args:
+        creates: /usr/share/keyrings/kubernetes-archive-keyring.gpg
+
+    - name: Add Kubernetes apt repository
+      apt_repository:
+        repo: "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.29/deb/ /"
+        state: present
+        filename: kubernetes
+
+    - name: Install Kubernetes tools
+      apt:
+        name:
+          - kubelet
+          - kubeadm
+          - kubectl
+        state: present
+        update_cache: yes
+
+    - name: Hold Kubernetes tools
+      shell: apt-mark hold kubelet kubeadm kubectl
+
+    - name: Initialize Kubernetes cluster
+      shell: kubeadm init --pod-network-cidr=192.168.0.0/16
+      args:
+        creates: /etc/kubernetes/admin.conf
+
+    - name: Set kubeconfig for ubuntu user
+      become: true
+      shell: |
+        mkdir -p /home/ubuntu/.kube && \
+        cp /etc/kubernetes/admin.conf /home/ubuntu/.kube/config && \
+        chown ubuntu:ubuntu /home/ubuntu/.kube/config
+      args:
+        creates: /home/ubuntu/.kube/config
+
+
+    - name: Remove control-plane taint (allow pods on master)
+      shell: kubectl taint nodes --all node-role.kubernetes.io/control-plane- || true
+
+    - name: Wait for kube-apiserver port to be open
+      shell: |
+        curl -k https://localhost:6443/version
+      register: result
+      until: result.rc == 0
+      retries: 10
+      delay: 10
+
+
+    - name: Install Calico CNI
+      shell: kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.27.0/manifests/calico.yaml
+
+    - name: Install Helm
+      shell: curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+      args:
+        creates: /usr/local/bin/helm
+
+    - name: Create devops namespace
+      kubernetes.core.k8s:
+        api_version: v1
+        kind: Namespace
+        name: devops
+        state: present
+
+    - name: Add Helm repos
+      kubernetes.core.helm_repository:
+        name: "{{ item.name }}"
+        repo_url: "{{ item.url }}"
+      loop:
+        - { name: "jenkinsci", url: "https://charts.jenkins.io" }
+        - { name: "argo", url: "https://argoproj.github.io/argo-helm" }
+        - { name: "ingress-nginx", url: "https://kubernetes.github.io/ingress-nginx" }
+        - { name: "jetstack", url: "https://charts.jetstack.io" }
+
+    - name: Install Jenkins
+      kubernetes.core.helm:
+        name: jenkins
+        chart_ref: jenkinsci/jenkins
+        release_namespace: devops
+        create_namespace: false
+        state: present
+
+    - name: Install ArgoCD
+      kubernetes.core.helm:
+        name: argocd
+        chart_ref: argo/argo-cd
+        release_namespace: devops
+        state: present
+
+    - name: Install ingress-nginx
+      kubernetes.core.helm:
+        name: ingress-nginx
+        chart_ref: ingress-nginx/ingress-nginx
+        release_namespace: ingress-nginx
+        create_namespace: true
+        state: present
+
+    - name: Install cert-manager
+      kubernetes.core.helm:
+        name: cert-manager
+        chart_ref: jetstack/cert-manager
+        release_namespace: cert-manager
+        create_namespace: true
+        set_values:
+          - value: installCRDs=true

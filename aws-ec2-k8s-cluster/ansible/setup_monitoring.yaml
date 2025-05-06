@@ -1,0 +1,48 @@
+# ansible/setup_monitoring.yaml
+- name: Install Prometheus and Grafana Agent
+  hosts: _monitoring
+  become: true
+
+  tasks:
+    - name: Install Prometheus Node Exporter
+      apt:
+        name: prometheus-node-exporter
+        state: present
+
+    - name: Enable and start node exporter
+      systemd:
+        name: prometheus-node-exporter
+        enabled: true
+        state: started
+
+    - name: Install Grafana Agent (manual binary fetch or package)
+      get_url:
+        url: https://github.com/grafana/agent/releases/download/v0.40.0/grafana-agent-linux-amd64.zip
+        dest: /tmp/grafana-agent.zip
+
+    - name: Unzip and move binary
+      unarchive:
+        src: /tmp/grafana-agent.zip
+        dest: /usr/local/bin/
+        remote_src: yes
+
+    - name: Create systemd service for grafana-agent
+      copy:
+        dest: /etc/systemd/system/grafana-agent.service
+        content: |
+          [Unit]
+          Description=Grafana Agent
+          After=network.target
+
+          [Service]
+          ExecStart=/usr/local/bin/grafana-agent --config.file=/etc/grafana-agent.yaml
+          Restart=on-failure
+
+          [Install]
+          WantedBy=multi-user.target
+
+    - name: Enable and start grafana-agent
+      systemd:
+        name: grafana-agent
+        enabled: true
+        state: started

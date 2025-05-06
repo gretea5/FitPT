@@ -1,0 +1,13 @@
+# ansible/infra.yaml
+- name: Install base tools and Python on all nodes
+  hosts: all
+  gather_facts: false
+
+  tasks:
+    - name: Install base dependencies
+      raw: |
+        apt update && \
+        apt install -y python3 python3-pip vim curl unzip
+      become: true
+      retries: 5
+      delay: 10
