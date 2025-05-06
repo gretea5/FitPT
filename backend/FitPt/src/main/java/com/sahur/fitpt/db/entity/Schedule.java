@@ -28,11 +28,14 @@ public class Schedule {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @CreationTimestamp
+    //@CreationTimestamp
     @Column(name = "start_time")
     private LocalDateTime startTime;
 
-    @CreationTimestamp
+    //@CreationTimestamp
     @Column(name = "end_time")
     private LocalDateTime endTime;
+
+    @Column(name = "schedule_content", columnDefinition = "TEXT")
+    private String scheduleContent;
 }
