@@ -1,5 +1,6 @@
 package com.sahur.fitpt.domain.report.service;
 
+import com.sahur.fitpt.core.exception.CustomException;
 import com.sahur.fitpt.db.entity.*;
 import com.sahur.fitpt.db.repository.*;
 
@@ -10,6 +11,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -32,25 +34,25 @@ public class ReportServiceImpl implements ReportService {
     @Override
     public Long createReport(ReportRequestDto requestDto) {
         if (requestDto.getMemberId() == null) {
-            throw new IllegalArgumentException("회원 ID는 null이 될 수 없습니다.");
+            throw new CustomException(HttpStatus.BAD_REQUEST);
         }
 
         if (requestDto.getTrainerId() == null) {
-            throw new IllegalArgumentException("트레이너 ID는 null이 될 수 없습니다.");
+            throw new CustomException(HttpStatus.BAD_REQUEST);
         }
 
         if (requestDto.getCompositionLogId() == null) {
-            throw new IllegalArgumentException("체성분 로그 ID는 null이 될 수 없습니다.");
+            throw new CustomException(HttpStatus.BAD_REQUEST);
         }
 
         Member member = memberRepository.findById(requestDto.getMemberId())
-                .orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
+                .orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND));
 
         Trainer trainer = trainerRepository.findById(requestDto.getTrainerId())
-                .orElseThrow(() -> new IllegalArgumentException("트레이너를 찾을 수 없습니다."));
+                .orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND));
 
         CompositionLog compositionLog = compositionRepository.findById(requestDto.getCompositionLogId())
-                .orElseThrow(() -> new IllegalArgumentException("체성분 로그를 찾을 수 없습니다."));
+                .orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND));
 
         Report report = Report.builder()
                 .member(member)
@@ -104,17 +106,17 @@ public class ReportServiceImpl implements ReportService {
     @Override
     public Long updateReport(Long reportId, ReportRequestDto requestDto) {
         Report report = reportRepository.findById(reportId)
-                .orElseThrow(() -> new IllegalArgumentException("보고서를 찾을 수 없습니다."));
+                .orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND));
 
         if (requestDto.getMemberId() != null) {
             Member member = memberRepository.findById(requestDto.getMemberId())
-                    .orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
+                    .orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND));
             report.updateMember(member);
         }
 
         if (requestDto.getCompositionLogId() != null) {
             CompositionLog compositionLog = compositionRepository.findById(requestDto.getCompositionLogId())
-                    .orElseThrow(() -> new IllegalArgumentException("체성분 로그를 찾을 수 없습니다."));
+                    .orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND));
             report.updateCompositionLog(compositionLog);
         }
 
@@ -172,13 +174,11 @@ public class ReportServiceImpl implements ReportService {
     @Override
     public ReportDetailResponseDto getReport(Long reportId) {
         Report report = reportRepository.findById(reportId).orElseThrow(() ->
-            new IllegalArgumentException("보고서를 찾을 수 없습니다.")
+                new CustomException(HttpStatus.NOT_FOUND)
         );
 
         CompositionLog compositionLog = compositionRepository.findById(report.getCompositionLog().getCompositionLogId())
-            .orElseThrow(() ->
-                    new IllegalArgumentException("체성분 정보를 찾을 수 없습니다.")
-            );
+            .orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND));
 
         CompositionResponseDto compositionResponseDto = CompositionResponseDto.fromEntity(compositionLog);
 

@@ -1,5 +1,6 @@
 package com.sahur.fitpt.domain.composition.service;
 
+import com.sahur.fitpt.core.exception.CustomException;
 import com.sahur.fitpt.db.entity.CompositionLog;
 import com.sahur.fitpt.db.entity.Member;
 import com.sahur.fitpt.db.repository.CompositionRepository;
@@ -8,6 +9,7 @@ import com.sahur.fitpt.domain.composition.dto.CompositionRequestDto;
 import com.sahur.fitpt.domain.composition.dto.CompositionResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,7 +24,7 @@ public class CompositionServiceImpl implements CompositionService {
     @Override
     public Long saveComposition(CompositionRequestDto request) {
         Member member = memberRepository.findById(request.getMemberId())
-                .orElseThrow(() -> new IllegalArgumentException("Member not found"));
+                .orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND));
 
         CompositionLog compositionLog = CompositionLog.builder()
                 .member(member)
