@@ -70,6 +70,14 @@ public class TrainerServiceImpl implements TrainerService {
         Trainer trainer = trainerRepository.findById(trainerId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 트레이너입니다."));
 
+        // 입력된 로그인 ID가 다른 트레이너에게 이미 존재하는지 검사
+        boolean isDuplicate = trainerRepository.existsByTrainerLoginId(trainerUpdateRequestDto.getTrainerLoginId())
+                && !trainerUpdateRequestDto.getTrainerLoginId().equals(trainer.getTrainerLoginId());
+
+        if (isDuplicate) {
+            throw new IllegalArgumentException("이미 존재하는 로그인 ID입니다.");
+        }
+
         trainer.updateTrainerInfo(trainerUpdateRequestDto.getTrainerName(), trainerUpdateRequestDto.getTrainerLoginId(), trainerUpdateRequestDto.getTrainerPw());
 
         return trainer.getTrainerId();

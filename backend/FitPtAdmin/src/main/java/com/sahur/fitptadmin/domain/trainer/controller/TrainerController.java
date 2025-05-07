@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -68,10 +69,17 @@ public class TrainerController {
 
     @PostMapping("/trainers/{trainerId}")
     public String updateTrainer(@PathVariable Long trainerId,
-                                @ModelAttribute TrainerUpdateRequestDto trainerUpdateRequestDto) {
+                                @ModelAttribute TrainerUpdateRequestDto trainerUpdateRequestDto,
+                                RedirectAttributes redirectAttributes) {
 
-        trainerService.updateTrainerInfo(trainerId, trainerUpdateRequestDto);
-        return "redirect:/admin/trainers";
+        try {
+            trainerService.updateTrainerInfo(trainerId, trainerUpdateRequestDto);
+            return "redirect:/admin/trainers";
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("editErrorMsg", e.getMessage());
+            redirectAttributes.addFlashAttribute("openEditModalId", trainerId); // 열릴 모달 ID 전달
+            return "redirect:/admin/trainers";
+        }
     }
 
     @PostMapping("/trainers/{trainerId}/delete")

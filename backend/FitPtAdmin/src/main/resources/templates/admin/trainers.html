@@ -118,9 +118,6 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
-                        <div th:if="${registerErrorMsg}" class="alert alert-danger" role="alert"
-                             th:text="${registerErrorMsg}">
-                        </div>
                         <div class="mb-3">
                             <label class="form-label">이름</label>
                             <input type="text" name="trainerName" class="form-control" required>
@@ -132,6 +129,9 @@
                         <div class="mb-3">
                             <label class="form-label">비밀번호</label>
                             <input type="password" name="trainerPw" class="form-control" required>
+                        </div>
+                        <div th:if="${registerErrorMsg}" class="alert alert-danger" role="alert"
+                             th:text="${registerErrorMsg}">
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -205,13 +205,17 @@
                                             <input type="text" class="form-control rounded-3"
                                                    name="trainerPw" th:value="${trainer.trainerPw}" required>
                                         </div>
+                                        <div th:if="${editErrorMsg}" class="alert alert-danger" role="alert"
+                                             th:text="${editErrorMsg}">
+                                        </div>
                                     </div>
                                     <div class="modal-footer border-top-0 pt-0 d-flex justify-content-between">
                                         <button type="button" class="btn btn-outline-secondary rounded-3 px-4"
                                                 data-bs-dismiss="modal">닫기
                                         </button>
                                         <button type="submit" class="btn btn-primary rounded-3 px-4"
-                                                style="background-color: #D24726; border: none;">저장</button>
+                                                style="background-color: #D24726; border: none;">저장
+                                        </button>
                                     </div>
                                 </form>
                             </div>
@@ -243,7 +247,8 @@
                                 </div>
 
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">닫기</button>
+                                    <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">닫기
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -253,6 +258,51 @@
             </tbody>
         </table>
     </div>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        let editModalId = /*[[${openEditModalId}]]*/ null;
+        if (editModalId !== null) {
+            document.addEventListener("DOMContentLoaded", function () {
+                let modalElement = document.getElementById('editTrainerModal__' + editModalId);
+                if (modalElement) {
+                    let modal = new bootstrap.Modal(modalElement);
+                    modal.show();
+
+                    // 모달 닫힘 시 alert 제거
+                    modalElement.addEventListener('hidden.bs.modal', function () {
+                        const alertBox = modalElement.querySelector('.alert');
+                        if (alertBox) {
+                            alertBox.remove();
+                        }
+                    });
+                }
+            });
+        }
+        /*]]>*/
+
+        /*<![CDATA[*/
+        let openCreateModal = [[${openCreateModal}]];
+        if (openCreateModal) {
+            document.addEventListener("DOMContentLoaded", function () {
+                let createModal = new bootstrap.Modal(document.getElementById('createTrainerModal'));
+                createModal.show();
+            });
+        }
+        /*]]>*/
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const createModalEl = document.getElementById('createTrainerModal');
+            if (createModalEl) {
+                createModalEl.addEventListener('hidden.bs.modal', function () {
+                    const alertBox = createModalEl.querySelector('.alert');
+                    if (alertBox) {
+                        alertBox.remove();
+                    }
+                });
+            }
+        });
+
+    </script>
 </section>
 </body>
 </html>
