@@ -1,7 +1,25 @@
 package com.sahur.fitpt.db.repository;
 
 import com.sahur.fitpt.db.entity.Member;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
-public interface MemberRepository extends CrudRepository<Member, Long> {
+import java.util.List;
+import java.util.Optional;
+
+public interface MemberRepository extends JpaRepository<Member, Long> {
+
+    //  findById(논리적 삭제 고려)
+    @Query("SELECT m FROM Member m " +
+            "LEFT JOIN FETCH m.admin " +
+            "LEFT JOIN FETCH m.trainer " +
+            "WHERE m.memberId = :memberId AND m.isDeleted = false")
+    Optional<Member> findByIdAndNotDeleted(@Param("memberId") Long memberId);
+
+    // 트레이너별 회원 목록 조회 (삭제되지 않은 회원만)
+    @Query("SELECT DISTINCT m FROM Member m " +
+            "LEFT JOIN FETCH m.admin " +
+            "WHERE m.trainer.trainerId = :trainerId AND m.isDeleted = false")
+    List<Member> findAllByTrainerIdAndNotDeleted(@Param("trainerId") Long trainerId);
 }
