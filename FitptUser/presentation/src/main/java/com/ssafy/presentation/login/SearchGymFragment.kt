@@ -26,14 +26,5 @@ class SearchGymFragment : BaseFragment<FragmentSearchGymBinding>(
         binding.ivBack.setOnClickListener {
             findNavController().popBackStack()
         }
-        binding.btnNext.setOnClickListener {
-            findNavController().navigate(
-                R.id.action_searchGymFragment_to_registerUserInfoFragment,
-                null,
-                NavOptions.Builder()
-                    .setPopUpTo(R.id.searchGymFragment, true) // 이 프래그먼트를 스택에서 제거
-                    .build()
-            )
-        }
     }
 }

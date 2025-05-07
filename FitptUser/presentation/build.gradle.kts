@@ -45,6 +45,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.firebase.messaging.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -67,7 +68,7 @@ dependencies {
     kapt("com.google.dagger:hilt-android-compiler:2.51.1")
 
     // FCM 사용 위한 plugins
-    //implementation("com.google.firebase:firebase-messaging-ktx")
+    implementation("com.google.firebase:firebase-messaging-ktx")
 }
 
 kapt {
