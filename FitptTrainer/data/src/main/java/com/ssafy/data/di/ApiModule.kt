@@ -1,0 +1,21 @@
+package com.ssafy.data.di
+
+import com.ssafy.data.network.api.AuthService
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import retrofit2.Retrofit
+import javax.inject.Singleton
+
+@Module(includes = [NetworkModule::class, DataStoreModule::class])
+@InstallIn(SingletonComponent::class)
+internal class ApiModule {
+    @Provides
+    @Singleton
+    fun provideAuthService(
+        @NoInterceptorRetrofit retrofit: Retrofit
+    ): AuthService {
+        return retrofit.create(AuthService::class.java)
+    }
+}
