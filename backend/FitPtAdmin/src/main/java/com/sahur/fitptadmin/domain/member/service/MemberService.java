@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface MemberService {
     List<MemberDto> getMembers(Long adminId);
+
+    Long changeTrainer(Long memberId, Long newTrainerId);
 }

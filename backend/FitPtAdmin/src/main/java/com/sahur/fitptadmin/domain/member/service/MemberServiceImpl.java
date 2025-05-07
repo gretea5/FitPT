@@ -1,7 +1,9 @@
 package com.sahur.fitptadmin.domain.member.service;
 
 import com.sahur.fitptadmin.db.entity.Member;
+import com.sahur.fitptadmin.db.entity.Trainer;
 import com.sahur.fitptadmin.db.repository.MemberRepository;
+import com.sahur.fitptadmin.db.repository.TrainerRepository;
 import com.sahur.fitptadmin.domain.member.dto.MemberDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +19,7 @@ import java.util.List;
 public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
+    private final TrainerRepository trainerRepository;
 
     @Override
     public List<MemberDto> getMembers(Long adminId) {
@@ -34,5 +37,22 @@ public class MemberServiceImpl implements MemberService {
                         .trainerName(member.getTrainer() != null ? member.getTrainer().getTrainerName() : "없음")
                         .build())
                 .toList();
+    }
+
+    @Override
+    public Long changeTrainer(Long memberId, Long newTrainerId) {
+
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
+
+        if (newTrainerId != null) {
+            Trainer trainer = trainerRepository.findById(newTrainerId)
+                    .orElseThrow(() -> new IllegalArgumentException("트레이너가 존재하지 않습니다."));
+            member.updateTrainer(trainer);
+        } else {
+            member.updateTrainer(null); // 트레이너 제거
+        }
+
+        return memberId;
     }
 }
