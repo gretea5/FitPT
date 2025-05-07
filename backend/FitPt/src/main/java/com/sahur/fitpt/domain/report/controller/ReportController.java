@@ -47,7 +47,7 @@ public class ReportController {
     }
 
     @GetMapping("/{reportId}")
-    public ResponseEntity<ReportDetailResponseDto> getReport(@RequestParam(value = "reportId") Long reportId) {
+    public ResponseEntity<ReportDetailResponseDto> getReport(@PathVariable Long reportId) {
         return new ResponseEntity<>(reportService.getReport(reportId), HttpStatus.OK);
     }
 }
