@@ -2,6 +2,7 @@ package com.sahur.fitptadmin.db.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
@@ -14,6 +15,7 @@ import java.util.List;
 @Entity
 @Table(name = "report")
 @Getter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Report {
@@ -30,13 +32,17 @@ public class Report {
     @JoinColumn(name = "composition_log_id", nullable = false)
     private CompositionLog compositionLog;
 
-    @Column(name = "report_context")
-    private String reportContext;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "trainer_id", nullable = false)
+    private Trainer trainer;
+
+    @Column(name = "report_comment")
+    private String reportComment;
 
     @CreationTimestamp
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @Column(name = "exercise")
-    private String exercise;
+    @OneToMany(mappedBy = "report")
+    private List<ReportExercise> reportExercises = new ArrayList<>();
 }

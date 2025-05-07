@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>트레이너 목록</title>
+    <style>
+        * {
+            caret-color: transparent;
+            user-select: none;
+        }
+
+        h2 {
+            font-weight: 700;
+            font-size: 1.75rem;
+            color: #343a40;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #D24726;
+            padding-bottom: 0.5rem;
+        }
+
+        .table thead {
+            background-color: #f1f1f1;
+        }
+
+        .table th {
+            color: #6c757d;
+            font-weight: 600;
+        }
+
+        td {
+            user-select: none;
+            caret-color: transparent;
+        }
+
+        td:focus {
+            outline: none;
+        }
+
+        .table-hover tbody tr:hover {
+            background-color: rgba(210, 71, 38, 0.08);
+        }
+
+        .no-data {
+            text-align: center;
+            color: #888;
+            padding: 40px 0;
+            font-style: italic;
+        }
+
+        @media (max-width: 576px) {
+            .table thead {
+                display: none;
+            }
+
+            .table tbody td {
+                display: block;
+                width: 100%;
+                text-align: left;
+                padding-left: 50%;
+                position: relative;
+            }
+
+            .table tbody td::before {
+                position: absolute;
+                left: 1rem;
+                top: 0.75rem;
+                font-weight: bold;
+                white-space: nowrap;
+            }
+
+            .table tbody tr td:nth-child(1)::before {
+                content: "번호";
+            }
+
+            .table tbody tr td:nth-child(2)::before {
+                content: "트레이너 이름";
+            }
+
+            .table tbody tr td:nth-child(3)::before {
+                content: "관리";
+            }
+        }
+
+        .modal-content {
+            transition: transform 0.3s ease;
+        }
+
+        .modal-content:hover {
+            transform: scale(1.01);
+        }
+
+        .form-control:focus {
+            border-color: #D24726;
+            box-shadow: 0 0 0 0.2rem rgba(210, 71, 38, 0.25);
+        }
+    </style>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="mb-0">트레이너 목록</h2>
+        <button type="button" class="btn btn-primary px-4"
+                style="background-color: #D24726; border: none;"
+                data-bs-toggle="modal" data-bs-target="#createTrainerModal">
+            + 신규 트레이너 등록
+        </button>
+    </div>
+
+    <!-- 신규 등록 모달 -->
+    <div class="modal fade" id="createTrainerModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content rounded-4 border-0 shadow">
+                <form th:action="@{/admin/trainers}" method="post">
+                    <div class="modal-header">
+                        <h5 class="modal-title">트레이너 등록</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label">이름</label>
+                            <input type="text" name="trainerName" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">로그인 ID</label>
+                            <input type="text" name="trainerLoginId" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">비밀번호</label>
+                            <input type="password" name="trainerPw" class="form-control" required>
+                        </div>
+                        <div th:if="${registerErrorMsg}" class="alert alert-danger" role="alert"
+                             th:text="${registerErrorMsg}">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" style="background-color: #D24726;">등록</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div th:if="${#lists.isEmpty(trainers)}" class="no-data">
+        등록된 트레이너가 없습니다.
+    </div>
+
+    <div th:if="${not #lists.isEmpty(trainers)}" class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead class="table-light">
+            <tr>
+                <th scope="col">번호</th>
+                <th scope="col">트레이너 이름</th>
+                <th scope="col">관리</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="trainer, iterStat : ${trainers}">
+                <td th:text="${iterStat.index + 1}"></td>
+                <td th:text="${trainer.trainerName}"></td>
+                <td>
+                    <div class="d-flex gap-2">
+                        <!-- 상세 버튼 -->
+                        <button type="button"
+                                class="btn btn-sm btn-outline-secondary"
+                                data-bs-toggle="modal"
+                                th:attr="data-bs-target='#detailTrainerModal__' + ${trainer.trainerId}">
+                            상세
+                        </button>
+                        <button type="button" class="btn btn-sm btn-outline-primary"
+                                data-bs-toggle="modal"
+                                th:attr="data-bs-target='#editTrainerModal__' + ${trainer.trainerId}">
+                            수정
+                        </button>
+                        <form th:action="@{/admin/trainers/{id}/delete(id=${trainer.trainerId})}" method="post"
+                              onsubmit="return confirm('정말 삭제하시겠습니까?')">
+                            <button type="submit" class="btn btn-sm btn-outline-danger">삭제</button>
+                        </form>
+                    </div>
+
+                    <!-- 수정 모달 -->
+                    <div class="modal fade"
+                         th:id="'editTrainerModal__' + ${trainer.trainerId}"
+                         tabindex="-1"
+                         aria-labelledby="editTrainerLabel"
+                         aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content rounded-4 border-0 shadow">
+                                <form th:action="@{/admin/trainers/{id}(id=${trainer.trainerId})}" method="post">
+                                    <div class="modal-body pt-1">
+                                        <input type="hidden" name="trainerId" th:value="${trainer.trainerId}"/>
+                                        <div class="mb-3">
+                                            <label class="form-label text-dark">이름</label>
+                                            <input type="text" class="form-control rounded-3"
+                                                   name="trainerName" th:value="${trainer.trainerName}" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label text-dark">트레이너ID</label>
+                                            <input type="text" class="form-control rounded-3"
+                                                   name="trainerLoginId" th:value="${trainer.trainerLoginId}" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label text-dark">트레이너 비밀번호</label>
+                                            <input type="text" class="form-control rounded-3"
+                                                   name="trainerPw" th:value="${trainer.trainerPw}" required>
+                                        </div>
+                                        <div th:if="${editErrorMsg}" class="alert alert-danger" role="alert"
+                                             th:text="${editErrorMsg}">
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer border-top-0 pt-0 d-flex justify-content-between">
+                                        <button type="button" class="btn btn-outline-secondary rounded-3 px-4"
+                                                data-bs-dismiss="modal">닫기
+                                        </button>
+                                        <button type="submit" class="btn btn-primary rounded-3 px-4"
+                                                style="background-color: #D24726; border: none;">저장
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal fade"
+                         th:id="'detailTrainerModal__' + ${trainer.trainerId}"
+                         tabindex="-1"
+                         aria-labelledby="detailTrainerLabel"
+                         aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content rounded-4 border-0 shadow">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="detailTrainerLabel">트레이너 상세 정보</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+
+                                <div class="modal-body">
+                                    <dl class="row">
+                                        <dt class="col-sm-4">이름</dt>
+                                        <dd class="col-sm-8" th:text="${trainer.trainerName}">홍길동</dd>
+
+                                        <dt class="col-sm-4">로그인 ID</dt>
+                                        <dd class="col-sm-8" th:text="${trainer.trainerLoginId}">hong123</dd>
+
+                                        <dt class="col-sm-4">비밀번호</dt>
+                                        <dd class="col-sm-8" th:text="${trainer.trainerPw}"></dd>
+                                    </dl>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">닫기
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        let editModalId = /*[[${openEditModalId}]]*/ null;
+        if (editModalId !== null) {
+            document.addEventListener("DOMContentLoaded", function () {
+                let modalElement = document.getElementById('editTrainerModal__' + editModalId);
+                if (modalElement) {
+                    let modal = new bootstrap.Modal(modalElement);
+                    modal.show();
+
+                    // 모달 닫힘 시 alert 제거
+                    modalElement.addEventListener('hidden.bs.modal', function () {
+                        const alertBox = modalElement.querySelector('.alert');
+                        if (alertBox) {
+                            alertBox.remove();
+                        }
+                    });
+                }
+            });
+        }
+        /*]]>*/
+
+        /*<![CDATA[*/
+        let openCreateModal = [[${openCreateModal}]];
+        if (openCreateModal) {
+            document.addEventListener("DOMContentLoaded", function () {
+                let createModal = new bootstrap.Modal(document.getElementById('createTrainerModal'));
+                createModal.show();
+            });
+        }
+        /*]]>*/
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const createModalEl = document.getElementById('createTrainerModal');
+            if (createModalEl) {
+                createModalEl.addEventListener('hidden.bs.modal', function () {
+                    const alertBox = createModalEl.querySelector('.alert');
+                    if (alertBox) {
+                        alertBox.remove();
+                    }
+                });
+            }
+        });
+
+    </script>
+</section>
+</body>
+</html>
