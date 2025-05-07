@@ -7,6 +7,8 @@ import java.util.Optional;
 
 public interface TrainerRepository extends JpaRepository<Trainer, Long> {
     Optional<Trainer> findByTrainerLoginId(String trainerLoginId);
+
     boolean existsByTrainerId(Long trainerId);
+
     boolean existsByTrainerLoginId(String trainerLoginId);
 }

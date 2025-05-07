@@ -45,4 +45,16 @@ public class Report {
 
     @OneToMany(mappedBy = "report")
     private List<ReportExercise> reportExercises = new ArrayList<>();
+
+    public void updateMember(Member member) {
+        this.member = member;
+    }
+
+    public void updateCompositionLog(CompositionLog compositionLog) {
+        this.compositionLog = compositionLog;
+    }
+
+    public void updateReportComment(String reportComment) {
+        this.reportComment = reportComment;
+    }
 }

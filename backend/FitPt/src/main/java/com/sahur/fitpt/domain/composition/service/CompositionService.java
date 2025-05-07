@@ -8,7 +8,10 @@ import java.util.Optional;
 
 public interface CompositionService {
     Long saveComposition(CompositionRequestDto request);
+
     Optional<CompositionResponseDto> getCompositionById(Long compositionLogId);
+
     List<CompositionResponseDto> getCompositionsByMemberId(Long memberId);
+
     List<CompositionResponseDto> getCompositionsByUserIdWithSort(Long memberId, String sortField, String order);
 }

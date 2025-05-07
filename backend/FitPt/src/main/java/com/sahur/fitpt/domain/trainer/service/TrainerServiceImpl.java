@@ -1,6 +1,5 @@
 package com.sahur.fitpt.domain.trainer.service;
 
-import com.sahur.fitpt.core.constant.ErrorCode;
 import com.sahur.fitpt.core.exception.CustomException;
 import com.sahur.fitpt.db.entity.Admin;
 import com.sahur.fitpt.db.entity.Trainer;
@@ -10,6 +9,7 @@ import com.sahur.fitpt.db.repository.TrainerRepository;
 import com.sahur.fitpt.domain.trainer.dto.TrainerSignUpRequestDto;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,10 +21,10 @@ public class TrainerServiceImpl implements TrainerService {
     @Override
     public Long trainerLogin(String trainerLoginId, String trainerPassword) {
         Trainer trainer = trainerRepository.findByTrainerLoginId(trainerLoginId)
-                .orElseThrow(() -> new CustomException(ErrorCode.TRAINER_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND));
 
         if (!trainer.getTrainerPw().equals(trainerPassword)) {
-            throw new CustomException(ErrorCode.INVALID_PASSWORD);
+            throw new CustomException(HttpStatus.UNAUTHORIZED);
         }
 
         return trainer.getTrainerId();
@@ -33,11 +33,11 @@ public class TrainerServiceImpl implements TrainerService {
     @Override
     public Long trainerSignUp(TrainerSignUpRequestDto trainerSignUpRequestDto) {
         if (trainerRepository.existsByTrainerLoginId(trainerSignUpRequestDto.getTrainerLoginId())) {
-            throw new CustomException(ErrorCode.TRAINER_SIGNUP_FAILED);
+            throw new CustomException(HttpStatus.BAD_REQUEST);
         }
 
         Admin admin = adminRepository.findById(trainerSignUpRequestDto.getAdminId())
-                .orElseThrow(() -> new CustomException(ErrorCode.ADMIN_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND));
 
         Trainer trainer = Trainer.builder()
                 .admin(admin)
@@ -56,7 +56,7 @@ public class TrainerServiceImpl implements TrainerService {
         boolean loginIdExists = trainerRepository.existsByTrainerId(trainerId);
 
         if (!loginIdExists) {
-            throw new CustomException(ErrorCode.TRAINER_LOGOUT_FAILED);
+            throw new CustomException(HttpStatus.BAD_REQUEST);
         }
     }
 }
