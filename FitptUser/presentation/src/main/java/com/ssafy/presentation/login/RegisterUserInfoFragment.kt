@@ -1,28 +1,21 @@
 package com.ssafy.presentation.login;
 
+import android.content.Context
 import android.content.Intent
-import android.os.Bundle;
+import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
-
-import androidx.fragment.app.Fragment;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.navigation.fragment.findNavController
-
-import com.ssafy.presentation.R;
+import com.ssafy.presentation.R
 import com.ssafy.presentation.base.BaseFragment
 import com.ssafy.presentation.common.MainActivity
-import com.ssafy.presentation.databinding.FragmentLoginBinding
 import com.ssafy.presentation.databinding.FragmentRegisterUserInfoBinding
 import java.util.Calendar
 
 class RegisterUserInfoFragment : BaseFragment<FragmentRegisterUserInfoBinding>(
-    FragmentRegisterUserInfoBinding::bind,
-    R.layout.fragment_register_user_info
+    FragmentRegisterUserInfoBinding::bind, R.layout.fragment_register_user_info
 ) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -32,21 +25,45 @@ class RegisterUserInfoFragment : BaseFragment<FragmentRegisterUserInfoBinding>(
         validateAllInputs()
     }
 
-    fun initEvent(){
-        binding.btnNext.setOnClickListener {
-            if (validateAllInputs()) {
-                val intent = Intent(requireContext(), MainActivity::class.java)
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-                startActivity(intent)
-                requireActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
-                requireActivity().finishAffinity()
+    fun initEvent() {
+        binding.apply {
+            btnNext.setOnClickListener {
+                if (validateAllInputs()) {
+                    val intent = Intent(requireContext(), MainActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+                    startActivity(intent)
+                    requireActivity().overridePendingTransition(
+                        R.anim.slide_in_right, R.anim.slide_out_left
+                    )
+                    requireActivity().finishAffinity()
+                }
             }
-        }
-        binding.cvGym.setOnClickListener {
-            findNavController().navigate(R.id.action_registerUserInfoFragment_to_searchGymFragment)
-        }
-        binding.ivBack.setOnClickListener {
-            findNavController().popBackStack()
+
+            cvGym.setOnClickListener {
+                findNavController().navigate(R.id.action_registerUserInfoFragment_to_searchGymFragment)
+            }
+
+            ivBack.setOnClickListener {
+                findNavController().popBackStack()
+            }
+
+            val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+
+            // 카드 뷰 선택 시 포커스 및 키보드 올리기
+            cvBirthyear.setOnClickListener {
+                etBirth.requestFocus()
+                imm.showSoftInput(etBirth, InputMethodManager.SHOW_IMPLICIT)
+            }
+
+            cvHeight.setOnClickListener {
+                etHeight.requestFocus()
+                imm.showSoftInput(etHeight, InputMethodManager.SHOW_IMPLICIT)
+            }
+
+            cvWeight.setOnClickListener {
+                etWeight.requestFocus()
+                imm.showSoftInput(etWeight, InputMethodManager.SHOW_IMPLICIT)
+            }
         }
     }
 
@@ -55,6 +72,7 @@ class RegisterUserInfoFragment : BaseFragment<FragmentRegisterUserInfoBinding>(
             override fun afterTextChanged(s: Editable?) {
                 validateHeight()
             }
+
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
@@ -63,6 +81,7 @@ class RegisterUserInfoFragment : BaseFragment<FragmentRegisterUserInfoBinding>(
             override fun afterTextChanged(s: Editable?) {
                 validateBirth()
             }
+
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
@@ -71,6 +90,7 @@ class RegisterUserInfoFragment : BaseFragment<FragmentRegisterUserInfoBinding>(
             override fun afterTextChanged(s: Editable?) {
                 validateWeight()
             }
+
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
@@ -131,8 +151,9 @@ class RegisterUserInfoFragment : BaseFragment<FragmentRegisterUserInfoBinding>(
             if (year !in 1900..currentYear) throw Exception()
             if (month !in 1..12) throw Exception()
 
-            val daysInMonth = arrayOf(31, if (isLeapYear(year)) 29 else 28, 31, 30, 31, 30,
-                31, 31, 30, 31, 30, 31)
+            val daysInMonth = arrayOf(
+                31, if (isLeapYear(year)) 29 else 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31
+            )
             if (day !in 1..daysInMonth[month - 1]) throw Exception()
 
             binding.tvBirthError.visibility = View.GONE

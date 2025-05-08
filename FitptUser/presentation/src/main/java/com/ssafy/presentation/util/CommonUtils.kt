@@ -7,7 +7,7 @@ import android.text.style.ForegroundColorSpan
 import androidx.core.content.ContextCompat
 
 object CommonUtils {
-    
+
     fun changeTextColor(
         context: Context,
         fullText: String,
