@@ -1,347 +1,344 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_marginStart="20dp"
+    android:layout_marginEnd="20dp"
+    android:background="@color/white">
 
-    <ImageButton
-        android:id="@+id/iv_back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:background="@null"
-        android:padding="16dp"
-        android:src="@drawable/ic_all_left_arrow"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="ContentDescription" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/iv_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:src="@drawable/ic_all_left_arrow"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
         android:id="@+id/titleText"
+        style="@style/Font_Bold_24_main_black"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp"
-        android:letterSpacing="-0.02"
-        android:text="태어난 해와 키, 몸무게, 체육관을 \n입력해주세요"
-        app:layout_constraintVertical_bias="0.14"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="40dp"
+        android:text="출생일과 키, 몸무게, 체육관을 \n입력해주세요"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cv_birthyear"
-        android:layout_width="0dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="24dp"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="0dp"
-        app:layout_constraintDimensionRatio="6:1"
+        android:layout_marginTop="40dp"
+        app:layout_constraintBottom_toTopOf="@+id/btn_next"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titleText"
-        app:layout_constraintWidth_percent="0.85">
+        app:layout_constraintTop_toBottomOf="@+id/titleText">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/layout_birthyear"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/bg_login_input_round"
-            android:padding="16dp">
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cv_birthyear"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:cardCornerRadius="12dp"
+            app:layout_constraintDimensionRatio="6:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
 
-            <TextView
-                android:id="@+id/birthYearLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/pretendard_regular"
-                android:letterSpacing="-0.02"
-                android:text="태어난 해"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.85">
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout_birthyear"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_login_input_round"
+                android:padding="16dp">
 
-            <EditText
-                android:id="@+id/et_birth"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:ems="4"
-                android:fontFamily="@font/pretendard_regular"
-                android:gravity="center"
-                android:hint="20001103"
-                android:inputType="number"
-                android:letterSpacing="0"
-                android:maxLength="8"
-                android:paddingTop="0dp"
-                android:paddingBottom="2dp"
-                android:textColor="@color/black"
-                android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.cardview.widget.CardView>
-
-    <TextView
-        android:id="@+id/tv_birth_error"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="1dp"
-        android:layout_marginBottom="4dp"
-        android:visibility="gone"
-        android:textColor="@color/main_red"
-        app:layout_constraintBottom_toTopOf="@+id/cv_height"
-        app:layout_constraintEnd_toEndOf="@+id/cv_birthyear"
-        app:layout_constraintStart_toStartOf="@+id/cv_birthyear"
-        app:layout_constraintTop_toBottomOf="@+id/cv_birthyear" />
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cv_height"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="24dp"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="0dp"
-        app:layout_constraintDimensionRatio="6:1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cv_birthyear"
-        app:layout_constraintWidth_percent="0.85">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/layout_height"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/bg_login_input_round"
-            android:padding="16dp">
-
-            <TextView
-                android:id="@+id/heightLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/pretendard_regular"
-                android:letterSpacing="-0.02"
-                android:text="키"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                <TextView
+                    android:id="@+id/birthYearLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/pretendard_regular"
+                    android:text="출생일"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
 
-            <EditText
-                android:id="@+id/et_height"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:ems="3"
-                android:fontFamily="@font/pretendard_regular"
-                android:hint="176"
-                android:gravity="right"
-                android:inputType="number"
-                android:letterSpacing="0"
-                android:maxLength="3"
-                android:paddingTop="0dp"
-                android:paddingBottom="2dp"
-                android:layout_marginRight="4dp"
-                android:textColor="@color/black"
-                android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/heightText"
-                app:layout_constraintTop_toTopOf="parent" />
+                <EditText
+                    android:id="@+id/et_birth"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:ems="4"
+                    android:fontFamily="@font/pretendard_regular"
+                    android:gravity="center"
+                    android:hint="20001103"
+                    android:inputType="number"
+                    android:letterSpacing="0"
+                    android:maxLength="8"
+                    android:paddingTop="0dp"
+                    android:paddingBottom="2dp"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
 
-            <TextView
-                android:id="@+id/heightText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/pretendard_regular"
-                android:letterSpacing="-0.02"
-                android:text="cm"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/tv_birth_error"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="1dp"
+            android:layout_marginBottom="4dp"
+            android:textColor="@color/main_red"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/cv_height"
+            app:layout_constraintEnd_toEndOf="@+id/cv_birthyear"
+            app:layout_constraintStart_toStartOf="@+id/cv_birthyear"
+            app:layout_constraintTop_toBottomOf="@+id/cv_birthyear" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.cardview.widget.CardView>
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cv_height"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="24dp"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="0dp"
+            app:layout_constraintDimensionRatio="6:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cv_birthyear"
+            app:layout_constraintWidth_percent="0.85">
 
-    <TextView
-        android:id="@+id/tv_height_error"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="키는 100 ~ 250cm 사이여야 합니다."
-        android:visibility="gone"
-        android:textColor="@color/main_red"
-        app:layout_constraintBottom_toTopOf="@+id/cv_weight"
-        app:layout_constraintEnd_toEndOf="@+id/cv_height"
-        app:layout_constraintStart_toStartOf="@+id/cv_height"
-        app:layout_constraintTop_toBottomOf="@+id/cv_height" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout_height"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_login_input_round"
+                android:padding="16dp">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cv_weight"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="24dp"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="0dp"
-        app:layout_constraintDimensionRatio="6:1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cv_height"
-        app:layout_constraintWidth_percent="0.85">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/layout_weight"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/bg_login_input_round"
-            android:padding="16dp">
-
-            <TextView
-                android:id="@+id/weightLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/pretendard_regular"
-                android:letterSpacing="-0.02"
-                android:text="몸무게"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                <TextView
+                    android:id="@+id/heightLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/pretendard_regular"
+                    android:text="키"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
 
-            <EditText
-                android:id="@+id/et_weight"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:ems="3"
-                android:fontFamily="@font/pretendard_regular"
-                android:gravity="right"
-                android:hint="50"
-                android:inputType="number"
-                android:layout_marginRight="4dp"
-                android:letterSpacing="0"
-                android:maxLength="3"
-                android:paddingTop="0dp"
-                android:paddingBottom="2dp"
-                android:textColor="@color/black"
-                android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/weightText"
-                app:layout_constraintTop_toTopOf="parent" />
+                <EditText
+                    android:id="@+id/et_height"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="4dp"
+                    android:background="@android:color/transparent"
+                    android:ems="3"
+                    android:fontFamily="@font/pretendard_regular"
+                    android:gravity="right"
+                    android:hint="176"
+                    android:inputType="number"
+                    android:letterSpacing="0"
+                    android:maxLength="3"
+                    android:paddingTop="0dp"
+                    android:paddingBottom="2dp"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/heightText"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/weightText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/pretendard_regular"
-                android:letterSpacing="-0.02"
-                android:text="kg"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.cardview.widget.CardView>
+                <TextView
+                    android:id="@+id/heightText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/pretendard_regular"
+                    android:letterSpacing="-0.02"
+                    android:text="cm"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/tv_weight_error"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="몸무게는 30kg 이상 400kg 이하로 설정하여야 합니다."
-        android:textColor="@color/main_red"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/cv_gym"
-        app:layout_constraintEnd_toEndOf="@+id/cv_weight"
-        app:layout_constraintStart_toStartOf="@+id/cv_weight"
-        app:layout_constraintTop_toBottomOf="@+id/cv_weight" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cv_gym"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="24dp"
-        app:cardCornerRadius="8dp"
-        android:clickable="true"
-        android:focusable="true"
-        app:cardElevation="0dp"
-        app:layout_constraintDimensionRatio="6:1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cv_weight"
-        app:layout_constraintWidth_percent="0.85">
+        <TextView
+            android:id="@+id/tv_height_error"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="키는 100 ~ 250cm 사이여야 합니다."
+            android:textColor="@color/main_red"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/cv_weight"
+            app:layout_constraintEnd_toEndOf="@+id/cv_height"
+            app:layout_constraintStart_toStartOf="@+id/cv_height"
+            app:layout_constraintTop_toBottomOf="@+id/cv_height" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/layout_gym"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/bg_login_input_round"
-            android:padding="16dp">
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cv_weight"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="24dp"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="0dp"
+            app:layout_constraintDimensionRatio="6:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cv_height"
+            app:layout_constraintWidth_percent="0.85">
 
-            <TextView
-                android:id="@+id/gymLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/pretendard_regular"
-                android:letterSpacing="-0.02"
-                android:text="체육관"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout_weight"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_login_input_round"
+                android:padding="16dp">
+
+                <TextView
+                    android:id="@+id/weightLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/pretendard_regular"
+                    android:text="몸무게"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
 
-            <TextView
-                android:id="@+id/tv_gym"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:fontFamily="@font/pretendard_regular"
-                android:hint="체육관을 입력해주세요"
-                android:paddingTop="0dp"
-                android:paddingBottom="2dp"
-                android:textColor="@color/black"
-                android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.cardview.widget.CardView>
+                <EditText
+                    android:id="@+id/et_weight"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="4dp"
+                    android:background="@android:color/transparent"
+                    android:ems="3"
+                    android:fontFamily="@font/pretendard_regular"
+                    android:gravity="right"
+                    android:hint="50"
+                    android:inputType="number"
+                    android:letterSpacing="0"
+                    android:maxLength="3"
+                    android:paddingTop="0dp"
+                    android:paddingBottom="2dp"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/weightText"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/weightText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/pretendard_regular"
+                    android:letterSpacing="-0.02"
+                    android:text="kg"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/tv_weight_error"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="몸무게는 30kg 이상 400kg 이하로 설정하여야 합니다."
+            android:textColor="@color/main_red"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/cv_gym"
+            app:layout_constraintEnd_toEndOf="@+id/cv_weight"
+            app:layout_constraintStart_toStartOf="@+id/cv_weight"
+            app:layout_constraintTop_toBottomOf="@+id/cv_weight" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cv_gym"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="20dp"
+            android:clickable="true"
+            android:focusable="true"
+            app:cardCornerRadius="12dp"
+            app:layout_constraintDimensionRatio="6:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cv_weight">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout_gym"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_login_input_round"
+                android:paddingStart="16dp"
+                android:paddingTop="10dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="10dp">
+
+                <TextView
+                    android:id="@+id/gymLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/pretendard_regular"
+                    android:text="체육관"
+                    android:textColor="@color/main_black"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+                <TextView
+                    android:id="@+id/tv_gym"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:fontFamily="@font/pretendard_regular"
+                    android:hint="체육관을 입력해주세요"
+                    android:textColor="@color/main_gray"
+                    android:textSize="20sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_next"
+        style="@style/Font_Bold_20_main_white"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp"
-        android:letterSpacing="-0.02"
+        android:layout_marginBottom="20dp"
+        android:backgroundTint="@color/secondary_gray"
         android:padding="16dp"
         android:text="다음"
-        android:textColor="#FFFFFF"
-        android:textSize="20sp"
-        android:fontFamily="@font/pretendard_bold"
-        android:backgroundTint="#C9C9C9"
         app:cornerRadius="10dp"
-        app:layout_constraintVertical_bias="0.9"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_percent="0.9" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
