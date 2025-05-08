@@ -105,6 +105,9 @@ public class ReportServiceImpl implements ReportService {
 
     @Override
     public Long updateReport(Long reportId, ReportRequestDto requestDto) {
+        if (reportId == null) {
+            throw new CustomException(HttpStatus.BAD_REQUEST);
+        }
         Report report = reportRepository.findById(reportId)
                 .orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND));
 
@@ -162,6 +165,10 @@ public class ReportServiceImpl implements ReportService {
 
     @Override
     public List<ReportResponseDto> getAllReports(Long memberId) {
+        if (memberId == null) {
+            throw new CustomException(HttpStatus.BAD_REQUEST);
+        }
+
         List<Report> reports = reportRepository.findAllByMemberIdWithExercises(memberId);
 
         List<ReportExercise> exercises = reportExerciseRepository.findAllWithWorkoutMusclesByReportIn(reports);
@@ -173,6 +180,10 @@ public class ReportServiceImpl implements ReportService {
 
     @Override
     public ReportDetailResponseDto getReport(Long reportId) {
+        if (reportId == null) {
+            throw new CustomException(HttpStatus.BAD_REQUEST);
+        }
+
         Report report = reportRepository.findById(reportId).orElseThrow(() ->
                 new CustomException(HttpStatus.NOT_FOUND)
         );
@@ -184,30 +195,28 @@ public class ReportServiceImpl implements ReportService {
 
         List<ReportExercise> reportExercises = reportExerciseRepository.findAllWithWorkoutMusclesByReport(report);
 
-        ReportDetailResponseDto dto = new ReportDetailResponseDto();
-
-        dto.setReportId(report.getReportId());
-        dto.setMemberId(report.getMember().getMemberId());
-        dto.setTrainerName(report.getTrainer().getTrainerName());
-        dto.setReportComment(report.getReportComment());
-        dto.setCreatedAt(report.getCreatedAt().toString());
-        dto.setCompositionResponseDto(compositionResponseDto);
-        dto.setReportExercises(new ArrayList<>());
-
-        for (ReportExercise exercise : reportExercises) {
-            ReportExerciseResponseDto reportExerciseResponseDto = new ReportExerciseResponseDto();
-
-            reportExerciseResponseDto.setExerciseComment(exercise.getExerciseComment());
-            reportExerciseResponseDto.setExerciseName(exercise.getExerciseName());
-            reportExerciseResponseDto.setExerciseAchievement(exercise.getExerciseAchievement());
-            reportExerciseResponseDto.setActivation_muscle_id(new ArrayList<>());
-
-            for (WorkoutMuscle workoutMuscle : exercise.getWorkoutMuscles()) {
-                reportExerciseResponseDto.getActivation_muscle_id().add(workoutMuscle.getActivationMuscleId());
-            }
-
-            dto.getReportExercises().add(reportExerciseResponseDto);
-        }
+        ReportDetailResponseDto dto = ReportDetailResponseDto.builder()
+                .reportId(report.getReportId())
+                .memberId(report.getMember().getMemberId())
+                .trainerName(report.getTrainer().getTrainerName())
+                .reportComment(report.getReportComment())
+                .createdAt(report.getCreatedAt().toString())
+                .compositionResponseDto(compositionResponseDto)
+                .reportExercises(
+                        reportExercises.stream()
+                                .map(exercise -> ReportExerciseResponseDto.builder()
+                                        .exerciseComment(exercise.getExerciseComment())
+                                        .exerciseName(exercise.getExerciseName())
+                                        .exerciseAchievement(exercise.getExerciseAchievement())
+                                        .activation_muscle_id(
+                                                exercise.getWorkoutMuscles().stream()
+                                                        .map(WorkoutMuscle::getActivationMuscleId)
+                                                        .collect(Collectors.toList())
+                                        )
+                                        .build())
+                                .collect(Collectors.toList())
+                )
+                .build();
 
         return dto;
     }
