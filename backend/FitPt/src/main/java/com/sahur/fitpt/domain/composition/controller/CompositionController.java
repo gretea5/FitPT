@@ -61,6 +61,7 @@ public class CompositionController {
     @Operation(summary = "내 체성분 상세 조회", description = "회원의 체성분을 상세 조회하는 API")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "400", content = @Content(mediaType = "application/json")),
             @ApiResponse(responseCode = "404", content = @Content(mediaType = "application/json")),
     })
     @Parameters({
@@ -73,12 +74,12 @@ public class CompositionController {
     }
 
     @PostMapping
-    @Operation(summary = "내 체성분 상세 조회", description = "회원의 체성분을 상세 조회하는 API")
+    @Operation(summary = "체성분 측정", description = "회원의 체성분을 측정하는 API")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "404", content = @Content(mediaType = "application/json")),
     })
     public ResponseEntity<Long> createCompositionLog(@RequestBody CompositionRequestDto request) {
-        Long savedId = compositionService.saveComposition(request);
-        return new ResponseEntity<>(savedId, HttpStatus.CREATED);
+        return new ResponseEntity<>(compositionService.saveComposition(request), HttpStatus.CREATED);
     }
 }

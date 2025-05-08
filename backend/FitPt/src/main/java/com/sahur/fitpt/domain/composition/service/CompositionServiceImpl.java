@@ -47,6 +47,10 @@ public class CompositionServiceImpl implements CompositionService {
 
     @Override
     public Optional<CompositionResponseDto> getCompositionById(Long compositionLogId) {
+        if (compositionLogId == null) {
+            throw new CustomException(HttpStatus.BAD_REQUEST);
+        }
+
         return compositionRepository.findById(compositionLogId)
                 .map(CompositionResponseDto::fromEntity);
     }
