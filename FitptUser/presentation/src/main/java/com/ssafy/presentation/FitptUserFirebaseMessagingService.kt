@@ -4,16 +4,18 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Intent
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
-//@AndroidEntryPoint
+
+private const val TAG = "FitptUserFirebaseMessag"
 class FitptUserFirebaseMessagingService: FirebaseMessagingService() {
     override fun onNewToken(token: String) {
         super.onNewToken(token)
-//        Log.d(TAG, "onNewToken: $token")
+        Log.d(TAG, "onNewToken: $token")
     }
 
     override fun onMessageReceived(message: RemoteMessage) {
@@ -22,6 +24,7 @@ class FitptUserFirebaseMessagingService: FirebaseMessagingService() {
         var messageContent = ""
         var messageType = ""
         var productId = -1
+        Log.d(TAG, "onmessage: $message")
 
         if(message.notification != null) {
             messageTitle = message.notification?.title.toString()
