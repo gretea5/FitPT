@@ -111,6 +111,17 @@ resource "aws_security_group" "kubernetes" {
   vpc_id = aws_vpc.kubernetes.id
   name   = "kubernetes"
 
+  dynamic "ingress" {
+    for_each = var.allowed_ports
+    content {
+      description = "Allow port ${ingress.value} from control IP"
+      from_port   = ingress.value
+      to_port     = ingress.value
+      protocol    = "tcp"
+      cidr_blocks = [var.control_cidr]
+    }
+  }
+
   # Allow all outbound
   egress {
     from_port   = 0

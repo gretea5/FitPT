@@ -38,6 +38,14 @@ variable "cluster_id_value" {
   default     = "owned"
 }
 
+
+# aws_security_ufw_setup
+variable "allowed_ports" {
+  description = "List of ports to open in security group"
+  type        = list(number)
+  default     = [22, 6443, 2379, 2380, 10250]
+}
+
 ##########################
 # Default variables (you can change for customizing)
 ##########################
