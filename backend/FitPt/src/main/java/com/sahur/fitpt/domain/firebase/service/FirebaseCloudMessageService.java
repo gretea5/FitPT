@@ -3,6 +3,7 @@ package com.sahur.fitpt.domain.firebase.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.auth.oauth2.GoogleCredentials;
+import com.sahur.fitpt.db.entity.FcmToken;
 import com.sahur.fitpt.domain.firebase.dto.FcmMessage;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
