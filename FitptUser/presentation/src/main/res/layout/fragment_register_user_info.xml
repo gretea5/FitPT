@@ -4,8 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginStart="20dp"
-    android:layout_marginEnd="20dp"
     android:background="@color/white">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -289,13 +287,11 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_next"
         style="@style/Font_Bold_20_main_white"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
         android:backgroundTint="@color/secondary_gray"
         android:padding="16dp"
         android:text="다음"
@@ -303,6 +299,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
