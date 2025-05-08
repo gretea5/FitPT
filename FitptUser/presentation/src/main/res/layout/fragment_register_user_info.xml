@@ -82,7 +82,7 @@
 
                 <EditText
                     android:id="@+id/et_birth"
-                    style="@style/Font_SemiBold_20_main_gray"
+                    style="@style/Font_SemiBold_20_main_black"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
@@ -96,15 +96,12 @@
 
         <TextView
             android:id="@+id/tv_birth_error"
+            style="@style/Font_Medium_16_main_red_bright"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="1dp"
-            android:layout_marginBottom="4dp"
-            android:textColor="@color/main_red"
+            android:layout_marginTop="4dp"
             android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@+id/cv_height"
             app:layout_constraintEnd_toEndOf="@+id/cv_birthyear"
-            app:layout_constraintStart_toStartOf="@+id/cv_birthyear"
             app:layout_constraintTop_toBottomOf="@+id/cv_birthyear" />
 
         <androidx.cardview.widget.CardView
@@ -117,7 +114,7 @@
             app:cardCornerRadius="12dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cv_birthyear">
+            app:layout_constraintTop_toBottomOf="@+id/tv_birth_error">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/layout_height"
@@ -141,7 +138,7 @@
 
                 <EditText
                     android:id="@+id/et_height"
-                    style="@style/Font_SemiBold_20_main_gray"
+                    style="@style/Font_SemiBold_20_main_black"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="10dp"
@@ -167,14 +164,13 @@
 
         <TextView
             android:id="@+id/tv_height_error"
+            style="@style/Font_Medium_16_main_red_bright"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="키는 100 ~ 250cm 사이여야 합니다."
-            android:textColor="@color/main_red"
+            android:layout_marginTop="4dp"
+            android:text="키는 100 ~ 250cm 사이만 입력이 가능합니다."
             android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@+id/cv_weight"
             app:layout_constraintEnd_toEndOf="@+id/cv_height"
-            app:layout_constraintStart_toStartOf="@+id/cv_height"
             app:layout_constraintTop_toBottomOf="@+id/cv_height" />
 
         <androidx.cardview.widget.CardView
@@ -187,7 +183,7 @@
             app:cardCornerRadius="12dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cv_height">
+            app:layout_constraintTop_toBottomOf="@+id/tv_height_error">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/layout_weight"
@@ -211,7 +207,7 @@
 
                 <EditText
                     android:id="@+id/et_weight"
-                    style="@style/Font_SemiBold_20_main_gray"
+                    style="@style/Font_SemiBold_20_main_black"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="10dp"
@@ -237,14 +233,13 @@
 
         <TextView
             android:id="@+id/tv_weight_error"
+            style="@style/Font_Medium_16_main_red_bright"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
             android:text="몸무게는 30kg 이상 400kg 이하로 설정하여야 합니다."
-            android:textColor="@color/main_red"
             android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@+id/cv_gym"
             app:layout_constraintEnd_toEndOf="@+id/cv_weight"
-            app:layout_constraintStart_toStartOf="@+id/cv_weight"
             app:layout_constraintTop_toBottomOf="@+id/cv_weight" />
 
         <androidx.cardview.widget.CardView
@@ -257,7 +252,7 @@
             app:cardCornerRadius="12dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cv_weight">
+            app:layout_constraintTop_toBottomOf="@+id/tv_weight_error">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/layout_gym"

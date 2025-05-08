@@ -12,6 +12,7 @@ import com.ssafy.presentation.R
 import com.ssafy.presentation.base.BaseFragment
 import com.ssafy.presentation.common.MainActivity
 import com.ssafy.presentation.databinding.FragmentRegisterUserInfoBinding
+import com.ssafy.presentation.util.CommonUtils
 import java.util.Calendar
 
 class RegisterUserInfoFragment : BaseFragment<FragmentRegisterUserInfoBinding>(
@@ -20,9 +21,26 @@ class RegisterUserInfoFragment : BaseFragment<FragmentRegisterUserInfoBinding>(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initData()
         initEvent()
         initValidation()
         validateAllInputs()
+    }
+
+    fun initData() {
+        val changeText = CommonUtils.changeMultipleTextColors(
+            requireContext(), "출생일과 키, 몸무게, 체육관을 \n입력해주세요",
+            listOf(
+                "출생일" to R.color.highlight_green,
+                "키" to R.color.highlight_green,
+                "몸무게" to R.color.highlight_green,
+                "체육관" to R.color.highlight_green
+            )
+        )
+
+        binding.apply {
+            titleText.text = changeText
+        }
     }
 
     fun initEvent() {
