@@ -17,6 +17,10 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintWidth_percent="0.6">
 
+        <com.kizitonwose.calendar.view.CalendarView
+            android:id="@+id/calendar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
