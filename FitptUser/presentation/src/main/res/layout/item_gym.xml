@@ -4,11 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/bg_gym_unselected"
+    android:layout_marginBottom="4dp"
     android:padding="16dp">
 
     <TextView
         android:id="@+id/tv_location_title"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="삼성 체육관"
         android:textColor="#000000"
@@ -21,7 +23,7 @@
 
     <TextView
         android:id="@+id/tv_location_address"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:text="대구시 수성못 옆"

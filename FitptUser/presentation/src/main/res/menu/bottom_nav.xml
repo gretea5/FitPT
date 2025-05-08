@@ -12,8 +12,7 @@
         android:background="@android:color/transparent" />
     <item
         android:id="@+id/measure"
-        android:icon="@drawable/ic_navbar_measure"
-        android:title="측정"
+        android:title=""
         android:background="@android:color/transparent" />
     <item
         android:id="@+id/pt_report"

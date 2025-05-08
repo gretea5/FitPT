@@ -6,6 +6,7 @@ import com.google.firebase.messaging.FirebaseMessaging
 import com.ssafy.data.datasource.UserDataStoreSource
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope
+import com.kakao.sdk.common.KakaoSdk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -18,7 +19,7 @@ class ApplicationClass : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        //KakaoSdk.init(this, BuildConfig.NATIVE_API_KEY)
+        KakaoSdk.init(this, BuildConfig.KAKAO_API_KEY)
         FirebaseMessaging
             .getInstance()
             .token

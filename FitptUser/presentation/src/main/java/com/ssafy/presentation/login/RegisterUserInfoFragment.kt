@@ -5,23 +5,33 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.util.Log
+import androidx.fragment.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.ssafy.presentation.R
 import com.ssafy.presentation.base.BaseFragment
 import com.ssafy.presentation.common.MainActivity
 import com.ssafy.presentation.databinding.FragmentRegisterUserInfoBinding
 import com.ssafy.presentation.util.CommonUtils
+import com.ssafy.presentation.login.viewModel.LoginViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.Calendar
 
+@AndroidEntryPoint
 class RegisterUserInfoFragment : BaseFragment<FragmentRegisterUserInfoBinding>(
     FragmentRegisterUserInfoBinding::bind, R.layout.fragment_register_user_info
 ) {
+    private val loginViewModel: LoginViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initData()
+        initView()
         initEvent()
         initValidation()
         validateAllInputs()
@@ -82,6 +92,10 @@ class RegisterUserInfoFragment : BaseFragment<FragmentRegisterUserInfoBinding>(
                 etWeight.requestFocus()
                 imm.showSoftInput(etWeight, InputMethodManager.SHOW_IMPLICIT)
             }
+
+    fun initView(){
+        if(loginViewModel.selectedGym.value!=null){
+            binding.tvGym.text = loginViewModel.selectedGym.value!!.gymName
         }
     }
 
@@ -89,6 +103,7 @@ class RegisterUserInfoFragment : BaseFragment<FragmentRegisterUserInfoBinding>(
         binding.etHeight.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 validateHeight()
+                updateButtonState()
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -98,6 +113,7 @@ class RegisterUserInfoFragment : BaseFragment<FragmentRegisterUserInfoBinding>(
         binding.etBirth.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 validateBirth()
+                updateButtonState()
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -107,6 +123,7 @@ class RegisterUserInfoFragment : BaseFragment<FragmentRegisterUserInfoBinding>(
         binding.etWeight.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 validateWeight()
+                updateButtonState()
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -118,7 +135,7 @@ class RegisterUserInfoFragment : BaseFragment<FragmentRegisterUserInfoBinding>(
         val isHeightValid = validateHeight()
         val isBirthValid = validateBirth()
         val isWeightValid = validateWeight()
-        return isHeightValid && isBirthValid && isWeightValid
+        return isHeightValid && isBirthValid && isWeightValid && binding.tvGym.text!=""
     }
 
     private fun validateHeight(): Boolean {
@@ -187,4 +204,13 @@ class RegisterUserInfoFragment : BaseFragment<FragmentRegisterUserInfoBinding>(
         return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)
     }
 
+    private fun updateButtonState() {
+        if (validateAllInputs()) {
+            binding.btnNext.setBackgroundColor(resources.getColor(R.color.main_orange, null))
+            binding.btnNext.isActivated = true
+        } else {
+            binding.btnNext.setBackgroundColor(resources.getColor(R.color.disabled, null))
+            binding.btnNext.isActivated = false
+        }
+    }
 }

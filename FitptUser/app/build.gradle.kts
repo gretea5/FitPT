@@ -11,6 +11,8 @@ plugins {
 val properties = Properties().apply {
     load(rootProject.file("apikey.properties").inputStream())
 }
+val kakaoApiKey: String = properties.getProperty("kakao_api_key") ?: ""
+val manifestNativeAppKey: String = properties.getProperty("manifest_native_app_key") ?: ""
 val serverurl: String = properties.getProperty("base_url") ?: ""
 
 android {
@@ -26,16 +28,22 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
+        buildConfigField("String", "KAKAO_API_KEY", kakaoApiKey)
         buildConfigField("String", "BASE_URL", serverurl)
     }
 
     buildTypes {
         release {
             isMinifyEnabled = false
+            manifestPlaceholders["NATIVE_API_KEY"] = manifestNativeAppKey
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            debug {
+                isMinifyEnabled = false
+                manifestPlaceholders["NATIVE_API_KEY"] = manifestNativeAppKey
+            }
         }
     }
     compileOptions {
@@ -72,7 +80,7 @@ dependencies {
     implementation("com.google.dagger:hilt-android:2.51.1")
     kapt("com.google.dagger:hilt-android-compiler:2.51.1")
 
-    //implementation ("com.kakao.sdk:v2-user:2.20.1")
+    implementation ("com.kakao.sdk:v2-user:2.20.1")
 
     //파이어베이스
     implementation(platform("com.google.firebase:firebase-bom:33.10.0"))
