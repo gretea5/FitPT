@@ -328,6 +328,27 @@
         <item name="android:includeFontPadding">false</item>
     </style>
 
+    <style name="Font_SemiBold_32_main_black">
+        <item name="fontFamily">@font/pretendard_semi_bold</item>
+        <item name="android:textSize">32sp</item>
+        <item name="android:textColor">@color/main_black</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="Font_SemiBold_32_main_white">
+        <item name="fontFamily">@font/pretendard_semi_bold</item>
+        <item name="android:textSize">32sp</item>
+        <item name="android:textColor">@color/main_white</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="Font_SemiBold_32_main_gray">
+        <item name="fontFamily">@font/pretendard_semi_bold</item>
+        <item name="android:textSize">32sp</item>
+        <item name="android:textColor">@color/main_gray</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
     <!-- Medium -->
     <style name="Font_Medium_16_main_black">
         <item name="fontFamily">@font/pretendard_medium</item>
