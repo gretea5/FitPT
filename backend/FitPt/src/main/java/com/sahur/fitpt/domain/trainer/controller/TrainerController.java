@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,7 +31,7 @@ public class TrainerController {
             @ApiResponse(responseCode = "404", content = @Content(mediaType = "application/json")),
     })
     public ResponseEntity<Long> login(@RequestBody TrainerLoginRequestDto request) {
-        return ResponseEntity.ok().body(trainerService.trainerLogin(request.getTrainerLoginId(), request.getTrainerPw()));
+        return new ResponseEntity<>(trainerService.trainerLogin(request.getTrainerLoginId(), request.getTrainerPw()), HttpStatus.OK);
     }
 
     @PostMapping
@@ -41,7 +42,7 @@ public class TrainerController {
             @ApiResponse(responseCode = "404", content = @Content(mediaType = "application/json")),
     })
     public ResponseEntity<Long> signup(@RequestBody TrainerSignUpRequestDto request) {
-        return ResponseEntity.ok().body(trainerService.trainerSignUp(request));
+        return new ResponseEntity<>(trainerService.trainerSignUp(request), HttpStatus.OK);
     }
 
     @PostMapping("/{trainerId}/logout")
@@ -51,6 +52,6 @@ public class TrainerController {
     })
     public ResponseEntity<TrainerLogoutResponseDto> logout(@PathVariable("trainerId") Long trainerId) {
         trainerService.trainerLogout(trainerId);
-        return ResponseEntity.ok().body(new TrainerLogoutResponseDto());
+        return new ResponseEntity<>(new TrainerLogoutResponseDto(), HttpStatus.OK);
     }
 }
