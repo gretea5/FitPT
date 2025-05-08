@@ -52,6 +52,27 @@
     <!-- 폰트 스타일 정리 -->
 
     <!-- Regular -->
+    <style name="Font_Regular_14_main_black">
+        <item name="fontFamily">@font/pretendard_regular</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/main_black</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="Font_Regular_14_main_white">
+        <item name="fontFamily">@font/pretendard_regular</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/main_white</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="Font_Regular_14_main_gray">
+        <item name="fontFamily">@font/pretendard_regular</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/main_gray</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
     <style name="Font_Regular_16_main_black">
         <item name="fontFamily">@font/pretendard_regular</item>
         <item name="android:textSize">16sp</item>

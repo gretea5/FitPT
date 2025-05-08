@@ -51,50 +51,43 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cv_birthyear"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="true"
             app:cardCornerRadius="12dp"
-            app:layout_constraintDimensionRatio="6:1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent="0.85">
+            app:layout_constraintTop_toTopOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/layout_birthyear"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/bg_login_input_round"
-                android:padding="16dp">
+                android:paddingStart="16dp"
+                android:paddingTop="14dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="14dp">
 
                 <TextView
                     android:id="@+id/birthYearLabel"
+                    style="@style/Font_Regular_14_main_gray"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/pretendard_regular"
                     android:text="출생일"
-                    android:textSize="14sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
 
                 <EditText
                     android:id="@+id/et_birth"
-                    android:layout_width="100dp"
+                    style="@style/Font_SemiBold_20_main_gray"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
-                    android:ems="4"
-                    android:fontFamily="@font/pretendard_regular"
-                    android:gravity="center"
-                    android:hint="20001103"
+                    android:hint="20001129"
                     android:inputType="number"
-                    android:letterSpacing="0"
-                    android:maxLength="8"
-                    android:paddingTop="0dp"
-                    android:paddingBottom="2dp"
-                    android:textColor="@color/black"
-                    android:textSize="20sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -116,65 +109,55 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cv_height"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="24dp"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="0dp"
-            app:layout_constraintDimensionRatio="6:1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:clickable="true"
+            android:focusable="true"
+            app:cardCornerRadius="12dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cv_birthyear"
-            app:layout_constraintWidth_percent="0.85">
+            app:layout_constraintTop_toBottomOf="@+id/cv_birthyear">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/layout_height"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/bg_login_input_round"
-                android:padding="16dp">
+                android:paddingStart="16dp"
+                android:paddingTop="14dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="14dp">
 
                 <TextView
                     android:id="@+id/heightLabel"
+                    style="@style/Font_Regular_14_main_gray"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/pretendard_regular"
                     android:text="키"
-                    android:textSize="14sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
 
                 <EditText
                     android:id="@+id/et_height"
+                    style="@style/Font_SemiBold_20_main_gray"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="4dp"
+                    android:layout_marginEnd="10dp"
                     android:background="@android:color/transparent"
-                    android:ems="3"
-                    android:fontFamily="@font/pretendard_regular"
-                    android:gravity="right"
                     android:hint="176"
                     android:inputType="number"
-                    android:letterSpacing="0"
-                    android:maxLength="3"
-                    android:paddingTop="0dp"
-                    android:paddingBottom="2dp"
-                    android:textColor="@color/black"
-                    android:textSize="20sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/heightText"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/heightText"
+                    style="@style/Font_SemiBold_20_main_black"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/pretendard_regular"
-                    android:letterSpacing="-0.02"
-                    android:text="cm"
+                    android:hint="cm"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -196,68 +179,59 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cv_weight"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="24dp"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="0dp"
-            app:layout_constraintDimensionRatio="6:1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:clickable="true"
+            android:focusable="true"
+            app:cardCornerRadius="12dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cv_height"
-            app:layout_constraintWidth_percent="0.85">
+            app:layout_constraintTop_toBottomOf="@+id/cv_height">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/layout_weight"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/bg_login_input_round"
-                android:padding="16dp">
+                android:paddingStart="16dp"
+                android:paddingTop="14dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="14dp">
 
                 <TextView
                     android:id="@+id/weightLabel"
+                    style="@style/Font_Regular_14_main_gray"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/pretendard_regular"
                     android:text="몸무게"
-                    android:textSize="14sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
 
                 <EditText
                     android:id="@+id/et_weight"
+                    style="@style/Font_SemiBold_20_main_gray"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="4dp"
+                    android:layout_marginEnd="10dp"
                     android:background="@android:color/transparent"
-                    android:ems="3"
-                    android:fontFamily="@font/pretendard_regular"
-                    android:gravity="right"
                     android:hint="50"
                     android:inputType="number"
-                    android:letterSpacing="0"
-                    android:maxLength="3"
-                    android:paddingTop="0dp"
-                    android:paddingBottom="2dp"
-                    android:textColor="@color/black"
-                    android:textSize="20sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/weightText"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/weightText"
+                    style="@style/Font_SemiBold_20_main_black"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/pretendard_regular"
-                    android:letterSpacing="-0.02"
-                    android:text="kg"
+                    android:hint="kg"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
 
@@ -275,13 +249,12 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cv_gym"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:clickable="true"
             android:focusable="true"
             app:cardCornerRadius="12dp"
-            app:layout_constraintDimensionRatio="6:1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cv_weight">
@@ -292,35 +265,31 @@
                 android:layout_height="match_parent"
                 android:background="@drawable/bg_login_input_round"
                 android:paddingStart="16dp"
-                android:paddingTop="10dp"
+                android:paddingTop="14dp"
                 android:paddingEnd="16dp"
-                android:paddingBottom="10dp">
+                android:paddingBottom="14dp">
 
                 <TextView
                     android:id="@+id/gymLabel"
+                    style="@style/Font_Regular_14_main_gray"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/pretendard_regular"
                     android:text="체육관"
-                    android:textColor="@color/main_black"
-                    android:textSize="14sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
 
                 <TextView
                     android:id="@+id/tv_gym"
+                    style="@style/Font_SemiBold_20_main_gray"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
-                    android:fontFamily="@font/pretendard_regular"
                     android:hint="체육관을 입력해주세요"
-                    android:textColor="@color/main_gray"
-                    android:textSize="20sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
+
         </androidx.cardview.widget.CardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
