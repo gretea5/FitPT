@@ -40,21 +40,7 @@ public class CompositionController {
             @RequestParam(value = "sort", required = false) String sort,
             @RequestParam(value = "order", required = false) String order
     ) {
-        if (memberId == null) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        if (sort == null && order == null) {
-            List<CompositionResponseDto> result = compositionService.getCompositionsByMemberId(memberId);
-            return ResponseEntity.ok(result);
-        }
-
-        if (sort != null && order != null) {
-            List<CompositionResponseDto> result = compositionService.getCompositionsByUserIdWithSort(memberId, sort, order);
-            return ResponseEntity.ok(result);
-        }
-
-        return ResponseEntity.badRequest().build();
+        return new ResponseEntity<>(compositionService.getCompositionsByMemberId(memberId, sort, order), HttpStatus.OK);
     }
 
     @GetMapping("/{compositionLogId}")

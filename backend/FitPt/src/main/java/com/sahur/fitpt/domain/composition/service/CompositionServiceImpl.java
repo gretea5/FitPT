@@ -1,5 +1,6 @@
 package com.sahur.fitpt.domain.composition.service;
 
+import com.sahur.fitpt.core.constant.ErrorCode;
 import com.sahur.fitpt.core.exception.CustomException;
 import com.sahur.fitpt.db.entity.CompositionLog;
 import com.sahur.fitpt.db.entity.Member;
@@ -9,7 +10,6 @@ import com.sahur.fitpt.domain.composition.dto.CompositionRequestDto;
 import com.sahur.fitpt.domain.composition.dto.CompositionResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,7 +24,7 @@ public class CompositionServiceImpl implements CompositionService {
     @Override
     public Long saveComposition(CompositionRequestDto request) {
         Member member = memberRepository.findById(request.getMemberId())
-                .orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 
         CompositionLog compositionLog = CompositionLog.builder()
                 .member(member)
@@ -48,7 +48,7 @@ public class CompositionServiceImpl implements CompositionService {
     @Override
     public Optional<CompositionResponseDto> getCompositionById(Long compositionLogId) {
         if (compositionLogId == null) {
-            throw new CustomException(HttpStatus.BAD_REQUEST);
+            throw new CustomException(ErrorCode.INVALID_INPUT_NULL_OR_EMPTY_VALUE);
         }
 
         return compositionRepository.findById(compositionLogId)
@@ -57,19 +57,31 @@ public class CompositionServiceImpl implements CompositionService {
 
     @Override
     public List<CompositionResponseDto> getCompositionsByMemberId(Long memberId) {
-        return compositionRepository.findAllByMemberMemberId(memberId)
-                .stream()
-                .map(CompositionResponseDto::fromEntity)
-                .toList();
+        return getCompositionsByMemberId(memberId, null, null);
     }
 
     @Override
     public List<CompositionResponseDto> getCompositionsByUserIdWithSort(Long memberId, String sortField, String order) {
-        Sort.Direction direction = "asc".equalsIgnoreCase(order) ? Sort.Direction.ASC : Sort.Direction.DESC;
-        Sort sort = Sort.by(direction, sortField);
-        return compositionRepository.findAllByMemberMemberId(memberId, sort)
-                .stream()
-                .map(CompositionResponseDto::fromEntity)
-                .toList();
+        return getCompositionsByMemberId(memberId, sortField, order);
+    }
+
+    public List<CompositionResponseDto> getCompositionsByMemberId(Long memberId, String sortField, String order) {
+        if (memberId == null) {
+            throw new CustomException(ErrorCode.INVALID_INPUT_NULL_OR_EMPTY_VALUE);
+        }
+
+        if (sortField != null && order != null) {
+            Sort.Direction direction = "asc".equalsIgnoreCase(order) ? Sort.Direction.ASC : Sort.Direction.DESC;
+            Sort sort = Sort.by(direction, sortField);
+            return compositionRepository.findAllByMemberMemberId(memberId, sort)
+                    .stream()
+                    .map(CompositionResponseDto::fromEntity)
+                    .toList();
+        } else {
+            return compositionRepository.findAllByMemberMemberId(memberId)
+                    .stream()
+                    .map(CompositionResponseDto::fromEntity)
+                    .toList();
+        }
     }
 }
