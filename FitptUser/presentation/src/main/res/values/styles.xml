@@ -350,6 +350,20 @@
         <item name="android:includeFontPadding">false</item>
     </style>
 
+    <style name="Font_Medium_16_main_red">
+        <item name="fontFamily">@font/pretendard_medium</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/main_red</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="Font_Medium_16_main_red_bright">
+        <item name="fontFamily">@font/pretendard_medium</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/main_red_bright</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
     <style name="Font_Medium_20_main_black">
         <item name="fontFamily">@font/pretendard_medium</item>
         <item name="android:textSize">20sp</item>
