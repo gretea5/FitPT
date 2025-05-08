@@ -1,0 +1,218 @@
+- name: Reset and Reinitialize Kubernetes Cluster
+  hosts: controller-etcd-0
+  become: true
+  gather_facts: true
+
+  tasks:
+    - name: Cleanup all old Docker apt GPG sources and keyrings
+      file:
+        path: "{{ item }}"
+        state: absent
+      loop:
+        - /etc/apt/sources.list.d/docker.list
+        - /etc/apt/keyrings/docker.gpg
+        - /etc/apt/trusted.gpg.d/docker.gpg
+
+    - name: Remove legacy Docker GPG key from apt-key (if exists)
+      shell: apt-key del 7EA0A9C3F273FCD8 || true
+      ignore_errors: true
+
+    - name: Remove old Kubernetes GPG and apt sources if exist
+      file:
+        path: "{{ item }}"
+        state: absent
+      loop:
+        - /etc/apt/sources.list.d/kubernetes.list
+        - /usr/share/keyrings/kubernetes-archive-keyring.gpg
+        - /etc/apt/keyrings/kubernetes.gpg
+
+    - name: Install required packages
+      apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - gnupg
+          - lsb-release
+        state: present
+        update_cache: yes
+
+    - name: Disable swap
+      command: swapoff -a
+
+    - name: Remove swap entry from fstab
+      replace:
+        path: /etc/fstab
+        regexp: '^.* swap .*$'
+        replace: ''
+
+    - name: Run apt update manually for debug
+      shell: apt update
+      register: apt_debug
+      ignore_errors: yes
+
+    - name: Reset Kubernetes cluster
+      shell: kubeadm reset -f
+      ignore_errors: true
+
+    - name: Clean up Kubernetes directories
+      file:
+        path: "{{ item }}"
+        state: absent
+      loop:
+        - /etc/kubernetes
+        - /var/lib/etcd
+        - /var/lib/kubelet
+        - /etc/cni/net.d
+        - /var/lib/cni
+        - /opt/cni
+        - /etc/containerd
+      ignore_errors: true
+
+    - name: Ensure containerd config directory exists
+      file:
+        path: /etc/containerd
+        state: directory
+        mode: '0755'
+
+    - name: Ensure directory for keyrings exists
+      file:
+        path: /etc/apt/keyrings
+        state: directory
+        mode: '0755'
+
+    - name: Download and convert Docker GPG key (binary format)
+      shell: |
+        curl -fsSL https://download.docker.com/linux/ubuntu/gpg \
+        | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+      args:
+        creates: /etc/apt/keyrings/docker.gpg
+
+    - name: Ensure Docker GPG key is world-readable
+      file:
+        path: /etc/apt/keyrings/docker.gpg
+        mode: '0644'
+
+    - name: Add Docker apt repository (Ubuntu 22.04+ format)
+      apt_repository:
+        repo: "deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release | lower }} stable"
+        state: present
+        filename: docker
+
+    - name: Update APT cache
+      apt:
+        update_cache: yes
+
+    - name: Install containerd.io from Docker repository
+      apt:
+        name: containerd.io
+        state: present
+
+    - name: Generate containerd config.toml
+      shell: containerd config default > /etc/containerd/config.toml
+      args:
+        creates: /etc/containerd/config.toml
+
+    - name: Remove CRI-disabled line from containerd config
+      lineinfile:
+        path: /etc/containerd/config.toml
+        regexp: '^disabled_plugins = \["cri"\]'
+        state: absent
+
+    - name: Restart containerd
+      systemd:
+        name: containerd
+        state: restarted
+        enabled: true
+
+    - name: Wait for containerd to be active
+      shell: systemctl is-active containerd
+      register: containerd_status
+      retries: 10
+      delay: 3
+      until: containerd_status.stdout == "active"
+
+    - name: Ensure br_netfilter module is loaded
+      modprobe:
+        name: br_netfilter
+        state: present
+
+    - name: Ensure br_netfilter is permanently loaded
+      copy:
+        dest: /etc/modules-load.d/k8s.conf
+        content: |
+          br_netfilter
+
+    - name: Add Kubernetes GPG key
+      shell: |
+        curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.29/deb/Release.key | \
+        gpg --dearmor -o /etc/apt/keyrings/kubernetes-archive-keyring.gpg
+      args:
+        creates: /etc/apt/keyrings/kubernetes-archive-keyring.gpg
+
+    - name: Add Kubernetes apt repository
+      apt_repository:
+        repo: "deb [signed-by=/etc/apt/keyrings/kubernetes-archive-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.29/deb/ /"
+        state: present
+        filename: kubernetes
+
+    - name: apt update
+      apt:
+        update_cache: yes
+
+    - name: Install kubeadm, kubelet, kubectl
+      apt:
+        name:
+          - kubelet
+          - kubeadm
+          - kubectl
+        state: present
+        update_cache: yes
+
+    - name: Mark Kubernetes packages as held
+      command: apt-mark hold kubelet kubeadm kubectl
+
+    - name: Set sysctl parameters for Kubernetes
+      sysctl:
+        name: "{{ item.name }}"
+        value: "{{ item.value }}"
+        state: present
+        reload: yes
+      loop:
+        - { name: "net.bridge.bridge-nf-call-iptables", value: "1" }
+        - { name: "net.ipv4.ip_forward", value: "1" }
+
+    - name: Pre-pull Kubernetes images
+      shell: kubeadm config images pull
+
+    - name: Re-initialize Kubernetes cluster without kube-proxy
+      shell: kubeadm init --pod-network-cidr=10.244.0.0/16 --skip-phases=addon/kube-proxy
+      args:
+        creates: /etc/kubernetes/admin.conf
+
+    - name: Wait for kube-apiserver to be ready
+      wait_for:
+        port: 6443
+        host: 127.0.0.1
+        delay: 10
+        timeout: 240
+
+    - name: Configure kubectl for ubuntu user
+      shell: |
+        mkdir -p /home/ubuntu/.kube
+        cp /etc/kubernetes/admin.conf /home/ubuntu/.kube/config
+        chown ubuntu:ubuntu /home/ubuntu/.kube/config
+        chmod 600 /home/ubuntu/.kube/config
+      args:
+        creates: /home/ubuntu/.kube/config
+
+    - name: Set sysctl params for Kubernetes networking
+      sysctl:
+        name: "{{ item.name }}"
+        value: "{{ item.value }}"
+        state: present
+        reload: yes
+      loop:
+        - { name: "net.bridge.bridge-nf-call-iptables", value: "1" }
+        - { name: "net.bridge.bridge-nf-call-ip6tables", value: "1" }
+        - { name: "net.ipv4.ip_forward", value: "1" }

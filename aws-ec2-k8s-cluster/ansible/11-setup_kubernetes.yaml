@@ -43,6 +43,12 @@
         state: present
         update_cache: yes
 
+    - name: Ensure containerd config directory exists
+      file:
+        path: /etc/containerd
+        state: directory
+        mode: '0755'
+
     - name: Generate containerd config.toml
       shell: containerd config default > /etc/containerd/config.toml
       args:
@@ -114,34 +120,6 @@
     - name: Hold Kubernetes packages
       shell: apt-mark hold kubelet kubeadm kubectl
 
-    - name: Ensure CNI config directory exists
-      file:
-        path: /etc/cni/net.d
-        state: directory
-
-    - name: Pre-populate Flannel CNI config
-      copy:
-        dest: /etc/cni/net.d/10-flannel.conflist
-        content: |
-          {
-            "cniVersion": "0.3.1",
-            "name": "cbr0",
-            "plugins": [
-              {
-                "type": "flannel",
-                "delegate": {
-                  "hairpinMode": true,
-                  "isDefaultGateway": true
-                }
-              },
-              {
-                "type": "portmap",
-                "capabilities": {"portMappings": true},
-                "snat": true
-              }
-            ]
-          }
-
     - name: Initialize Kubernetes cluster
       shell: kubeadm init --pod-network-cidr=10.244.0.0/16
       args:
@@ -160,19 +138,16 @@
         kubectl taint nodes --all node-role.kubernetes.io/master- || true
         kubectl taint nodes --all node-role.kubernetes.io/control-plane:NoSchedule- || true
 
-    - name: Install Flannel CNI
-      shell: kubectl apply --validate=false -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
-      register: flannel_result
-      until: flannel_result.rc == 0
-      retries: 5
-      delay: 10
+    - name: Ensure pip is installed
+      apt:
+        name: python3-pip
+        state: present
+        update_cache: true
 
-    - name: Wait for kube-apiserver to be ready on port 6443
-      wait_for:
-        port: 6443
-        host: 127.0.0.1
-        timeout: 90
-        state: started
+    - name: Install python Kubernetes client
+      pip:
+        name: kubernetes
+        executable: pip3
 
     - name: Install Helm
       shell: curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
@@ -185,6 +160,7 @@
         kind: Namespace
         name: devops
         state: present
+        kubeconfig: /etc/kubernetes/admin.conf
 
     - name: Add Helm repositories
       kubernetes.core.helm_repository:
@@ -203,13 +179,22 @@
         release_namespace: devops
         create_namespace: false
         state: present
+        kubeconfig: /etc/kubernetes/admin.conf
 
     - name: Install ArgoCD
       kubernetes.core.helm:
         name: argocd
         chart_ref: argo/argo-cd
         release_namespace: devops
+        create_namespace: false
         state: present
+        kubeconfig: /etc/kubernetes/admin.conf
+        set_values:
+          - value: rbac.create=true
+      register: argocd_result
+      until: argocd_result is succeeded
+      retries: 5
+      delay: 20
 
     - name: Install ingress-nginx
       kubernetes.core.helm:
@@ -218,6 +203,9 @@
         release_namespace: ingress-nginx
         create_namespace: true
         state: present
+        kubeconfig: /etc/kubernetes/admin.conf
+        set_values:
+          - value: rbac.create=true
 
     - name: Install cert-manager
       kubernetes.core.helm:
@@ -225,5 +213,6 @@
         chart_ref: jetstack/cert-manager
         release_namespace: cert-manager
         create_namespace: true
+        kubeconfig: /etc/kubernetes/admin.conf
         set_values:
           - value: installCRDs=true
