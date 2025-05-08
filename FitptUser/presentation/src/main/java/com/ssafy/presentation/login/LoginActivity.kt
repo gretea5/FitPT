@@ -8,7 +8,10 @@ import androidx.core.view.WindowInsetsCompat
 import com.ssafy.presentation.R
 import com.ssafy.presentation.databinding.ActivityLoginBinding
 import com.ssafy.presentation.databinding.ActivityMainBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+
+@AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
     override fun onCreate(savedInstanceState: Bundle?) {

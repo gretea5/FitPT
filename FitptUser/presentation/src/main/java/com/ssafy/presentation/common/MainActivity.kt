@@ -6,6 +6,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationBarView
@@ -22,6 +23,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initNavigationBar()
+        initEvent()
     }
 
     fun initNavigationBar() {
@@ -36,7 +38,6 @@ class MainActivity : AppCompatActivity() {
             val destinationMap = mapOf(
                 R.id.home to R.id.home_fragment,
                 R.id.private_records to R.id.measure_list_fragment,
-                R.id.measure to R.id.measure_fragment,
                 R.id.pt_report to R.id.report_list_fragment,
                 R.id.mypage to R.id.mypage_fragment
             )
@@ -55,11 +56,6 @@ class MainActivity : AppCompatActivity() {
                     R.id.home -> navController.navigate(R.id.home_fragment, null, navigateOptions)
                     R.id.private_records -> navController.navigate(
                         R.id.measure_list_fragment,
-                        null,
-                        navigateOptions
-                    )
-                    R.id.measure -> navController.navigate(
-                        R.id.measure_fragment,
                         null,
                         navigateOptions
                     )
@@ -97,4 +93,18 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+    fun initEvent(){
+        binding.fabCenter.setOnClickListener {
+            val navController = findNavController(R.id.main_container)
+
+            val currentDestinationId = navController.currentDestination?.id
+            val navigateOptions = NavOptions.Builder()
+                .setLaunchSingleTop(true)  // 이미 스택에 있는 프래그먼트를 재사용
+                .setPopUpTo(currentDestinationId ?: -1, true)  // 현재 destination을 팝하여 새로운 프래그먼트만 남기기
+                .build()
+            navController.navigate(R.id.measure_fragment, null, navigateOptions)
+        }
+    }
+
 }

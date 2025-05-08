@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 
 import com.ssafy.presentation.R;
@@ -18,29 +19,38 @@ import com.ssafy.presentation.base.BaseFragment
 import com.ssafy.presentation.common.MainActivity
 import com.ssafy.presentation.databinding.FragmentLoginBinding
 import com.ssafy.presentation.databinding.FragmentRegisterUserInfoBinding
+import com.ssafy.presentation.login.viewModel.LoginViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.Calendar
 
+@AndroidEntryPoint
 class RegisterUserInfoFragment : BaseFragment<FragmentRegisterUserInfoBinding>(
     FragmentRegisterUserInfoBinding::bind,
     R.layout.fragment_register_user_info
 ) {
+    private val loginViewModel: LoginViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initView()
         initEvent()
         initValidation()
         validateAllInputs()
     }
 
+    fun initView(){
+        if(loginViewModel.selectedGym.value!=null){
+            binding.tvGym.text = loginViewModel.selectedGym.value!!.gymName
+        }
+    }
+
     fun initEvent(){
         binding.btnNext.setOnClickListener {
-            if (validateAllInputs()) {
-                val intent = Intent(requireContext(), MainActivity::class.java)
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-                startActivity(intent)
-                requireActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
-                requireActivity().finishAffinity()
-            }
+            val intent = Intent(requireContext(), MainActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
+            requireActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+            requireActivity().finishAffinity()
         }
         binding.cvGym.setOnClickListener {
             findNavController().navigate(R.id.action_registerUserInfoFragment_to_searchGymFragment)
@@ -54,6 +64,7 @@ class RegisterUserInfoFragment : BaseFragment<FragmentRegisterUserInfoBinding>(
         binding.etHeight.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 validateHeight()
+                updateButtonState()
             }
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
@@ -62,6 +73,7 @@ class RegisterUserInfoFragment : BaseFragment<FragmentRegisterUserInfoBinding>(
         binding.etBirth.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 validateBirth()
+                updateButtonState()
             }
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
@@ -70,6 +82,7 @@ class RegisterUserInfoFragment : BaseFragment<FragmentRegisterUserInfoBinding>(
         binding.etWeight.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 validateWeight()
+                updateButtonState()
             }
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
@@ -80,7 +93,7 @@ class RegisterUserInfoFragment : BaseFragment<FragmentRegisterUserInfoBinding>(
         val isHeightValid = validateHeight()
         val isBirthValid = validateBirth()
         val isWeightValid = validateWeight()
-        return isHeightValid && isBirthValid && isWeightValid
+        return isHeightValid && isBirthValid && isWeightValid && binding.tvGym.text!=""
     }
 
     private fun validateHeight(): Boolean {
@@ -148,4 +161,13 @@ class RegisterUserInfoFragment : BaseFragment<FragmentRegisterUserInfoBinding>(
         return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)
     }
 
+    private fun updateButtonState() {
+        if (validateAllInputs()) {
+            binding.btnNext.setBackgroundColor(resources.getColor(R.color.main_orange, null))
+            binding.btnNext.isActivated = true
+        } else {
+            binding.btnNext.setBackgroundColor(resources.getColor(R.color.disabled, null))
+            binding.btnNext.isActivated = false
+        }
+    }
 }
