@@ -24,9 +24,10 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/imageView3"
+        android:id="@+id/iv_fitrus_use"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         android:src="@drawable/image_measure_fitrus_use"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -34,12 +35,13 @@
         app:layout_constraintTop_toTopOf="@+id/tv_title" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/tv_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:textSize="20sp"
         android:textColor="#000000"
+        android:visibility="gone"
         android:fontFamily="@font/pretendard_bold"
         android:text="바른 자세로 서서 양팔을 길게 뻗어\n양손의 엄지와 검지를 이용하여 \n금속전극 판을 가볍게 잡아주세요."
         app:layout_constraintVertical_bias="0.15"
@@ -54,6 +56,7 @@
         android:layout_height="wrap_content"
         android:text="측정 시작"
         app:cornerRadius="10dp"
+        android:visibility="gone"
         android:layout_marginLeft="40dp"
         android:layout_marginRight="40dp"
         app:backgroundTint="@color/main_orange"
@@ -62,5 +65,55 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/iv_fitrus_ble"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/image_fitrus_ble"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_ble_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/pretendard_bold"
+        android:gravity="center"
+        android:text="디바이스와의 연결을 위해 위 그림처럼\n전윈 버튼을 눌러주세요."
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/btn_ble_start"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/iv_fitrus_ble" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_ble_start"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="블루투스 시작"
+        app:cornerRadius="10dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        app:backgroundTint="@color/main_orange"
+        app:layout_constraintVertical_bias="0.9"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_result"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -10,7 +10,7 @@ android {
     compileSdk = 35
 
     defaultConfig {
-        minSdk = 24
+        minSdk = 30
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
     }
@@ -61,7 +61,7 @@ dependencies {
     // calendar
     implementation("com.kizitonwose.calendar:view:2.5.4")
 
-    //implementation ("com.kakao.sdk:v2-user:2.20.1")
+    implementation ("com.kakao.sdk:v2-user:2.20.1")
 
     //dagger와 hilt
     implementation("com.google.dagger:hilt-android:2.51.1")
@@ -69,6 +69,8 @@ dependencies {
 
     // FCM 사용 위한 plugins
     implementation("com.google.firebase:firebase-messaging-ktx")
+
+    implementation(libs.fitrus.est.device)
 }
 
 kapt {
