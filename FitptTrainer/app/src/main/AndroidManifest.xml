@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <application
-        android:allowBackup="true"
         android:name=".ApplicationClass"
+        android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
@@ -13,10 +13,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FitptTrainer"
         tools:targetApi="31">
+
         <activity
             android:name="com.ssafy.presentation.login.LoginActivity"
             android:exported="true"
-            android:screenOrientation="nosensor">
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -26,8 +28,8 @@
         <activity
             android:name="com.ssafy.presentation.common.MainActivity"
             android:exported="true"
-            android:screenOrientation="nosensor">
-        </activity>
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="adjustResize"></activity>
     </application>
 
 </manifest>

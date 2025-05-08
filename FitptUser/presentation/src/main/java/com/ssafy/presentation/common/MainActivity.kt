@@ -1,7 +1,6 @@
 package com.ssafy.presentation.common
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
@@ -111,5 +110,4 @@ class MainActivity : AppCompatActivity() {
             navController.navigate(R.id.measure_fragment, null, navigateOptions)
         }
     }
-
 }

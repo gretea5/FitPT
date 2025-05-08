@@ -19,7 +19,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
         initEvent()
     }
 
-    fun initEvent(){
+    fun initEvent() {
 
     }
 }
