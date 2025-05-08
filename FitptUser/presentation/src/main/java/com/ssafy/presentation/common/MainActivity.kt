@@ -103,6 +103,12 @@ class MainActivity : AppCompatActivity() {
         binding.fabCenter.setOnClickListener {
             val navController = findNavController(R.id.main_container)
 
+            binding.bottomNavigation.menu.setGroupCheckable(0, true, false)
+            for (i in 0 until binding.bottomNavigation.menu.size()) {
+                binding.bottomNavigation.menu.getItem(i).isChecked = false
+            }
+            binding.bottomNavigation.menu.setGroupCheckable(0, true, true)
+
             val currentDestinationId = navController.currentDestination?.id
             val navigateOptions = NavOptions.Builder()
                 .setLaunchSingleTop(true)  // 이미 스택에 있는 프래그먼트를 재사용

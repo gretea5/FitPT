@@ -5,6 +5,7 @@
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowIsTranslucent">true</item>
+        <item name="colorPrimary">@color/primary</item>
     </style>
 
     <style name="Theme.FitptUser" parent="Base.Theme.FitptUser" />
