@@ -91,6 +91,11 @@ class MainActivity : AppCompatActivity() {
             } else {
                 View.GONE
             }
+            binding.fabCenter.visibility = if (destination.id in visibleFragments) {
+                View.VISIBLE
+            } else {
+                View.GONE
+            }
         }
     }
 
