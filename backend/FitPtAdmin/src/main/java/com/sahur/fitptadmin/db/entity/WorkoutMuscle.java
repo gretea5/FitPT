@@ -15,7 +15,8 @@ import lombok.NoArgsConstructor;
 public class WorkoutMuscle {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long workMuscleId;
+    @Column(name = "workout_muscle_id")
+    private Long workoutMuscleId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "report_exercise_id")

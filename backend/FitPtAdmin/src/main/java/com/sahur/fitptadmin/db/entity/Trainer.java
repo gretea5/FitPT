@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,10 +39,4 @@ public class Trainer {
 
     @OneToMany(mappedBy = "trainer")
     private List<Report> reports = new ArrayList<>();
-
-    public void updateTrainerInfo(String trainerName, String trainerLoginId, String trainerPw) {
-        this.trainerName = trainerName;
-        this.trainerLoginId = trainerLoginId;
-        this.trainerPw = trainerPw;
-    }
 }
