@@ -1,18 +1,13 @@
 package com.ssafy.presentation.login
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ssafy.domain.model.sign.GymInfoItem
 import com.ssafy.presentation.R
 import com.ssafy.presentation.base.BaseFragment
-import com.ssafy.presentation.databinding.FragmentRegisterUserInfoBinding
 import com.ssafy.presentation.databinding.FragmentSearchGymBinding
 import com.ssafy.presentation.login.adapter.GymSearchAdapter
 import com.ssafy.presentation.login.viewModel.LoginViewModel
@@ -38,7 +33,7 @@ class SearchGymFragment : BaseFragment<FragmentSearchGymBinding>(
         binding.ivBack.setOnClickListener {
             findNavController().popBackStack()
         }
-        binding.btnNext.setOnClickListener {
+        binding.btnSelect.setOnClickListener {
             selectedGym?.let {
                 findNavController().popBackStack()
             }
@@ -64,9 +59,9 @@ class SearchGymFragment : BaseFragment<FragmentSearchGymBinding>(
 
     private fun updateNextButtonState(enabled: Boolean) {
         if (enabled) {
-            binding.btnNext.setBackgroundColor(resources.getColor(R.color.main_orange, null)) // 주황색으로 변경
+            binding.btnSelect.setBackgroundColor(resources.getColor(R.color.main_orange, null)) // 주황색으로 변경
         } else {
-            binding.btnNext.setBackgroundColor(resources.getColor(R.color.disabled, null)) // 비활성화 색상
+            binding.btnSelect.setBackgroundColor(resources.getColor(R.color.disabled, null)) // 비활성화 색상
         }
     }
 }

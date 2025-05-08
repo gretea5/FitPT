@@ -5,20 +5,16 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.util.Log
-import androidx.fragment.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.ssafy.presentation.R
 import com.ssafy.presentation.base.BaseFragment
 import com.ssafy.presentation.common.MainActivity
 import com.ssafy.presentation.databinding.FragmentRegisterUserInfoBinding
-import com.ssafy.presentation.util.CommonUtils
 import com.ssafy.presentation.login.viewModel.LoginViewModel
+import com.ssafy.presentation.util.CommonUtils
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Calendar
 
@@ -92,9 +88,11 @@ class RegisterUserInfoFragment : BaseFragment<FragmentRegisterUserInfoBinding>(
                 etWeight.requestFocus()
                 imm.showSoftInput(etWeight, InputMethodManager.SHOW_IMPLICIT)
             }
+        }
+    }
 
-    fun initView(){
-        if(loginViewModel.selectedGym.value!=null){
+    fun initView() {
+        if (loginViewModel.selectedGym.value != null) {
             binding.tvGym.text = loginViewModel.selectedGym.value!!.gymName
         }
     }
@@ -135,7 +133,7 @@ class RegisterUserInfoFragment : BaseFragment<FragmentRegisterUserInfoBinding>(
         val isHeightValid = validateHeight()
         val isBirthValid = validateBirth()
         val isWeightValid = validateWeight()
-        return isHeightValid && isBirthValid && isWeightValid && binding.tvGym.text!=""
+        return isHeightValid && isBirthValid && isWeightValid && binding.tvGym.text != ""
     }
 
     private fun validateHeight(): Boolean {
