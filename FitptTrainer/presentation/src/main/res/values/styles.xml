@@ -137,6 +137,27 @@
     </style>
 
     <!-- Bold -->
+    <style name="Font_Bold_14_main_black">
+        <item name="fontFamily">@font/pretendard_bold</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/main_black</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="Font_Bold_14_main_white">
+        <item name="fontFamily">@font/pretendard_bold</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/main_white</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="Font_Bold_14_main_gray">
+        <item name="fontFamily">@font/pretendard_bold</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/main_gray</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
     <style name="Font_Bold_16_main_black">
         <item name="fontFamily">@font/pretendard_bold</item>
         <item name="android:textSize">16sp</item>
