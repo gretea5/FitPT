@@ -91,7 +91,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(
                         requireActivity().finishAffinity()
                     }
                     is LoginStatus.Error -> {
-                        /*lifecycleScope.launch {
+                        lifecycleScope.launch {
                             val token = userDataStoreSource.kakaoAccessToken.first()
                             //loginViewModel.updateAccessToken(token ?: "")
                         }
@@ -99,13 +99,13 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(
                         if (currentDestination == R.id.loginFragment) {
                             findNavController().navigate(R.id.action_loginFragment_to_registerUserInfoFragment)
                         }
-                        loginViewModel.resetLoginState()*/
+                        loginViewModel.resetLoginState()
                         //나중에 지울거임
-                        val intent = Intent(requireContext(), MainActivity::class.java)
+                        /*val intent = Intent(requireContext(), MainActivity::class.java)
                         startActivity(intent)
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
                         requireActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
-                        requireActivity().finishAffinity()
+                        requireActivity().finishAffinity()*/
                     }
                     LoginStatus.Idle -> {
 

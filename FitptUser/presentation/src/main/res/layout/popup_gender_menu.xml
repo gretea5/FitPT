@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/bg_popup"
+    android:padding="8dp"
+    android:gravity="center_horizontal">
+
+    <TextView
+        android:id="@+id/popupItemMale"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="남성"
+        android:padding="16dp"
+        android:textColor="@color/black"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="?attr/selectableItemBackground" />
+
+    <TextView
+        android:id="@+id/popupItemFemale"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="여성"
+        android:padding="16dp"
+        android:textColor="@color/black"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="?attr/selectableItemBackground" />
+
+</LinearLayout>

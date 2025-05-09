@@ -1,9 +1,13 @@
 package com.ssafy.presentation.login;
 
+import android.content.Context
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle;
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.DisplayMetrics
 import android.util.Log
 
 import androidx.fragment.app.Fragment;
@@ -11,6 +15,8 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager
+import android.widget.PopupWindow
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 
@@ -19,6 +25,7 @@ import com.ssafy.presentation.base.BaseFragment
 import com.ssafy.presentation.common.MainActivity
 import com.ssafy.presentation.databinding.FragmentLoginBinding
 import com.ssafy.presentation.databinding.FragmentRegisterUserInfoBinding
+import com.ssafy.presentation.databinding.PopupGenderMenuBinding
 import com.ssafy.presentation.login.viewModel.LoginViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Calendar
@@ -29,6 +36,7 @@ class RegisterUserInfoFragment : BaseFragment<FragmentRegisterUserInfoBinding>(
     R.layout.fragment_register_user_info
 ) {
     private val loginViewModel: LoginViewModel by activityViewModels()
+    private var popupWindow: PopupWindow? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -36,6 +44,12 @@ class RegisterUserInfoFragment : BaseFragment<FragmentRegisterUserInfoBinding>(
         initEvent()
         initValidation()
         validateAllInputs()
+    }
+
+    override fun onDestroyView() {
+        popupWindow?.dismiss()
+        popupWindow = null
+        super.onDestroyView()
     }
 
     fun initView(){
@@ -57,6 +71,60 @@ class RegisterUserInfoFragment : BaseFragment<FragmentRegisterUserInfoBinding>(
         }
         binding.ivBack.setOnClickListener {
             findNavController().popBackStack()
+        }
+
+        binding.cvGender.setOnClickListener {
+            // 키보드 내리기
+            val imm = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(binding.etBirth.windowToken, 0)
+            showPopupWindow(it)
+        }
+    }
+
+    private fun showPopupWindow(view: View) {
+        // 이미 열려있으면 닫고 반환
+        if (popupWindow != null && popupWindow?.isShowing == true) {
+            popupWindow?.dismiss()
+            return
+        }
+
+        // 새 팝업 생성
+        val inflater = LayoutInflater.from(requireContext())
+        val popupBinding = PopupGenderMenuBinding.inflate(inflater)
+
+        // 새 PopupWindow 인스턴스 생성
+        popupWindow = PopupWindow(
+            popupBinding.root,
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            true  // focusable을 true로 변경
+        )
+
+        val displayMetrics = DisplayMetrics()
+        requireActivity().windowManager.defaultDisplay.getMetrics(displayMetrics)
+        popupWindow?.width = (displayMetrics.widthPixels * 0.85).toInt()
+        popupWindow?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        popupWindow?.isOutsideTouchable = true
+        popupWindow?.isTouchable = true
+
+        // 팝업 표시
+        popupWindow?.showAsDropDown(view)
+
+        val clickListener = View.OnClickListener { clickedView ->
+            val jobTitle = when (clickedView.id) {
+                R.id.popupItemMale-> "남성"
+                R.id.popupItemFemale -> "여성"
+                else -> return@OnClickListener
+            }
+            binding.tvGender.text = jobTitle
+            popupWindow?.dismiss()
+        }
+        popupBinding.popupItemMale.setOnClickListener(clickListener)
+        popupBinding.popupItemFemale.setOnClickListener(clickListener)
+
+        // 팝업이 닫힐 때 참조 정리
+        popupWindow?.setOnDismissListener {
+            popupWindow = null
         }
     }
 

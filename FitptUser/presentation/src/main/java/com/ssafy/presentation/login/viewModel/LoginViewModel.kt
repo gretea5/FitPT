@@ -6,11 +6,13 @@ import androidx.lifecycle.viewModelScope
 import com.ssafy.data.datasource.UserDataStoreSource
 import com.ssafy.domain.model.base.ResponseStatus
 import com.ssafy.domain.model.sign.GymInfoItem
+import com.ssafy.domain.model.sign.UserInfo
 import com.ssafy.domain.usecase.auth.LoginUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -26,6 +28,11 @@ class LoginViewModel @Inject constructor(
     //체육관 저장
     private val _selectedGym = MutableStateFlow<GymInfoItem?>(null)
     val selectedGym: StateFlow<GymInfoItem?> = _selectedGym.asStateFlow()
+
+    private val _userJoin = MutableStateFlow(
+        UserInfo(admin = 0, memberName = "", memberGender = "", memberHeight = 0.0, memberWeight = 0.0, memberBirth = "")
+    )
+    val userJoin = _userJoin.asStateFlow()
 
 
     fun login(accessToken: String) {
@@ -56,6 +63,15 @@ class LoginViewModel @Inject constructor(
     fun setGym(gym: GymInfoItem) {
         _selectedGym.value = gym
     }
+
+    fun updateGym(adminNumber: Int) {
+        _userJoin.update { it.copy(admin = adminNumber) }
+    }
+
+    fun updateGender(gender: String){
+        _userJoin.update{it.copy(memberGender = gender)}
+    }
+
 }
 
 sealed class LoginStatus {
