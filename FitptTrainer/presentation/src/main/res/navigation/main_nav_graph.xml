@@ -3,18 +3,28 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/userWorkoutInfoFragment">
+    app:startDestination="@id/reportEditFragment">
 
     <fragment
         android:id="@+id/schedulingFragment"
         android:name="com.ssafy.presentation.scheduling.SchedulingFragment"
         android:label="fragment_scheduling"
-        tools:layout="@layout/fragment_scheduling" />
+        tools:layout="@layout/fragment_scheduling" >
+    </fragment>
 
     <fragment
         android:id="@+id/userWorkoutInfoFragment"
         android:name="com.ssafy.presentation.user.UserWorkoutInfoFragment"
         android:label="fragment_userWorkoutInfo"
-        tools:layout="@layout/fragment_user_workout_info"
-        />
+        tools:layout="@layout/fragment_user_workout_info" >
+        <action
+            android:id="@+id/action_userWorkoutInfoFragment_to_reportEditFragment"
+            app:destination="@id/reportEditFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/reportEditFragment"
+        android:name="com.ssafy.presentation.report.ReportEditFragment"
+        android:label="fragment_reportEdit"
+        tools:layout="@layout/fragment_report_edit"/>
 </navigation>
