@@ -99,6 +99,324 @@
             app:layout_constraintStart_toEndOf="@+id/layout_user_user_list"
             app:layout_constraintTop_toTopOf="parent">
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout_user_status_btn_list"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingHorizontal="20dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <Button
+                    android:id="@+id/btn_skeletal_muscle"
+                    style="@style/Font_Medium_20_main_gray"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/tab_button_selector"
+                    android:paddingHorizontal="20dp"
+                    android:paddingVertical="10dp"
+                    android:stateListAnimator="@null"
+                    android:text="골격근량"
+                    android:textColor="@color/tab_button_selector"
+                    app:backgroundTint="@null"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/btn_weight"
+                    style="@style/Font_Medium_20_main_gray"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:background="@drawable/tab_button_selector"
+                    android:paddingHorizontal="20dp"
+                    android:stateListAnimator="@null"
+                    android:text="몸무게"
+                    android:textColor="@color/tab_button_selector"
+                    app:backgroundTint="@null"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/btn_skeletal_muscle"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/btn_bmi"
+                    style="@style/Font_Medium_20_main_gray"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:background="@drawable/tab_button_selector"
+                    android:paddingHorizontal="20dp"
+                    android:stateListAnimator="@null"
+                    android:text="BMI"
+                    android:textColor="@color/tab_button_selector"
+                    app:backgroundTint="@null"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/btn_weight"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/btn_body_fat"
+                    style="@style/Font_Medium_20_main_gray"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:background="@drawable/tab_button_selector"
+                    android:paddingHorizontal="20dp"
+                    android:stateListAnimator="@null"
+                    android:text="체지방량"
+                    android:textColor="@color/tab_button_selector"
+                    app:backgroundTint="@null"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/btn_bmi"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/chart_user_body_graph"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:visibility="invisible"
+                app:layout_constraintDimensionRatio="2:1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/layout_user_status_btn_list" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cv_user_info_line"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginTop="20dp"
+                android:backgroundTint="@color/main_gray"
+                app:cardCornerRadius="5dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/chart_user_body_graph" />
+
+            <LinearLayout
+                android:id="@+id/layout_user_info_detail"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cv_user_info_line">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="10dp"
+                    android:layout_weight="1"
+                    android:clipToOutline="true"
+                    android:foreground="@drawable/cardview_stroke"
+                    app:cardCornerRadius="10dp">
+
+                    <androidx.core.widget.NestedScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:padding="20dp">
+
+                            <TextView
+                                android:id="@+id/tv_user_info_detail_title"
+                                style="@style/Font_Medium_20_main_black"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="사용자 최신 체성분 정보"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/tv_user_info_detail_birth"
+                                style="@style/Font_Medium_20_main_black"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="12dp"
+                                android:text="생년월일"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/tv_user_info_detail_title" />
+
+                            <TextView
+                                android:id="@+id/tv_user_info_detail_birth_content"
+                                style="@style/Font_Medium_20_main_black"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="12dp"
+                                android:text="990730"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/tv_user_info_detail_title" />
+
+                            <TextView
+                                android:id="@+id/tv_user_info_detail_gender"
+                                style="@style/Font_Medium_20_main_black"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:text="성별"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/tv_user_info_detail_birth" />
+
+                            <TextView
+                                android:id="@+id/tv_user_info_detail_gender_content"
+                                style="@style/Font_Medium_20_main_black"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:text="남성"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/tv_user_info_detail_birth" />
+
+                            <TextView
+                                android:id="@+id/tv_user_info_detail_weight"
+                                style="@style/Font_Medium_20_main_black"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:text="몸무게"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/tv_user_info_detail_gender" />
+
+                            <TextView
+                                android:id="@+id/tv_user_info_detail_weight_content"
+                                style="@style/Font_Medium_20_main_black"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:text="70kg"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/tv_user_info_detail_gender" />
+
+                            <TextView
+                                android:id="@+id/tv_user_info_detail_height"
+                                style="@style/Font_Medium_20_main_black"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:text="키"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/tv_user_info_detail_weight" />
+
+                            <TextView
+                                android:id="@+id/tv_user_info_detail_height_content"
+                                style="@style/Font_Medium_20_main_black"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:text="187cm"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/tv_user_info_detail_weight" />
+
+                            <TextView
+                                android:id="@+id/tv_user_info_detail_fat"
+                                style="@style/Font_Medium_20_main_black"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:text="체지방률"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/tv_user_info_detail_height" />
+
+                            <TextView
+                                android:id="@+id/tv_user_info_detail_fat_content"
+                                style="@style/Font_Medium_20_main_black"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:text="15%"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/tv_user_info_detail_height" />
+
+                            <TextView
+                                android:id="@+id/tv_user_info_detail_muscles"
+                                style="@style/Font_Medium_20_main_black"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:text="근육량"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/tv_user_info_detail_fat" />
+
+                            <TextView
+                                android:id="@+id/tv_user_info_detail_muscles_content"
+                                style="@style/Font_Medium_20_main_black"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:text="20kg"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/tv_user_info_detail_fat" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    </androidx.core.widget.NestedScrollView>
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="10dp"
+                    android:layout_weight="1"
+                    android:clipToOutline="true"
+                    android:foreground="@drawable/cardview_stroke"
+                    app:cardCornerRadius="10dp">
+
+                    <androidx.core.widget.NestedScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:padding="20dp">
+
+                            <TextView
+                                android:id="@+id/textView7"
+                                style="@style/Font_Medium_20_main_black"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="사용자 예상 외형"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <ImageView
+                                android:id="@+id/imageView2"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginTop="12dp"
+                                android:src="@drawable/user_body_sample"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintDimensionRatio="1"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/textView7" />
+
+                            <TextView
+                                android:id="@+id/tv_user_info_detail_body_composition"
+                                style="@style/Font_Medium_20_main_black"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="비만형"
+                                app:layout_constraintBottom_toBottomOf="@+id/imageView2"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toEndOf="@+id/imageView2"
+                                app:layout_constraintTop_toTopOf="@+id/imageView2" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    </androidx.core.widget.NestedScrollView>
+
+                </androidx.cardview.widget.CardView>
+
+            </LinearLayout>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
