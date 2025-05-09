@@ -15,7 +15,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_percent="0.6">
+        app:layout_constraintWidth_percent="0.5">
 
         <LinearLayout
             android:id="@+id/weekDaysContainer"
@@ -196,39 +196,7 @@
             app:flexWrap="wrap"
             app:justifyContent="flex_start"
             app:layout_constraintTop_toBottomOf="@+id/tv_morning"
-            tools:layout_editor_absoluteX="16dp">
-
-            <Button
-                android:id="@+id/btn_time_9"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:background="@drawable/bg_time_button"
-                android:text="14 : 00"
-                android:textColor="@android:color/black"
-                app:layout_flexBasisPercent="30%" />
-
-            <Button
-                android:id="@+id/btn_time_10"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:background="@drawable/bg_time_button"
-                android:text="18 : 00"
-                android:textColor="@android:color/black"
-                app:layout_flexBasisPercent="30%" />
-
-            <Button
-                android:id="@+id/btn_time_11"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:background="@drawable/bg_time_button"
-                android:text="19 : 00"
-                android:textColor="@android:color/black"
-                app:layout_flexBasisPercent="30%" />
-
-        </com.google.android.flexbox.FlexboxLayout>
+            tools:layout_editor_absoluteX="16dp"/>
 
         <!-- 오후 라벨 -->
         <TextView
@@ -251,58 +219,7 @@
             app:alignItems="stretch"
             app:alignContent="stretch"
             app:justifyContent="flex_start"
-            app:layout_constraintTop_toBottomOf="@id/tv_afternoon">
-
-            <Button
-                android:id="@+id/btn_time_14"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                app:layout_flexBasisPercent="30%"
-                android:text="14 : 00"
-                android:textColor="@android:color/black" />
-
-            <Button
-                android:id="@+id/btn_time_18"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                app:layout_flexBasisPercent="30%"
-                android:background="@drawable/bg_time_button"
-                android:text="18 : 00"
-                android:textColor="@android:color/black" />
-
-            <Button
-                android:id="@+id/btn_time_19"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                app:layout_flexBasisPercent="30%"
-                android:background="@drawable/bg_time_button"
-                android:text="19 : 00"
-                android:textColor="@android:color/black" />
-
-            <Button
-                android:id="@+id/btn_time_20"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                app:layout_flexBasisPercent="30%"
-                android:background="@drawable/bg_time_button"
-                android:text="20 : 00"
-                android:textColor="@android:color/black" />
-
-            <Button
-                android:id="@+id/btn_time_21"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                app:layout_flexBasisPercent="30%"
-                android:background="@drawable/bg_time_button"
-                android:text="21 : 00"
-                android:textColor="@android:color/black" />
-
-        </com.google.android.flexbox.FlexboxLayout>
+            app:layout_constraintTop_toBottomOf="@id/tv_afternoon"/>
 
 
         <!-- 하단 구분선 -->

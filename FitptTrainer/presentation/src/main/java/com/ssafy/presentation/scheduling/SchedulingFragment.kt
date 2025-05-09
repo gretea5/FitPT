@@ -18,6 +18,7 @@ import java.time.YearMonth
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.core.view.children
+import com.google.android.flexbox.FlexboxLayout
 import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.daysOfWeek
 import com.kizitonwose.calendar.view.MonthHeaderFooterBinder
@@ -32,7 +33,7 @@ class SchedulingFragment : BaseFragment<FragmentSchedulingBinding>(
 ) {
     private val eventsDatesList = mutableListOf<LocalDate>()
 
-    private val morningTimeList = listOf(
+    private val morningTimeList =    listOf(
         "09:00",
         "10:00",
         "11:00",
@@ -40,47 +41,34 @@ class SchedulingFragment : BaseFragment<FragmentSchedulingBinding>(
 
     val afternoonTimeList = listOf(
         "12:00",
-        "12:30",
         "13:00",
-        "13:30",
         "14:00",
-        "14:30",
         "15:00",
-        "15:30",
         "16:00",
-        "16:30",
         "17:00",
-        "17:30",
         "18:00",
-        "18:30",
         "19:00",
-        "19:30",
         "20:00",
-        "20:30",
         "21:00",
-        "21:30",
         "22:00",
-        "22:30",
-        "23:00",
-        "23:30"
     )
 
+    private val selectedButtons = mutableListOf<Button>()
 
     private var selectedDate: LocalDate? = null
-    private var selectedButton: Button? = null
 
-    val clickListener = View.OnClickListener { view ->
-        selectedButton = null
+    private val clickListener = View.OnClickListener { view ->
+        val button = view as Button
 
-        view.isSelected = true
-
-        selectedButton = view as Button
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-
+        if (button.isSelected) {
+            // 이미 선택된 버튼이면 선택 해제
+            button.isSelected = false
+            selectedButtons.remove(button)
+        } else {
+            // 선택되지 않은 버튼이면 선택 상태로 변경
+            button.isSelected = true
+            selectedButtons.add(button)
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -210,5 +198,39 @@ class SchedulingFragment : BaseFragment<FragmentSchedulingBinding>(
         binding.calendar.notifyCalendarChanged()
     }
 
-    fun initEvent() {}
+    fun initEvent() {
+        morningTimeList.forEach { time ->
+            val button = Button(requireContext()).apply {
+                // 버튼 속성 설정
+                layoutParams = FlexboxLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
+                    flexBasisPercent = 0.3f  // 30%에 해당
+                    setMargins(4, 4, 4, 4)   // 모든 방향에 4dp 마진 설정
+                }
+                text = time
+                setBackgroundResource(R.drawable.selector_button_time)
+                setTextColor(Color.BLACK)
+                setOnClickListener(clickListener)
+            }
+
+            // FlexboxLayout에 버튼 추가
+            binding.fbMidButton.addView(button)
+        }
+
+        afternoonTimeList.forEach { time ->
+            val button = Button(requireContext()).apply {
+                // 버튼 속성 설정
+                layoutParams = FlexboxLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
+                    flexBasisPercent = 0.3f  // 30%에 해당
+                    setMargins(4, 4, 4, 4)   // 모든 방향에 4dp 마진 설정
+                }
+                text = time
+                setBackgroundResource(R.drawable.selector_button_time)
+                setTextColor(Color.BLACK)
+                setOnClickListener(clickListener)
+            }
+
+            // FlexboxLayout에 버튼 추가
+            binding.fbAfternoonButton.addView(button)
+        }
+    }
 }
