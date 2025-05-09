@@ -3,10 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/schedulingFragment">
+    app:startDestination="@id/userWorkoutInfoFragment">
+
     <fragment
         android:id="@+id/schedulingFragment"
         android:name="com.ssafy.presentation.scheduling.SchedulingFragment"
         android:label="fragment_scheduling"
         tools:layout="@layout/fragment_scheduling" />
+
+    <fragment
+        android:id="@+id/userWorkoutInfoFragment"
+        android:name="com.ssafy.presentation.user.UserWorkoutInfoFragment"
+        android:label="fragment_userWorkoutInfo"
+        tools:layout="@layout/fragment_user_workout_info"
+        />
 </navigation>
