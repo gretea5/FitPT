@@ -2,12 +2,19 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    app:startDestination="@id/home_fragment"
-    android:id="@+id/nav_graph">
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/userWorkoutInfoFragment">
 
     <fragment
-        android:id="@+id/home_fragment"
-        android:name="com.ssafy.presentation.home.HomeFragment"
-        android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
+        android:id="@+id/schedulingFragment"
+        android:name="com.ssafy.presentation.scheduling.SchedulingFragment"
+        android:label="fragment_scheduling"
+        tools:layout="@layout/fragment_scheduling" />
+
+    <fragment
+        android:id="@+id/userWorkoutInfoFragment"
+        android:name="com.ssafy.presentation.user.UserWorkoutInfoFragment"
+        android:label="fragment_userWorkoutInfo"
+        tools:layout="@layout/fragment_user_workout_info"
+        />
 </navigation>
