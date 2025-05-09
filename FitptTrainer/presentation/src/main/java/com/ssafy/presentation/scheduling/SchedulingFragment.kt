@@ -5,6 +5,7 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
@@ -31,7 +32,56 @@ class SchedulingFragment : BaseFragment<FragmentSchedulingBinding>(
 ) {
     private val eventsDatesList = mutableListOf<LocalDate>()
 
+    private val morningTimeList = listOf(
+        "09:00",
+        "10:00",
+        "11:00",
+    )
+
+    val afternoonTimeList = listOf(
+        "12:00",
+        "12:30",
+        "13:00",
+        "13:30",
+        "14:00",
+        "14:30",
+        "15:00",
+        "15:30",
+        "16:00",
+        "16:30",
+        "17:00",
+        "17:30",
+        "18:00",
+        "18:30",
+        "19:00",
+        "19:30",
+        "20:00",
+        "20:30",
+        "21:00",
+        "21:30",
+        "22:00",
+        "22:30",
+        "23:00",
+        "23:30"
+    )
+
+
     private var selectedDate: LocalDate? = null
+    private var selectedButton: Button? = null
+
+    val clickListener = View.OnClickListener { view ->
+        selectedButton = null
+
+        view.isSelected = true
+
+        selectedButton = view as Button
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+
+    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
