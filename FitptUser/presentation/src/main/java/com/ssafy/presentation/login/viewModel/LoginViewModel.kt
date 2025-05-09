@@ -30,7 +30,7 @@ class LoginViewModel @Inject constructor(
     val selectedGym: StateFlow<GymInfoItem?> = _selectedGym.asStateFlow()
 
     private val _userJoin = MutableStateFlow(
-        UserInfo(admin = 0, memberName = "", memberGender = "", memberHeight = 0.0, memberWeight = 0.0, memberBirth = "")
+        UserInfo()
     )
     val userJoin = _userJoin.asStateFlow()
 
@@ -70,6 +70,11 @@ class LoginViewModel @Inject constructor(
 
     fun updateGender(gender: String){
         _userJoin.update{it.copy(memberGender = gender)}
+    }
+
+    fun resetClear(){
+        _userJoin.value = UserInfo()
+        _selectedGym.value = null
     }
 
 }

@@ -36,6 +36,9 @@
         <action
             android:id="@+id/action_edit_user_info_fragment_to_mypage_fragment"
             app:destination="@id/mypage_fragment" />
+        <action
+            android:id="@+id/action_edit_user_info_fragment_to_searchGymFragment2"
+            app:destination="@id/searchGymFragment2" />
     </fragment>
 
     <fragment
@@ -98,5 +101,10 @@
         android:name="com.ssafy.presentation.home.notification.NotificationFragment"
         android:label="fragment_notification"
         tools:layout="@layout/fragment_notification" />
+    <fragment
+        android:id="@+id/searchGymFragment2"
+        android:name="com.ssafy.presentation.login.SearchGymFragment"
+        android:label="fragment_search_gym"
+        tools:layout="@layout/fragment_search_gym" />
 
 </navigation>

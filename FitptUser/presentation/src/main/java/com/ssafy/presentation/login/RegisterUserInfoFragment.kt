@@ -30,6 +30,7 @@ import com.ssafy.presentation.login.viewModel.LoginViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Calendar
 
+private const val TAG = "RegisterUserInfoFragmen"
 @AndroidEntryPoint
 class RegisterUserInfoFragment : BaseFragment<FragmentRegisterUserInfoBinding>(
     FragmentRegisterUserInfoBinding::bind,
@@ -43,7 +44,7 @@ class RegisterUserInfoFragment : BaseFragment<FragmentRegisterUserInfoBinding>(
         initView()
         initEvent()
         initValidation()
-        validateAllInputs()
+        updateButtonState()
     }
 
     override fun onDestroyView() {
@@ -52,14 +53,30 @@ class RegisterUserInfoFragment : BaseFragment<FragmentRegisterUserInfoBinding>(
         super.onDestroyView()
     }
 
+    override fun onDestroy() {
+        loginViewModel.resetClear()
+        super.onDestroy()
+    }
     fun initView(){
         if(loginViewModel.selectedGym.value!=null){
             binding.tvGym.text = loginViewModel.selectedGym.value!!.gymName
+            binding.layoutGym.setBackgroundResource(R.drawable.bg_card_border_active)
+        }
+        else{
+            binding.layoutGym.setBackgroundResource(R.drawable.bg_card_border_inactive)
+        }
+        if(loginViewModel.userJoin.value.memberGender!=""){
+            binding.tvGender.text = loginViewModel.userJoin.value.memberGender
+            binding.layoutGender.setBackgroundResource(R.drawable.bg_card_border_active)
+        }
+        else{
+            binding.layoutGender.setBackgroundResource(R.drawable.bg_card_border_inactive)
         }
     }
 
     fun initEvent(){
         binding.btnNext.setOnClickListener {
+            Log.d(TAG,"안녕")
             val intent = Intent(requireContext(), MainActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
@@ -111,12 +128,15 @@ class RegisterUserInfoFragment : BaseFragment<FragmentRegisterUserInfoBinding>(
         popupWindow?.showAsDropDown(view)
 
         val clickListener = View.OnClickListener { clickedView ->
-            val jobTitle = when (clickedView.id) {
+            val genderTitle = when (clickedView.id) {
                 R.id.popupItemMale-> "남성"
                 R.id.popupItemFemale -> "여성"
                 else -> return@OnClickListener
             }
-            binding.tvGender.text = jobTitle
+            binding.tvGender.text = genderTitle
+            loginViewModel.updateGender(genderTitle)
+            binding.layoutGender.setBackgroundResource(R.drawable.bg_card_border_active)
+            updateButtonState()
             popupWindow?.dismiss()
         }
         popupBinding.popupItemMale.setOnClickListener(clickListener)
@@ -161,18 +181,27 @@ class RegisterUserInfoFragment : BaseFragment<FragmentRegisterUserInfoBinding>(
         val isHeightValid = validateHeight()
         val isBirthValid = validateBirth()
         val isWeightValid = validateWeight()
-        return isHeightValid && isBirthValid && isWeightValid && binding.tvGym.text!=""
+        val isGymSelected = binding.tvGym.text.isNotBlank()
+        val isGenderSelected = binding.tvGender.text.isNotBlank()
+        return isHeightValid && isBirthValid && isWeightValid && isGymSelected && isGenderSelected
     }
 
     private fun validateHeight(): Boolean {
         val heightStr = binding.etHeight.text.toString()
         val height = heightStr.toIntOrNull()
+        if (heightStr.isEmpty()) {
+            binding.tvHeightError.visibility = View.GONE
+            binding.layoutHeight.setBackgroundResource(R.drawable.bg_card_border_inactive)
+            return false
+        }
         return if (height != null && height !in 100..250) {
             binding.tvHeightError.text = "키는 100~250cm 사이여야 합니다"
             binding.tvHeightError.visibility = View.VISIBLE
+            binding.layoutHeight.setBackgroundResource(R.drawable.bg_card_border_inactive)
             false
         } else {
             binding.tvHeightError.visibility = View.GONE
+            binding.layoutHeight.setBackgroundResource(R.drawable.bg_card_border_active)
             true
         }
     }
@@ -180,12 +209,19 @@ class RegisterUserInfoFragment : BaseFragment<FragmentRegisterUserInfoBinding>(
     private fun validateWeight(): Boolean {
         val weightStr = binding.etWeight.text.toString()
         val weight = weightStr.toIntOrNull()
+        if (weightStr.isEmpty()) {
+            binding.tvWeightError.visibility = View.GONE
+            binding.layoutWeight.setBackgroundResource(R.drawable.bg_card_border_inactive)
+            return false
+        }
         return if (weight != null && weight !in 30..200) {
             binding.tvWeightError.text = "몸무게는 30~400kg 사이여야 합니다"
             binding.tvWeightError.visibility = View.VISIBLE
+            binding.layoutWeight.setBackgroundResource(R.drawable.bg_card_border_inactive)
             false
         } else {
             binding.tvWeightError.visibility = View.GONE
+            binding.layoutWeight.setBackgroundResource(R.drawable.bg_card_border_active)
             true
         }
     }
@@ -194,12 +230,14 @@ class RegisterUserInfoFragment : BaseFragment<FragmentRegisterUserInfoBinding>(
         val birthStr = binding.etBirth.text.toString()
         if (birthStr.isEmpty()) {
             binding.tvBirthError.visibility = View.GONE
+            binding.layoutBirthyear.setBackgroundResource(R.drawable.bg_card_border_inactive)
             return false
         }
 
         if (!birthStr.matches(Regex("^\\d{8}\$"))) {
             binding.tvBirthError.text = "생년월일은 8자리 숫자(yyyyMMdd)여야 합니다"
             binding.tvBirthError.visibility = View.VISIBLE
+            binding.layoutBirthyear.setBackgroundResource(R.drawable.bg_card_border_inactive)
             return false
         }
 
@@ -217,10 +255,12 @@ class RegisterUserInfoFragment : BaseFragment<FragmentRegisterUserInfoBinding>(
             if (day !in 1..daysInMonth[month - 1]) throw Exception()
 
             binding.tvBirthError.visibility = View.GONE
+            binding.layoutBirthyear.setBackgroundResource(R.drawable.bg_card_border_active)
             return true
         } catch (e: Exception) {
             binding.tvBirthError.text = "올바른 생년월일을 입력해주세요"
             binding.tvBirthError.visibility = View.VISIBLE
+            binding.layoutBirthyear.setBackgroundResource(R.drawable.bg_card_border_inactive)
             return false
         }
     }

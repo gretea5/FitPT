@@ -16,6 +16,7 @@ import com.ssafy.presentation.databinding.FragmentRegisterUserInfoBinding
 import com.ssafy.presentation.databinding.FragmentSearchGymBinding
 import com.ssafy.presentation.login.adapter.GymSearchAdapter
 import com.ssafy.presentation.login.viewModel.LoginViewModel
+import com.ssafy.presentation.mypage.viewModel.MypageViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -27,6 +28,7 @@ class SearchGymFragment : BaseFragment<FragmentSearchGymBinding>(
     private lateinit var gymSearchAdapter: GymSearchAdapter
     private var selectedGym: GymInfoItem? = null
     private val loginViewModel: LoginViewModel by activityViewModels()
+    private val mypageViewModel: MypageViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -56,6 +58,7 @@ class SearchGymFragment : BaseFragment<FragmentSearchGymBinding>(
         gymSearchAdapter = GymSearchAdapter(dummyList) { gymInfoItem ->
             selectedGym = gymInfoItem
             loginViewModel.setGym(gymInfoItem)
+            mypageViewModel.setGym(gymInfoItem)
             updateNextButtonState(true)
         }
         binding.rvGymSearch.adapter = gymSearchAdapter

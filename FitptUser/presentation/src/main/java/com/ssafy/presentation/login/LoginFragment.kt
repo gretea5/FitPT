@@ -48,7 +48,11 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(
         binding.ivKakaoMove.setOnClickListener {
             if (!isClick) {
                 isClick = true // 클릭 방지 활성화
-                kakaoLogin()
+                //kakaoLogin()
+                val currentDestination = findNavController().currentDestination?.id
+                if (currentDestination == R.id.loginFragment) {
+                    findNavController().navigate(R.id.action_loginFragment_to_registerUserInfoFragment)
+                }
             }
         }
     }
