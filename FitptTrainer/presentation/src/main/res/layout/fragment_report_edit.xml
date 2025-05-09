@@ -82,33 +82,78 @@
             android:id="@+id/tl_report"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintWidth_percent="0.5"
             app:tabGravity="fill"
             app:tabIndicatorColor="@color/highlight_orange"
-            android:backgroundTint="@color/white"
             app:tabIndicatorFullWidth="true"
             app:tabIndicatorHeight="4dp"
             app:tabMode="fixed"
             app:tabSelectedTextColor="@color/highlight_orange"
             app:tabTextColor="@color/main_gray">
 
-            <com.google.android.material.tabs.TabItem
-                style="@style/Font_SemiBold_24_main_gray"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="헬스 보고서" />
+            <!--            <com.google.android.material.tabs.TabItem-->
+            <!--                style="@style/Font_SemiBold_24_main_gray"-->
+            <!--                android:layout_width="0dp"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:text="헬스 보고서" />-->
 
-            <com.google.android.material.tabs.TabItem
-                style="@style/Font_SemiBold_24_main_gray"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="체성분 기록 / 식단 코칭" />
+            <!--            <com.google.android.material.tabs.TabItem-->
+            <!--                style="@style/Font_SemiBold_24_main_gray"-->
+            <!--                android:layout_width="0dp"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:text="체성분 기록 / 식단 코칭" />-->
 
         </com.google.android.material.tabs.TabLayout>
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_report_health_report"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tl_report">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_report_health_muscles"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_percent="0.3">
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_report_health_workout"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/cl_report_health_content_detail"
+                app:layout_constraintStart_toEndOf="@+id/cl_report_health_muscles"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_percent="0.3">
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_report_health_content_detail"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_percent="0.3">
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
