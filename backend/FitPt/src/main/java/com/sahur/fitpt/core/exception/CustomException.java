@@ -1,13 +1,14 @@
 package com.sahur.fitpt.core.exception;
 
 import lombok.Getter;
-import org.springframework.http.HttpStatus;
+import com.sahur.fitpt.core.constant.ErrorCode;
 
 @Getter
 public class CustomException extends RuntimeException {
-    private final HttpStatus httpStatus;
+    private final ErrorCode errorCode;
 
-    public CustomException(HttpStatus httpStatus) {
-        this.httpStatus = httpStatus;
+    public CustomException(ErrorCode errorCode) {
+        super(errorCode.getMessage());
+        this.errorCode = errorCode;
     }
 }
