@@ -122,6 +122,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_gray_button"
+            android:enabled="false"
             android:text="등록"
             android:textColor="@android:color/white"
             app:layout_constraintEnd_toEndOf="parent"
