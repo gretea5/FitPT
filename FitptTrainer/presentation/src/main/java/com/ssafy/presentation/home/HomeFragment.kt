@@ -1,6 +1,7 @@
 package com.ssafy.presentation.home
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,8 @@ import com.ssafy.presentation.base.BaseFragment
 import com.ssafy.presentation.databinding.FragmentHomeBinding
 import com.ssafy.presentation.databinding.FragmentLoginBinding
 
+private const val TAG = "HomeFragment_FitPT"
+
 class HomeFragment : BaseFragment<FragmentHomeBinding>(
     FragmentHomeBinding::bind,
     R.layout.fragment_home
@@ -17,6 +20,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initEvent()
+        Log.d(TAG, "onViewCreated: ")
     }
 
     fun initEvent() {
