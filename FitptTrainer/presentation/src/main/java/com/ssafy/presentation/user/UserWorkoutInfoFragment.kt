@@ -40,7 +40,15 @@ class UserWorkoutInfoFragment : BaseFragment<FragmentUserWorkoutInfoBinding>(
     }
 
     fun initEvent() {
+        binding.apply {
+            layoutUserReportYear.setOnClickListener {
+                showYearDropdownMenu()
+            }
 
+            ibUserReportDropdownYear.setOnClickListener {
+                showYearDropdownMenu()
+            }
+        }
     }
 
     fun initRecyclerView() {
@@ -161,5 +169,23 @@ class UserWorkoutInfoFragment : BaseFragment<FragmentUserWorkoutInfoBinding>(
 
             tvUserUserListTitle.text = changeText
         }
+    }
+
+    private fun showYearDropdownMenu() {
+        val yearList = listOf("2025년", "2024년", "2023년", "2022년")
+
+        val popupMenu = androidx.appcompat.widget.PopupMenu(requireContext(), binding.tvUserReportYear)
+        yearList.forEachIndexed { index, year ->
+            popupMenu.menu.add(0, index, index, year)
+        }
+
+        popupMenu.setOnMenuItemClickListener { menuItem ->
+            val selectedYear = yearList[menuItem.itemId]
+            binding.tvUserReportYear.text = selectedYear
+            // 선택된 연도에 따라 데이터를 필터링하거나 업데이트하는 로직 추가
+            true
+        }
+
+        popupMenu.show()
     }
 }

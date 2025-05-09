@@ -460,7 +460,7 @@
             app:layout_constraintWidth_percent="0.2">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/constraintLayout"
+                android:id="@+id/layout_user_report_year"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -477,7 +477,8 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <ImageButton
+                <ImageView
+                    android:id="@+id/ib_user_report_dropdown_year"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_marginStart="4dp"
@@ -497,7 +498,7 @@
                 android:layout_marginTop="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
+                app:layout_constraintTop_toBottomOf="@+id/layout_user_report_year" />
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cv_user_report_line"
