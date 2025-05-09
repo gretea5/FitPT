@@ -61,14 +61,14 @@ class SchedulingFragment : BaseFragment<FragmentSchedulingBinding>(
         val button = view as Button
 
         if (button.isSelected) {
-            // 이미 선택된 버튼이면 선택 해제
             button.isSelected = false
             selectedButtons.remove(button)
         } else {
-            // 선택되지 않은 버튼이면 선택 상태로 변경
             button.isSelected = true
             selectedButtons.add(button)
         }
+
+        binding.btnRegister.isEnabled = selectedButtons.isNotEmpty()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -219,7 +219,7 @@ class SchedulingFragment : BaseFragment<FragmentSchedulingBinding>(
         afternoonTimeList.forEach { time ->
             val button = Button(requireContext()).apply {
                 // 버튼 속성 설정
-                layoutParams = FlexboxLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
+                layoutParams = FlexboxLayout.LayoutParams(0,  ViewGroup.LayoutParams.WRAP_CONTENT).apply {
                     flexBasisPercent = 0.3f  // 30%에 해당
                     setMargins(4, 4, 4, 4)   // 모든 방향에 4dp 마진 설정
                 }
