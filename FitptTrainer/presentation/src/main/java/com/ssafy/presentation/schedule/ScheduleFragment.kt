@@ -1,4 +1,4 @@
-package com.ssafy.presentation.scheduling
+package com.ssafy.presentation.schedule
 
 import android.graphics.Color
 import android.os.Build
@@ -13,7 +13,6 @@ import com.kizitonwose.calendar.view.MonthDayBinder
 import com.kizitonwose.calendar.view.ViewContainer
 import com.ssafy.presentation.R
 import com.ssafy.presentation.base.BaseFragment
-import com.ssafy.presentation.databinding.FragmentSchedulingBinding
 import java.time.YearMonth
 import android.widget.TextView
 import androidx.annotation.RequiresApi
@@ -22,14 +21,15 @@ import com.google.android.flexbox.FlexboxLayout
 import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.daysOfWeek
 import com.kizitonwose.calendar.view.MonthHeaderFooterBinder
+import com.ssafy.presentation.databinding.FragmentScheduleBinding
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.format.TextStyle
 import java.util.Locale
 
-class SchedulingFragment : BaseFragment<FragmentSchedulingBinding>(
-    FragmentSchedulingBinding::bind,
-    R.layout.fragment_scheduling
+class ScheduleFragment : BaseFragment<FragmentScheduleBinding>(
+    FragmentScheduleBinding::bind,
+    R.layout.fragment_schedule
 ) {
     private val eventsDatesList = mutableListOf<LocalDate>()
 
@@ -157,20 +157,16 @@ class SchedulingFragment : BaseFragment<FragmentSchedulingBinding>(
                     container.textView.text = data.date.dayOfMonth.toString()
 
                     if (data.position == DayPosition.MonthDate) {
-                        // 요일에 따른 색상 설정
                         when (data.date.dayOfWeek) {
                             DayOfWeek.SUNDAY -> container.textView.setTextColor(Color.RED)
                             DayOfWeek.SATURDAY -> container.textView.setTextColor(Color.BLUE)
                             else -> container.textView.setTextColor(Color.BLACK)
                         }
 
-                        // 선택된 날짜 처리
                         if (data.date == selectedDate) {
                             container.textView.setBackgroundResource(R.drawable.bg_selected_day)
                         }
-                        // 일정이 있는 날짜 처리
                         else if (eventsDatesList.contains(data.date)) {
-                            // 일정이 있는 날짜는 배경 색상 변경
                             container.textView.setBackgroundResource(R.drawable.bg_event_day)
                         } else {
                             container.textView.background = null
@@ -201,7 +197,6 @@ class SchedulingFragment : BaseFragment<FragmentSchedulingBinding>(
     fun initEvent() {
         morningTimeList.forEach { time ->
             val button = Button(requireContext()).apply {
-                // 버튼 속성 설정
                 layoutParams = FlexboxLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
                     flexBasisPercent = 0.3f  // 30%에 해당
                     setMargins(4, 4, 4, 4)   // 모든 방향에 4dp 마진 설정
@@ -218,7 +213,6 @@ class SchedulingFragment : BaseFragment<FragmentSchedulingBinding>(
 
         afternoonTimeList.forEach { time ->
             val button = Button(requireContext()).apply {
-                // 버튼 속성 설정
                 layoutParams = FlexboxLayout.LayoutParams(0,  ViewGroup.LayoutParams.WRAP_CONTENT).apply {
                     flexBasisPercent = 0.3f  // 30%에 해당
                     setMargins(4, 4, 4, 4)   // 모든 방향에 4dp 마진 설정
