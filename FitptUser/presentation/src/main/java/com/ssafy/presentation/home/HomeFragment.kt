@@ -13,6 +13,10 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
@@ -32,9 +36,17 @@ import com.kizitonwose.calendar.view.MonthDayBinder
 import com.kizitonwose.calendar.view.ViewContainer
 import com.ssafy.locket.utils.CalendarUtils.displayText
 import com.ssafy.presentation.databinding.CalendarDayBinding
+import com.ssafy.presentation.home.viewModel.OpenDialogState
+import com.ssafy.presentation.home.viewModel.SelectedDayState
+import com.ssafy.presentation.home.viewModel.SelectedDayViewModel
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.yield
 import java.time.DayOfWeek
 import java.time.format.DateTimeFormatter
 
+private const val TAG = "HomeFragment"
 class HomeFragment : BaseFragment<FragmentHomeBinding>(
     FragmentHomeBinding::bind,
     R.layout.fragment_home
@@ -49,6 +61,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
     private lateinit var dialog: PtCalendarBottomSheetFragment
     private lateinit var lineChart: LineChart
     private var selectedButton: Button? = null
+    private val selectedDayViewModel: SelectedDayViewModel by activityViewModels()
+
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -85,13 +99,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
     }
 
     private fun dateClicked(date: LocalDate) {
-        binding.calendar.notifyDateChanged(selectedDate) // 이전 선택값 해제
-        selectedDate = date
-        val existingDialog = childFragmentManager.findFragmentByTag("payment")
-        if (existingDialog == null || !existingDialog.isAdded) {
-            dialog.show(childFragmentManager, "payment")
+        if(selectedDayViewModel.selectedDay.value is SelectedDayState.Exist == false) {
+            binding.calendar.notifyDateChanged(selectedDate) // 이전 선택값 해제
+            selectedDate = date
+            binding.calendar.notifyDateChanged(date) // 새로운 선택값
+            selectedDayViewModel.setSelectedDay(date)
+            //selectedDayViewModel.setSelectedDayPayments(date.year, date.monthValue, date.dayOfMonth)
         }
-        binding.calendar.notifyDateChanged(date)
     }
 
     private fun bindDate(
@@ -189,9 +203,26 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
         binding.calendar.setup(startMonth, endMonth, daysOfWeek.first())
         binding.calendar.scrollToMonth(currentMonth)
         updateDayWeekColor()
-
+        initObserver()
     }
+    private fun initObserver() {
+        // 선택된 날짜 갱신
+        viewLifecycleOwner.lifecycleScope.launch {
+            selectedDayViewModel.selectedDay.collectLatest { uiState ->
+                if (uiState is SelectedDayState.Exist) {
+                    binding.calendar.notifyDateChanged(selectedDate)
+                }
+            }
+        }
 
+        viewLifecycleOwner.lifecycleScope.launch {
+            selectedDayViewModel.openDialog.collectLatest { dialogState ->
+                if (dialogState is OpenDialogState.Opened && !dialog.isAdded) {
+                    dialog.show(childFragmentManager, "payment")
+                }
+            }
+        }
+    }
 
     fun initView(){
         val text = "김동현님의 체성분 그래프"

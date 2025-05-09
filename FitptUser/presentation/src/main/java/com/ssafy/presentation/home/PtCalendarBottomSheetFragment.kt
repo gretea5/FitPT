@@ -4,26 +4,36 @@ import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.ssafy.domain.model.home.PtScheduleItem
+import com.ssafy.locket.utils.CalendarUtils.displayText
 import com.ssafy.presentation.R
 import com.ssafy.presentation.common.MainActivity
 import com.ssafy.presentation.databinding.FragmentPtCalendarBottomSheetBinding
 import com.ssafy.presentation.home.adapter.PtScheduleAdapter
+import com.ssafy.presentation.home.viewModel.SelectedDayState
+import com.ssafy.presentation.home.viewModel.SelectedDayViewModel
 import dagger.hilt.android.internal.managers.ViewComponentManager
+import kotlinx.coroutines.launch
 
-
+private const val TAG = "PtCalendarBottomSheetFr"
 class PtCalendarBottomSheetFragment : BottomSheetDialogFragment() {
     private var _binding : FragmentPtCalendarBottomSheetBinding? = null
     private val binding get() = _binding!!
     private var mContext : Context? = null
+    private val selectedDayViewModel: SelectedDayViewModel by activityViewModels()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -40,9 +50,31 @@ class PtCalendarBottomSheetFragment : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initView()
         initEvent()
         setupRecyclerView()
     }
+
+    fun initView(){
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                selectedDayViewModel.selectedDay.collect { uiState ->
+                    when(uiState) {
+                        is SelectedDayState.Exist -> {
+                            val day = uiState.day
+                            binding.tvDate.text = String.format(
+                                getString(R.string.home_bottom_sheet_date),
+                                day.dayOfMonth.toString(),
+                                day.dayOfWeek.displayText()
+                            )
+                        }
+                        else -> dismissSmoothly()
+                    }
+                }
+            }
+        }
+    }
+
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = BottomSheetDialog(mContext!!, R.style.CustomDialog)
@@ -83,6 +115,7 @@ class PtCalendarBottomSheetFragment : BottomSheetDialogFragment() {
 
     override fun onStop() {
         super.onStop()
+        selectedDayViewModel.clearSelectedDay()
         dismissSmoothly()
     }
 

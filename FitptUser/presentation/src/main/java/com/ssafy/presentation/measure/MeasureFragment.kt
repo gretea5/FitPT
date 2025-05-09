@@ -113,12 +113,10 @@ class MeasureFragment : BaseFragment<FragmentMeasureBinding>(
         binding.tvResult.text = result.map { "${it.key} : ${it.value}" }.joinToString("\n")
         Log.d(TAG,result.toString())
         measuring = false
-        Log.d(TAG,"끊기 전입니다")
         manager.disconnectFitrus()
     }
 
     override fun handleFitrusConnected() {
-        Log.d(TAG,"연결했습니다.")
         binding.btnMeasureStart.isVisible = true
         binding.btnMeasureStart.isEnabled = true
         binding.btnBleStart.isVisible = false
@@ -134,7 +132,6 @@ class MeasureFragment : BaseFragment<FragmentMeasureBinding>(
     }
 
     override fun handleFitrusDisconnected() {
-        Log.d(TAG,"끊겼습니다")
         binding.btnMeasureStart.isVisible = false
         binding.btnMeasureStart.isEnabled = false
         binding.ivFitrusUse.isVisible = false
