@@ -22,4 +22,11 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
             "LEFT JOIN FETCH m.admin " +
             "WHERE m.trainer.trainerId = :trainerId AND m.isDeleted = false")
     List<Member> findAllByTrainerIdAndNotDeleted(@Param("trainerId") Long trainerId);
+
+    // 카카오 로그인용 memberName으로 회원 조회 (삭제되지 않은 회원만)
+    @Query("SELECT m FROM Member m " +
+            "LEFT JOIN FETCH m.admin " +
+            "LEFT JOIN FETCH m.trainer " +
+            "WHERE m.memberName = :memberName AND m.isDeleted = false")
+    Optional<Member> findByMemberName(@Param("memberName") String memberName);
 }
