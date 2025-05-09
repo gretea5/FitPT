@@ -38,7 +38,7 @@ public class FcmNotificationService {
 
         for (FcmToken token : tokens) {
             try {
-                fcmService.sendMessageTo(token.getToken(), title, body);
+                fcmService.sendDataMessageTo(token.getToken(), title, body, reportId);
             } catch (IOException e) {
                 log.error("Failed to send FCM to token: {}", token.getToken(), e);
             }

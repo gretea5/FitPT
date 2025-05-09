@@ -32,10 +32,4 @@ public class FcmController {
         fcmNotificationService.sendNotificationToUser(memberId, reportId, title, body);
         return ResponseEntity.ok().build();
     }
-
-//    @PostMapping("/sendMessageTo")
-//    public void sendMessageTo(String token, String title, String body) throws IOException {
-//        log.info("sendMessageTo : token:{}, title:{}, body:{}", token, title, body);
-//        firebaseCloudMessageService.sendMessageTo(token, title, body);
-//    }
 }

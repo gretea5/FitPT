@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.sahur.fitpt.db.entity.FcmToken;
 import com.sahur.fitpt.domain.firebase.dto.FcmMessage;
+import com.sahur.fitpt.domain.firebase.dto.FcmMessageWithData;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 import org.apache.http.HttpHeaders;
@@ -14,7 +15,9 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Component
 @Slf4j
@@ -100,6 +103,67 @@ public class FirebaseCloudMessageService {
             log.error("response body: {}", responseBody);
         }
 
+    }
+
+    /**
+     * FCM 알림 메시지 생성
+     * background 대응을 위해서 data로 전송한다.
+     *
+     * @param targetToken
+     * @param title
+     * @param body
+     * @return
+     * @throws JsonProcessingException
+     */
+    private String makeDataMessage(String targetToken, String title, String body, Long reportId) throws JsonProcessingException {
+        Map<String, String> map = new HashMap<>();
+        map.put("reportId", String.valueOf(reportId));
+
+        FcmMessageWithData.Message message = new FcmMessageWithData.Message();
+        FcmMessageWithData.Notification noti = new FcmMessageWithData.Notification(title, body, null);
+        message.setToken(targetToken);
+        message.setData(map);
+        message.setNotification(noti);
+
+        FcmMessageWithData fcmMessage = new FcmMessageWithData(false, message);
+
+        return objectMapper.writeValueAsString(fcmMessage);
+    }
+
+    /**
+     * targetToken에 해당하는 device로 FCM 푸시 알림 전송
+     * background 대응을 위해서 data로 전송한다.
+     *
+     * @param targetToken
+     * @param title
+     * @param body
+     * @param reportId
+     * @throws IOException
+     */
+    public void sendDataMessageTo(String targetToken, String title, String body, Long reportId) throws IOException {
+        String message = makeDataMessage(targetToken, title, body, reportId);
+
+        log.info("FCM 전송 요청: {}", message);
+
+        OkHttpClient client = new OkHttpClient();
+        RequestBody requestBody = RequestBody.create(message, MediaType.get("application/json; charset=utf-8"));
+        Request request = new Request.Builder()
+                .url(fcmApiUrl)
+                .post(requestBody)
+                // 전송 토큰 추가
+                .addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + getAccessToken())
+                .addHeader(HttpHeaders.CONTENT_TYPE, "application/json; UTF-8")
+                .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            String responseBody = response.body() != null ? response.body().string() : "null";
+
+            if (response.isSuccessful()) {
+                log.info("✅ FCM 전송 성공: {}", responseBody);
+            } else {
+                log.error("❌ FCM 전송 실패 - 코드: {}, 응답: {}", response.code(), responseBody);
+            }
+        }
     }
 
 }
