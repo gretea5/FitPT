@@ -38,3 +38,4 @@ out/
 
 ### env 무시
 .env
+/src/main/resources/firebase/firebase_service_key.json
