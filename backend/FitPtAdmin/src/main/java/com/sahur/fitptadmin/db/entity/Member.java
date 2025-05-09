@@ -80,4 +80,9 @@ public class Member {
         this.isDeleted = true;
     }
 
+    public void updateTrainer(Trainer trainer) {
+        this.trainer = trainer;
+    }
+
+
 }

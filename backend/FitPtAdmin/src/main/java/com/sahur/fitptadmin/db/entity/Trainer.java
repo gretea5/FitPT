@@ -39,4 +39,11 @@ public class Trainer {
 
     @OneToMany(mappedBy = "trainer")
     private List<Report> reports = new ArrayList<>();
+
+    public void updateTrainerInfo(String trainerName, String trainerLoginId, String trainerPw) {
+        this.trainerName = trainerName;
+        this.trainerLoginId = trainerLoginId;
+        this.trainerPw = trainerPw;
+    }
+
 }
