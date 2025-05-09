@@ -19,7 +19,6 @@ import java.io.IOException;
 public class FcmController {
     private final FcmService firebaseService;
     private final FcmNotificationService fcmNotificationService;
-    private final FirebaseCloudMessageService firebaseCloudMessageService;
 
     @PostMapping("")
     @Operation(summary = "Fcm 토큰 전송")
@@ -27,9 +26,10 @@ public class FcmController {
         return ResponseEntity.ok(firebaseService.registerFcmToken(fcmRequestDto));
     }
 
-    @PostMapping("/notify")
-    public ResponseEntity<Void> notifyUser(@RequestParam Long memberId, @RequestParam String title, @RequestParam String body) {
-        fcmNotificationService.sendNotificationToUser(memberId, title, body);
+    @PostMapping("/notification")
+    @Operation(summary = "사용자에게 알림전송")
+    public ResponseEntity<Void> notifyUser(@RequestParam Long memberId, @RequestParam Long reportId, @RequestParam String title, @RequestParam String body) {
+        fcmNotificationService.sendNotificationToUser(memberId, reportId, title, body);
         return ResponseEntity.ok().build();
     }
 
