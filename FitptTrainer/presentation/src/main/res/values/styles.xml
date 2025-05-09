@@ -158,6 +158,13 @@
         <item name="android:includeFontPadding">false</item>
     </style>
 
+    <style name="Font_Bold_14_highlight_orange">
+        <item name="fontFamily">@font/pretendard_bold</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/highlight_orange</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
     <style name="Font_Bold_16_main_black">
         <item name="fontFamily">@font/pretendard_bold</item>
         <item name="android:textSize">16sp</item>

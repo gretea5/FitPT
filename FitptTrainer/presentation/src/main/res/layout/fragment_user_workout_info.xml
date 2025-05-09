@@ -209,7 +209,6 @@
                 android:id="@+id/chart_user_body_graph"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:visibility="invisible"
                 app:layout_constraintDimensionRatio="2:1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -499,6 +498,27 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cv_user_report_line"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginTop="20dp"
+                android:backgroundTint="@color/main_gray"
+                app:cardCornerRadius="5dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rv_user_report_month" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_user_report_list"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="20dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cv_user_report_line" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
