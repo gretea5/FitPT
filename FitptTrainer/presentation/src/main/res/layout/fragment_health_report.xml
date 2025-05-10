@@ -18,8 +18,8 @@
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:strokeColor="@color/main_black"
             android:backgroundTint="@color/white"
+            app:strokeColor="@color/main_black"
             app:strokeWidth="2dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -28,24 +28,49 @@
                 android:padding="20dp">
 
 
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="0dp"
+                <com.google.android.material.button.MaterialButtonToggleGroup
+                    android:id="@+id/tg_report_muscles"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:cardCornerRadius="10dp"
+                    android:orientation="horizontal"
+                    app:checkedButton="@+id/btn_report_muscles_front"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintWidth_percent="0.5">
+                    app:layout_constraintWidth_percent="0.6"
+                    app:singleSelection="true">
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:padding="12dp">
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_report_muscles_front"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/highlight_orange"
+                        android:fontFamily="@font/pretendard_bold"
+                        android:paddingHorizontal="20dp"
+                        android:paddingVertical="12dp"
+                        android:text="앞면"
+                        android:textColor="@color/main_white"
+                        android:textSize="20sp"
+                        app:cornerRadius="10dp"
+                        app:strokeWidth="0dp" />
 
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_report_muscles_back"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/main_gray"
+                        android:fontFamily="@font/pretendard_bold"
+                        android:paddingHorizontal="20dp"
+                        android:paddingVertical="12dp"
+                        android:text="뒷면"
+                        android:textColor="@color/main_white"
+                        android:textSize="20sp"
+                        app:cornerRadius="10dp"
+                        app:strokeWidth="0dp" />
+                </com.google.android.material.button.MaterialButtonToggleGroup>
 
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                </com.google.android.material.card.MaterialCardView>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -174,8 +199,8 @@
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:strokeColor="@color/main_black"
             android:backgroundTint="@color/white"
+            app:strokeColor="@color/main_black"
             app:strokeWidth="2dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
