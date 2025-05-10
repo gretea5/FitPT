@@ -95,18 +95,6 @@
             app:tabSelectedTextColor="@color/highlight_orange"
             app:tabTextColor="@color/main_gray">
 
-            <!--            <com.google.android.material.tabs.TabItem-->
-            <!--                style="@style/Font_SemiBold_24_main_gray"-->
-            <!--                android:layout_width="0dp"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:text="헬스 보고서" />-->
-
-            <!--            <com.google.android.material.tabs.TabItem-->
-            <!--                style="@style/Font_SemiBold_24_main_gray"-->
-            <!--                android:layout_width="0dp"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:text="체성분 기록 / 식단 코칭" />-->
-
         </com.google.android.material.tabs.TabLayout>
 
         <androidx.viewpager2.widget.ViewPager2
@@ -117,10 +105,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tl_report">
-
-
-        </androidx.viewpager2.widget.ViewPager2>
+            app:layout_constraintTop_toBottomOf="@id/tl_report" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
