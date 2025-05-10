@@ -19,6 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:strokeColor="@color/main_black"
+            android:backgroundTint="@color/white"
             app:strokeWidth="2dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -174,6 +175,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:strokeColor="@color/main_black"
+            android:backgroundTint="@color/white"
             app:strokeWidth="2dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
