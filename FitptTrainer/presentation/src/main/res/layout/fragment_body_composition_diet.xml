@@ -14,6 +14,59 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintWidth_percent="0.65">
 
+        <ImageView
+            android:id="@+id/iv_report_measure"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:src="@drawable/measure_bluetooth"
+            app:layout_constraintDimensionRatio="1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            style="@style/Font_SemiBold_20_main_black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="바른 자세로 서서 양팔을 길게 뻗어, 양손의 엄지와 검지를 이용하여\n 금속전극 판을 가볍게 잡아주세요."
+            app:layout_constraintBottom_toTopOf="@+id/cv_report_workout_add_workout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_report_measure" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cv_report_workout_add_workout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/main_gray"
+            android:clickable="false"
+            android:focusable="false"
+            app:cardCornerRadius="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintWidth_percent="0.5">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="12dp">
+
+                <TextView
+                    style="@style/Font_SemiBold_24_main_white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="체성분 측정하기"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
