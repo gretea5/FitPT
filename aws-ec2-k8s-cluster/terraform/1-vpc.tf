@@ -57,8 +57,7 @@ resource "aws_subnet" "private_a" {
   availability_zone = "ap-northeast-2a"
 
   tags = merge(
-    l
-    ocal.common_tags,
+    local.common_tags,
     {
       Name = "${var.project_name}-${var.customer_id}-private-subnet-a"
     }

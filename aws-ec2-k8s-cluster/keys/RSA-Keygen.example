@@ -1,6 +1,7 @@
 # RSA-keygen CLI
 
 cd aws-ec2-k8s-cluster/
+cd terraform/
 
 # 운영용 4096 비트
 $ terraform init && ssh-keygen -t rsa -b 4096 -f ../keys/tf-fitpt -N ""
