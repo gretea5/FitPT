@@ -27,8 +27,8 @@ public class CompositionController {
     @GetMapping
     @Operation(summary = "내 체성분 조회", description = "회원의 체성분을 조회하는 API")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "201", content = @Content(mediaType = "application/json")),
-        @ApiResponse(responseCode = "400", content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "201", content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "400", content = @Content(mediaType = "application/json")),
     })
     @Parameters({
             @Parameter(name = "memberId", description = "회원 Id", example = "1"),
@@ -40,27 +40,14 @@ public class CompositionController {
             @RequestParam(value = "sort", required = false) String sort,
             @RequestParam(value = "order", required = false) String order
     ) {
-        if (memberId == null) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        if (sort == null && order == null) {
-            List<CompositionResponseDto> result = compositionService.getCompositionsByMemberId(memberId);
-            return ResponseEntity.ok(result);
-        }
-
-        if (sort != null && order != null) {
-            List<CompositionResponseDto> result = compositionService.getCompositionsByUserIdWithSort(memberId, sort, order);
-            return ResponseEntity.ok(result);
-        }
-
-        return ResponseEntity.badRequest().build();
+        return new ResponseEntity<>(compositionService.getCompositionsByMemberId(memberId, sort, order), HttpStatus.OK);
     }
 
     @GetMapping("/{compositionLogId}")
     @Operation(summary = "내 체성분 상세 조회", description = "회원의 체성분을 상세 조회하는 API")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "400", content = @Content(mediaType = "application/json")),
             @ApiResponse(responseCode = "404", content = @Content(mediaType = "application/json")),
     })
     @Parameters({
@@ -73,12 +60,12 @@ public class CompositionController {
     }
 
     @PostMapping
-    @Operation(summary = "내 체성분 상세 조회", description = "회원의 체성분을 상세 조회하는 API")
+    @Operation(summary = "체성분 측정", description = "회원의 체성분을 측정하는 API")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "404", content = @Content(mediaType = "application/json")),
     })
     public ResponseEntity<Long> createCompositionLog(@RequestBody CompositionRequestDto request) {
-        Long savedId = compositionService.saveComposition(request);
-        return new ResponseEntity<>(savedId, HttpStatus.CREATED);
+        return new ResponseEntity<>(compositionService.saveComposition(request), HttpStatus.CREATED);
     }
 }
