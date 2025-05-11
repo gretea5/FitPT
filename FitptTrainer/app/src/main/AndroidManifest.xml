@@ -29,7 +29,7 @@
             android:name="com.ssafy.presentation.common.MainActivity"
             android:exported="true"
             android:screenOrientation="landscape"
-            android:windowSoftInputMode="adjustResize"></activity>
+            android:windowSoftInputMode="adjustResize"/>
     </application>
 
 </manifest>
