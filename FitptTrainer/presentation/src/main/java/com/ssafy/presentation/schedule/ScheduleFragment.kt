@@ -5,6 +5,7 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.Button
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.DayPosition
@@ -22,6 +23,8 @@ import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.daysOfWeek
 import com.kizitonwose.calendar.view.MonthHeaderFooterBinder
 import com.ssafy.presentation.databinding.FragmentScheduleBinding
+import com.ssafy.presentation.schedule.adapter.Member
+import com.ssafy.presentation.schedule.adapter.ScheduleMemberAdapter
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.format.TextStyle
@@ -33,13 +36,13 @@ class ScheduleFragment : BaseFragment<FragmentScheduleBinding>(
 ) {
     private val eventsDatesList = mutableListOf<LocalDate>()
 
-    private val morningTimeList =    listOf(
+    private val morningTimeList = listOf(
         "09:00",
         "10:00",
         "11:00",
     )
 
-    val afternoonTimeList = listOf(
+    private val afternoonTimeList = listOf(
         "12:00",
         "13:00",
         "14:00",
@@ -51,6 +54,15 @@ class ScheduleFragment : BaseFragment<FragmentScheduleBinding>(
         "20:00",
         "21:00",
         "22:00",
+    )
+
+    private val memberList = listOf(
+        Member("박장훈", "2000.01.07"),
+        Member("안세호", "1997.07.11"),
+        Member("김두영", "1998.05.29"),
+        Member("김기훈", "1997.09.27"),
+        Member("김동현", "1999.07.30"),
+        Member("관경탁", "1996.12.31")
     )
 
     private val selectedButtons = mutableListOf<Button>()
@@ -74,7 +86,9 @@ class ScheduleFragment : BaseFragment<FragmentScheduleBinding>(
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initAdapter()
         initCalendar()
+        initButtonView()
         initEvent()
     }
 
@@ -86,6 +100,11 @@ class ScheduleFragment : BaseFragment<FragmentScheduleBinding>(
         eventsDatesList.add(today.plusDays(7))
         eventsDatesList.add(today.plusDays(12))
         eventsDatesList.add(today.minusDays(2))
+    }
+
+    private fun initAdapter() {
+        val adapter = ScheduleMemberAdapter(requireContext(), memberList)
+        binding.sMember.adapter = adapter
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -194,7 +213,7 @@ class ScheduleFragment : BaseFragment<FragmentScheduleBinding>(
         binding.calendar.notifyCalendarChanged()
     }
 
-    fun initEvent() {
+    private fun initButtonView() {
         morningTimeList.forEach { time ->
             val button = Button(requireContext()).apply {
                 layoutParams = FlexboxLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
@@ -207,7 +226,6 @@ class ScheduleFragment : BaseFragment<FragmentScheduleBinding>(
                 setOnClickListener(clickListener)
             }
 
-            // FlexboxLayout에 버튼 추가
             binding.fbMidButton.addView(button)
         }
 
@@ -215,7 +233,7 @@ class ScheduleFragment : BaseFragment<FragmentScheduleBinding>(
             val button = Button(requireContext()).apply {
                 layoutParams = FlexboxLayout.LayoutParams(0,  ViewGroup.LayoutParams.WRAP_CONTENT).apply {
                     flexBasisPercent = 0.3f  // 30%에 해당
-                    setMargins(4, 4, 4, 4)   // 모든 방향에 4dp 마진 설정
+                    setMargins(4, 4, 4, 4)
                 }
                 text = time
                 setBackgroundResource(R.drawable.selector_button_time)
@@ -223,8 +241,25 @@ class ScheduleFragment : BaseFragment<FragmentScheduleBinding>(
                 setOnClickListener(clickListener)
             }
 
-            // FlexboxLayout에 버튼 추가
             binding.fbAfternoonButton.addView(button)
+        }
+    }
+
+    private fun initEvent() {
+        // 스피너 선택 이벤트 처리
+        binding.sMember.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val selectedMember = parent?.getItemAtPosition(position) as Member
+                binding.tvMemberName.text = selectedMember.name
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                binding.tvMemberName.text = "회원 선택"
+            }
+        }
+
+        binding.tvMemberName.setOnClickListener {
+            binding.sMember.performClick()
         }
     }
 }
