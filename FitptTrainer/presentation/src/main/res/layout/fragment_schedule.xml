@@ -156,6 +156,21 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/divider_top" />
 
+        <Spinner
+            android:id="@+id/s_member"
+            style="@style/Widget.AppCompat.Spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            android:spinnerMode="dropdown"
+            android:dropDownWidth="match_parent"
+            android:dropDownVerticalOffset="35dp"
+            android:dropDownHeight="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/tv_member_name"
+            app:layout_constraintTop_toTopOf="@id/tv_member_name"
+            app:layout_constraintBottom_toBottomOf="@id/tv_member_name" />
+
         <ImageView
             android:id="@+id/iv_check"
             android:layout_width="wrap_content"
