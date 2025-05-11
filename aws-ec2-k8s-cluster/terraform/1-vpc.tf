@@ -1,37 +1,29 @@
-############
-## VPC
-############
+##################################
+# 1-vpc.tf : VPC 및 네트워크 구성
+##################################
 
-resource "aws_vpc" "kubernetes" {
+resource "aws_vpc" "main" {
   cidr_block           = var.vpc_cidr
   enable_dns_hostnames = true
 
   tags = merge(
     local.common_tags,
     {
-      "Name"  = "${var.vpc_name}",
-      "Owner" = "${var.owner}"
+      Name = var.vpc_name
     }
   )
 }
 
-# DHCP Options are not actually required, being identical to the Default Option Set
-resource "aws_vpc_dhcp_options" "dns_resolver" {
+resource "aws_vpc_dhcp_options" "default" {
   domain_name         = "${var.region}.compute.internal"
   domain_name_servers = ["AmazonProvidedDNS"]
 
-  tags = merge(
-    local.common_tags,
-    {
-      "Name"  = "${var.vpc_name}",
-      "Owner" = "${var.owner}"
-    }
-  )
+  tags = local.common_tags
 }
 
-resource "aws_vpc_dhcp_options_association" "dns_resolver" {
-  vpc_id          = aws_vpc.kubernetes.id
-  dhcp_options_id = aws_vpc_dhcp_options.dns_resolver.id
+resource "aws_vpc_dhcp_options_association" "default" {
+  vpc_id          = aws_vpc.main.id
+  dhcp_options_id = aws_vpc_dhcp_options.default.id
 }
 
 ##########
@@ -43,130 +35,73 @@ resource "aws_key_pair" "default_keypair" {
   public_key = local.default_keypair_public_key
 }
 
-
-############
-## Subnets
-############
-
-# Subnet (public)
-resource "aws_subnet" "kubernetes" {
-  vpc_id            = aws_vpc.kubernetes.id
-  cidr_block        = var.vpc_cidr
-  availability_zone = var.zone
+# 퍼블릭 서브넷 (App, Bastion용)
+resource "aws_subnet" "public" {
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = cidrsubnet(var.vpc_cidr, 8, 0)
+  availability_zone       = "ap-northeast-2a"
+  map_public_ip_on_launch = true
 
   tags = merge(
     local.common_tags,
     {
-      "Name"  = "${var.vpc_name}",
-      "Owner" = "${var.owner}"
+      Name = "${var.project_name}-${var.customer_id}-public-subnet-a"
     }
   )
 }
 
-resource "aws_internet_gateway" "gw" {
-  vpc_id = aws_vpc.kubernetes.id
+# 프라이빗 서브넷 (RDS용) - AZ a
+resource "aws_subnet" "private_a" {
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = cidrsubnet(var.vpc_cidr, 8, 10)
+  availability_zone = "ap-northeast-2a"
+
+  tags = merge(
+    l
+    ocal.common_tags,
+    {
+      Name = "${var.project_name}-${var.customer_id}-private-subnet-a"
+    }
+  )
+}
+
+# 프라이빗 서브넷 (RDS용) - AZ c
+resource "aws_subnet" "private_c" {
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = cidrsubnet(var.vpc_cidr, 8, 11)
+  availability_zone = "ap-northeast-2c"
 
   tags = merge(
     local.common_tags,
     {
-      "Name"  = "${var.vpc_name}",
-      "Owner" = "${var.owner}"
+      Name = "${var.project_name}-${var.customer_id}-private-subnet-c"
     }
   )
 }
 
-############
-## Routing
-############
+resource "aws_internet_gateway" "igw" {
+  vpc_id = aws_vpc.main.id
 
-resource "aws_route_table" "kubernetes" {
-  vpc_id = aws_vpc.kubernetes.id
+  tags = merge(
+    local.common_tags,
+    {
+      Name = "${var.project_name}-${var.customer_id}-igw"
+    }
+  )
+}
 
-  # Default route through Internet Gateway
+resource "aws_route_table" "public" {
+  vpc_id = aws_vpc.main.id
+
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.gw.id
+    gateway_id = aws_internet_gateway.igw.id
   }
 
-  tags = merge(
-    local.common_tags,
-    {
-      "Name"  = "${var.vpc_name}",
-      "Owner" = "${var.owner}"
-    }
-  )
+  tags = local.common_tags
 }
 
-resource "aws_route_table_association" "kubernetes" {
-  subnet_id      = aws_subnet.kubernetes.id
-  route_table_id = aws_route_table.kubernetes.id
-}
-
-
-############
-## Security
-############
-
-resource "aws_security_group" "kubernetes" {
-  vpc_id = aws_vpc.kubernetes.id
-  name   = "kubernetes"
-
-  dynamic "ingress" {
-    for_each = var.allowed_ports
-    content {
-      description = "Allow port ${ingress.value} from control IP"
-      from_port   = ingress.value
-      to_port     = ingress.value
-      protocol    = "tcp"
-      cidr_blocks = [var.control_cidr]
-    }
-  }
-
-  # Allow all outbound
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  # Allow ICMP from control host IP
-  ingress {
-    from_port   = 8
-    to_port     = 0
-    protocol    = "icmp"
-    cidr_blocks = ["${var.control_cidr}"]
-  }
-
-  # Allow all internal
-  ingress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["${var.vpc_cidr}"]
-  }
-
-  # Allow all traffic from the API ELB
-  ingress {
-    from_port       = 0
-    to_port         = 0
-    protocol        = "-1"
-    security_groups = ["${aws_security_group.kubernetes_api.id}"]
-  }
-
-  # Allow all traffic from control host IP
-  ingress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["${var.control_cidr}"]
-  }
-
-  tags = merge(
-    local.common_tags,
-    {
-      "Name"  = "${var.vpc_name}",
-      "Owner" = "${var.owner}"
-    }
-  )
+resource "aws_route_table_association" "public" {
+  subnet_id      = aws_subnet.public.id
+  route_table_id = aws_route_table.public.id
 }

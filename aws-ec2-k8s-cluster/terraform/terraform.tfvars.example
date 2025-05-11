@@ -1,0 +1,4 @@
+# aws_Rds_db_password_setup, fileName = terraform.tfvars
+
+# content
+db_password = "password"

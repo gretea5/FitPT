@@ -1,6 +1,11 @@
 locals {
+  vpc_name        = "${var.project_name}-${var.customer_id}-vpc"
+  ansibleFilter   = "${var.project_name}-${var.customer_id}"
   common_tags = {
-    "kubernetes.io/cluster/${var.cluster_id_tag}" = "${var.cluster_id_value}"
+    Project     = var.project_name
+    Customer    = var.customer_id
+    Environment = var.environment
+    Owner       = var.owner
   }
 }
 
@@ -8,34 +13,27 @@ locals {
 # Adjustable variables
 #############################
 
-variable "number_of_controller" {
-  description = "The number of controller, only acts as controller"
-  default     = 0
+variable "project_name" {
+  description = "SaaS 서비스 또는 시스템 명"
+  default     = "fitpt"
 }
 
-variable "number_of_etcd" {
-  description = "The number of etcd, only acts as etcd"
-  default     = 0
+variable "customer_id" {
+  description = "고객 고유 ID (지점/프랜차이즈용)"
+  default     = "gym001"
 }
 
-variable "number_of_controller_etcd" {
-  description = "The number of nodes which act as controller and etcd simultaneously"
-  default     = 1
+variable "environment" {
+  description = "배포 환경 (dev, staging, prod)"
+  default     = "dev"
 }
 
-variable "number_of_worker" {
-  description = "The number of worker nodes"
-  default     = 0
+variable "number_of_app_nodes" {
+  default = 1
 }
 
-variable "cluster_id_tag" {
-  description = "Cluster ID tag for kubespray"
-  default     = "kkt3289"
-}
-
-variable "cluster_id_value" {
-  description = "Cluster ID value, it can be shared or owned"
-  default     = "owned"
+variable "number_of_bastion_nodes" {
+  default = 1
 }
 
 
@@ -43,20 +41,31 @@ variable "cluster_id_value" {
 variable "allowed_ports" {
   description = "List of ports to open in security group"
   type        = list(number)
-  default     = [22, 6443, 2379, 2380, 10250]
+  default     = [22, 443, 3306, 6443, 2379, 2380, 10250]
 }
+
+
+# aws_Rds_db_password_setup
+variable "db_password" {
+  description = "RDS root password"
+  sensitive   = true
+}
+
 
 ##########################
 # Default variables (you can change for customizing)
 ##########################
 
+# SaaS 용 관리자 IP 등록 부분
+# SaaS 고객사 설치 시 아래 값은 각 고객의 운영자/지점 IP로 설정
+# SaaS 사용자 IP를 등록하여 ssh 또는 접근 제한 가능
 variable "control_cidr" {
-  description = "CIDR for maintenance: inbound traffic will be allowed from this IPs"
-  default     = "0.0.0.0/0"
+  description = "CIDR for maintenance (SSH or admin access control)."
+  default     = "0.0.0.0/0"  # ← 지금은 모든 IP 허용 (개발용)
 }
 
 locals {
-  default_keypair_public_key = file("../keys/tf-kube.pub")
+  default_keypair_public_key = file("../keys/tf-fitpt.pub")
 }
 
 /*
@@ -64,33 +73,26 @@ locals {
 ## TODO : Replace default_keypair_public_key as output?
 variable default_keypair_public_key {
   description = "Public Key of the default keypair"
-  default = "${file("../keys/tf-kube.pub")}"
+  default = "${file("../keys/tf-fitpt.pub")}"
 }
 */
 
 variable "default_keypair_name" {
   description = "Name of the KeyPair used for all nodes"
-  default     = "tf-kube"
+  default     = "tf-fitpt"
 }
 
 
 variable "vpc_name" {
-  description = "Name of the VPC"
-  default     = "kubernetes"
+  default = ""
 }
 
-variable "elb_name" {
-  description = "Name of the ELB for Kubernetes API"
-  default     = "kubernetes"
+variable "ansibleFilter" {
+  default = ""
 }
 
 variable "owner" {
   default = "kkt3289"
-}
-
-variable "ansibleFilter" {
-  description = "`ansibleFilter` tag value added to all instances, to enable instance filtering in Ansible dynamic inventory"
-  default     = "Kubernetes01" # IF YOU CHANGE THIS YOU HAVE TO CHANGE instance_filters = tag:ansibleFilter=Kubernetes01 in ./ansible/hosts/ec2.ini
 }
 
 # Networking setup
@@ -107,11 +109,6 @@ variable "zone" {
 variable "vpc_cidr" {
   default = "10.43.0.0/16"
 }
-
-variable "kubernetes_pod_cidr" {
-  default = "10.200.0.0/16"
-}
-
 
 # Instances Setup
 variable "amis" {
@@ -135,17 +132,10 @@ variable "default_instance_user" {
   default = "ubuntu"
 }
 
-variable "etcd_instance_type" {
+variable "app_instance_type" {
   default = "t3.xlarge"
 }
-variable "controller_instance_type" {
-  default = "t3.xlarge"
-}
-variable "worker_instance_type" {
-  default = "t2.small"
-}
 
-
-variable "kubernetes_cluster_dns" {
-  default = "10.31.0.1"
+variable "bastion_instance_type" {
+  default = "t2.micro"
 }
