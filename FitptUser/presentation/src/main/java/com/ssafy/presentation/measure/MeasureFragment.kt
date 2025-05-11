@@ -3,11 +3,14 @@ package com.ssafy.presentation.measure
 import android.app.ProgressDialog
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import com.onesoftdigm.fitrus.device.sdk.FitrusBleDelegate
@@ -30,6 +33,7 @@ class MeasureFragment : BaseFragment<FragmentMeasureBinding>(
     private var type: String = "comp"
     private lateinit var dialog: ProgressDialog
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -48,6 +52,32 @@ class MeasureFragment : BaseFragment<FragmentMeasureBinding>(
         binding.btnBleStart.setOnClickListener {
             bluetoothConnect()
         }
+
+        binding.btnWeight.setOnClickListener {
+            binding.ivFitrusBle.isVisible = true
+            binding.tvBleDescription.isVisible = true
+            binding.btnBleStart.isVisible = true
+            binding.btnWeight.isVisible = false
+            binding.tvWeight.isVisible = false
+            binding.etWeight.isVisible = false
+        }
+        binding.etWeight.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
+                val weightStr = s.toString()
+                val weight = weightStr.toFloatOrNull()
+                if (weight != null && weight >= 30 && weight < 200) {
+                    binding.btnWeight.isEnabled = true
+                    binding.btnWeight.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.main_orange))
+                } else {
+                    binding.btnWeight.isEnabled = false
+                    binding.btnWeight.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.disabled))
+                }
+            }
+        })
 
         binding.btnMeasureStart.setOnClickListener {
             if (measuring) return@setOnClickListener
