@@ -181,6 +181,15 @@
             app:layout_constraintStart_toEndOf="@id/tv_member_name"
             app:layout_constraintTop_toTopOf="@id/tv_member_name" />
 
+        <View
+            android:id="@+id/divider_member"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="16dp"
+            android:background="#E0E0E0"
+            app:layout_constraintTop_toBottomOf="@+id/tv_member_name"
+            tools:layout_editor_absoluteX="16dp" />
+
         <TextView
             android:id="@+id/tv_available_time"
             android:layout_width="wrap_content"
@@ -191,7 +200,7 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_member_name" />
+            app:layout_constraintTop_toBottomOf="@id/divider_member" />
 
         <TextView
             android:id="@+id/tv_morning"
@@ -214,7 +223,14 @@
             app:layout_constraintTop_toBottomOf="@+id/tv_morning"
             tools:layout_editor_absoluteX="16dp"/>
 
-        <!-- 오후 라벨 -->
+        <View
+            android:id="@+id/divider_time"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="16dp"
+            android:background="#E0E0E0"
+            app:layout_constraintTop_toBottomOf="@id/fb_mid_button"/>
+
         <TextView
             android:id="@+id/tv_afternoon"
             android:layout_width="wrap_content"
@@ -223,8 +239,7 @@
             android:text="오후"
             android:textColor="@android:color/black"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/fb_mid_button" />
-
+            app:layout_constraintTop_toBottomOf="@id/divider_time" />
 
         <com.google.android.flexbox.FlexboxLayout
             android:id="@+id/fb_afternoon_button"
@@ -237,8 +252,6 @@
             app:justifyContent="flex_start"
             app:layout_constraintTop_toBottomOf="@id/tv_afternoon"/>
 
-
-        <!-- 하단 구분선 -->
         <View
             android:id="@+id/divider_bottom"
             android:layout_width="match_parent"
@@ -247,7 +260,6 @@
             android:background="#E0E0E0"
             app:layout_constraintTop_toBottomOf="@id/fb_afternoon_button" />
 
-        <!-- 세부 내역 작성 라벨 -->
         <TextView
             android:id="@+id/tv_detail_label"
             android:layout_width="wrap_content"

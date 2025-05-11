@@ -218,7 +218,7 @@ class ScheduleFragment : BaseFragment<FragmentScheduleBinding>(
             val button = Button(requireContext()).apply {
                 layoutParams = FlexboxLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
                     flexBasisPercent = 0.3f  // 30%에 해당
-                    setMargins(4, 4, 4, 4)   // 모든 방향에 4dp 마진 설정
+                    setMargins(4, 4, 4, 4)
                 }
                 text = time
                 setBackgroundResource(R.drawable.selector_button_time)
@@ -246,7 +246,6 @@ class ScheduleFragment : BaseFragment<FragmentScheduleBinding>(
     }
 
     private fun initEvent() {
-        // 스피너 선택 이벤트 처리
         binding.sMember.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val selectedMember = parent?.getItemAtPosition(position) as Member
