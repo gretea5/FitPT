@@ -117,14 +117,31 @@
         app:layout_constraintStart_toEndOf="@+id/layout_calendar"
         app:layout_constraintTop_toTopOf="parent">
 
-        <Button
-            android:id="@+id/btn_register"
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_delete"
+            style="@style/Font_Bold_16_main_white"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_gray_button"
-            android:enabled="false"
-            android:text="등록"
+            android:backgroundTint="@color/main_brown"
+            android:text="삭제"
+            android:textSize="18sp"
             android:textColor="@android:color/white"
+            android:layout_marginEnd="16dp"
+            app:cornerRadius="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_edit"
+            app:layout_constraintEnd_toStartOf="@+id/btn_edit"
+            app:layout_constraintTop_toTopOf="@+id/btn_edit" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_edit"
+            style="@style/Font_Bold_16_main_white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/highlight_orange"
+            android:text="수정"
+            android:textSize="18sp"
+            android:textColor="@android:color/white"
+            app:cornerRadius="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -134,7 +151,7 @@
             android:layout_height="1dp"
             android:layout_marginTop="16dp"
             android:background="#E0E0E0"
-            app:layout_constraintTop_toBottomOf="@id/btn_register" />
+            app:layout_constraintTop_toBottomOf="@id/btn_edit" />
 
         <TextView
             android:id="@+id/tv_member_label"
