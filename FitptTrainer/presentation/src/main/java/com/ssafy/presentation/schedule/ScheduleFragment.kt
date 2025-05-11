@@ -62,7 +62,7 @@ class ScheduleFragment : BaseFragment<FragmentScheduleBinding>(
         Member("김두영", "1998.05.29"),
         Member("김기훈", "1997.09.27"),
         Member("김동현", "1999.07.30"),
-        Member("관경탁", "1996.12.31")
+        Member("권경탁", "1996.12.31")
     )
 
     private val selectedButtons = mutableListOf<Button>()
