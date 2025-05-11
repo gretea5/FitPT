@@ -1,19 +1,14 @@
 package com.ssafy.presentation.mypage.viewModel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.ssafy.data.datasource.UserDataStoreSource
-import com.ssafy.domain.model.base.ResponseStatus
-import com.ssafy.domain.model.sign.GymInfoItem
-import com.ssafy.domain.model.sign.UserInfo
-import com.ssafy.domain.usecase.auth.LoginUseCase
+import com.ssafy.domain.model.login.GymInfoItem
+import com.ssafy.domain.model.login.UserInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel

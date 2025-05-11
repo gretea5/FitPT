@@ -5,8 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ssafy.data.datasource.UserDataStoreSource
 import com.ssafy.domain.model.base.ResponseStatus
-import com.ssafy.domain.model.sign.GymInfoItem
-import com.ssafy.domain.model.sign.UserInfo
+import com.ssafy.domain.model.login.GymInfoItem
+import com.ssafy.domain.model.login.UserInfo
 import com.ssafy.domain.usecase.auth.LoginUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

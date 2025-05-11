@@ -1,24 +1,22 @@
 package com.ssafy.presentation.login.adapter
 
-import android.os.Parcel
-import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.ssafy.domain.model.sign.GymInfoItem
+import com.ssafy.domain.model.login.Gym
 import com.ssafy.presentation.R
 import com.ssafy.presentation.databinding.ItemGymBinding
 
 class GymSearchAdapter(
-    private val items: List<GymInfoItem>,
-    private val onItemClick: (GymInfoItem) -> Unit
+    private val items: List<Gym>,
+    private val onItemClick: (Gym) -> Unit
 ) : RecyclerView.Adapter<GymSearchAdapter.GymViewHolder>(){
     private var selectedPosition = RecyclerView.NO_POSITION
     inner class GymViewHolder(private val binding: ItemGymBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: GymInfoItem, position: Int) {
+        fun bind(item: Gym, position: Int) {
             binding.tvLocationTitle.text = item.gymName
-            binding.tvLocationAddress.text = item.location
+            binding.tvLocationAddress.text = item.gymAddr
 
             binding.root.setBackgroundResource(
                 if (selectedPosition == position) R.drawable.bg_gym_selected

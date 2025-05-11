@@ -1,4 +1,4 @@
-package com.ssafy.domain.model.sign
+package com.ssafy.domain.model.login
 
 data class UserInfo(
     val admin: Int = 0,

@@ -1,18 +1,14 @@
 package com.ssafy.presentation.login
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.ssafy.domain.model.sign.GymInfoItem
+import com.ssafy.domain.model.login.Gym
+import com.ssafy.domain.model.login.GymInfoItem
 import com.ssafy.presentation.R
 import com.ssafy.presentation.base.BaseFragment
-import com.ssafy.presentation.databinding.FragmentRegisterUserInfoBinding
 import com.ssafy.presentation.databinding.FragmentSearchGymBinding
 import com.ssafy.presentation.login.adapter.GymSearchAdapter
 import com.ssafy.presentation.login.viewModel.LoginViewModel
@@ -48,17 +44,17 @@ class SearchGymFragment : BaseFragment<FragmentSearchGymBinding>(
     }
     private fun initAdapter() {
         val dummyList = listOf(
-            GymInfoItem("삼성 체육관", "서울 강남구 삼성동"),
-            GymInfoItem("헬스킹짐", "부산 해운대구 마린시티"),
-            GymInfoItem("피트니스 월드", "대전 중구 중앙로"),
-            GymInfoItem("광주 바디짐", "광주 서구 농성동"),
-            GymInfoItem("인천 스포짐", "인천 연수구 송도동")
+            Gym(1,"삼성 체육관", "서울 강남구 삼성동"),
+            Gym(2,"헬스킹짐", "부산 해운대구 마린시티"),
+            Gym(3,"피트니스 월드", "대전 중구 중앙로"),
+            Gym(4,"광주 바디짐", "광주 서구 농성동"),
+            Gym(5,"인천 스포짐", "인천 연수구 송도동")
         )
 
-        gymSearchAdapter = GymSearchAdapter(dummyList) { gymInfoItem ->
-            selectedGym = gymInfoItem
-            loginViewModel.setGym(gymInfoItem)
-            mypageViewModel.setGym(gymInfoItem)
+        gymSearchAdapter = GymSearchAdapter(dummyList) { gym->
+            selectedGym = gym
+            loginViewModel.setGym(gym)
+            mypageViewModel.setGym(gym)
             updateNextButtonState(true)
         }
         binding.rvGymSearch.adapter = gymSearchAdapter
