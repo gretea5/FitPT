@@ -8,6 +8,7 @@ import com.ssafy.data.network.common.ApiResponse
 import com.ssafy.data.network.common.ApiResponseHandler
 import com.ssafy.data.network.common.ErrorResponse.Companion.toDomainModel
 import com.ssafy.data.network.request.UserLoginRequest
+import com.ssafy.data.network.request.UserRequest
 import com.ssafy.data.network.response.GetUserInfoResponse.Companion.toDomainModel
 import com.ssafy.data.network.response.JwtTokenResponse.Companion.toDomainModel
 import com.ssafy.domain.model.auth.JwtToken
@@ -34,6 +35,31 @@ internal class UserRepositoryImpl @Inject constructor(
             }.first() // ✅ 첫 번째 값만 가져옴
             when (result) {
                 is ApiResponse.Success -> emit(ResponseStatus.Success(result.data.toDomainModel()))
+                is ApiResponse.Error -> emit(ResponseStatus.Error(result.error.toDomainModel()))
+            }
+        }
+    }
+
+    override suspend fun updateUserInfo(
+        memberId: Int,
+        userInfo: UserInfo): Flow<ResponseStatus<Int>> {
+        return flow {
+            val result = ApiResponseHandler().handle {
+                userService.updateUserInfo(memberId,
+                    UserRequest(
+                        adminId = userInfo.admin.toLong(),
+                        memberBirth = userInfo.memberBirth,
+                        memberGender = userInfo.memberGender,
+                        memberHeight = userInfo.memberHeight,
+                        memberId = memberId.toLong(),
+                        memberName = userInfo.memberName,
+                        memberWeight = userInfo.memberWeight,
+                        trainerId = userInfo.trainerId.toLong()
+                    )
+                )
+            }.first() // ✅ 첫 번째 값만 가져옴
+            when (result) {
+                is ApiResponse.Success -> emit(ResponseStatus.Success(result.data))
                 is ApiResponse.Error -> emit(ResponseStatus.Error(result.error.toDomainModel()))
             }
         }

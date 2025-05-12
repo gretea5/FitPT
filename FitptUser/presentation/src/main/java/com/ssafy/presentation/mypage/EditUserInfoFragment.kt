@@ -21,36 +21,40 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.ssafy.data.datasource.UserDataStoreSource
+import com.ssafy.domain.model.login.UserInfo
 import com.ssafy.presentation.R
 import com.ssafy.presentation.base.BaseFragment
 import com.ssafy.presentation.common.MainActivity
 import com.ssafy.presentation.databinding.FragmentEditUserInfoBinding
 import com.ssafy.presentation.databinding.FragmentMypageBinding
 import com.ssafy.presentation.databinding.PopupGenderMenuBinding
+import com.ssafy.presentation.home.viewModel.UserInfoViewModel
 import com.ssafy.presentation.login.viewModel.LoginViewModel
 import com.ssafy.presentation.mypage.viewModel.MypageViewModel
 import com.ssafy.presentation.util.CommonUtils
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import java.util.Calendar
 import javax.inject.Inject
 
+private const val TAG = "EditUserInfoFragment"
 @AndroidEntryPoint
 class EditUserInfoFragment : BaseFragment<FragmentEditUserInfoBinding>(
     FragmentEditUserInfoBinding::bind,
     R.layout.fragment_edit_user_info
 ) {
-    private val mypageViewModel: MypageViewModel by activityViewModels()
+    private val userInfoViewModel : UserInfoViewModel by activityViewModels()
     private var popupWindow: PopupWindow? = null
-
     @Inject
-    lateinit var userDataStore: UserDataStoreSource
+    lateinit var userDataStoreSource: UserDataStoreSource
 
-
+    
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
-        observeUserDataStore(userDataStore)
         initEvent()
         initValidation()
         updateButtonState()
@@ -63,23 +67,26 @@ class EditUserInfoFragment : BaseFragment<FragmentEditUserInfoBinding>(
     }
 
     override fun onDestroy() {
-        mypageViewModel.resetClear()
         super.onDestroy()
+        userInfoViewModel.resetTemporaryUserInfo()
     }
+
     fun initView(){
-        if(mypageViewModel.selectedGym.value!=null){
-            binding.tvGym.text = mypageViewModel.selectedGym.value!!.gymName
-            binding.layoutGym.setBackgroundResource(R.drawable.bg_card_border_active)
-        }
-        else{
-            binding.layoutGym.setBackgroundResource(R.drawable.bg_card_border_inactive)
-        }
-        if(mypageViewModel.userJoin.value.memberGender!=""){
-            binding.tvGender.text = mypageViewModel.userJoin.value.memberGender
-            binding.layoutGender.setBackgroundResource(R.drawable.bg_card_border_active)
-        }
-        else{
-            binding.layoutGender.setBackgroundResource(R.drawable.bg_card_border_inactive)
+        Log.d(TAG,"실행")
+        lifecycleScope.launch {
+            // 이미 값이 있는지 확인
+            val tempUserInfo = userInfoViewModel.temporaryUserInfo.first()
+            Log.d(TAG,tempUserInfo.toString())
+            if (tempUserInfo != null) {
+                applyUserInfoToUI(tempUserInfo)
+            } else {
+                // 처음 진입했을 때만 DataStore에서 가져옴
+                val user = userDataStoreSource.user.first()
+                user?.let {
+                    userInfoViewModel.setTemporaryUserInfo(it) // 초기화
+                    applyUserInfoToUI(it)
+                }
+            }
         }
     }
 
@@ -138,10 +145,11 @@ class EditUserInfoFragment : BaseFragment<FragmentEditUserInfoBinding>(
                 else -> return@OnClickListener
             }
             binding.tvGender.text = genderTitle
-            mypageViewModel.updateGender(genderTitle)
+            //성별 변경
             binding.layoutGender.setBackgroundResource(R.drawable.bg_card_border_active)
             updateButtonState()
             popupWindow?.dismiss()
+            userInfoViewModel.updateGender(genderTitle)
         }
         popupBinding.popupItemMale.setOnClickListener(clickListener)
         popupBinding.popupItemFemale.setOnClickListener(clickListener)
@@ -179,6 +187,12 @@ class EditUserInfoFragment : BaseFragment<FragmentEditUserInfoBinding>(
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
+        if(binding.tvGender.text!=""){
+            binding.layoutGender.setBackgroundResource(R.drawable.bg_card_border_active)
+        }
+        if(binding.tvGym.text!=""){
+            binding.layoutGym.setBackgroundResource(R.drawable.bg_card_border_active)
+        }
     }
 
     private fun validateAllInputs(): Boolean {
@@ -206,6 +220,7 @@ class EditUserInfoFragment : BaseFragment<FragmentEditUserInfoBinding>(
         } else {
             binding.tvHeightError.visibility = View.GONE
             binding.layoutHeight.setBackgroundResource(R.drawable.bg_card_border_active)
+            userInfoViewModel.updateHeight(binding.etHeight.text.toString().toDouble())
             true
         }
     }
@@ -226,12 +241,14 @@ class EditUserInfoFragment : BaseFragment<FragmentEditUserInfoBinding>(
         } else {
             binding.tvWeightError.visibility = View.GONE
             binding.layoutWeight.setBackgroundResource(R.drawable.bg_card_border_active)
+            userInfoViewModel.updateWeight(binding.etWeight.text.toString().toDouble())
             true
         }
     }
 
     private fun validateBirth(): Boolean {
         val birthStr = binding.etBirth.text.toString()
+        Log.d(TAG,"왜"+birthStr)
         if (birthStr.isEmpty()) {
             binding.tvBirthError.visibility = View.GONE
             binding.layoutBirthyear.setBackgroundResource(R.drawable.bg_card_border_inactive)
@@ -249,6 +266,7 @@ class EditUserInfoFragment : BaseFragment<FragmentEditUserInfoBinding>(
             val year = birthStr.substring(0, 4).toInt()
             val month = birthStr.substring(4, 6).toInt()
             val day = birthStr.substring(6, 8).toInt()
+            Log.d(TAG,year.toString()+" "+month+" "+day)
 
             val currentYear = Calendar.getInstance().get(Calendar.YEAR)
             if (year !in 1900..currentYear) throw Exception()
@@ -257,9 +275,10 @@ class EditUserInfoFragment : BaseFragment<FragmentEditUserInfoBinding>(
             val daysInMonth = arrayOf(31, if (isLeapYear(year)) 29 else 28, 31, 30, 31, 30,
                 31, 31, 30, 31, 30, 31)
             if (day !in 1..daysInMonth[month - 1]) throw Exception()
-
             binding.tvBirthError.visibility = View.GONE
             binding.layoutBirthyear.setBackgroundResource(R.drawable.bg_card_border_active)
+            val formattedDate = CommonUtils.formatBirthDate(binding.etBirth.text.toString().ifEmpty { "" })
+            userInfoViewModel.updateBirth(formattedDate?:"")
             return true
         } catch (e: Exception) {
             binding.tvBirthError.text = "올바른 생년월일을 입력해주세요"
@@ -283,14 +302,12 @@ class EditUserInfoFragment : BaseFragment<FragmentEditUserInfoBinding>(
         }
     }
 
-    fun observeUserDataStore(dataStoreSource: UserDataStoreSource) {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                dataStoreSource.user.collect { userInfo ->
-                    binding.etBirth.text = userI
-
-                }
-            }
-        }
+    private fun applyUserInfoToUI(user: UserInfo) {
+        val birth = user.memberBirth ?: ""
+        val formatted = if (birth.isNotBlank()) CommonUtils.formatBirthToYYYYMMDD(birth) else ""
+        binding.etBirth.setText(formatted)
+        binding.etWeight.setText(user.memberWeight?.toInt()?.toString() ?: "")
+        binding.etHeight.setText(user.memberHeight?.toInt()?.toString() ?: "")
+        binding.tvGender.text = if (user.memberGender == "남성") "남성" else "여성"
     }
 }

@@ -65,7 +65,6 @@
                 android:fontFamily="@font/pretendard_regular"
                 android:gravity="left"
                 android:hint="체육관의 이름을 입력해주세요"
-                android:inputType="number"
                 android:letterSpacing="0"
                 android:maxLength="4"
                 android:paddingTop="0dp"

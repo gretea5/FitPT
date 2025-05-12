@@ -18,7 +18,9 @@ import com.ssafy.presentation.databinding.FragmentMypageBinding
 import com.ssafy.presentation.databinding.FragmentNotificationBinding
 import com.ssafy.presentation.util.CommonUtils
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -32,8 +34,8 @@ class MypageFragment : BaseFragment<FragmentMypageBinding>(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        observeUserDataStore(userDataStore)
         initEvent()
+        initView()
     }
     fun initEvent(){
         binding.ivEdit.setOnClickListener {
@@ -49,19 +51,17 @@ class MypageFragment : BaseFragment<FragmentMypageBinding>(
     }
 
 
-    fun observeUserDataStore(dataStoreSource: UserDataStoreSource) {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                dataStoreSource.user.collect { userInfo ->
-                    val koreanAge = CommonUtils.getKoreanAge(userInfo?.memberBirth!!)
-                    binding.tvProfileName.text = userInfo?.memberName
-                    binding.tvValueAge.text = koreanAge
-                    binding.tvValueHeight.text = userInfo?.memberHeight.toString()+"cm"
-                    binding.tvValueWeight.text = userInfo?.memberWeight.toString()+"kg"
-                    binding.tvValueGym.text = userInfo?.admin.toString()
-                    binding.tvValueTrainer.text = userInfo?.trainerId.toString()
-                    // 여기서 TextView 업데이트 같은 것도 가능
-                }
+    fun initView() {
+        lifecycleScope.launch {
+            val user = userDataStore.user.first() // 최초 값 한 번만 가져오기
+            user?.let {
+                val koreanAge = CommonUtils.getKoreanAge(it?.memberBirth!!)
+                binding.tvProfileName.text = it?.memberName  // nickname을 TextView에 설정
+                binding.tvValueAge.text = koreanAge
+                binding.tvValueHeight.text = it?.memberHeight.toString()+"cm"
+                binding.tvValueWeight.text = it?.memberWeight.toString()+"kg"
+                binding.tvValueGym.text = it?.admin.toString()
+                binding.tvValueTrainer.text = it?.trainerId.toString()
             }
         }
     }

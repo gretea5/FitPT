@@ -1,4 +1,4 @@
-package com.ssafy.presentation.mypage.viewModel
+package com.ssafy.presentation.home.viewModel
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -7,6 +7,7 @@ import com.ssafy.data.datasource.UserDataStoreSource
 import com.ssafy.domain.model.base.ResponseStatus
 import com.ssafy.domain.model.login.Gym
 import com.ssafy.domain.model.login.UserInfo
+import com.ssafy.domain.usecase.gym.GetGymListUsecase
 import com.ssafy.domain.usecase.user.GetUserInfoUsecase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,29 +16,25 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MypageViewModel @Inject constructor(
-    private val dataStore: UserDataStoreSource,
-    private val getUserInfoUsecase: GetUserInfoUsecase
+class GymInfoViewModel  @Inject constructor(
+    private val getGymListUsecase: GetGymListUsecase,
+    private val dataStoreSource: UserDataStoreSource
 ) : ViewModel() {
-    //체육관 저장
-    private val _selectedGym = MutableStateFlow<Gym?>(null)
-    val selectedGym: StateFlow<Gym?> = _selectedGym.asStateFlow()
 
-    private val _userInfo = MutableStateFlow<UserInfoState>(UserInfoState.Initial)
-    val userInfo: StateFlow<UserInfoState> = _userInfo.asStateFlow()
+    private val _gymInfo = MutableStateFlow<GymInfoState>(GymInfoState.Initial)
+    val gymInfo: StateFlow<GymInfoState> = _gymInfo.asStateFlow()
 
     fun setLoading() {
-        _userInfo.value = UserInfoState.Loading
+        _gymInfo.value = GymInfoState.Loading
     }
 
-    fun fetchUser() {
+    fun getGymList(keyword: String) {
         viewModelScope.launch {
-            getUserInfoUsecase()
+            getGymListUsecase(keyword)
                 .onStart { setLoading() }
                 .catch { e ->
 
@@ -46,12 +43,12 @@ class MypageViewModel @Inject constructor(
                 .let { uiState ->
                     when(uiState) {
                         is ResponseStatus.Success -> {
-                            _userInfo.value = UserInfoState.Success(uiState.data)
-                            Log.d("UserFragment", "User: ${_userInfo.value}")
+                            val user = uiState.data
+                            _gymInfo.value = GymInfoState.Success(uiState.data)
+                            //Log.d("UserFragment", "User: ${_userInfo.value}")
                         }
                         is ResponseStatus.Error -> {
-                            _userInfo.value = UserInfoState.Error(uiState.error.message)
-                            Log.d("UserFragment", "fetchUser: ${_userInfo.value}")
+                            _gymInfo.value = GymInfoState.Error(uiState.error.message)
                         }
                         else -> Log.d("UserFragment", "fetchUser: else error")
                     }
@@ -59,14 +56,10 @@ class MypageViewModel @Inject constructor(
         }
     }
 
-    fun setGym(gym: Gym) {
-        _selectedGym.value = gym
-    }
 }
-
-sealed class UserInfoState {
-    object Initial: UserInfoState()
-    object Loading: UserInfoState()
-    data class Success(val userInfo: UserInfo): UserInfoState()
-    data class Error(val message: String): UserInfoState()
+sealed class GymInfoState {
+    object Initial: GymInfoState()
+    object Loading: GymInfoState()
+    data class Success(val gymList: List<Gym>): GymInfoState()
+    data class Error(val message: String): GymInfoState()
 }

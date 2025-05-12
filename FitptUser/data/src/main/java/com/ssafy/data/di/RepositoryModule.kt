@@ -1,9 +1,11 @@
 package com.ssafy.data.di
 
 import com.ssafy.data.repository.auth.AuthRepositoryImpl
+import com.ssafy.data.repository.gym.GymRepositoryImpl
 import com.ssafy.data.repository.user.DataStoreRepositoryImpl
 import com.ssafy.data.repository.user.UserRepositoryImpl
 import com.ssafy.domain.repository.auth.AuthRepository
+import com.ssafy.domain.repository.gym.GymRepository
 import com.ssafy.domain.repository.user.DataStoreRepository
 import com.ssafy.domain.repository.user.UserRepository
 import dagger.Binds
@@ -26,6 +28,14 @@ internal abstract class RepositoryModule {
     abstract fun bindUserRepository(
         userRepositoryImpl: UserRepositoryImpl
     ): UserRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindGymRepository(
+        gymRepositoryImpl: GymRepositoryImpl
+    ): GymRepository
+
+
 
     @Binds
     @Singleton

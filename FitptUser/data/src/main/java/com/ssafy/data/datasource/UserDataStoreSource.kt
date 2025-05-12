@@ -8,6 +8,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import com.google.gson.Gson
 import com.ssafy.domain.model.login.UserInfo
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -62,6 +63,17 @@ class UserDataStoreSource @Inject constructor(
         }
     }
 
+    suspend fun updateUserInfoPartially(update: (UserInfo) -> UserInfo) {
+        val currentUser = user.firstOrNull()
+        val updatedUser = currentUser?.let { update(it) }
+        updatedUser?.let {
+            val userJson = gson.toJson(it)
+            dataStore.edit { preferences ->
+                preferences[USER_OBJECT] = userJson
+            }
+        }
+    }
+
     val kakaoAccessToken: Flow<String?> = dataStore.data.map { preferences ->
         preferences[KAKAO_ACCESS_TOKEN]
     }
@@ -86,6 +98,7 @@ class UserDataStoreSource @Inject constructor(
         val userJson = preferences[USER_OBJECT]
         userJson?.let { gson.fromJson(it, UserInfo::class.java) }
     }
+
 
     suspend fun clearAll() {
         dataStore.edit { preferences ->

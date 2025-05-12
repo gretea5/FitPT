@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ssafy.data.datasource.UserDataStoreSource
 import com.ssafy.domain.model.base.ResponseStatus
+import com.ssafy.domain.model.login.Gym
 import com.ssafy.domain.model.login.UserInfo
 import com.ssafy.domain.usecase.user.GetUserInfoUsecase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,6 +25,12 @@ class UserInfoViewModel @Inject constructor(
 ) : ViewModel() {
     private val _userInfo = MutableStateFlow<UserInfoState>(UserInfoState.Initial)
     val userInfo: StateFlow<UserInfoState> = _userInfo.asStateFlow()
+
+    private val _temporaryUserInfo = MutableStateFlow<UserInfo?>(null)
+    val temporaryUserInfo: StateFlow<UserInfo?> = _temporaryUserInfo.asStateFlow()
+
+    private val _GymInfo = MutableStateFlow<Gym?>(null)
+    val GymInfo: StateFlow<Gym?> = _GymInfo.asStateFlow()
 
     fun setLoading() {
         _userInfo.value = UserInfoState.Loading
@@ -59,6 +66,34 @@ class UserInfoViewModel @Inject constructor(
         viewModelScope.launch {
             dataStoreSource.saveUser(user)
         }
+    }
+
+    fun setTemporaryUserInfo(user: UserInfo) {
+        _temporaryUserInfo.value = user
+    }
+
+    fun resetTemporaryUserInfo() {
+        _temporaryUserInfo.value = null
+    }
+
+    fun updateName(name: String) {
+        _temporaryUserInfo.value = _temporaryUserInfo.value?.copy(memberName = name)
+    }
+
+    fun updateBirth(birth: String){
+        _temporaryUserInfo.value = _temporaryUserInfo.value?.copy(memberBirth = birth)
+    }
+
+    fun updateGender(gender: String) {
+        _temporaryUserInfo.value = _temporaryUserInfo.value?.copy(memberGender = gender)
+    }
+
+    fun updateHeight(height: Double) {
+        _temporaryUserInfo.value = _temporaryUserInfo.value?.copy(memberHeight = height)
+    }
+
+    fun updateWeight(weight: Double) {
+        _temporaryUserInfo.value = _temporaryUserInfo.value?.copy(memberWeight = weight)
     }
 }
 

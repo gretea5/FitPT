@@ -44,6 +44,24 @@ object CommonUtils {
         return "${koreanAge}세"
     }
 
+    fun formatBirthToYYYYMMDD(birth: String): String {
+        val inputFormatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME
+        val outputFormatter = DateTimeFormatter.ofPattern("yyyyMMdd")
+        val dateTime = LocalDateTime.parse(birth, inputFormatter)
+        return dateTime.format(outputFormatter)
+    }
+
+    fun formatBirthDate(inputDate: String): String? {
+        return try {
+            if (inputDate.isEmpty()) return null // 빈 문자열 처리
+            val inputFormatter = DateTimeFormatter.ofPattern("yyyyMMdd") // "yyyyMMdd" 형식 파싱
+            val outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss") // "yyyy-MM-dd HH:mm:ss" 형식으로 출력
+            val date = LocalDateTime.parse(inputDate, inputFormatter) // LocalDateTime으로 변환
+            date.format(outputFormatter) // 변환된 날짜를 원하는 형식으로 반환
+        } catch (e: Exception) {
+            null // 예외 발생 시 null 반환
+        }
+    }
 
     fun dateformatYMDHMFromInt(year: Int, month: Int, day: Int):String{
 //        val format = SimpleDateFormat("yyyy.MM.dd. HH:mm", Locale.KOREA)
