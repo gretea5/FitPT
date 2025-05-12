@@ -2,6 +2,7 @@
 *.pem
 *.pub
 tf-fitpt
+tf-fitpt-private
 terraform.tfstate
 terraform.tfstate.backup
 terraform.tfvars
