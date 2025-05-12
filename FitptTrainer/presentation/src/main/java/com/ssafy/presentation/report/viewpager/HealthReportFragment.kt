@@ -42,12 +42,20 @@ class HealthReportFragment : BaseFragment<FragmentHealthReportBinding>(
 
             val muscleViews = listOf(
                 listOf(ivMuscleFrontChest) to "chest",
-                listOf(ivMuscleFrontShoulderLeft, ivMuscleFrontShoulderRight) to "shoulder",
+                listOf(ivMuscleFrontShoulderLeft, ivMuscleFrontShoulderRight) to "shoulder front",
                 listOf(ivMuscleFrontAbs) to "abs",
                 listOf(ivMuscleFrontBicepsLeft, ivMuscleFrontBicepsRight) to "biceps",
-                listOf(ivMuscleFrontForearmLeft, ivMuscleFrontForearmRight) to "forearm",
+                listOf(ivMuscleFrontForearmLeft, ivMuscleFrontForearmRight) to "forearm front",
                 listOf(ivMuscleFrontQuadricepsLeft, ivMuscleFrontQuadricepsRight) to "quariceps",
                 listOf(ivMuscleFrontTibialisLeft, ivMuscleFrontTibialisRight) to "tilialis",
+
+                listOf(ivMuscleBackTrapezius) to "trapezius",
+                listOf(ivMuscleBackRotatorLeft, ivMuscleBackRotatorRight) to "rotator",
+                listOf(ivMuscleBackLatsLeft, ivMuscleBackLatsRight) to "lats",
+                listOf(ivMuscleBackErectorSpinae) to "spinae",
+                listOf(ivMuscleBackDeltoidLeft, ivMuscleBackDeltoidRight) to "shoulder back",
+                listOf(ivMuscleBackTricepsLeft, ivMuscleBackTricepsRight) to "triceps",
+                listOf(ivMuscleBackForearmLeft, ivMuscleBackForearmRight) to "forearm back",
             )
 
             muscleViews.forEach { (viewGroup, tagKey) ->
