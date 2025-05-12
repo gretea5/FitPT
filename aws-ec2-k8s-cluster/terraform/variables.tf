@@ -68,6 +68,10 @@ locals {
   default_keypair_public_key = file("../keys/tf-fitpt.pub")
 }
 
+locals {
+  app_keypair_public_key = file("../keys/tf-fitpt-private.pub")
+}
+
 /*
 ## It triggers interpolation. It is recommended to use another way.
 ## TODO : Replace default_keypair_public_key as output?
@@ -78,10 +82,14 @@ variable default_keypair_public_key {
 */
 
 variable "default_keypair_name" {
-  description = "Name of the KeyPair used for all nodes"
+  description = "Name of the KeyPair used for bastion nodes"
   default     = "tf-fitpt"
 }
 
+variable "app_keypair_name" {
+  description = "Name of the KeyPair used for app"
+  default     = "tf-fitpt-private"
+}
 
 variable "vpc_name" {
   default = ""
@@ -138,4 +146,10 @@ variable "app_instance_type" {
 
 variable "bastion_instance_type" {
   default = "t2.micro"
+}
+
+# https 인증
+variable "acm_certificate_arn" {
+  description = "ACM Certificate ARN for HTTPS listener"
+  type        = string
 }
