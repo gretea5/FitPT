@@ -21,7 +21,7 @@ interface UserService {
     suspend fun getUserInfo(@Path("memberId") memberId : Int) : Response<GetUserInfoResponse>
 
     @PUT("members/{memberId}")
-    suspend fun updateUserInfo(@Path("memberId") memberId: Int,@Body userRequest: UserRequest) :Response<Int>
+    suspend fun updateUserInfo(@Path("memberId") memberId: Int,@Body userRequest: UserRequest) :Response<Unit>
 
     @DELETE("members/{memberId}")
     suspend fun deleteUserInfo(@Path("memberId") memberId: Int) : Response<Unit>

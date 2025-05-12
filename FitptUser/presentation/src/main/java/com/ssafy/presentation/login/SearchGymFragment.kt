@@ -45,6 +45,11 @@ class SearchGymFragment : BaseFragment<FragmentSearchGymBinding>(
         initAdapter()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        gymInfoViewModel.gymListClear()
+    }
+
     private fun initEvent() {
         binding.ivBack.setOnClickListener {
             findNavController().popBackStack()
@@ -72,8 +77,9 @@ class SearchGymFragment : BaseFragment<FragmentSearchGymBinding>(
         gymList = mutableListOf()
         gymSearchAdapter = GymSearchAdapter(gymList) { gym->
             selectedGym = gym
-            loginViewModel.setGym(gym)
-            mypageViewModel.setGym(gym)
+            //loginViewModel.setGym(gym)
+            //mypageViewModel.setGym(gym)
+            gymInfoViewModel.updateClick(gym)
             updateNextButtonState(true)
         }
         binding.rvGymSearch.adapter = gymSearchAdapter

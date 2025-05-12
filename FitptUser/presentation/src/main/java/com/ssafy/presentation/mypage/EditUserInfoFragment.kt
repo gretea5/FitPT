@@ -28,6 +28,7 @@ import com.ssafy.presentation.common.MainActivity
 import com.ssafy.presentation.databinding.FragmentEditUserInfoBinding
 import com.ssafy.presentation.databinding.FragmentMypageBinding
 import com.ssafy.presentation.databinding.PopupGenderMenuBinding
+import com.ssafy.presentation.home.viewModel.GymInfoViewModel
 import com.ssafy.presentation.home.viewModel.UserInfoViewModel
 import com.ssafy.presentation.login.viewModel.LoginViewModel
 import com.ssafy.presentation.mypage.viewModel.MypageViewModel
@@ -47,6 +48,7 @@ class EditUserInfoFragment : BaseFragment<FragmentEditUserInfoBinding>(
     R.layout.fragment_edit_user_info
 ) {
     private val userInfoViewModel : UserInfoViewModel by activityViewModels()
+    private val gymInfoViewModel : GymInfoViewModel by activityViewModels()
     private var popupWindow: PopupWindow? = null
     @Inject
     lateinit var userDataStoreSource: UserDataStoreSource
@@ -69,6 +71,7 @@ class EditUserInfoFragment : BaseFragment<FragmentEditUserInfoBinding>(
     override fun onDestroy() {
         super.onDestroy()
         userInfoViewModel.resetTemporaryUserInfo()
+        gymInfoViewModel.tempGymClear()
     }
 
     fun initView(){
@@ -84,15 +87,38 @@ class EditUserInfoFragment : BaseFragment<FragmentEditUserInfoBinding>(
                 val user = userDataStoreSource.user.first()
                 user?.let {
                     userInfoViewModel.setTemporaryUserInfo(it) // 초기화
+                    Log.d(TAG,"보여주세요"+userInfoViewModel.temporaryUserInfo.value.toString())
                     applyUserInfoToUI(it)
                 }
             }
+        }
+        if(gymInfoViewModel.tempgymInfo.value!=null){
+            binding.tvGym.setText(gymInfoViewModel.tempgymInfo.value!!.gymName)
         }
     }
 
     fun initEvent(){
         binding.btnNext.setOnClickListener {
-            findNavController().popBackStack()
+            val userInfo = UserInfo(
+                admin = gymInfoViewModel.tempgymInfo.value!!.adminId,
+                memberName = userInfoViewModel.temporaryUserInfo.value!!.memberName,
+                memberGender = userInfoViewModel.temporaryUserInfo.value!!.memberGender,
+                memberHeight = userInfoViewModel.temporaryUserInfo.value!!.memberHeight,
+                memberWeight = userInfoViewModel.temporaryUserInfo.value!!.memberWeight,
+                memberBirth = userInfoViewModel.temporaryUserInfo.value!!.memberBirth,
+                trainerId = userInfoViewModel.temporaryUserInfo.value!!.trainerId
+            )
+            // 데이터 업데이트
+            userInfoViewModel.updateUser(userInfo)
+            // DataStore에 저장하고, 저장 완료 후 UI 갱신
+            viewLifecycleOwner.lifecycleScope.launch {
+                userDataStoreSource.saveUser(userInfo)  // 데이터 저장 시작
+                userDataStoreSource.user.collect { user ->  // 저장된 데이터 가져오기
+                    Log.d(TAG, "UserInfo from DataStore: $user")
+                    // 데이터가 갱신되었으면, 그 후에 화면 전환
+                    findNavController().popBackStack()
+                }
+            }
         }
         binding.cvGym.setOnClickListener {
             findNavController().navigate(R.id.action_edit_user_info_fragment_to_searchGymFragment2)
@@ -248,7 +274,6 @@ class EditUserInfoFragment : BaseFragment<FragmentEditUserInfoBinding>(
 
     private fun validateBirth(): Boolean {
         val birthStr = binding.etBirth.text.toString()
-        Log.d(TAG,"왜"+birthStr)
         if (birthStr.isEmpty()) {
             binding.tvBirthError.visibility = View.GONE
             binding.layoutBirthyear.setBackgroundResource(R.drawable.bg_card_border_inactive)
@@ -266,7 +291,6 @@ class EditUserInfoFragment : BaseFragment<FragmentEditUserInfoBinding>(
             val year = birthStr.substring(0, 4).toInt()
             val month = birthStr.substring(4, 6).toInt()
             val day = birthStr.substring(6, 8).toInt()
-            Log.d(TAG,year.toString()+" "+month+" "+day)
 
             val currentYear = Calendar.getInstance().get(Calendar.YEAR)
             if (year !in 1900..currentYear) throw Exception()
@@ -277,7 +301,16 @@ class EditUserInfoFragment : BaseFragment<FragmentEditUserInfoBinding>(
             if (day !in 1..daysInMonth[month - 1]) throw Exception()
             binding.tvBirthError.visibility = View.GONE
             binding.layoutBirthyear.setBackgroundResource(R.drawable.bg_card_border_active)
-            val formattedDate = CommonUtils.formatBirthDate(binding.etBirth.text.toString().ifEmpty { "" })
+            val formattedDate = CommonUtils.formatBirthDate(birthStr)
+            // 디버깅 로그 추가
+            Log.d(TAG, "formattedDate: $formattedDate")
+
+            // 유효한 날짜만 업데이트
+            if (formattedDate != null && formattedDate.isNotEmpty()) {
+                userInfoViewModel.updateBirth(formattedDate)
+            } else {
+                Log.d(TAG, "Invalid birth date format.")
+            }
             userInfoViewModel.updateBirth(formattedDate?:"")
             return true
         } catch (e: Exception) {
@@ -296,15 +329,17 @@ class EditUserInfoFragment : BaseFragment<FragmentEditUserInfoBinding>(
         if (validateAllInputs()) {
             binding.btnNext.setBackgroundColor(resources.getColor(R.color.main_orange, null))
             binding.btnNext.isActivated = true
+            binding.btnNext.isEnabled = true
         } else {
             binding.btnNext.setBackgroundColor(resources.getColor(R.color.disabled, null))
             binding.btnNext.isActivated = false
+            binding.btnNext.isEnabled = false
         }
     }
 
     private fun applyUserInfoToUI(user: UserInfo) {
         val birth = user.memberBirth ?: ""
-        val formatted = if (birth.isNotBlank()) CommonUtils.formatBirthToYYYYMMDD(birth) else ""
+        val formatted = CommonUtils.formatBirthToYYYYMMDD(birth)
         binding.etBirth.setText(formatted)
         binding.etWeight.setText(user.memberWeight?.toInt()?.toString() ?: "")
         binding.etHeight.setText(user.memberHeight?.toInt()?.toString() ?: "")

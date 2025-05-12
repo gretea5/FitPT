@@ -42,7 +42,7 @@ internal class UserRepositoryImpl @Inject constructor(
 
     override suspend fun updateUserInfo(
         memberId: Int,
-        userInfo: UserInfo): Flow<ResponseStatus<Int>> {
+        userInfo: UserInfo): Flow<ResponseStatus<Unit>> {
         return flow {
             val result = ApiResponseHandler().handle {
                 userService.updateUserInfo(memberId,
@@ -59,7 +59,7 @@ internal class UserRepositoryImpl @Inject constructor(
                 )
             }.first() // ✅ 첫 번째 값만 가져옴
             when (result) {
-                is ApiResponse.Success -> emit(ResponseStatus.Success(result.data))
+                is ApiResponse.Success -> emit(ResponseStatus.Success(Unit))
                 is ApiResponse.Error -> emit(ResponseStatus.Error(result.error.toDomainModel()))
             }
         }

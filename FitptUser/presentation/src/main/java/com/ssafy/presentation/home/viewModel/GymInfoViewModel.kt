@@ -28,6 +28,9 @@ class GymInfoViewModel  @Inject constructor(
     private val _gymInfo = MutableStateFlow<GymInfoState>(GymInfoState.Initial)
     val gymInfo: StateFlow<GymInfoState> = _gymInfo.asStateFlow()
 
+    private val _tempgymInfo = MutableStateFlow<Gym?>(null)
+    val tempgymInfo: StateFlow<Gym?> = _tempgymInfo.asStateFlow()
+
     fun setLoading() {
         _gymInfo.value = GymInfoState.Loading
     }
@@ -56,6 +59,17 @@ class GymInfoViewModel  @Inject constructor(
         }
     }
 
+    fun gymListClear(){
+        _gymInfo.value = GymInfoState.Initial
+    }
+
+    fun updateClick(gym: Gym){
+        _tempgymInfo.value = gym
+    }
+
+    fun tempGymClear(){
+        _tempgymInfo.value = null
+    }
 }
 sealed class GymInfoState {
     object Initial: GymInfoState()

@@ -53,13 +53,14 @@ object CommonUtils {
 
     fun formatBirthDate(inputDate: String): String? {
         return try {
-            if (inputDate.isEmpty()) return null // 빈 문자열 처리
-            val inputFormatter = DateTimeFormatter.ofPattern("yyyyMMdd") // "yyyyMMdd" 형식 파싱
-            val outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss") // "yyyy-MM-dd HH:mm:ss" 형식으로 출력
-            val date = LocalDateTime.parse(inputDate, inputFormatter) // LocalDateTime으로 변환
-            date.format(outputFormatter) // 변환된 날짜를 원하는 형식으로 반환
+            if (inputDate.isEmpty()) return null
+            val inputFormatter = DateTimeFormatter.ofPattern("yyyyMMdd")
+            val outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
+            val date = LocalDate.parse(inputDate, inputFormatter)
+            val dateTime = date.atTime(15, 0, 0)
+            dateTime.format(outputFormatter)
         } catch (e: Exception) {
-            null // 예외 발생 시 null 반환
+            null
         }
     }
 

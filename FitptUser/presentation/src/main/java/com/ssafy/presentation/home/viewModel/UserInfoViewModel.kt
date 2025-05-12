@@ -8,11 +8,13 @@ import com.ssafy.domain.model.base.ResponseStatus
 import com.ssafy.domain.model.login.Gym
 import com.ssafy.domain.model.login.UserInfo
 import com.ssafy.domain.usecase.user.GetUserInfoUsecase
+import com.ssafy.domain.usecase.user.UpdateUserInfoUsecase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
@@ -21,6 +23,7 @@ import javax.inject.Inject
 @HiltViewModel
 class UserInfoViewModel @Inject constructor(
     private val getUserInfoUseCase: GetUserInfoUsecase,
+    private val updateUserInfoUsecase: UpdateUserInfoUsecase,
     private val dataStoreSource: UserDataStoreSource
 ) : ViewModel() {
     private val _userInfo = MutableStateFlow<UserInfoState>(UserInfoState.Initial)
@@ -28,9 +31,6 @@ class UserInfoViewModel @Inject constructor(
 
     private val _temporaryUserInfo = MutableStateFlow<UserInfo?>(null)
     val temporaryUserInfo: StateFlow<UserInfo?> = _temporaryUserInfo.asStateFlow()
-
-    private val _GymInfo = MutableStateFlow<Gym?>(null)
-    val GymInfo: StateFlow<Gym?> = _GymInfo.asStateFlow()
 
     fun setLoading() {
         _userInfo.value = UserInfoState.Loading
@@ -57,6 +57,28 @@ class UserInfoViewModel @Inject constructor(
                             Log.d("UserFragment", "fetchUser: ${_userInfo.value}")
                         }
                         else -> Log.d("UserFragment", "fetchUser: else error")
+                    }
+                }
+        }
+    }
+
+    fun updateUser(userInfo: UserInfo) {
+        viewModelScope.launch {
+            updateUserInfoUsecase(userInfo)
+                .onStart { setLoading() }
+                .catch { e ->
+                    Log.e("UserFragment", "에러 발생: ${e.message}", e)
+                }
+                .first()
+                .let { uiState ->
+                    when(uiState) {
+                        is ResponseStatus.Success -> {
+                            Log.d("UserFragment", "User sdf: ${_userInfo.value}")
+                        }
+                        is ResponseStatus.Error -> {
+                            _userInfo.value = UserInfoState.Error(uiState.error.message)
+                            Log.d("UserFragment", "updateUser: ${_userInfo.value}")
+                        }
                     }
                 }
         }
@@ -102,4 +124,11 @@ sealed class UserInfoState {
     object Loading: UserInfoState()
     data class Success(val userInfo: UserInfo): UserInfoState()
     data class Error(val message: String): UserInfoState()
+}
+
+sealed class UserUpdateInfoState {
+    object Initial: UserUpdateInfoState()
+    object Loading: UserUpdateInfoState()
+    data class Success(val success: Int): UserUpdateInfoState()
+    data class Error(val message: String): UserUpdateInfoState()
 }
