@@ -1,12 +1,17 @@
 package com.ssafy.presentation.report.viewpager
 
 import android.graphics.Color
+import android.graphics.drawable.VectorDrawable
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
+import com.caverock.androidsvg.SVG
 import com.ssafy.presentation.R
 import com.ssafy.presentation.base.BaseFragment
 import com.ssafy.presentation.databinding.FragmentHealthReportBinding
@@ -15,12 +20,15 @@ class HealthReportFragment : BaseFragment<FragmentHealthReportBinding>(
     FragmentHealthReportBinding::bind,
     R.layout.fragment_health_report
 ) {
+    private lateinit var svg: SVG
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initEvent()
     }
 
     fun initEvent() {
+
         binding.apply {
             tgReportMuscles.addOnButtonCheckedListener { group, checkedId, isChecked ->
                 val frontButton = binding.btnReportMusclesFront
@@ -34,6 +42,38 @@ class HealthReportFragment : BaseFragment<FragmentHealthReportBinding>(
                     frontButton.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.main_gray))
                 }
             }
+
+            val muscleViews = listOf(
+                listOf(ivMuscleFrontChest) to "chest",
+                listOf(ivMuscleFrontShoulderLeft, ivMuscleFrontShoulderRight) to "shoulder" // 그룹으로 묶음
+
+            )
+
+            muscleViews.forEach { (viewGroup, tagKey) ->
+                viewGroup.forEach { imageView ->
+                    imageView.setOnClickListener {
+                        toggleMuscleGroupSelection(viewGroup, tagKey)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun toggleMuscleGroupSelection(imageViews: List<ImageView>, tagKey: String) {
+        val mainBlue = ContextCompat.getColor(requireContext(), R.color.main_blue)
+        val mainGray = ContextCompat.getColor(requireContext(), R.color.main_gray)
+
+        val currentTag = imageViews.first().getTag(R.id.muscle_tag_key) as? String
+        val isBlue = currentTag == tagKey
+
+        val newColor = if (isBlue) mainGray else mainBlue
+        val newTag = if (isBlue) "gray" else tagKey
+
+        imageViews.forEach { iv ->
+            val drawable = iv.drawable.mutate()
+            drawable.setTint(newColor)
+            iv.setImageDrawable(drawable)
+            iv.setTag(R.id.muscle_tag_key, newTag)
         }
     }
 }

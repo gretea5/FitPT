@@ -15,6 +15,12 @@ class BodyCompositionDietFragment : BaseFragment<FragmentBodyCompositionDietBind
 ) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initEvevt()
+    }
 
+    fun initEvevt(){
+        binding.apply {
+
+        }
     }
 }
