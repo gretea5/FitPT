@@ -3,8 +3,11 @@
 cd aws-ec2-k8s-cluster/
 cd terraform/
 
-# 운영용 4096 비트
+# 배스천 운영용 4096 비트
 $ terraform init && ssh-keygen -t rsa -b 4096 -f ../keys/tf-fitpt -N ""
+
+# 프라이빗 서브넷 4.96 비트
+$ terraform init && ssh-keygen -t rsa -b 4096 -f ../keys/tf-fitpt-private -N ""
 
 # 개발용 2048 비트
 $ terraform init && ssh-keygen -t rsa -N "" -f ../keys/tf-fitpt
