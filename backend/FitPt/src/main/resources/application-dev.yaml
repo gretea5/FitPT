@@ -62,8 +62,8 @@ logging:
 jwt:
   secret: ${JWT_SECRET}
   expiration:
-    access: 60000 #1시간
-    refresh: 604800000
+    access: 3600000 #1시간
+    refresh: 604800000 # 7일
 
 #oauth2:
 #  # 추후 프론트 서버로 리다이렉트
