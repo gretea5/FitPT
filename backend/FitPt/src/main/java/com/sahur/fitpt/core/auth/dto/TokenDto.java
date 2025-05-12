@@ -6,17 +6,14 @@ import lombok.Getter;
 
 @Getter
 @Builder
-@Schema(description = "카카오 로그인 응답 DTO")
-public class KakaoLoginResponseDto {
-    @Schema(description = "회원 ID")
-    private Long memberId;
-
-    @Schema(description = "회원 이름")
-    private String memberName;
-
+@Schema(description = "토큰 정보 DTO")
+public class TokenDto {
     @Schema(description = "JWT 액세스 토큰")
     private String accessToken;
 
     @Schema(description = "JWT 리프레시 토큰")
     private String refreshToken;
+
+    @Schema(description = "액세스 토큰 만료 시간 (밀리초)")
+    private Long accessTokenExpiresIn;
 }

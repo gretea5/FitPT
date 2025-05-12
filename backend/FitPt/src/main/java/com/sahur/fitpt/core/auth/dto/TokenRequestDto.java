@@ -1,19 +1,13 @@
 package com.sahur.fitpt.core.auth.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
-@Builder
-@Schema(description = "카카오 로그인 응답 DTO")
-public class KakaoLoginResponseDto {
-    @Schema(description = "회원 ID")
-    private Long memberId;
-
-    @Schema(description = "회원 이름")
-    private String memberName;
-
+@NoArgsConstructor
+@Schema(description = "토큰 재발급 요청 DTO")
+public class TokenRequestDto {
     @Schema(description = "JWT 액세스 토큰")
     private String accessToken;
 
