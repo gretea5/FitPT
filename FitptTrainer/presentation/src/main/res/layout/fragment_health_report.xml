@@ -27,6 +27,115 @@
                 android:layout_height="match_parent"
                 android:padding="20dp">
 
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:paddingVertical="20dp"
+                    app:layout_constraintBottom_toTopOf="@+id/tg_report_muscles"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/iv_muscle_front_neck"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:src="@drawable/muscle_front_ex_neck"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/iv_muscle_front_chest"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:src="@drawable/muscle_front_pectoralis_major"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/iv_muscle_front_neck" />
+
+                    <ImageView
+                        android:id="@+id/iv_muscle_front_shoulder_left"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:src="@drawable/muscle_front_deltoid_left"
+                        app:layout_constraintStart_toEndOf="@+id/iv_muscle_front_chest"
+                        app:layout_constraintTop_toBottomOf="@+id/iv_muscle_front_neck" />
+
+                    <ImageView
+                        android:id="@+id/iv_muscle_front_shoulder_right"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:src="@drawable/muscle_front_deltoid_right"
+                        app:layout_constraintEnd_toStartOf="@+id/iv_muscle_front_chest"
+                        app:layout_constraintTop_toBottomOf="@+id/iv_muscle_front_neck" />
+
+                    <ImageView
+                        android:id="@+id/iv_muscle_front_serratus_anterior"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:clickable="false"
+                        android:focusable="false"
+                        android:src="@drawable/muscle_front_ex_serratus_anterior"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/iv_muscle_front_chest" />
+
+                    <ImageView
+                        android:id="@+id/iv_muscle_front_abs"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:src="@drawable/muscle_front_abs"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/iv_muscle_front_chest" />
+
+                    <ImageView
+                        android:id="@+id/iv_muscle_front_biceps_left"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="12dp"
+                        android:src="@drawable/muscle_front_biceps_left"
+                        app:layout_constraintStart_toEndOf="@+id/iv_muscle_front_serratus_anterior"
+                        app:layout_constraintTop_toBottomOf="@+id/iv_muscle_front_shoulder_left" />
+
+                    <ImageView
+                        android:id="@+id/iv_muscle_front_biceps_right"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="12dp"
+                        android:src="@drawable/muscle_front_biceps_right"
+                        app:layout_constraintEnd_toStartOf="@+id/iv_muscle_front_serratus_anterior"
+                        app:layout_constraintTop_toBottomOf="@+id/iv_muscle_front_shoulder_right" />
+
+                    <ImageView
+                        android:id="@+id/iv_muscle_front_forearm_left"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:src="@drawable/muscle_front_forearm_left"
+                        app:layout_constraintStart_toStartOf="@+id/iv_muscle_front_biceps_left"
+                        app:layout_constraintTop_toBottomOf="@+id/iv_muscle_front_biceps_left" />
+
+                    <ImageView
+                        android:id="@+id/iv_muscle_front_forearm_right"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="20dp"
+                        android:src="@drawable/muscle_front_forearm_right"
+                        app:layout_constraintEnd_toEndOf="@+id/iv_muscle_front_biceps_right"
+                        app:layout_constraintTop_toBottomOf="@+id/iv_muscle_front_biceps_right" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <com.google.android.material.button.MaterialButtonToggleGroup
                     android:id="@+id/tg_report_muscles"
