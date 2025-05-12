@@ -1,10 +1,11 @@
-package com.ssafy.presentation.scheduling
+package com.ssafy.presentation.schedule
 
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.Button
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.DayPosition
@@ -13,22 +14,25 @@ import com.kizitonwose.calendar.view.MonthDayBinder
 import com.kizitonwose.calendar.view.ViewContainer
 import com.ssafy.presentation.R
 import com.ssafy.presentation.base.BaseFragment
-import com.ssafy.presentation.databinding.FragmentSchedulingBinding
 import java.time.YearMonth
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.core.view.children
+import com.google.android.flexbox.FlexboxLayout
 import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.daysOfWeek
 import com.kizitonwose.calendar.view.MonthHeaderFooterBinder
+import com.ssafy.presentation.databinding.FragmentScheduleBinding
+import com.ssafy.presentation.schedule.adapter.Member
+import com.ssafy.presentation.schedule.adapter.ScheduleMemberAdapter
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.format.TextStyle
 import java.util.Locale
 
-class SchedulingFragment : BaseFragment<FragmentSchedulingBinding>(
-    FragmentSchedulingBinding::bind,
-    R.layout.fragment_scheduling
+class ScheduleFragment : BaseFragment<FragmentScheduleBinding>(
+    FragmentScheduleBinding::bind,
+    R.layout.fragment_schedule
 ) {
     private val eventsDatesList = mutableListOf<LocalDate>()
 
@@ -38,55 +42,53 @@ class SchedulingFragment : BaseFragment<FragmentSchedulingBinding>(
         "11:00",
     )
 
-    val afternoonTimeList = listOf(
+    private val afternoonTimeList = listOf(
         "12:00",
-        "12:30",
         "13:00",
-        "13:30",
         "14:00",
-        "14:30",
         "15:00",
-        "15:30",
         "16:00",
-        "16:30",
         "17:00",
-        "17:30",
         "18:00",
-        "18:30",
         "19:00",
-        "19:30",
         "20:00",
-        "20:30",
         "21:00",
-        "21:30",
         "22:00",
-        "22:30",
-        "23:00",
-        "23:30"
     )
 
+    private val memberList = listOf(
+        Member("박장훈", "2000.01.07"),
+        Member("안세호", "1997.07.11"),
+        Member("김두영", "1998.05.29"),
+        Member("김기훈", "1997.09.27"),
+        Member("김동현", "1999.07.30"),
+        Member("권경탁", "1996.12.31")
+    )
+
+    private val selectedButtons = mutableListOf<Button>()
 
     private var selectedDate: LocalDate? = null
-    private var selectedButton: Button? = null
 
-    val clickListener = View.OnClickListener { view ->
-        selectedButton = null
+    private val clickListener = View.OnClickListener { view ->
+        val button = view as Button
 
-        view.isSelected = true
+        if (button.isSelected) {
+            button.isSelected = false
+            selectedButtons.remove(button)
+        } else {
+            button.isSelected = true
+            selectedButtons.add(button)
+        }
 
-        selectedButton = view as Button
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-
+        binding.btnRegister.isEnabled = selectedButtons.isNotEmpty()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initAdapter()
         initCalendar()
+        initButtonView()
         initEvent()
     }
 
@@ -98,6 +100,11 @@ class SchedulingFragment : BaseFragment<FragmentSchedulingBinding>(
         eventsDatesList.add(today.plusDays(7))
         eventsDatesList.add(today.plusDays(12))
         eventsDatesList.add(today.minusDays(2))
+    }
+
+    private fun initAdapter() {
+        val adapter = ScheduleMemberAdapter(requireContext(), memberList)
+        binding.sMember.adapter = adapter
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -169,20 +176,16 @@ class SchedulingFragment : BaseFragment<FragmentSchedulingBinding>(
                     container.textView.text = data.date.dayOfMonth.toString()
 
                     if (data.position == DayPosition.MonthDate) {
-                        // 요일에 따른 색상 설정
                         when (data.date.dayOfWeek) {
                             DayOfWeek.SUNDAY -> container.textView.setTextColor(Color.RED)
                             DayOfWeek.SATURDAY -> container.textView.setTextColor(Color.BLUE)
                             else -> container.textView.setTextColor(Color.BLACK)
                         }
 
-                        // 선택된 날짜 처리
                         if (data.date == selectedDate) {
                             container.textView.setBackgroundResource(R.drawable.bg_selected_day)
                         }
-                        // 일정이 있는 날짜 처리
                         else if (eventsDatesList.contains(data.date)) {
-                            // 일정이 있는 날짜는 배경 색상 변경
                             container.textView.setBackgroundResource(R.drawable.bg_event_day)
                         } else {
                             container.textView.background = null
@@ -210,5 +213,52 @@ class SchedulingFragment : BaseFragment<FragmentSchedulingBinding>(
         binding.calendar.notifyCalendarChanged()
     }
 
-    fun initEvent() {}
+    private fun initButtonView() {
+        morningTimeList.forEach { time ->
+            val button = Button(requireContext()).apply {
+                layoutParams = FlexboxLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
+                    flexBasisPercent = 0.3f  // 30%에 해당
+                    setMargins(4, 4, 4, 4)
+                }
+                text = time
+                setBackgroundResource(R.drawable.selector_button_time)
+                setTextColor(Color.BLACK)
+                setOnClickListener(clickListener)
+            }
+
+            binding.fbMidButton.addView(button)
+        }
+
+        afternoonTimeList.forEach { time ->
+            val button = Button(requireContext()).apply {
+                layoutParams = FlexboxLayout.LayoutParams(0,  ViewGroup.LayoutParams.WRAP_CONTENT).apply {
+                    flexBasisPercent = 0.3f  // 30%에 해당
+                    setMargins(4, 4, 4, 4)
+                }
+                text = time
+                setBackgroundResource(R.drawable.selector_button_time)
+                setTextColor(Color.BLACK)
+                setOnClickListener(clickListener)
+            }
+
+            binding.fbAfternoonButton.addView(button)
+        }
+    }
+
+    private fun initEvent() {
+        binding.sMember.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val selectedMember = parent?.getItemAtPosition(position) as Member
+                binding.tvMemberName.text = selectedMember.name
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                binding.tvMemberName.text = "회원 선택"
+            }
+        }
+
+        binding.tvMemberName.setOnClickListener {
+            binding.sMember.performClick()
+        }
+    }
 }

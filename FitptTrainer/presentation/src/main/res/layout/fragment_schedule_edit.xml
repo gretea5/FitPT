@@ -6,7 +6,8 @@
     android:paddingBottom="20dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".scheduling.SchedulingFragment">
+    android:background="@color/white"
+    tools:context=".schedule.ScheduleEditFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_calendar"
@@ -15,7 +16,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_percent="0.6">
+        app:layout_constraintWidth_percent="0.5">
 
         <LinearLayout
             android:id="@+id/weekDaysContainer"
@@ -117,13 +118,31 @@
         app:layout_constraintStart_toEndOf="@+id/layout_calendar"
         app:layout_constraintTop_toTopOf="parent">
 
-        <Button
-            android:id="@+id/btn_register"
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_delete"
+            style="@style/Font_Bold_16_main_white"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_gray_button"
-            android:text="등록"
+            android:backgroundTint="@color/main_brown"
+            android:text="삭제"
+            android:textSize="18sp"
             android:textColor="@android:color/white"
+            android:layout_marginEnd="16dp"
+            app:cornerRadius="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_edit"
+            app:layout_constraintEnd_toStartOf="@+id/btn_edit"
+            app:layout_constraintTop_toTopOf="@+id/btn_edit" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_edit"
+            style="@style/Font_Bold_16_main_white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/highlight_orange"
+            android:text="수정"
+            android:textSize="18sp"
+            android:textColor="@android:color/white"
+            app:cornerRadius="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -133,7 +152,7 @@
             android:layout_height="1dp"
             android:layout_marginTop="16dp"
             android:background="#E0E0E0"
-            app:layout_constraintTop_toBottomOf="@id/btn_register" />
+            app:layout_constraintTop_toBottomOf="@id/btn_edit" />
 
         <TextView
             android:id="@+id/tv_member_label"
@@ -155,6 +174,21 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/divider_top" />
 
+        <Spinner
+            android:id="@+id/s_member"
+            style="@style/Widget.AppCompat.Spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            android:spinnerMode="dropdown"
+            android:dropDownWidth="match_parent"
+            android:dropDownVerticalOffset="35dp"
+            android:dropDownHeight="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/tv_member_name"
+            app:layout_constraintTop_toTopOf="@id/tv_member_name"
+            app:layout_constraintBottom_toBottomOf="@id/tv_member_name" />
+
         <ImageView
             android:id="@+id/iv_check"
             android:layout_width="wrap_content"
@@ -164,6 +198,15 @@
             app:layout_constraintBottom_toBottomOf="@id/tv_member_name"
             app:layout_constraintStart_toEndOf="@id/tv_member_name"
             app:layout_constraintTop_toTopOf="@id/tv_member_name" />
+
+        <View
+            android:id="@+id/divider_member"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="16dp"
+            android:background="#E0E0E0"
+            app:layout_constraintTop_toBottomOf="@+id/tv_member_name"
+            tools:layout_editor_absoluteX="16dp" />
 
         <TextView
             android:id="@+id/tv_available_time"
@@ -175,7 +218,7 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_member_name" />
+            app:layout_constraintTop_toBottomOf="@id/divider_member" />
 
         <TextView
             android:id="@+id/tv_morning"
@@ -196,41 +239,16 @@
             app:flexWrap="wrap"
             app:justifyContent="flex_start"
             app:layout_constraintTop_toBottomOf="@+id/tv_morning"
-            tools:layout_editor_absoluteX="16dp">
+            tools:layout_editor_absoluteX="16dp"/>
 
-            <Button
-                android:id="@+id/btn_time_9"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:background="@drawable/bg_time_button"
-                android:text="14 : 00"
-                android:textColor="@android:color/black"
-                app:layout_flexBasisPercent="30%" />
+        <View
+            android:id="@+id/divider_time"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="16dp"
+            android:background="#E0E0E0"
+            app:layout_constraintTop_toBottomOf="@id/fb_mid_button"/>
 
-            <Button
-                android:id="@+id/btn_time_10"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:background="@drawable/bg_time_button"
-                android:text="18 : 00"
-                android:textColor="@android:color/black"
-                app:layout_flexBasisPercent="30%" />
-
-            <Button
-                android:id="@+id/btn_time_11"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:background="@drawable/bg_time_button"
-                android:text="19 : 00"
-                android:textColor="@android:color/black"
-                app:layout_flexBasisPercent="30%" />
-
-        </com.google.android.flexbox.FlexboxLayout>
-
-        <!-- 오후 라벨 -->
         <TextView
             android:id="@+id/tv_afternoon"
             android:layout_width="wrap_content"
@@ -239,8 +257,7 @@
             android:text="오후"
             android:textColor="@android:color/black"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/fb_mid_button" />
-
+            app:layout_constraintTop_toBottomOf="@id/divider_time" />
 
         <com.google.android.flexbox.FlexboxLayout
             android:id="@+id/fb_afternoon_button"
@@ -251,61 +268,8 @@
             app:alignItems="stretch"
             app:alignContent="stretch"
             app:justifyContent="flex_start"
-            app:layout_constraintTop_toBottomOf="@id/tv_afternoon">
+            app:layout_constraintTop_toBottomOf="@id/tv_afternoon"/>
 
-            <Button
-                android:id="@+id/btn_time_14"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                app:layout_flexBasisPercent="30%"
-                android:text="14 : 00"
-                android:textColor="@android:color/black" />
-
-            <Button
-                android:id="@+id/btn_time_18"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                app:layout_flexBasisPercent="30%"
-                android:background="@drawable/bg_time_button"
-                android:text="18 : 00"
-                android:textColor="@android:color/black" />
-
-            <Button
-                android:id="@+id/btn_time_19"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                app:layout_flexBasisPercent="30%"
-                android:background="@drawable/bg_time_button"
-                android:text="19 : 00"
-                android:textColor="@android:color/black" />
-
-            <Button
-                android:id="@+id/btn_time_20"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                app:layout_flexBasisPercent="30%"
-                android:background="@drawable/bg_time_button"
-                android:text="20 : 00"
-                android:textColor="@android:color/black" />
-
-            <Button
-                android:id="@+id/btn_time_21"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                app:layout_flexBasisPercent="30%"
-                android:background="@drawable/bg_time_button"
-                android:text="21 : 00"
-                android:textColor="@android:color/black" />
-
-        </com.google.android.flexbox.FlexboxLayout>
-
-
-        <!-- 하단 구분선 -->
         <View
             android:id="@+id/divider_bottom"
             android:layout_width="match_parent"
@@ -314,7 +278,6 @@
             android:background="#E0E0E0"
             app:layout_constraintTop_toBottomOf="@id/fb_afternoon_button" />
 
-        <!-- 세부 내역 작성 라벨 -->
         <TextView
             android:id="@+id/tv_detail_label"
             android:layout_width="wrap_content"
@@ -337,6 +300,5 @@
             app:layout_constraintTop_toBottomOf="@id/tv_detail_label" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

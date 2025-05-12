@@ -17,7 +17,6 @@ import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.ssafy.presentation.R
 import com.ssafy.presentation.base.BaseFragment
-import com.ssafy.presentation.databinding.FragmentSchedulingBinding
 import com.ssafy.presentation.databinding.FragmentUserWorkoutInfoBinding
 import com.ssafy.presentation.user.adapter.UserWorkoutInfoMonthAdapter
 import com.ssafy.presentation.util.CommonUtils
