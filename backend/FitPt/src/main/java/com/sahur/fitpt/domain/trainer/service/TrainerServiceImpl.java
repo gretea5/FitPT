@@ -30,7 +30,7 @@ public class TrainerServiceImpl implements TrainerService {
 
         String encodedPassword = Base64Util.encode(trainerPassword);
 
-        if (!encodedPassword.equals(trainerPassword)) {
+        if (!encodedPassword.equals(trainer.getTrainerPw())) {
             throw new CustomException(ErrorCode.UNAUTHORIZED);
         }
 
