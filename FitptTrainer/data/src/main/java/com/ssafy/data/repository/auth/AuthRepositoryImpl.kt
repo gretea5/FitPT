@@ -19,7 +19,7 @@ internal class AuthRepositoryImpl @Inject constructor(
     private val authService: AuthService,
     private val dataStore: TrainerDataStoreSource
 ): AuthRepository {
-    override suspend fun login(trainerLoginId : String, trainerPw: String): Flow<ResponseStatus<Unit>> {
+    override suspend fun login(trainerLoginId : String, trainerPw: String): Flow<ResponseStatus<Long>> {
         return flow {
             ApiResponseHandler().handle {
                 authService.login(
@@ -34,7 +34,7 @@ internal class AuthRepositoryImpl @Inject constructor(
                     is ApiResponse.Success -> {
                         //요청이 성공일때, 토큰이나 사용자 식별자 정보를 저장해야함
                         // dataStore.saveUserId(result.data.userId.toLong())
-                        emit(ResponseStatus.Success(result.data))
+                        emit(ResponseStatus.Success(result.data.toString().toLong()))
                     }
                     is ApiResponse.Error -> {
                         emit(ResponseStatus.Error(result.error.toDomainModel()))
