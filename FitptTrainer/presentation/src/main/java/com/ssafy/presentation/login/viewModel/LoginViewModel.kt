@@ -19,14 +19,14 @@ class LoginViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase,
     private val dataStore: TrainerDataStoreSource
 ) : ViewModel() {
-    // 로그인 상태 Flow (이전 값을 유지하지 않음)
-    private val _loginState = MutableStateFlow<LoginStatus>(LoginStatus.Idle) // 🔥 null 기본값 추가
+    private val _loginState = MutableStateFlow<LoginStatus>(LoginStatus.Idle)
     val loginState : StateFlow<LoginStatus> = _loginState.asStateFlow()
 
-    fun login(accessToken: String) {
+    fun login(trainerLoginId: String, trainerPw: String) {
         viewModelScope.launch {
             try {
-                loginUseCase(accessToken).collect { response ->
+                loginUseCase(trainerLoginId, trainerPw).collect { response ->
+                    Log.d(TAG, "login: $response")
                     when (response) {
                         is ResponseStatus.Success -> {
                             _loginState.value = LoginStatus.Success
