@@ -18,9 +18,11 @@ class HealthReportFragment : BaseFragment<FragmentHealthReportBinding>(
     FragmentHealthReportBinding::bind,
     R.layout.fragment_health_report
 ) {
+    private lateinit var muscleViews: List<Pair<List<ImageView>, String>>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initMuscles()
         initEvent()
     }
 
@@ -40,24 +42,6 @@ class HealthReportFragment : BaseFragment<FragmentHealthReportBinding>(
                 }
             }
 
-            val muscleViews = listOf(
-                listOf(ivMuscleFrontChest) to "chest",
-                listOf(ivMuscleFrontShoulderLeft, ivMuscleFrontShoulderRight) to "shoulder front",
-                listOf(ivMuscleFrontAbs) to "abs",
-                listOf(ivMuscleFrontBicepsLeft, ivMuscleFrontBicepsRight) to "biceps",
-                listOf(ivMuscleFrontForearmLeft, ivMuscleFrontForearmRight) to "forearm front",
-                listOf(ivMuscleFrontQuadricepsLeft, ivMuscleFrontQuadricepsRight) to "quariceps",
-                listOf(ivMuscleFrontTibialisLeft, ivMuscleFrontTibialisRight) to "tilialis",
-
-                listOf(ivMuscleBackTrapezius) to "trapezius",
-                listOf(ivMuscleBackRotatorLeft, ivMuscleBackRotatorRight) to "rotator",
-                listOf(ivMuscleBackLatsLeft, ivMuscleBackLatsRight) to "lats",
-                listOf(ivMuscleBackErectorSpinae) to "spinae",
-                listOf(ivMuscleBackDeltoidLeft, ivMuscleBackDeltoidRight) to "shoulder back",
-                listOf(ivMuscleBackTricepsLeft, ivMuscleBackTricepsRight) to "triceps",
-                listOf(ivMuscleBackForearmLeft, ivMuscleBackForearmRight) to "forearm back",
-            )
-
             muscleViews.forEach { (viewGroup, tagKey) ->
                 viewGroup.forEach { imageView ->
                     imageView.setOnClickListener {
@@ -68,6 +52,32 @@ class HealthReportFragment : BaseFragment<FragmentHealthReportBinding>(
         }
     }
 
+    fun initMuscles() {
+        binding.apply {
+            muscleViews = listOf(
+                listOf(ivMuscleFrontChest) to "chest",
+                listOf(ivMuscleFrontShoulderLeft, ivMuscleFrontShoulderRight) to "shoulder_front",
+                listOf(ivMuscleFrontAbs) to "abs",
+                listOf(ivMuscleFrontBicepsLeft, ivMuscleFrontBicepsRight) to "biceps",
+                listOf(ivMuscleFrontForearmLeft, ivMuscleFrontForearmRight) to "forearm_front",
+                listOf(ivMuscleFrontQuadricepsLeft, ivMuscleFrontQuadricepsRight) to "quariceps",
+                listOf(ivMuscleFrontTibialisLeft, ivMuscleFrontTibialisRight) to "tilialis",
+
+                listOf(ivMuscleBackTrapezius) to "trapezius",
+                listOf(ivMuscleBackRotatorLeft, ivMuscleBackRotatorRight) to "rotator",
+                listOf(ivMuscleBackLatsLeft, ivMuscleBackLatsRight) to "lats",
+                listOf(ivMuscleBackErectorSpinae) to "spinae",
+                listOf(ivMuscleBackDeltoidLeft, ivMuscleBackDeltoidRight) to "shoulder_back",
+                listOf(ivMuscleBackTricepsLeft, ivMuscleBackTricepsRight) to "triceps",
+                listOf(ivMuscleBackForearmLeft, ivMuscleBackForearmRight) to "forearm_back",
+                listOf(ivMuscleBackGluteusMaximus) to "gluteus",
+                listOf(ivMuscleBackHamstringLeft, ivMuscleBackHamstringRight) to "hamstring",
+                listOf(ivMuscleBackTricepsLowerLegLeft, ivMuscleBackTricepsLowerLegRight) to "lower_leg",
+            )
+        }
+    }
+
+    // 근육 선택 시 색 변환
     private fun toggleMuscleGroupSelection(imageViews: List<ImageView>, tagKey: String) {
         val mainBlue = ContextCompat.getColor(requireContext(), R.color.main_blue)
         val mainGray = ContextCompat.getColor(requireContext(), R.color.secondary_gray)
@@ -83,6 +93,20 @@ class HealthReportFragment : BaseFragment<FragmentHealthReportBinding>(
             drawable.setTint(newColor)
             iv.setImageDrawable(drawable)
             iv.setTag(R.id.muscle_tag_key, newTag)
+        }
+    }
+
+    // 모든 근육을 회색으로
+    fun resetAllMuscleViewsToGray() {
+        val grayColor = ContextCompat.getColor(requireContext(), R.color.secondary_gray)
+
+        muscleViews.forEach { (imageViews, _) ->
+            imageViews.forEach { iv ->
+                val drawable = iv.drawable.mutate()
+                drawable.setTint(grayColor)
+                iv.setImageDrawable(drawable)
+                iv.setTag(R.id.muscle_tag_key, "gray")
+            }
         }
     }
 }
