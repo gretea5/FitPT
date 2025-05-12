@@ -10,8 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
-import androidx.core.graphics.drawable.DrawableCompat
-import com.caverock.androidsvg.SVG
 import com.ssafy.presentation.R
 import com.ssafy.presentation.base.BaseFragment
 import com.ssafy.presentation.databinding.FragmentHealthReportBinding
@@ -20,7 +18,6 @@ class HealthReportFragment : BaseFragment<FragmentHealthReportBinding>(
     FragmentHealthReportBinding::bind,
     R.layout.fragment_health_report
 ) {
-    private lateinit var svg: SVG
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -45,8 +42,12 @@ class HealthReportFragment : BaseFragment<FragmentHealthReportBinding>(
 
             val muscleViews = listOf(
                 listOf(ivMuscleFrontChest) to "chest",
-                listOf(ivMuscleFrontShoulderLeft, ivMuscleFrontShoulderRight) to "shoulder" // 그룹으로 묶음
-
+                listOf(ivMuscleFrontShoulderLeft, ivMuscleFrontShoulderRight) to "shoulder",
+                listOf(ivMuscleFrontAbs) to "abs",
+                listOf(ivMuscleFrontBicepsLeft, ivMuscleFrontBicepsRight) to "biceps",
+                listOf(ivMuscleFrontForearmLeft, ivMuscleFrontForearmRight) to "forearm",
+                listOf(ivMuscleFrontQuadricepsLeft, ivMuscleFrontQuadricepsRight) to "quariceps",
+                listOf(ivMuscleFrontTibialisLeft, ivMuscleFrontTibialisRight) to "tilialis",
             )
 
             muscleViews.forEach { (viewGroup, tagKey) ->
@@ -61,7 +62,7 @@ class HealthReportFragment : BaseFragment<FragmentHealthReportBinding>(
 
     private fun toggleMuscleGroupSelection(imageViews: List<ImageView>, tagKey: String) {
         val mainBlue = ContextCompat.getColor(requireContext(), R.color.main_blue)
-        val mainGray = ContextCompat.getColor(requireContext(), R.color.main_gray)
+        val mainGray = ContextCompat.getColor(requireContext(), R.color.secondary_gray)
 
         val currentTag = imageViews.first().getTag(R.id.muscle_tag_key) as? String
         val isBlue = currentTag == tagKey
