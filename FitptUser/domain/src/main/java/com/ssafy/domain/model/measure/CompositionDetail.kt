@@ -1,6 +1,6 @@
-package com.ssafy.data.network.request
+package com.ssafy.domain.model.measure
 
-data class CompositionRequest(
+data class CompositionDetail(
     val bfm: Double,
     val bfp: Double,
     val bmr: Double,

@@ -1,6 +1,6 @@
-package com.ssafy.data.network.response.measure
+package com.ssafy.domain.model.measure
 
-data class CompositionListReponseItem(
+data class CompositionItem(
     val bfm: Double,
     val bfp: Double,
     val bmr: Double,
