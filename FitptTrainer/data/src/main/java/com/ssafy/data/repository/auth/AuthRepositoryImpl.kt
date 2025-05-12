@@ -33,8 +33,9 @@ internal class AuthRepositoryImpl @Inject constructor(
                 when (result) {
                     is ApiResponse.Success -> {
                         //요청이 성공일때, 토큰이나 사용자 식별자 정보를 저장해야함
+                        val trainerId = result.data as Long
                         // dataStore.saveUserId(result.data.userId.toLong())
-                        emit(ResponseStatus.Success(result.data.toString().toLong()))
+                        emit(ResponseStatus.Success(trainerId))
                     }
                     is ApiResponse.Error -> {
                         emit(ResponseStatus.Error(result.error.toDomainModel()))
