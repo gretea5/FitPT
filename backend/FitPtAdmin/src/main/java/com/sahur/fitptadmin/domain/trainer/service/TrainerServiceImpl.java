@@ -35,7 +35,6 @@ public class TrainerServiceImpl implements TrainerService {
                 .map(trainer -> TrainerResponseDto.builder()
                         .trainerId(trainer.getTrainerId())
                         .trainerLoginId(trainer.getTrainerLoginId())
-                        .trainerPw(trainer.getTrainerPw())
                         .trainerName(trainer.getTrainerName())
                         .build())
                 .toList();
