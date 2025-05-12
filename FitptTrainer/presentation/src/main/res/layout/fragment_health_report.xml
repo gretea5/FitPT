@@ -197,7 +197,7 @@
                         android:id="@+id/iv_muscle_back_erector_spinae"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
+                        android:layout_marginTop="8dp"
                         android:src="@drawable/muscle_back_erector_spinae"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -292,15 +292,62 @@
                         app:layout_constraintTop_toBottomOf="@+id/iv_muscle_back_triceps_right" />
 
                     <ImageView
+                        android:id="@+id/iv_muscle_back_ex_side"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
+                        android:layout_marginTop="4dp"
                         android:clickable="false"
                         android:focusable="false"
                         android:src="@drawable/muscle_back_ex_side"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/iv_muscle_back_lats_right" />
+
+                    <ImageView
+                        android:id="@+id/iv_muscle_back_gluteus_maximus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="-12dp"
+                        android:src="@drawable/muscle_back_gluteus_maximus"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/iv_muscle_back_ex_side" />
+
+                    <ImageView
+                        android:id="@+id/iv_muscle_back_hamstring_left"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="-8dp"
+                        android:layout_marginStart="4dp"
+                        android:src="@drawable/muscle_back_hamstring_left"
+                        app:layout_constraintStart_toEndOf="@+id/iv_muscle_back_deltoid_left"
+                        app:layout_constraintTop_toBottomOf="@+id/iv_muscle_back_gluteus_maximus" />
+
+                    <ImageView
+                        android:id="@+id/iv_muscle_back_hamstring_right"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="-8dp"
+                        android:layout_marginEnd="4dp"
+                        android:src="@drawable/muscle_back_hamstring_right"
+                        app:layout_constraintEnd_toStartOf="@+id/iv_muscle_back_deltoid_right"
+                        app:layout_constraintTop_toBottomOf="@+id/iv_muscle_back_gluteus_maximus" />
+
+                    <ImageView
+                        android:id="@+id/iv_muscle_back_triceps_lower_leg_left"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/muscle_back_triceps_lower_leg_left"
+                        app:layout_constraintStart_toStartOf="@+id/iv_muscle_back_hamstring_left"
+                        app:layout_constraintTop_toBottomOf="@+id/iv_muscle_back_hamstring_left" />
+
+                    <ImageView
+                        android:id="@+id/iv_muscle_back_triceps_lower_leg_right"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/muscle_back_triceps_lower_leg_right"
+                        app:layout_constraintEnd_toEndOf="@+id/iv_muscle_back_hamstring_right"
+                        app:layout_constraintTop_toBottomOf="@+id/iv_muscle_back_hamstring_right" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
