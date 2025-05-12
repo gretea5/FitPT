@@ -25,12 +25,13 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:padding="20dp">
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="12dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_report_health_muscles_front"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:paddingVertical="20dp"
                     app:layout_constraintBottom_toTopOf="@+id/tg_report_muscles"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -135,6 +136,42 @@
                         app:layout_constraintEnd_toEndOf="@+id/iv_muscle_front_biceps_right"
                         app:layout_constraintTop_toBottomOf="@+id/iv_muscle_front_biceps_right" />
 
+                    <ImageView
+                        android:id="@+id/iv_muscle_front_quadriceps_left"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/muscle_front_quadriceps_left"
+                        app:layout_constraintEnd_toStartOf="@+id/iv_muscle_front_biceps_left"
+                        app:layout_constraintTop_toBottomOf="@+id/iv_muscle_front_forearm_left" />
+
+                    <ImageView
+                        android:id="@+id/iv_muscle_front_quadriceps_right"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/muscle_front_quadriceps_right"
+                        app:layout_constraintStart_toEndOf="@+id/iv_muscle_front_biceps_right"
+                        app:layout_constraintTop_toBottomOf="@+id/iv_muscle_front_forearm_left" />
+
+                    <ImageView
+                        android:id="@+id/iv_muscle_front_tibialis_left"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:src="@drawable/muscle_front_tibialis_left"
+                        app:layout_constraintEnd_toEndOf="@+id/iv_muscle_front_quadriceps_left"
+                        app:layout_constraintStart_toStartOf="@+id/iv_muscle_front_quadriceps_left"
+                        app:layout_constraintTop_toBottomOf="@+id/iv_muscle_front_quadriceps_left" />
+
+                    <ImageView
+                        android:id="@+id/iv_muscle_front_tibialis_right"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:src="@drawable/muscle_front_tibialis_right"
+                        app:layout_constraintEnd_toEndOf="@+id/iv_muscle_front_quadriceps_right"
+                        app:layout_constraintStart_toStartOf="@+id/iv_muscle_front_quadriceps_right"
+                        app:layout_constraintTop_toBottomOf="@+id/iv_muscle_front_quadriceps_right" />
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <com.google.android.material.button.MaterialButtonToggleGroup
@@ -157,7 +194,7 @@
                         android:backgroundTint="@color/highlight_orange"
                         android:fontFamily="@font/pretendard_bold"
                         android:paddingHorizontal="20dp"
-                        android:paddingVertical="12dp"
+                        android:paddingVertical="8dp"
                         android:text="앞면"
                         android:textColor="@color/main_white"
                         android:textSize="20sp"
@@ -172,7 +209,7 @@
                         android:backgroundTint="@color/main_gray"
                         android:fontFamily="@font/pretendard_bold"
                         android:paddingHorizontal="20dp"
-                        android:paddingVertical="12dp"
+                        android:paddingVertical="8dp"
                         android:text="뒷면"
                         android:textColor="@color/main_white"
                         android:textSize="20sp"
