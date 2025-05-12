@@ -6,6 +6,7 @@
     android:paddingBottom="20dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".schedule.ScheduleEditFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
