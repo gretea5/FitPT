@@ -10,14 +10,14 @@ import retrofit2.http.Path
 
 interface ReportService {
     @GET("reports")
-    fun getReportList(@Query("memberId") memberId: Int) :Response<Unit>
+    suspend fun getReportList(@Query("memberId") memberId: Int) :Response<Unit>
 
     @POST("reports")
-    fun createReport() : Response<Unit>
+    suspend fun createReport() : Response<Unit>
 
     @GET("reports/{reportId}")
-    fun getDetailReport(@Path("reportId") reportId: Int) : Response<Unit>
+    suspend fun getDetailReport(@Path("reportId") reportId: Int) : Response<Unit>
 
     @PATCH("reports/{reportsId")
-    fun updateReport() : Response<Unit>
+    suspend fun updateReport() : Response<Unit>
 }

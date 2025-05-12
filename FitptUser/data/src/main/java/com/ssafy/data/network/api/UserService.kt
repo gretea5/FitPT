@@ -15,17 +15,17 @@ import retrofit2.http.Path
 interface UserService {
 
     @POST("members")
-    fun registerUser(@Body registerRequest: UserRequest):Response<Unit>
+    suspend fun registerUser(@Body registerRequest: UserRequest):Response<Unit>
 
     @GET("members/{memberId}")
-    fun getUserInfo(@Path("memberId") memberId : Int) : Response<GetUserInfoResponse>
+    suspend fun getUserInfo(@Path("memberId") memberId : Int) : Response<GetUserInfoResponse>
 
     @PUT("members/{memberId}")
-    fun updateUserInfo(@Path("memberId") memberId: Int,@Body userRequest: UserRequest) :Response<Unit>
+    suspend fun updateUserInfo(@Path("memberId") memberId: Int,@Body userRequest: UserRequest) :Response<Unit>
 
     @DELETE("members/{memberId}")
-    fun deleteUserInfo(@Path("memberId") memberId: Int) : Response<Unit>
+    suspend fun deleteUserInfo(@Path("memberId") memberId: Int) : Response<Unit>
 
     @PATCH("members/{memberId}")
-    fun updatePartitionUserInfo(@Path("memberId") memberId: Int,@Body userBodyInfo: UserBodyInfo) :Response<Unit>
+    suspend fun updatePartitionUserInfo(@Path("memberId") memberId: Int,@Body userBodyInfo: UserBodyInfo) :Response<Unit>
 }

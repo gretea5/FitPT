@@ -1,5 +1,6 @@
 package com.ssafy.domain.repository.user
 
+import com.ssafy.domain.model.login.UserInfo
 import kotlinx.coroutines.flow.Flow
 
 interface DataStoreRepository {
@@ -17,6 +18,9 @@ interface DataStoreRepository {
 
     val fcmToken: Flow<String?>
     suspend fun saveFcmToken(fcmToken: String)
+
+    val user: Flow<UserInfo?>
+    suspend fun saveUser(user: UserInfo)
 
     suspend fun clearAll()
 }

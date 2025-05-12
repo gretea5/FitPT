@@ -16,7 +16,11 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.PopupWindow
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import com.ssafy.data.datasource.UserDataStoreSource
 import com.ssafy.presentation.R
 import com.ssafy.presentation.base.BaseFragment
 import com.ssafy.presentation.common.MainActivity
@@ -25,8 +29,13 @@ import com.ssafy.presentation.databinding.FragmentMypageBinding
 import com.ssafy.presentation.databinding.PopupGenderMenuBinding
 import com.ssafy.presentation.login.viewModel.LoginViewModel
 import com.ssafy.presentation.mypage.viewModel.MypageViewModel
+import com.ssafy.presentation.util.CommonUtils
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import java.util.Calendar
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class EditUserInfoFragment : BaseFragment<FragmentEditUserInfoBinding>(
     FragmentEditUserInfoBinding::bind,
     R.layout.fragment_edit_user_info
@@ -34,9 +43,14 @@ class EditUserInfoFragment : BaseFragment<FragmentEditUserInfoBinding>(
     private val mypageViewModel: MypageViewModel by activityViewModels()
     private var popupWindow: PopupWindow? = null
 
+    @Inject
+    lateinit var userDataStore: UserDataStoreSource
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
+        observeUserDataStore(userDataStore)
         initEvent()
         initValidation()
         updateButtonState()
@@ -266,6 +280,17 @@ class EditUserInfoFragment : BaseFragment<FragmentEditUserInfoBinding>(
         } else {
             binding.btnNext.setBackgroundColor(resources.getColor(R.color.disabled, null))
             binding.btnNext.isActivated = false
+        }
+    }
+
+    fun observeUserDataStore(dataStoreSource: UserDataStoreSource) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                dataStoreSource.user.collect { userInfo ->
+                    binding.etBirth.text = userI
+
+                }
+            }
         }
     }
 }

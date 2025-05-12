@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ssafy.data.datasource.UserDataStoreSource
 import com.ssafy.domain.model.base.ResponseStatus
-import com.ssafy.domain.model.login.GymInfoItem
+import com.ssafy.domain.model.login.Gym
 import com.ssafy.domain.model.login.UserInfo
 import com.ssafy.domain.usecase.auth.LoginUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,8 +26,8 @@ class LoginViewModel @Inject constructor(
     private val _loginState = MutableStateFlow<LoginStatus>(LoginStatus.Idle) // 🔥 null 기본값 추가
     val loginState : StateFlow<LoginStatus> = _loginState.asStateFlow()
     //체육관 저장
-    private val _selectedGym = MutableStateFlow<GymInfoItem?>(null)
-    val selectedGym: StateFlow<GymInfoItem?> = _selectedGym.asStateFlow()
+    private val _selectedGym = MutableStateFlow<Gym?>(null)
+    val selectedGym: StateFlow<Gym?> = _selectedGym.asStateFlow()
 
     private val _userJoin = MutableStateFlow(
         UserInfo()
@@ -60,7 +60,7 @@ class LoginViewModel @Inject constructor(
         _loginState.value = LoginStatus.Idle
     }
 
-    fun setGym(gym: GymInfoItem) {
+    fun setGym(gym: Gym) {
         _selectedGym.value = gym
     }
 

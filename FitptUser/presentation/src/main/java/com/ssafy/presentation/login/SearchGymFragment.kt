@@ -6,7 +6,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ssafy.domain.model.login.Gym
-import com.ssafy.domain.model.login.GymInfoItem
 import com.ssafy.presentation.R
 import com.ssafy.presentation.base.BaseFragment
 import com.ssafy.presentation.databinding.FragmentSearchGymBinding
@@ -22,7 +21,7 @@ class SearchGymFragment : BaseFragment<FragmentSearchGymBinding>(
     R.layout.fragment_search_gym
 ) {
     private lateinit var gymSearchAdapter: GymSearchAdapter
-    private var selectedGym: GymInfoItem? = null
+    private var selectedGym: Gym? = null
     private val loginViewModel: LoginViewModel by activityViewModels()
     private val mypageViewModel: MypageViewModel by activityViewModels()
 

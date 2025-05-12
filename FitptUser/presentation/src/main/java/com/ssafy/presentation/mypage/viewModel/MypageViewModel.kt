@@ -2,7 +2,7 @@ package com.ssafy.presentation.mypage.viewModel
 
 import androidx.lifecycle.ViewModel
 import com.ssafy.data.datasource.UserDataStoreSource
-import com.ssafy.domain.model.login.GymInfoItem
+import com.ssafy.domain.model.login.Gym
 import com.ssafy.domain.model.login.UserInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,11 +13,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MypageViewModel @Inject constructor(
-    private val dataStore: UserDataStoreSource
+    private val dataStore: UserDataStoreSource,
+
 ) : ViewModel() {
     //체육관 저장
-    private val _selectedGym = MutableStateFlow<GymInfoItem?>(null)
-    val selectedGym: StateFlow<GymInfoItem?> = _selectedGym.asStateFlow()
+    private val _selectedGym = MutableStateFlow<Gym?>(null)
+    val selectedGym: StateFlow<Gym?> = _selectedGym.asStateFlow()
 
     private val _userJoin = MutableStateFlow(
         UserInfo()
@@ -25,7 +26,7 @@ class MypageViewModel @Inject constructor(
     val userJoin = _userJoin.asStateFlow()
 
 
-    fun setGym(gym: GymInfoItem) {
+    fun setGym(gym: Gym) {
         _selectedGym.value = gym
     }
 

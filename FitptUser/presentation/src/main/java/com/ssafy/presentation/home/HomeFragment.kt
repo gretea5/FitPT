@@ -34,19 +34,25 @@ import java.time.YearMonth
 import com.kizitonwose.calendar.core.daysOfWeek
 import com.kizitonwose.calendar.view.MonthDayBinder
 import com.kizitonwose.calendar.view.ViewContainer
+import com.ssafy.data.datasource.UserDataStoreSource
 import com.ssafy.locket.utils.CalendarUtils.displayText
 import com.ssafy.presentation.databinding.CalendarDayBinding
 import com.ssafy.presentation.home.viewModel.OpenDialogState
 import com.ssafy.presentation.home.viewModel.SelectedDayState
 import com.ssafy.presentation.home.viewModel.SelectedDayViewModel
+import com.ssafy.presentation.home.viewModel.UserInfoState
+import com.ssafy.presentation.home.viewModel.UserInfoViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.yield
 import java.time.DayOfWeek
 import java.time.format.DateTimeFormatter
+import javax.inject.Inject
 
 private const val TAG = "HomeFragment"
+@AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding>(
     FragmentHomeBinding::bind,
     R.layout.fragment_home
@@ -63,10 +69,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
     private var selectedButton: Button? = null
     private val selectedDayViewModel: SelectedDayViewModel by activityViewModels()
 
-
+    private val userInfoViewModel: UserInfoViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        observeModel()
         initEvent()
         initCalendar()
         initView()
@@ -81,10 +88,14 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
     }
 
     fun initEvent(){
+        Log.d(TAG,"실행")
+        userInfoViewModel.fetchUser()
         binding.ivNotificationMove.setOnClickListener {
             findNavController().navigate(R.id.action_home_fragment_to_notification_fragment)
         }
     }
+
+
 
     private fun updateDayWeekColor() {
         for ((index, dayText) in daysOfWeek.withIndex()) {
@@ -219,6 +230,15 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
             selectedDayViewModel.openDialog.collectLatest { dialogState ->
                 if (dialogState is OpenDialogState.Opened && !dialog.isAdded) {
                     dialog.show(childFragmentManager, "payment")
+                }
+            }
+        }
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                userInfoViewModel.userInfo.collect { user ->
+                    if (user is UserInfoState.Success) {
+                        Log.d(TAG,user.userInfo.toString())
+                    }
                 }
             }
         }
@@ -380,5 +400,21 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
         // 차트에 데이터 설정
         lineChart.data = LineData(dataSet)
         lineChart.invalidate()  // 차트 갱신
+    }
+
+    fun observeModel() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                userInfoViewModel.userInfo.collect { user ->
+                    if (user is UserInfoState.Success) {
+                        binding.tvBodyGraph.text = user.userInfo.memberName+"님의 체성분 그래프"
+                        binding.tvPtCalendar.text = user.userInfo.memberName+"님의 PT 일정"
+                    }
+                    else{
+                        Log.d(TAG,"실패")
+                    }
+                }
+            }
+        }
     }
 }
