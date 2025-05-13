@@ -9,6 +9,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -22,90 +23,81 @@ import java.util.Collections;
  * JWT 인증 필터
  * 모든 요청에 대해 JWT 토큰을 검증하고 인증 정보를 설정하는 필터
  */
+@Slf4j
 @RequiredArgsConstructor
 public class JWTFilter extends OncePerRequestFilter {
-    private final JWTUtil jwtUtil;                            // JWT 유틸리티
-    private final RedisTemplate<String, String> redisTemplate; // Redis 템플릿
+    private final JWTUtil jwtUtil;
+    private final RedisTemplate<String, String> redisTemplate;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    /**
-     * 필터 로직 구현
-     * 모든 요청에 대해 JWT 토큰을 검증하고 인증 정보를 설정
-     */
     @Override
     protected void doFilterInternal(
             HttpServletRequest request,
             HttpServletResponse response,
             FilterChain filterChain
     ) throws ServletException, IOException {
-        // 인증이 필요없는 경로는 필터 통과
+        String requestURI = request.getRequestURI();
+        log.debug("요청 URI: {}", requestURI);
+
         if (shouldNotFilter(request)) {
+            log.debug("인증이 필요없는 경로입니다: {}", requestURI);
             filterChain.doFilter(request, response);
             return;
         }
 
         try {
-            // 요청 헤더에서 JWT 토큰 추출
             String token = jwtUtil.extractToken(request);
+            log.debug("추출된 토큰: {}", token);
+
             if (token == null) {
+                log.debug("토큰이 없습니다");
                 throw new CustomException(ErrorCode.INVALID_TOKEN_FORM);
             }
 
-            // Redis에서 로그아웃된 토큰인지 확인
-            // 로그아웃된 토큰은 Redis에 저장되어 있음
             String isLoggedOut = redisTemplate.opsForValue().get(token);
             if (isLoggedOut != null) {
+                log.debug("이미 로그아웃된 토큰입니다");
                 throw new CustomException(ErrorCode.INVALID_TOKEN);
             }
 
-            // 토큰 유효성 검증
             jwtUtil.validateToken(token);
+            log.debug("토큰이 유효합니다");
 
-            // 토큰에서 사용자 정보 추출
             Long memberId = jwtUtil.getMemberId(token);
             String role = jwtUtil.getRole(token);
+            request.setAttribute("trainerId", memberId);
+            log.debug("토큰에서 추출한 정보 - 회원ID: {}, 역할: {}", memberId, role);
 
-            // Spring Security 인증 객체 생성
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                    memberId,    // Principal: 회원 ID
-                    null,       // Credentials: 비밀번호 (JWT에서는 불필요)
-                    Collections.singleton(new SimpleGrantedAuthority(role)) // Authorities: 권한 정보
+                    memberId,
+                    null,
+                    Collections.singleton(new SimpleGrantedAuthority(role))
             );
 
-            // SecurityContext에 인증 정보 설정
             SecurityContextHolder.getContext().setAuthentication(authentication);
+            log.debug("인증 정보가 설정되었습니다 - 회원ID: {}, 역할: {}", memberId, role);
 
-            // 다음 필터로 요청 전달
             filterChain.doFilter(request, response);
 
         } catch (CustomException e) {
-            // 예외 발생 시 에러 응답 반환
+            log.error("인증 처리 중 오류 발생: {}", e.getErrorCode().getMessage());
             setErrorResponse(response, e);
         }
     }
 
-    /**
-     * 인증이 필요없는 경로인지 확인
-     * @param request HTTP 요청
-     * @return 인증 제외 여부
-     */
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getServletPath();
-        return path.startsWith("/api/auth/") ||        // 인증 관련 API
-                path.startsWith("/swagger-ui") ||     // Swagger UI
-                path.startsWith("/v3/api-docs") ||    // API 문서
-                path.equals("/swagger-ui.html") ||     // Swagger UI 메인
-                path.startsWith("/swagger-resources") ||  // Swagger 리소스
-                path.startsWith("/webjars/" +
-                        "");          // Webjar 리소스
+        return path.startsWith("/api/auth/") ||
+                path.startsWith("/api/test/") ||
+                path.startsWith("/api/trainers/login") ||
+                path.startsWith("/swagger-ui") ||
+                path.startsWith("/v3/api-docs") ||
+                path.equals("/swagger-ui.html") ||
+                path.startsWith("/swagger-resources") ||
+                path.startsWith("/webjars/");
     }
 
-    /**
-     * 에러 응답 설정
-     * @param response HTTP 응답
-     * @param e 발생한 예외
-     */
     private void setErrorResponse(
             HttpServletResponse response,
             CustomException e
@@ -114,5 +106,8 @@ public class JWTFilter extends OncePerRequestFilter {
         response.setStatus(e.getErrorCode().getHttpStatus().value());
         response.setContentType("application/json;charset=UTF-8");
         response.getWriter().write(objectMapper.writeValueAsString(error));
+        log.error("에러 응답이 설정되었습니다 - 상태: {}, 메시지: {}",
+                e.getErrorCode().getHttpStatus().value(),
+                e.getErrorCode().getMessage());
     }
 }

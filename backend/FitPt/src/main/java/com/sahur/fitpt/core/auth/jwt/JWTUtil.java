@@ -19,76 +19,66 @@ import java.util.Date;
 @Slf4j
 @Component
 public class JWTUtil {
-    private final SecretKey secretKey;                          // JWT 서명에 사용할 비밀키
-    private final long accessTokenValidityInMilliseconds;       // 액세스 토큰 유효 기간
-    private final long refreshTokenValidityInMilliseconds;      // 리프레시 토큰 유효 기간
+    // 상수 정의
+    private static final String AUTHORIZATION_HEADER = "Authorization";
+    private static final String BEARER_PREFIX = "Bearer ";
+    private static final String MEMBER_ID_CLAIM = "memberId";
+    private static final String ROLE_CLAIM = "role";
 
-    /**
-     * 생성자: application.yaml의 설정값으로 초기화
-     */
+    private final SecretKey secretKey;
+    private final long accessTokenValidityInMilliseconds;
+    private final long refreshTokenValidityInMilliseconds;
+
+    // 생성자: yaml 파일 설정값으로 초기화
     public JWTUtil(
             @Value("${jwt.secret}") String secret,
             @Value("${jwt.expiration.access}") long accessTokenValidityInMilliseconds,
             @Value("${jwt.expiration.refresh}") long refreshTokenValidityInMilliseconds
     ) {
-        // 비밀키를 바이트 배열로 변환하여 HMAC-SHA 키 생성
         this.secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
         this.accessTokenValidityInMilliseconds = accessTokenValidityInMilliseconds;
         this.refreshTokenValidityInMilliseconds = refreshTokenValidityInMilliseconds;
     }
 
-    /**
-     * Access Token 생성
-     * @param memberId 회원 ID
-     * @param role 회원 역할
-     * @return 생성된 액세스 토큰
-     */
+    // Access Token 생성: 회원 ID와 role 정보 포함
     public String createAccessToken(Long memberId, String role) {
         return createToken(memberId, role, accessTokenValidityInMilliseconds);
     }
 
-    /**
-     * Refresh Token 생성
-     * @param memberId 회원 ID
-     * @param role 회원 역할
-     * @return 생성된 리프레시 토큰
-     */
-    public String createRefreshToken(Long memberId, String role) {
-        return createToken(memberId, role, refreshTokenValidityInMilliseconds);
+    // Refresh Token 생성: 만료 시간만 포함
+    public String createRefreshToken() {
+        Date now = new Date();
+        Date validity = new Date(now.getTime() + refreshTokenValidityInMilliseconds);
+
+        return Jwts.builder()
+                .setIssuedAt(now)
+                .setExpiration(validity)
+                .signWith(secretKey, SignatureAlgorithm.HS256)
+                .compact();
     }
 
-    /**
-     * 토큰 생성 공통 메소드
-     * @param memberId 회원 ID
-     * @param role 회원 역할
-     * @param validityInMilliseconds 토큰 유효 기간
-     * @return 생성된 JWT 토큰
-     */
+    // 토큰 생성 공통 메소드
     private String createToken(Long memberId, String role, long validityInMilliseconds) {
         Date now = new Date();
         Date validity = new Date(now.getTime() + validityInMilliseconds);
 
         return Jwts.builder()
-                .claim("memberId", memberId)     // 회원 ID 저장
-                .claim("role", role)             // 역할 정보 저장
-                .setIssuedAt(now)               // 발행 시간
-                .setExpiration(validity)         // 만료 시간
-                .signWith(secretKey, SignatureAlgorithm.HS256)  // HS256 알고리즘으로 서명
+                .claim(MEMBER_ID_CLAIM, memberId)
+                .claim(ROLE_CLAIM, role)
+                .setIssuedAt(now)
+                .setExpiration(validity)
+                .signWith(secretKey, SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    /**
-     * 토큰 검증
-     * @param token 검증할 토큰
-     * @return 토큰 유효성 여부
-     */
-    public boolean validateToken(String token) {
+    // 토큰 파싱 공통 메소드: 예외 처리 통합
+    private Claims parseToken(String token) {
         try {
-            Jwts.parser()
+            return Jwts.parser()
                     .setSigningKey(secretKey)
                     .build()
-                    .parseClaimsJws(token);
-            return true;
+                    .parseClaimsJws(token)
+                    .getBody();
         } catch (ExpiredJwtException e) {
             log.error("만료된 토큰입니다: {}", e.getMessage());
             throw new CustomException(ErrorCode.EXPIRED_TOKEN);
@@ -98,61 +88,41 @@ public class JWTUtil {
         }
     }
 
-    /**
-     * Claims 추출
-     * @param token JWT 토큰
-     * @return 토큰의 Claims
-     */
+    // 토큰 유효성 검증
+    public boolean validateToken(String token) {
+        parseToken(token);
+        return true;
+    }
+
+    // 토큰에서 Claims 추출
     public Claims getClaims(String token) {
-        try {
-            return Jwts.parser()
-                    .setSigningKey(secretKey)
-                    .build()
-                    .parseClaimsJws(token)
-                    .getBody();
-        } catch (ExpiredJwtException e) {
-            return e.getClaims(); // 만료된 토큰이어도 Claims 반환
-        }
+        return parseToken(token);
     }
 
-    /**
-     * 토큰에서 회원 ID 추출
-     */
+    // 토큰에서 회원 ID 추출
     public Long getMemberId(String token) {
-        return getClaims(token).get("memberId", Long.class);
+        return getClaims(token).get(MEMBER_ID_CLAIM, Long.class);
     }
 
-    /**
-     * 토큰에서 역할 정보 추출
-     */
+    // 토큰에서 역할 정보 추출
     public String getRole(String token) {
-        return getClaims(token).get("role", String.class);
+        return getClaims(token).get(ROLE_CLAIM, String.class);
     }
 
-    /**
-     * Authorization 헤더에서 토큰 추출
-     */
+    // HTTP 요청 헤더에서 토큰 추출
     public String extractToken(HttpServletRequest request) {
-        String bearerToken = request.getHeader("Authorization");
-        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
-            return bearerToken.substring(7);
+        String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
+        if (bearerToken != null && bearerToken.startsWith(BEARER_PREFIX)) {
+            return bearerToken.substring(BEARER_PREFIX.length());
         }
         return null;
     }
 
-    /**
-     * 토큰의 남은 만료 시간을 반환
-     * @param token JWT 토큰
-     * @return 남은 만료 시간 (밀리초)
-     */
+    // 토큰의 남은 만료 시간 계산
     public long getExpirationTime(String token) {
-        try {
-            Claims claims = getClaims(token);
-            Date expiration = claims.getExpiration();
-            Date now = new Date();
-            return Math.max(0, expiration.getTime() - now.getTime());
-        } catch (Exception e) {
-            return 0;
-        }
+        Claims claims = parseToken(token);
+        Date expiration = claims.getExpiration();
+        Date now = new Date();
+        return Math.max(0, expiration.getTime() - now.getTime());
     }
 }

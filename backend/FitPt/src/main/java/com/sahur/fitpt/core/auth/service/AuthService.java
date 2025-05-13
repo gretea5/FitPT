@@ -49,7 +49,7 @@ public class AuthService {
 
         // JWT 토큰 생성
         String accessToken = jwtUtil.createAccessToken(member.getMemberId(), member.getRole().getKey());
-        String refreshToken = jwtUtil.createRefreshToken(member.getMemberId(), member.getRole().getKey());
+        String refreshToken = jwtUtil.createRefreshToken();
 
         // Refresh 토큰 Redis 저장
         storeRefreshToken(member.getMemberId(), refreshToken);
