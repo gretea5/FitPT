@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class GetReportDetailUsecase @Inject constructor(private val reportRepository: ReportRepository){
-    suspend operator fun invoke(): Flow<ResponseStatus<ReportDetailInfo>> {
-        return reportRepository.getReportDetailInfo()
+    suspend operator fun invoke(reportId: Int): Flow<ResponseStatus<ReportDetailInfo>> {
+        return reportRepository.getReportDetailInfo(reportId)
     }
 }

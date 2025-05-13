@@ -8,6 +8,7 @@ import com.ssafy.data.network.common.ApiResponse
 import com.ssafy.data.network.common.ApiResponseHandler
 import com.ssafy.data.network.common.ErrorResponse.Companion.toDomainModel
 import com.ssafy.data.network.response.GetUserInfoResponse.Companion.toDomainModel
+import com.ssafy.data.network.response.report.ReportDetailResponse.Companion.toDomainModel
 import com.ssafy.data.network.response.report.toDomainModel
 import com.ssafy.domain.model.base.ResponseStatus
 import com.ssafy.domain.model.report.PtReportItem
@@ -40,7 +41,17 @@ internal class ReportRepositoryImpl  @Inject constructor(
         }
     }
 
-    override suspend fun getReportDetailInfo(): Flow<ResponseStatus<ReportDetailInfo>> {
-        TODO("Not yet implemented")
+    override suspend fun getReportDetailInfo(reportId: Int): Flow<ResponseStatus<ReportDetailInfo>> {
+        return flow {
+            val result = ApiResponseHandler().handle {
+                reportService.getDetailReport(reportId)
+            }.first() // ✅ 첫 번째 값만 가져옴
+            when (result) {
+                is ApiResponse.Success -> {
+                    emit(ResponseStatus.Success(result.data.toDomainModel()))
+                }
+                is ApiResponse.Error -> emit(ResponseStatus.Error(result.error.toDomainModel()))
+            }
+        }
     }
 }

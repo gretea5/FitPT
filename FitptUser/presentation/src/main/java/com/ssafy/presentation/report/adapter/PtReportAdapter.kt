@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.ssafy.domain.model.report.PtReportItem
 import com.ssafy.presentation.databinding.ItemPtReportBinding
+import com.ssafy.presentation.util.CommonUtils
 
 class PtReportAdapter(
     private val items: List<PtReportItem>,
@@ -13,7 +14,7 @@ class PtReportAdapter(
 
     inner class PtViewHolder(private val binding: ItemPtReportBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: PtReportItem) {
-            binding.txtDateTime.text = item.dateTime  // 예: "2025년 02월 28일 오후 06:20"
+            binding.txtDateTime.text = CommonUtils.formatCreatedAt(item.dateTime)  // 예: "2025년 02월 28일 오후 06:20"
             binding.txtTrainerName.text = item.trainerName // 예: "박장훈"
 
             binding.root.setOnClickListener {

@@ -68,8 +68,21 @@ object CommonUtils {
         val inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS", Locale.KOREAN)
         val outputFormatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 a hh:mm", Locale.KOREAN)
 
-        val dateTime = LocalDateTime.parse(isoDateTime, inputFormatter)
+        val dateTime = LocalDateTime.parse(parseFlexibleDateTime(isoDateTime), inputFormatter)
         return dateTime.format(outputFormatter)
+    }
+
+    fun parseFlexibleDateTime(dateTimeStr: String): String {
+        // 소수점 이하 자릿수 보정
+        val fixedDateTimeStr = if (dateTimeStr.contains(".")) {
+            val (main, fraction) = dateTimeStr.split(".")
+            val normalizedFraction = fraction.padEnd(6, '0').take(6) // 항상 6자리로 맞춤
+            "$main.$normalizedFraction"
+        } else {
+            dateTimeStr
+        }
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS")
+        return LocalDateTime.parse(fixedDateTimeStr, formatter).toString()
     }
 
     fun formatMeasureCreatedAt(createdAt: String): String {

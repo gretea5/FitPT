@@ -47,6 +47,7 @@ class ReportListFragment : BaseFragment<FragmentReportListBinding>(
                         }
                         is ReportListState.Success -> {
                             val adapter = PtReportAdapter(state.reportList) { item ->
+                                reportViewModel.setReport(item.reportId)
                                 findNavController().navigate(R.id.action_report_list_fragment_to_report_detail_fragment)
                             }
                             binding.rvPtRecord.adapter = adapter

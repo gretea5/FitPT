@@ -52,17 +52,14 @@ class MeasureListFragment : BaseFragment<FragmentMeasureListBinding>(
                         is GetBodyListInfoState.Success -> {
                             Log.d(TAG, "성공: ${state.getBodyList}")
                             // 여기서 어댑터에 데이터 전달 가능
-                            Log.d(TAG,state.getBodyList.get(0).toString())
-                            Log.d(TAG,state.getBodyList.get(1).toString())
                             val adapter = MeasureListAdapter(
                                 state.getBodyList.map {
                                     MeasureRecordItem(it.bfp, it.smm, it.weight,it.createdAt) // 매핑
                                 }
                             ) { item, index ->
-                                val current = state.getBodyList[index]
                                 if (index<=state.getBodyList.size-2&&state.getBodyList.size > 1) {
                                     val previous = state.getBodyList[index+1]
-
+                                    val current = state.getBodyList[index]
                                     // diff 계산
                                     val weightDif = current.weight - previous.weight
                                     val bfpDif = current.bfp - previous.bfp
@@ -89,7 +86,11 @@ class MeasureListFragment : BaseFragment<FragmentMeasureListBinding>(
                                     // ViewModel에 저장
                                     measureViewModel.setMeasureDetailInfo(detail)
                                 }
+                                else if(state.getBodyList.size==0){
+
+                                }
                                 else{
+                                    val current = state.getBodyList[index]
                                     val detail = MesureDetail(
                                         bfm = current.bfm,
                                         bfp = current.bfp,

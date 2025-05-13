@@ -7,5 +7,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface ReportRepository {
     suspend fun getReportList(): Flow<ResponseStatus<List<PtReportItem>>>
-    suspend fun getReportDetailInfo(): Flow<ResponseStatus<ReportDetailInfo>>
+    suspend fun getReportDetailInfo(reportId: Int): Flow<ResponseStatus<ReportDetailInfo>>
 }

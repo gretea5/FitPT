@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ssafy.data.datasource.UserDataStoreSource
 import com.ssafy.domain.model.base.ResponseStatus
+import com.ssafy.domain.model.login.Gym
 import com.ssafy.domain.model.login.UserInfo
 import com.ssafy.domain.model.report.PtReportItem
 import com.ssafy.domain.model.report.ReportDetailInfo
@@ -38,6 +39,10 @@ class ReportViewModel @Inject constructor(
     private val _getReportDetailInfo = MutableStateFlow<ReportDetailState>(ReportDetailState.Initial)
     val getReportDetailInfo: StateFlow<ReportDetailState> = _getReportDetailInfo.asStateFlow()
 
+
+    private val _selectReport = MutableStateFlow<Int>(0)
+    val selectReport: StateFlow<Int> = _selectReport.asStateFlow()
+
     fun setReportListLoading() {
         _getReportListInfo.value = ReportListState.Loading
     }
@@ -70,9 +75,9 @@ class ReportViewModel @Inject constructor(
         }
     }
 
-    fun getReportDetail(){
+    fun getReportDetail(reportId: Int){
         viewModelScope.launch {
-            getReportDetailUsecase()
+            getReportDetailUsecase(reportId)
                 .onStart { setReportDetailLoading() }
                 .catch { e ->
 
@@ -91,6 +96,11 @@ class ReportViewModel @Inject constructor(
                 }
         }
     }
+
+    fun setReport(reportId: Int) {
+        _selectReport.value = reportId
+    }
+
 }
 
 sealed class ReportListState {

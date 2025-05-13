@@ -8,7 +8,7 @@ import com.ssafy.presentation.databinding.ItemBodyCompositionBinding
 import com.ssafy.presentation.databinding.ItemMeasureRecordBinding
 
 class BodyInfoAdapter(
-    private val items: List<BodyInfoItem>,
+    private var items: List<BodyInfoItem>,
     private val onItemClick: (BodyInfoItem) -> Unit
 ) : RecyclerView.Adapter<BodyInfoAdapter.BodyInfoViewHolder>() {
 
@@ -36,4 +36,9 @@ class BodyInfoAdapter(
     }
 
     override fun getItemCount(): Int = items.size
+
+    fun updateItems(newItems: List<BodyInfoItem>) {
+        items = newItems
+        notifyDataSetChanged()
+    }
 }

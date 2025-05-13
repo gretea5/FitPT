@@ -8,6 +8,7 @@
     tools:context=".report.viewpager.CoachingFragment">
 
     <TextView
+        android:id="@+id/tv_coachging"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="📅 [오늘의 PT 맞춤 식단 추천]\n
