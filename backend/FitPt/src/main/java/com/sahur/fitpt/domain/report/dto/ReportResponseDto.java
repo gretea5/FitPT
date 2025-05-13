@@ -35,7 +35,7 @@ public class ReportResponseDto {
                     .exerciseName(exercise.getExerciseName())
                     .exerciseAchievement(exercise.getExerciseAchievement())
                     .exerciseComment(exercise.getExerciseComment())
-                    .activation_muscle_id(muscleIds)
+                    .activationMuscleId(muscleIds)
                     .build();
 
             exerciseDtos.add(exerciseDto);

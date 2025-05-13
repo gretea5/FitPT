@@ -13,5 +13,5 @@ public class ReportExerciseResponseDto {
     private String exerciseName;
     private String exerciseAchievement;
     private String exerciseComment;
-    private List<Long> activation_muscle_id;
+    private List<Long> activationMuscleId;
 }

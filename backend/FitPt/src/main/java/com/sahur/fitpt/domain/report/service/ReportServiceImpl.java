@@ -87,7 +87,7 @@ public class ReportServiceImpl implements ReportService {
             ReportExerciseRequestDto exerciseDto = requestDto.getReportExercises().get(i);
 
             List<WorkoutMuscle> workoutMuscles = new ArrayList<>();
-            for (Long muscleId : exerciseDto.getActivation_muscle_id()) {
+            for (Long muscleId : exerciseDto.getActivationMuscleId()) {
                 WorkoutMuscle workoutMuscle = WorkoutMuscle.builder()
                         .reportExercise(savedExercise)
                         .activationMuscleId(muscleId)
@@ -148,7 +148,7 @@ public class ReportServiceImpl implements ReportService {
                 ReportExercise savedExercise = reportExerciseRepository.save(reportExercise);
 
                 List<WorkoutMuscle> workoutMuscles = new ArrayList<>();
-                for (Long muscleId : exerciseDto.getActivation_muscle_id()) {
+                for (Long muscleId : exerciseDto.getActivationMuscleId()) {
                     WorkoutMuscle workoutMuscle = WorkoutMuscle.builder()
                             .reportExercise(savedExercise)
                             .activationMuscleId(muscleId)
@@ -208,7 +208,7 @@ public class ReportServiceImpl implements ReportService {
                                         .exerciseComment(exercise.getExerciseComment())
                                         .exerciseName(exercise.getExerciseName())
                                         .exerciseAchievement(exercise.getExerciseAchievement())
-                                        .activation_muscle_id(
+                                        .activationMuscleId(
                                                 exercise.getWorkoutMuscles().stream()
                                                         .map(WorkoutMuscle::getActivationMuscleId)
                                                         .collect(Collectors.toList())
