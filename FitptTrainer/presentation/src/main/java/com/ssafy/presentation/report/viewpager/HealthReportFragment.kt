@@ -9,7 +9,7 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ssafy.domain.model.report.MuscleGroup
-import com.ssafy.domain.model.report.WorkoutItem
+import com.ssafy.domain.model.report.WorkoutNameScoreItem
 import com.ssafy.presentation.R
 import com.ssafy.presentation.base.BaseFragment
 import com.ssafy.presentation.databinding.FragmentHealthReportBinding
@@ -83,6 +83,9 @@ class HealthReportFragment : BaseFragment<FragmentHealthReportBinding>(
             ibReportHealthWorkoutAdd.setOnClickListener {
                 healthReportAdapter.finalizeLastItem()
 
+                // 입력값 ViewModel에 저장
+                reportViewModel.addWorkoutReport()
+
                 // 추가 입력 막기
                 setAllMuscleClickable(false)
                 resetAllMuscleViewsToGray()
@@ -92,12 +95,12 @@ class HealthReportFragment : BaseFragment<FragmentHealthReportBinding>(
                 etReportHealthContent.text.clear()
                 etReportHealthContent.isEnabled = false
 
-                cvReportWorkoutAddWorkout.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.highlight_orange))
+                cvReportWorkoutAddWorkout.setCardBackgroundColor(
+                    ContextCompat.getColor(requireContext(), R.color.highlight_orange)
+                )
                 cvReportWorkoutAddWorkout.isEnabled = true
-
-                // ViewModel 입력값 초기화
-                reportViewModel.clearInputs()
             }
+
 
             // 운동 삭제
             ibReportHealthWorkoutDelete.setOnClickListener {
@@ -135,7 +138,7 @@ class HealthReportFragment : BaseFragment<FragmentHealthReportBinding>(
     }
 
     private fun initRecyclerView() {
-        val initialList = mutableListOf<WorkoutItem>()
+        val initialList = mutableListOf<WorkoutNameScoreItem>()
 
         healthReportAdapter = HealthReportAdapter(initialList) {
             updateAddButtonState()
@@ -193,9 +196,13 @@ class HealthReportFragment : BaseFragment<FragmentHealthReportBinding>(
 
     // 선택한 근육 색 변경
     private fun toggleMuscleGroupSelection(group: MuscleGroup) {
+        // ViewModel을 통해 상태 업데이트
+        reportViewModel.toggleMuscleSelection(group)
+
+        // ViewModel 호출 후의 상태를 반영해 색상 업데이트
         val color = ContextCompat.getColor(
             requireContext(),
-            if (group.isSelected) R.color.secondary_gray else R.color.main_blue
+            if (group.isSelected) R.color.main_blue else R.color.secondary_gray
         )
 
         group.imageViews.forEach { iv ->
@@ -203,12 +210,8 @@ class HealthReportFragment : BaseFragment<FragmentHealthReportBinding>(
             drawable.setTint(color)
             iv.setImageDrawable(drawable)
         }
-
-        group.isSelected = !group.isSelected
-
-        val anySelected = muscleGroups.any { it.isSelected }
-        reportViewModel.updateMuscleSelection(anySelected)
     }
+
 
     // 모든 근육 회색으로 변경
     fun resetAllMuscleViewsToGray() {
@@ -221,7 +224,6 @@ class HealthReportFragment : BaseFragment<FragmentHealthReportBinding>(
                 iv.setImageDrawable(drawable)
             }
             group.isSelected = false
-            Log.d(TAG, "resetAllMuscleViewsToGray: ${group.key}")
         }
     }
 
