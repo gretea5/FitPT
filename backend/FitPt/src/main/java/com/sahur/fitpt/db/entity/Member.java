@@ -86,9 +86,6 @@ public class Member {
         this.isDeleted = true;
     }
 
-    // Role 업데이트 메소드
-    public void updateRole(Role role) {
-        this.role = role;
-    }
+
 
 }
