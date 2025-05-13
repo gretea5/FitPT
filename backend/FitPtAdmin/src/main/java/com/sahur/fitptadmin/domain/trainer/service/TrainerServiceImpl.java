@@ -11,6 +11,8 @@ import com.sahur.fitptadmin.domain.trainer.dto.TrainerResponseDto;
 import com.sahur.fitptadmin.domain.trainer.dto.TrainerUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.logging.log4j.util.Base64Util;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +27,7 @@ public class TrainerServiceImpl implements TrainerService {
     private final TrainerRepository trainerRepository;
     private final AdminRepository adminRepository;
     private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public List<TrainerResponseDto> getTrainers(Long adminId) {
@@ -34,7 +37,6 @@ public class TrainerServiceImpl implements TrainerService {
                 .map(trainer -> TrainerResponseDto.builder()
                         .trainerId(trainer.getTrainerId())
                         .trainerLoginId(trainer.getTrainerLoginId())
-                        .trainerPw(trainer.getTrainerPw())
                         .trainerName(trainer.getTrainerName())
                         .build())
                 .toList();
@@ -52,9 +54,11 @@ public class TrainerServiceImpl implements TrainerService {
         Admin admin = adminRepository.findById(trainerRegisterDto.getAdminId())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 관리자입니다."));
 
+        String encodedPassword = passwordEncoder.encode(trainerRegisterDto.getTrainerPw());
+
         Trainer trainer = Trainer.builder()
                 .trainerLoginId(trainerRegisterDto.getTrainerLoginId())
-                .trainerPw(trainerRegisterDto.getTrainerPw())
+                .trainerPw(encodedPassword)
                 .trainerName(trainerRegisterDto.getTrainerName())
                 .admin(admin)
                 .build();
@@ -78,7 +82,13 @@ public class TrainerServiceImpl implements TrainerService {
             throw new IllegalArgumentException("이미 존재하는 로그인 ID입니다.");
         }
 
-        trainer.updateTrainerInfo(trainerUpdateRequestDto.getTrainerName(), trainerUpdateRequestDto.getTrainerLoginId(), trainerUpdateRequestDto.getTrainerPw());
+        String encodedPassword = passwordEncoder.encode(trainerUpdateRequestDto.getTrainerPw());
+
+        trainer.updateTrainerInfo(
+                trainerUpdateRequestDto.getTrainerName(),
+                trainerUpdateRequestDto.getTrainerLoginId(),
+                encodedPassword
+        );
 
         return trainer.getTrainerId();
     }

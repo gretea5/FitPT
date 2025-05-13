@@ -1,7 +1,7 @@
 package com.sahur.fitpt.core.exception;
 
-import lombok.Getter;
 import com.sahur.fitpt.core.constant.ErrorCode;
+import lombok.Getter;
 
 @Getter
 public class CustomException extends RuntimeException {

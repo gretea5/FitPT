@@ -66,9 +66,20 @@ dependencies {
     annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
     annotationProcessor "jakarta.annotation:jakarta.annotation-api"
     annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+
+    // FCM
+    implementation 'com.google.firebase:firebase-admin:9.2.0'
+
+    // OkHttp3
+    // define a BOM and its version
+    implementation(platform("com.squareup.okhttp3:okhttp-bom:4.12.0"))
+
+    // define any required OkHttp artifacts without version
+    implementation("com.squareup.okhttp3:okhttp")
+    implementation("com.squareup.okhttp3:logging-interceptor")
+
 }
 
-tasks.named('test') {
-    useJUnitPlatform()
-}
-
+//tasks.named('test') {
+//    useJUnitPlatform()
+//}

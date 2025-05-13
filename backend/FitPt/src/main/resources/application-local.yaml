@@ -55,11 +55,12 @@ logging:
     org.hibernate.SQL: DEBUG
     org.hibernate.orm.jdbc.bind: TRACE
 
-jwt:
-  secret: ${JWT_SECRET}
-  expiration:
-    access: 3600000 # 1시간
-    refresh: 604800000 #일주일
+firebase:
+  config-path: firebase/firebase_service_key.json
+
+fcm:
+  api-url: ${FCM_API_URL}
+
 
 springdoc:
   swagger-ui:

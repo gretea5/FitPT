@@ -53,6 +53,7 @@ dependencies {
     // 의존성검증
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 
+    implementation 'org.springframework.boot:spring-boot-starter-security'
 }
 
 //tasks.named('test') {

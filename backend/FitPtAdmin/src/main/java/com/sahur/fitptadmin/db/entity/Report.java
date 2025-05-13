@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
@@ -45,4 +44,16 @@ public class Report {
 
     @OneToMany(mappedBy = "report")
     private List<ReportExercise> reportExercises = new ArrayList<>();
+
+    public void updateMember(Member member) {
+        this.member = member;
+    }
+
+    public void updateCompositionLog(CompositionLog compositionLog) {
+        this.compositionLog = compositionLog;
+    }
+
+    public void updateReportComment(String reportComment) {
+        this.reportComment = reportComment;
+    }
 }

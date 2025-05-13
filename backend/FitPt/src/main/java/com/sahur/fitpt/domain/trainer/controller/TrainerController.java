@@ -5,6 +5,7 @@ import com.sahur.fitpt.domain.trainer.dto.TrainerLogoutResponseDto;
 import com.sahur.fitpt.domain.trainer.dto.TrainerSignUpRequestDto;
 import com.sahur.fitpt.domain.trainer.dto.TrainerAuthResponseDto;
 import com.sahur.fitpt.domain.trainer.service.TrainerService;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -12,6 +13,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -4,6 +4,7 @@
       layout:decorate="~{layout/layout}">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     <title>트레이너 목록</title>
     <style>
         * {
@@ -126,9 +127,11 @@
                             <label class="form-label">로그인 ID</label>
                             <input type="text" name="trainerLoginId" class="form-control" required>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label">비밀번호</label>
-                            <input type="password" name="trainerPw" class="form-control" required>
+                        <div class="mb-3 position-relative">
+                            <label class="form-label text-dark">트레이너 비밀번호</label>
+                            <input type="password" class="form-control rounded-3 pe-5" name="trainerPw" id="trainerPwInput" required>
+                            <i class="fa-solid fa-eye position-absolute top-50 end-0 translate-middle-y me-3"
+                               style="cursor: pointer;" onclick="togglePassword(this)"></i>
                         </div>
                         <div th:if="${registerErrorMsg}" class="alert alert-danger" role="alert"
                              th:text="${registerErrorMsg}">
@@ -200,10 +203,11 @@
                                             <input type="text" class="form-control rounded-3"
                                                    name="trainerLoginId" th:value="${trainer.trainerLoginId}" required>
                                         </div>
-                                        <div class="mb-3">
+                                        <div class="mb-3 position-relative">
                                             <label class="form-label text-dark">트레이너 비밀번호</label>
-                                            <input type="text" class="form-control rounded-3"
-                                                   name="trainerPw" th:value="${trainer.trainerPw}" required>
+                                            <input type="password" class="form-control rounded-3 pe-5" name="trainerPw" id="trainerPwInput" required>
+                                            <i class="fa-solid fa-eye position-absolute top-50 end-0 translate-middle-y me-3"
+                                               style="cursor: pointer;" onclick="togglePassword(this)"></i>
                                         </div>
                                         <div th:if="${editErrorMsg}" class="alert alert-danger" role="alert"
                                              th:text="${editErrorMsg}">
@@ -240,9 +244,6 @@
 
                                         <dt class="col-sm-4">로그인 ID</dt>
                                         <dd class="col-sm-8" th:text="${trainer.trainerLoginId}">hong123</dd>
-
-                                        <dt class="col-sm-4">비밀번호</dt>
-                                        <dd class="col-sm-8" th:text="${trainer.trainerPw}"></dd>
                                     </dl>
                                 </div>
 
@@ -301,6 +302,14 @@
                 });
             }
         });
+
+        function togglePassword(icon) {
+            const input = document.getElementById('trainerPwInput');
+            const isPassword = input.type === "password";
+            input.type = isPassword ? "text" : "password";
+            icon.classList.toggle('fa-eye');
+            icon.classList.toggle('fa-eye-slash');
+        }
 
     </script>
 </section>
