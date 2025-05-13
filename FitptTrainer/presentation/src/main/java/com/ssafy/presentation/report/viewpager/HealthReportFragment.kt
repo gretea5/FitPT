@@ -109,4 +109,14 @@ class HealthReportFragment : BaseFragment<FragmentHealthReportBinding>(
             }
         }
     }
+
+    // 모든 근육 선택 가능 여부 설정
+    fun setAllMuscleClickable(flag: Boolean) {
+        muscleViews.forEach { (imageViews, _) ->
+            imageViews.forEach { iv ->
+                iv.isEnabled = flag
+            }
+
+        }
+    }
 }
