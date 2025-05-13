@@ -10,7 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TrainerSignUpRequestDto {
-    private Long adminId;
+    // private Long adminId;
     private String trainerName;
     private String trainerLoginId;
     private String trainerPw;
