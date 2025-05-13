@@ -1,5 +1,6 @@
 package com.ssafy.domain.repository.schedule
 
+import com.ssafy.domain.model.base.ResponseStatus
 import com.ssafy.domain.model.schedule.Schedule
 import kotlinx.coroutines.flow.Flow
 
@@ -9,7 +10,5 @@ interface ScheduleRepository {
         month: String? = null,
         trainerId: Long? = null,
         memberId: Long? = null
-    ): Flow<List<Schedule>>
-
-
+    ): Flow<ResponseStatus<List<Schedule>>>
 }
