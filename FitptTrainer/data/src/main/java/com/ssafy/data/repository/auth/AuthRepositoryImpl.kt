@@ -7,6 +7,9 @@ import com.ssafy.data.network.common.ApiResponseHandler
 import com.ssafy.data.network.common.ApiResponse
 import com.ssafy.data.network.common.ErrorResponse.Companion.toDomainModel
 import com.ssafy.data.network.request.TrainerLoginRequest
+import com.ssafy.data.network.response.TrainerLoginResponse
+import com.ssafy.data.network.response.TrainerLoginResponse.Companion.toDomainModel
+import com.ssafy.domain.model.auth.TrainerLogin
 import com.ssafy.domain.model.base.ResponseStatus
 import com.ssafy.domain.repository.auth.AuthRepository
 import kotlinx.coroutines.flow.Flow
@@ -19,7 +22,7 @@ internal class AuthRepositoryImpl @Inject constructor(
     private val authService: AuthService,
     private val dataStore: TrainerDataStoreSource
 ): AuthRepository {
-    override suspend fun login(trainerLoginId : String, trainerPw: String): Flow<ResponseStatus<Long>> {
+    override suspend fun login(trainerLoginId : String, trainerPw: String): Flow<ResponseStatus<TrainerLogin>> {
         return flow {
             ApiResponseHandler().handle {
                 authService.login(
@@ -32,10 +35,9 @@ internal class AuthRepositoryImpl @Inject constructor(
                 Log.d("AuthRepositoryImpl", "login: $result")
                 when (result) {
                     is ApiResponse.Success -> {
-                        //요청이 성공일때, 토큰이나 사용자 식별자 정보를 저장해야함
-                        val trainerId = result.data as Long
-                        // dataStore.saveUserId(result.data.userId.toLong())
-                        emit(ResponseStatus.Success(trainerId))
+                        dataStore.saveTrainerId(result.data.trainerId.toLong())
+                        dataStore.saveJwtToken(result.data.accessToken)
+                        emit(ResponseStatus.Success(result.data.toDomainModel()))
                     }
                     is ApiResponse.Error -> {
                         emit(ResponseStatus.Error(result.error.toDomainModel()))
