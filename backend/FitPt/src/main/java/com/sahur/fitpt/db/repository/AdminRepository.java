@@ -9,6 +9,6 @@ import java.util.List;
 
 public interface AdminRepository extends JpaRepository<Admin, Long> {
 
-    @Query("SELECT a FROM Admin a WHERE LENGTH(:keyword) >= 2 AND a.gymName LIKE %:keyword% ORDER BY a.gymName ASC")
-    List<Admin> findByGymNameContainingAndKeywordLengthGreaterThanEqual(@Param("keyword") String keyword);
+    @Query("SELECT a FROM Admin a WHERE a.gymName LIKE %:keyword% ORDER BY a.gymName ASC")
+    List<Admin> findByGymNameContainingOrderByGymNameAsc(@Param("keyword") String keyword);
 }
