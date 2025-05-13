@@ -13,9 +13,11 @@ import com.ssafy.presentation.R
 import com.ssafy.presentation.base.BaseFragment
 import com.ssafy.presentation.databinding.FragmentReportEditBinding
 import com.ssafy.presentation.report.adapter.ReportViewPagerAdapter
+import dagger.hilt.android.AndroidEntryPoint
 
 private const val TAG = "ReportEditFragment_FitPT"
 
+@AndroidEntryPoint
 class ReportEditFragment : BaseFragment<FragmentReportEditBinding>(
     FragmentReportEditBinding::bind,
     R.layout.fragment_report_edit

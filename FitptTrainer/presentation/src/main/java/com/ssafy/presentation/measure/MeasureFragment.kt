@@ -9,7 +9,9 @@ import com.ssafy.presentation.R
 import com.ssafy.presentation.base.BaseFragment
 import com.ssafy.presentation.databinding.FragmentMeasureBinding
 import com.ssafy.presentation.databinding.FragmentReportEditBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MeasureFragment : BaseFragment<FragmentMeasureBinding>(
     FragmentMeasureBinding::bind,
     R.layout.fragment_measure

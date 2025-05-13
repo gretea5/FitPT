@@ -6,7 +6,9 @@ import com.ssafy.presentation.R
 import com.ssafy.presentation.databinding.FragmentReportDetailBinding
 
 import com.ssafy.presentation.base.BaseFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ReportDetailFragment : BaseFragment<FragmentReportDetailBinding>(
     FragmentReportDetailBinding::bind,
     R.layout.fragment_report_detail
