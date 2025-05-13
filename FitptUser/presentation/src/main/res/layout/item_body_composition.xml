@@ -73,10 +73,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/white"
-        android:padding="8dp"
         android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@+id/tv_item_value"
-        tools:layout_editor_absoluteX="16dp">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_item_value">
 
         <!-- Container card with rounded corners -->
         <androidx.cardview.widget.CardView
@@ -99,8 +99,8 @@
                     android:id="@+id/btn_midal"
                     android:layout_width="0dp"
                     android:layout_height="40dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginEnd="4dp"
                     app:cardBackgroundColor="#FFA7A7"
                     app:cardCornerRadius="12dp"
                     app:cardElevation="0dp"
@@ -136,8 +136,8 @@
                     android:id="@+id/btn_botong"
                     android:layout_width="0dp"
                     android:layout_height="40dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginEnd="4dp"
                     app:cardBackgroundColor="#7ECEF4"
                     app:cardCornerRadius="12dp"
                     app:cardElevation="0dp"
@@ -170,8 +170,8 @@
                     android:id="@+id/btn_chogwa"
                     android:layout_width="0dp"
                     android:layout_height="40dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginEnd="4dp"
                     app:cardBackgroundColor="#F44336"
                     app:cardCornerRadius="12dp"
                     app:cardElevation="0dp"
@@ -194,8 +194,10 @@
                     android:id="@+id/divider3"
                     android:layout_width="1dp"
                     android:layout_height="0dp"
+                    android:layout_marginEnd="7dp"
                     android:background="#E0E0E0"
                     app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/btn_many_chogwa"
                     app:layout_constraintStart_toStartOf="@+id/guideline3"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -204,8 +206,8 @@
                     android:id="@+id/btn_many_chogwa"
                     android:layout_width="0dp"
                     android:layout_height="40dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginEnd="4dp"
                     app:cardBackgroundColor="#F44336"
                     app:cardCornerRadius="12dp"
                     app:cardElevation="0dp"
@@ -229,21 +231,21 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    app:layout_constraintGuide_begin="97dp" />
+                    app:layout_constraintGuide_begin="95dp" />
 
                 <androidx.constraintlayout.widget.Guideline
                     android:id="@+id/guideline2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    app:layout_constraintGuide_begin="194dp" />
+                    app:layout_constraintGuide_begin="190dp" />
 
                 <androidx.constraintlayout.widget.Guideline
                     android:id="@+id/guideline3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    app:layout_constraintGuide_begin="266dp" />
+                    app:layout_constraintGuide_begin="285dp" />
 
                 <TextView
                     android:id="@+id/score_botong"

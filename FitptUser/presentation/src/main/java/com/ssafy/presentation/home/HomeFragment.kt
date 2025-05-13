@@ -24,6 +24,7 @@ import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
+import com.github.mikephil.charting.formatter.ValueFormatter
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.DayPosition
 import com.ssafy.presentation.R
@@ -35,6 +36,8 @@ import com.kizitonwose.calendar.core.daysOfWeek
 import com.kizitonwose.calendar.view.MonthDayBinder
 import com.kizitonwose.calendar.view.ViewContainer
 import com.ssafy.data.datasource.UserDataStoreSource
+import com.ssafy.domain.model.measure_record.MeasureRecordItem
+import com.ssafy.domain.model.measure_record.MesureDetail
 import com.ssafy.locket.utils.CalendarUtils.displayText
 import com.ssafy.presentation.databinding.CalendarDayBinding
 import com.ssafy.presentation.home.viewModel.OpenDialogState
@@ -42,12 +45,16 @@ import com.ssafy.presentation.home.viewModel.SelectedDayState
 import com.ssafy.presentation.home.viewModel.SelectedDayViewModel
 import com.ssafy.presentation.home.viewModel.UserInfoState
 import com.ssafy.presentation.home.viewModel.UserInfoViewModel
+import com.ssafy.presentation.measurement_record.adapter.MeasureListAdapter
+import com.ssafy.presentation.measurement_record.viewModel.GetBodyListInfoState
+import com.ssafy.presentation.measurement_record.viewModel.MeasureViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.yield
 import java.time.DayOfWeek
+import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
@@ -70,21 +77,28 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
     private val selectedDayViewModel: SelectedDayViewModel by activityViewModels()
 
     private val userInfoViewModel: UserInfoViewModel by activityViewModels()
+    private val measureViewModel: MeasureViewModel by activityViewModels()
+    //차트
+    private val chartDates = mutableListOf<String>() // X축 날짜
+
+    private val weightEntries = mutableListOf<Entry>()
+    private val skeletalMuscleEntries = mutableListOf<Entry>()
+    private val bodyFatEntries = mutableListOf<Entry>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         observeModel()
         initEvent()
         initCalendar()
-        //initView()
         lineChart = binding.chartBodyGraph
-        setupLineChart()
-        setLineChartData()
         setupTabButtons()
         // 초기 선택 버튼 설정 (몸무게)
         selectButton(binding.btnWeight)
         // 차트를 보이게 설정
         lineChart.visibility = View.VISIBLE
+        lineChart.setScaleEnabled(false)
+        lineChart.setPinchZoom(false)
+        lineChart.setDoubleTapToZoomEnabled(false)
     }
 
     fun initEvent(){
@@ -93,6 +107,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
         binding.ivNotificationMove.setOnClickListener {
             findNavController().navigate(R.id.action_home_fragment_to_notification_fragment)
         }
+        measureViewModel.getBodyList("createdAt","asc")
     }
 
 
@@ -244,59 +259,26 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
         }
     }
 
-    /*
-    fun initView(){
-        val text = "김동현님의 체성분 그래프"
-        val spannableString = SpannableString(text)
-
-        val start = text.indexOf("김동현")
-        val end = start + "김동현".length
-        spannableString.setSpan(
-            ForegroundColorSpan(ContextCompat.getColor(requireContext(), R.color.highlight_green)), // 원하는 색으로 변경
-            start,
-            end,
-            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-        )
-        binding.tvBodyGraph.text = spannableString
-
-        val text2 = "김동현님의 PT 일정"
-        val spannableString2 = SpannableString(text2)
-        val start2 = text2.indexOf("김동현")
-        val end2 = start2 + "김동현".length
-        spannableString2.setSpan(
-            ForegroundColorSpan(ContextCompat.getColor(requireContext(), R.color.highlight_green)), // 원하는 색으로 변경
-            start2,
-            end2,
-            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-        )
-        binding.tvPtCalendar.text = spannableString2
-    }*/
-
     private fun setupTabButtons() {
         val buttons = listOf(
             binding.btnSkeletalMuscle,
             binding.btnWeight,
-            binding.btnBmi,
             binding.btnBodyFat
         )
 
         buttons.forEach { button ->
             button.setOnClickListener {
                 selectButton(button)
-
                 // 여기에 각 버튼에 맞는 데이터/화면 변경 로직 추가
                 when (button.id) {
                     R.id.btn_skeletal_muscle -> {
-                        // 골격근량 데이터 표시
+                      showSkeletalMuscleData()
                     }
                     R.id.btn_weight -> {
-                        // 몸무게 데이터 표시
-                    }
-                    R.id.btn_bmi -> {
-                        // BMI 데이터 표시
+                        showWeightData()
                     }
                     R.id.btn_body_fat -> {
-                        // 체지방량 데이터 표시
+                        showBodyFatData()
                     }
                 }
             }
@@ -310,97 +292,169 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
 
 
     //차트 관련한 코드
-    private fun setupLineChart() {
-        lineChart.apply {
-            // 차트 설명 텍스트 숨기기
-            description.isEnabled = false
-
-            // 차트 오른쪽 Y축 숨기기
-            axisRight.isEnabled = false
-
-            // 터치 제스처 설정
-            setTouchEnabled(true)
-            setPinchZoom(false)
-            setScaleEnabled(false)
-
-            // 배경 격자 설정
-            setDrawGridBackground(false)
-
-            // 범례 숨기기
-            legend.isEnabled = false
-
-            // X축 설정
-            xAxis.apply {
-                position = XAxis.XAxisPosition.BOTTOM
-                textColor = Color.parseColor("#AAAAAA")
-                textSize = 12f
-                granularity = 1f
-                setDrawGridLines(false)
-
-                // X축 날짜 데이터 설정
-                val dates = arrayOf("01/10", "01/25", "02/11", "02/19", "03/13", "03/27", "04/01", "04/12", "04/22")
-                valueFormatter = IndexAxisValueFormatter(dates)
-            }
-
-            // Y축 설정
-            axisLeft.apply {
-                textColor = Color.parseColor("#AAAAAA")
-                textSize = 12f
-                granularity = 25f
-                axisMinimum = 0f
-                axisMaximum = 100f
-                setDrawGridLines(true)
-                gridColor = Color.parseColor("#DDDDDD")
-                gridLineWidth = 0.5f
-
-                // Y축 수치 설정 (0, 25, 50, 75, 100)
-                setLabelCount(5, true)
-            }
-
-            // 애니메이션 설정
-            //animateX(1000)
-        }
-    }
-
-    private fun setLineChartData() {
-        // 데이터 포인트 생성
-        val entries = ArrayList<Entry>().apply {
-            add(Entry(0f, 10f))    // 01/10, 값: 10
-            add(Entry(1f, 30f))    // 01/25, 값: 30
-            add(Entry(2f, 50f))    // 02/11, 값: 50
-            add(Entry(3f, 45f))    // 02/19, 값: 45
-            add(Entry(4f, 40f))    // 03/13, 값: 40
-            add(Entry(5f, 60f))    // 03/27, 값: 60
-            add(Entry(6f, 80f))    // 04/01, 값: 80
-            add(Entry(7f, 75f))    // 04/12, 값: 75
-            add(Entry(8f, 85f))    // 04/22, 값: 85
-        }
-
-        // 데이터셋 생성 및 스타일 설정
-        val dataSet = LineDataSet(entries, "데이터셋").apply {
-            // 선 스타일 설정
-            color = Color.parseColor("#FF5722")  // 주황-빨강 계열 색상
+    private fun showWeightData() {
+        Log.d(TAG, "Weight Entries: $weightEntries")
+        val weightDataSet = LineDataSet(weightEntries, "체중(kg)").apply {
+            color = Color.parseColor("#FF5722")
             lineWidth = 2.5f
-            mode = LineDataSet.Mode.CUBIC_BEZIER  // 곡선으로 표현
-
-            // 선 아래 영역 채우기 설정
+            mode = LineDataSet.Mode.CUBIC_BEZIER
             setDrawFilled(true)
             fillDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.fade_red)
-
-            // 원형 포인트 설정
             setDrawCircles(true)
             setCircleColor(Color.WHITE)
             circleRadius = 4f
             setCircleHoleColor(Color.parseColor("#FF5722"))
             circleHoleRadius = 2f
-
-            // 값 텍스트 숨기기
             setDrawValues(false)
         }
 
-        // 차트에 데이터 설정
-        lineChart.data = LineData(dataSet)
-        lineChart.invalidate()  // 차트 갱신
+        lineChart.apply {
+            data = LineData(weightDataSet)
+            axisLeft.apply {
+                valueFormatter = object : ValueFormatter() {
+                    override fun getFormattedValue(value: Float): String {
+                        return "${value.toInt()} kg" // kg 단위 추가
+                    }
+                }
+            }
+            setupChartForWeight() // 몸무게용 설정
+            invalidate()
+        }
+    }
+
+    private fun showSkeletalMuscleData() {
+        Log.d(TAG, "Skeleton Entries: ${skeletalMuscleEntries}Entries")
+        val skeletalMuscleDataSet = LineDataSet(skeletalMuscleEntries, "골격근량(kg)").apply {
+            color = Color.parseColor("#4CAF50")
+            lineWidth = 2.5f
+            mode = LineDataSet.Mode.CUBIC_BEZIER
+            setDrawFilled(true)
+            fillDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.fade_red)
+            setDrawCircles(true)
+            setCircleColor(Color.WHITE)
+            circleRadius = 4f
+            setCircleHoleColor(Color.parseColor("#4CAF50"))
+            circleHoleRadius = 2f
+            setDrawValues(false)
+        }
+
+        lineChart.apply {
+            data = LineData(skeletalMuscleDataSet)
+            axisLeft.apply {
+                valueFormatter = object : ValueFormatter() {
+                    override fun getFormattedValue(value: Float): String {
+                        return "${value.toInt()} kg" // kg 단위 추가
+                    }
+                }
+            }
+            setupChartForSkeletalMuscle() // 골격근량용 설정
+            invalidate()
+        }
+    }
+
+    private fun showBodyFatData() {
+        val bodyFatDataSet = LineDataSet(bodyFatEntries, "체지방량(kg)").apply {
+            color = Color.parseColor("#2196F3")
+            lineWidth = 2.5f
+            mode = LineDataSet.Mode.CUBIC_BEZIER
+            setDrawFilled(true)
+            fillDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.fade_red)
+            setDrawCircles(true)
+            setCircleColor(Color.WHITE)
+            circleRadius = 4f
+            setCircleHoleColor(Color.parseColor("#2196F3"))
+            circleHoleRadius = 2f
+            setDrawValues(false)
+        }
+
+        lineChart.apply {
+            data = LineData(bodyFatDataSet)
+            setupChartForBodyFat() // 체지방량용 설정
+            invalidate()
+        }
+    }
+
+    private fun setupChartForWeight() {
+        lineChart.apply {
+            axisLeft.apply {
+                val minY = weightEntries.minOf { it.y }
+                val maxY = weightEntries.maxOf { it.y }
+                val buffer = (maxY - minY) * 0.2f
+                axisMinimum = (minY - buffer).coerceAtLeast(0f)
+                axisMaximum = maxY + buffer
+                granularity = ((maxY - minY) / 4).coerceAtLeast(1f)
+                setLabelCount(5, true)
+            }
+
+            xAxis.apply {
+                position = XAxis.XAxisPosition.BOTTOM
+                textColor = Color.parseColor("#AAAAAA")
+                textSize = 12f
+                granularity = 1f
+                setDrawGridLines(false) // 격자 선 비활성화
+                valueFormatter = IndexAxisValueFormatter(chartDates) // 날짜 표시
+            }
+
+            axisRight.isEnabled = false // 오른쪽 축 비활성화
+            setDrawGridBackground(false) // 배경 격자선 비활성화
+        }
+    }
+
+    private fun setupChartForSkeletalMuscle() {
+        lineChart.apply {
+            axisLeft.apply {
+                val minSkeletalMuscle = skeletalMuscleEntries.minOf { it.y }
+                val maxSkeletalMuscle = skeletalMuscleEntries.maxOf { it.y }
+                val buffer = (maxSkeletalMuscle - minSkeletalMuscle) * 0.2f
+                axisMinimum = (minSkeletalMuscle - buffer).coerceAtLeast(0f)
+                axisMaximum = maxSkeletalMuscle + buffer
+                granularity = ((maxSkeletalMuscle - minSkeletalMuscle) / 4).coerceAtLeast(1f)
+                setLabelCount(5, true)
+            }
+
+            xAxis.apply {
+                position = XAxis.XAxisPosition.BOTTOM
+                textColor = Color.parseColor("#AAAAAA")
+                textSize = 12f
+                granularity = 1f
+                setDrawGridLines(false) // 격자 선 비활성화
+                valueFormatter = IndexAxisValueFormatter(chartDates) // 날짜 표시
+            }
+
+            axisRight.isEnabled = false // 오른쪽 축 비활성화
+            setDrawGridBackground(false) // 배경 격자선 비활성화
+        }
+    }
+
+    private fun setupChartForBodyFat() {
+        lineChart.apply {
+            axisLeft.apply {
+                val minBodyFat = bodyFatEntries.minOf { it.y }
+                val maxBodyFat = bodyFatEntries.maxOf { it.y }
+                val buffer = (maxBodyFat - minBodyFat) * 0.2f
+                axisMinimum = (minBodyFat - buffer).coerceAtLeast(0f)
+                axisMaximum = maxBodyFat + buffer
+                granularity = ((maxBodyFat - minBodyFat) / 4).coerceAtLeast(1f)
+                setLabelCount(5, true)
+                valueFormatter = object : ValueFormatter() {
+                    override fun getFormattedValue(value: Float): String {
+                        return "${value.toInt()}%"
+                    }
+                }
+            }
+
+            xAxis.apply {
+                position = XAxis.XAxisPosition.BOTTOM
+                textColor = Color.parseColor("#AAAAAA")
+                textSize = 12f
+                granularity = 1f
+                setDrawGridLines(false) // 격자 선 비활성화
+                valueFormatter = IndexAxisValueFormatter(chartDates) // 날짜 표시
+            }
+
+            axisRight.isEnabled = false // 오른쪽 축 비활성화
+            setDrawGridBackground(false) // 배경 격자선 비활성화
+        }
     }
 
     fun observeModel() {
@@ -408,12 +462,55 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 userInfoViewModel.userInfo.collect { user ->
                     if (user is UserInfoState.Success) {
-
                         binding.tvBodyGraph.text = user.userInfo.memberName+"님의 체성분 그래프"
                         binding.tvPtCalendar.text = user.userInfo.memberName+"님의 PT 일정"
                     }
                     else{
                         Log.d(TAG,"실패")
+                    }
+                }
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                measureViewModel.getBodyListInfo.collect { state ->
+                    when (state) {
+                        is GetBodyListInfoState.Loading -> {
+                            Log.d(TAG, "로딩 중...")
+                        }
+                        is GetBodyListInfoState.Success -> {
+                            val list = state.getBodyList
+                            Log.d(TAG, "데이터 수신 성공: $list")
+
+                            // 데이터 정렬 (날짜 순)
+                            val sortedList = list.sortedBy { it.weight }
+
+                            chartDates.clear()
+                            weightEntries.clear()
+                            skeletalMuscleEntries.clear()
+                            bodyFatEntries.clear()
+
+                            sortedList.forEachIndexed { index, bodyInfo ->
+                                try {
+                                    val outputFormatter = DateTimeFormatter.ofPattern("MM-dd")
+                                    val dateTime = LocalDateTime.parse(bodyInfo.createdAt) // ISO 형식 자동 파싱
+                                    val formattedDate = dateTime.format(outputFormatter)
+                                    chartDates.add(formattedDate)
+                                    weightEntries.add(Entry(index.toFloat(), bodyInfo.weight.toFloat()))
+                                    skeletalMuscleEntries.add(Entry(index.toFloat(), bodyInfo.bfp.toFloat()))
+                                    bodyFatEntries.add(Entry(index.toFloat(), bodyInfo.smm.toFloat()))
+                                } catch (e: Exception) {
+                                    Log.e(TAG, "날짜 파싱 오류: ${e.message}")
+                                }
+                            }
+                            showWeightData()
+                        }
+                        is GetBodyListInfoState.Error -> {
+                            Log.d(TAG, "에러: ${state.message}")
+                        }
+
+                        else -> Unit
                     }
                 }
             }

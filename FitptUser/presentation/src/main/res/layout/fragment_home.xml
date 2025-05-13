@@ -54,7 +54,18 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:paddingHorizontal="16dp">
-
+            <Button
+                android:id="@+id/btn_weight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="몸무게"
+                app:backgroundTint="@null"
+                android:textColor="@color/tab_button_selector"
+                android:background="@drawable/tab_button_selector"
+                android:textSize="16sp"
+                android:paddingHorizontal="20dp"
+                android:stateListAnimator="@null" />
             <Button
                 android:id="@+id/btn_skeletal_muscle"
                 android:layout_width="wrap_content"
@@ -68,31 +79,6 @@
                 android:paddingHorizontal="20dp"
                 android:stateListAnimator="@null" />
 
-            <Button
-                android:id="@+id/btn_weight"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:text="몸무게"
-                app:backgroundTint="@null"
-                android:textColor="@color/tab_button_selector"
-                android:background="@drawable/tab_button_selector"
-                android:textSize="16sp"
-                android:paddingHorizontal="20dp"
-                android:stateListAnimator="@null" />
-
-            <Button
-                android:id="@+id/btn_bmi"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:text="BMI"
-                android:textColor="@color/tab_button_selector"
-                android:textSize="16sp"
-                app:backgroundTint="@null"
-                android:background="@drawable/tab_button_selector"
-                android:paddingHorizontal="20dp"
-                android:stateListAnimator="@null" />
             <Button
                 android:id="@+id/btn_body_fat"
                 android:layout_width="wrap_content"
