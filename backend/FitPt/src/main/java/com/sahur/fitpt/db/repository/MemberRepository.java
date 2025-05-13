@@ -30,6 +30,12 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
             "WHERE m.memberName = :memberName AND m.isDeleted = false")
     Optional<Member> findByMemberName(@Param("memberName") String memberName);
 
+    @Query("SELECT m FROM Member m " +
+            "LEFT JOIN FETCH m.admin " +
+            "LEFT JOIN FETCH m.trainer " +
+            "WHERE m.kakaoId = :kakaoId AND m.isDeleted = false")
+    Optional<Member> findByKakaoId(@Param("kakaoId") Long kakaoId);
+
     boolean existsByMemberIdAndTrainerTrainerId(Long memberId, Long trainerId);
 }
 

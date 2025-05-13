@@ -34,9 +34,6 @@ public class AuthService {
 
     /**
      * 카카오 로그인 처리
-     * 1. 카카오 액세스 토큰으로 사용자 정보 조회
-     * 2. 회원가입 또는 로그인 처리
-     * 3. JWT 토큰 발급
      */
     @Transactional
     public KakaoLoginResponseDto kakaoLogin(String kakaoAccessToken) {
@@ -44,7 +41,7 @@ public class AuthService {
         KakaoUserInfo kakaoUserInfo = getKakaoUserInfo(kakaoAccessToken);
 
         // 회원 조회 또는 생성
-        Member member = memberRepository.findByMemberName(kakaoUserInfo.getProperties().getNickname())
+        Member member = memberRepository.findByKakaoId(kakaoUserInfo.getId())
                 .orElseGet(() -> createMember(kakaoUserInfo));
 
         // JWT 토큰 생성
@@ -64,7 +61,6 @@ public class AuthService {
 
     /**
      * 카카오 사용자 정보 조회
-     * 카카오 API를 호출하여 사용자 정보를 가져옴
      */
     private KakaoUserInfo getKakaoUserInfo(String kakaoAccessToken) {
         try {
@@ -91,12 +87,12 @@ public class AuthService {
 
     /**
      * 신규 회원 생성
-     * 카카오 사용자 정보를 기반으로 새로운 회원 생성
      */
     private Member createMember(KakaoUserInfo kakaoUserInfo) {
         Member member = Member.builder()
+                .kakaoId(kakaoUserInfo.getId())
                 .memberName(kakaoUserInfo.getProperties().getNickname())
-                .role(Role.MEMBER) // 기본 역할은 MEMBER로 설정
+                .role(Role.MEMBER)
                 .isDeleted(false)
                 .build();
 
@@ -105,7 +101,6 @@ public class AuthService {
 
     /**
      * Refresh 토큰 저장
-     * Redis에 Refresh 토큰을 저장하고 만료 시간 설정
      */
     private void storeRefreshToken(Long memberId, String refreshToken) {
         redisTemplate.opsForValue().set(
@@ -118,7 +113,6 @@ public class AuthService {
 
     /**
      * 로그아웃 처리
-     * Access 토큰을 블랙리스트에 추가하고 Refresh 토큰 삭제
      */
     public void logout(Long memberId, String accessToken) {
         // Access 토큰 블랙리스트 추가
@@ -135,9 +129,11 @@ public class AuthService {
 
     /**
      * 토큰 재발급
-     * Refresh 토큰을 검증하고 새로운 Access 토큰 발급
      */
-    public String reissueAccessToken(Long memberId, String refreshToken) {
+    public KakaoLoginResponseDto refreshToken(String refreshToken) {
+        // Refresh 토큰에서 memberId 추출
+        Long memberId = jwtUtil.getMemberId(refreshToken);
+
         // Redis에서 저장된 Refresh 토큰 조회
         String storedRefreshToken = redisTemplate.opsForValue().get("RT:" + memberId);
 
@@ -148,6 +144,18 @@ public class AuthService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 
-        return jwtUtil.createAccessToken(memberId, member.getRole().getKey());
+        // 새로운 토큰 세트 발급
+        String newAccessToken = jwtUtil.createAccessToken(memberId, member.getRole().getKey());
+        String newRefreshToken = jwtUtil.createRefreshToken();
+
+        // Redis 업데이트
+        storeRefreshToken(memberId, newRefreshToken);
+
+        return KakaoLoginResponseDto.builder()
+                .memberId(member.getMemberId())
+                .memberName(member.getMemberName())
+                .accessToken(newAccessToken)
+                .refreshToken(newRefreshToken)
+                .build();
     }
 }
