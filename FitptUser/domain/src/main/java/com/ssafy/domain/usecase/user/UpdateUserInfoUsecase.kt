@@ -10,7 +10,6 @@ import javax.inject.Inject
 
 class UpdateUserInfoUsecase @Inject constructor(private val userRepository: UserRepository, private val dataStoreRepository: DataStoreRepository){
     suspend operator fun invoke(userInfo: UserInfo): Flow<ResponseStatus<Unit>> {
-        val memberId = dataStoreRepository.userId.firstOrNull() ?: -1
-        return userRepository.updateUserInfo(3, userInfo)
+        return userRepository.updateUserInfo(userInfo)
     }
 }

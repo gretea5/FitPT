@@ -10,9 +10,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
 import javax.inject.Inject
 
-class GetUserInfoUsecase @Inject constructor(private val userRepository: UserRepository, private val dataStoreRepository: DataStoreRepository){
+class GetUserInfoUsecase @Inject constructor(private val userRepository: UserRepository){
     suspend operator fun invoke(): Flow<ResponseStatus<UserInfo>> {
-        val memberId = dataStoreRepository.userId.firstOrNull() ?: -1
-        return userRepository.getUserInfo(3)
+        return userRepository.getUserInfo()
     }
 }

@@ -407,6 +407,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 userInfoViewModel.userInfo.collect { user ->
                     if (user is UserInfoState.Success) {
+
                         binding.tvBodyGraph.text = user.userInfo.memberName+"님의 체성분 그래프"
                         binding.tvPtCalendar.text = user.userInfo.memberName+"님의 PT 일정"
                     }

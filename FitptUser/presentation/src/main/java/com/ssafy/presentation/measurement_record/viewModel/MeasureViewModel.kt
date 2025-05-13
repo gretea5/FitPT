@@ -1,4 +1,4 @@
-package com.ssafy.presentation.measure.viewModel
+package com.ssafy.presentation.measurement_record.viewModel
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -8,6 +8,7 @@ import com.ssafy.domain.model.base.ResponseStatus
 import com.ssafy.domain.model.login.UserInfo
 import com.ssafy.domain.model.measure.CompositionDetail
 import com.ssafy.domain.model.measure.CompositionItem
+import com.ssafy.domain.model.measure_record.MesureDetail
 import com.ssafy.domain.usecase.measure.CreateBodyUsecase
 import com.ssafy.domain.usecase.measure.GetBodyDetailUsecase
 import com.ssafy.domain.usecase.measure.GetBodyListUsecase
@@ -37,6 +38,10 @@ class MeasureViewModel @Inject constructor(
     private val _getBodyDetailInfo = MutableStateFlow<GetBodyDetailInfoState>(GetBodyDetailInfoState.Initial)
     val getBodyDetailInfo: StateFlow<GetBodyDetailInfoState> = _getBodyDetailInfo.asStateFlow()
 
+    private val _measureDetailInfo = MutableStateFlow<MesureDetail?>(null)
+    val measureDetailInfo: StateFlow<MesureDetail?> = _measureDetailInfo.asStateFlow()
+
+
     fun setLoading() {
         _getBodyListInfo.value = GetBodyListInfoState.Loading
     }
@@ -59,12 +64,23 @@ class MeasureViewModel @Inject constructor(
                             _getBodyListInfo.value = GetBodyListInfoState.Success(uiState.data)
                         }
                         is ResponseStatus.Error -> {
-                            _getBodyListInfo.value = GetBodyListInfoState.Error(uiState.error.message)
+                            Log.d(TAG,uiState.error.message)
+                            _getBodyListInfo.value =
+                                GetBodyListInfoState.Error(uiState.error.message)
                         }
-                        else -> Log.d("UserFragment", "fetchUser: else error")
+                        else -> Log.d("MeasureViewModel", "fetchUser: else error")
                     }
                 }
         }
+    }
+
+
+    fun setMeasureDetailInfo(measureDetail: MesureDetail) {
+        _measureDetailInfo.value = measureDetail
+    }
+
+    fun resetMeasureDetailInfo() {
+        _measureDetailInfo.value = null
     }
 }
 

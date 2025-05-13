@@ -64,29 +64,12 @@ object CommonUtils {
         }
     }
 
-    fun dateformatYMDHMFromInt(year: Int, month: Int, day: Int):String{
-//        val format = SimpleDateFormat("yyyy.MM.dd. HH:mm", Locale.KOREA)
-//        format.timeZone = TimeZone.getTimeZone("Asia/Seoul")
-//        return format.format(time)
-        return "${year}.${month}.${day}."
-    }
+    fun formatCreatedAt(isoDateTime: String): String {
+        val inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS", Locale.KOREAN)
+        val outputFormatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 a hh:mm", Locale.KOREAN)
 
-    //날짜 포맷 출력
-    fun dateformatYMDHM(time:Date):String{
-        val format = SimpleDateFormat("yyyy.MM.dd. HH:mm", Locale.KOREA)
-        format.timeZone = TimeZone.getTimeZone("Asia/Seoul")
-        return format.format(time)
-    }
-
-    fun dateformatYMD(time: Date):String{
-        val format = SimpleDateFormat("yyyy.MM.dd", Locale.KOREA)
-        format.timeZone = TimeZone.getTimeZone("Asia/Seoul")
-        return format.format(time)
-    }
-
-    fun formatLongToDate(longDate: Long): String {
-        val format = SimpleDateFormat("yyyy.MM.dd HH:mm", Locale.getDefault())  // 원하는 날짜 형식 지정
-        return format.format(Date(longDate))  // Long 값을 Date 객체로 변환 후 포맷 적용
+        val dateTime = LocalDateTime.parse(isoDateTime, inputFormatter)
+        return dateTime.format(outputFormatter)
     }
 
     fun formatNumber(number: String): String {

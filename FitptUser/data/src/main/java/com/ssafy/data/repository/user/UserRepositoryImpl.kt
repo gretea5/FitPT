@@ -18,6 +18,7 @@ import com.ssafy.domain.repository.user.UserRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
@@ -28,10 +29,11 @@ internal class UserRepositoryImpl @Inject constructor(
     private val dataStore: UserDataStoreSource
 ): UserRepository {
 
-    override suspend fun getUserInfo(memberId: Int): Flow<ResponseStatus<UserInfo>> {
+    override suspend fun getUserInfo(): Flow<ResponseStatus<UserInfo>> {
         return flow {
             val result = ApiResponseHandler().handle {
-                userService.getUserInfo(memberId)
+                val memberId = dataStore.user.firstOrNull()!!.memberId
+                userService.getUserInfo(3)
             }.first() // ✅ 첫 번째 값만 가져옴
             when (result) {
                 is ApiResponse.Success -> emit(ResponseStatus.Success(result.data.toDomainModel()))
@@ -41,11 +43,11 @@ internal class UserRepositoryImpl @Inject constructor(
     }
 
     override suspend fun updateUserInfo(
-        memberId: Int,
         userInfo: UserInfo): Flow<ResponseStatus<Unit>> {
         return flow {
             val result = ApiResponseHandler().handle {
-                userService.updateUserInfo(memberId,
+                val memberId = dataStore.user.firstOrNull()!!.memberId
+                userService.updateUserInfo(3,
                     UserRequest(
                         adminId = userInfo.admin.toLong(),
                         memberBirth = userInfo.memberBirth,

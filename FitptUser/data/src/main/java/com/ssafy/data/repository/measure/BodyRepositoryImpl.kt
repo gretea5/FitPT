@@ -13,24 +13,29 @@ import com.ssafy.domain.repository.measure.BodyRepository
 import com.ssafy.domain.repository.user.UserRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
+import android.util.Log
 
+private const val TAG = "BodyRepositoryImpl"
 internal class BodyRepositoryImpl  @Inject constructor(
     private val bodyService: BodyService,
     private val dataStore: UserDataStoreSource
 ): BodyRepository {
     override suspend fun getBodyList(
-        memberId: Int,
         sort: String,
         order: String
     ): Flow<ResponseStatus<List<CompositionItem>>> {
         return flow {
             val result = ApiResponseHandler().handle {
-                bodyService.getBodyList(memberId,sort,order)
+                val user = dataStore.user.firstOrNull()
+                Log.d(TAG,user.toString())
+                bodyService.getBodyList(3,sort,order)
             }.first() // ✅ 첫 번째 값만 가져옴
             when (result) {
-                is ApiResponse.Success -> emit(ResponseStatus.Success(result.data))
+                is ApiResponse.Success ->
+                    emit(ResponseStatus.Success(result.data))
                 is ApiResponse.Error -> emit(ResponseStatus.Error(result.error.toDomainModel()))
             }
         }

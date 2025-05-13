@@ -9,10 +9,11 @@ import com.ssafy.domain.repository.user.UserRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
 import javax.inject.Inject
+import android.util.Log
 
-class GetBodyListUsecase @Inject constructor(private val bodyRepository: BodyRepository, private val dataStoreRepository: DataStoreRepository){
+private const val TAG = "GetBodyListUsecase"
+class GetBodyListUsecase @Inject constructor(private val bodyRepository: BodyRepository){
     suspend operator fun invoke(sort :String,order: String): Flow<ResponseStatus<List<CompositionItem>>> {
-        val memberId = dataStoreRepository.userId.firstOrNull() ?: -1
-        return bodyRepository.getBodyList(memberId.toInt(),sort,order)
+        return bodyRepository.getBodyList(sort,order)
     }
 }

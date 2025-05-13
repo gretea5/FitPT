@@ -19,6 +19,7 @@ data class GetUserInfoResponse(
     companion object : DataMapper<GetUserInfoResponse, UserInfo> {
         override fun GetUserInfoResponse.toDomainModel(): UserInfo {
             return UserInfo(
+                memberId = this.memberId,
                 admin = this.adminId,
                 memberName = this.memberName,
                 memberGender = this.memberGender,

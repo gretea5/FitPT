@@ -5,6 +5,7 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class UserInfo(
+    val memberId: Int = 0 ,
     val admin: Int = 0,
     val memberName: String = "",
     val memberGender: String = "",
