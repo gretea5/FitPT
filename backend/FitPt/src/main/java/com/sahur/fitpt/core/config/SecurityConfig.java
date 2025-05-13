@@ -43,6 +43,7 @@ public class SecurityConfig {
                                 "/api/auth/**",          // 인증 관련 API
                                 "/api/trainers/login",
                                 "/api/test/**",
+                                "/api/gyms",          // 체육관 키워드 검색 API
                                 "/swagger-ui/**",        // Swagger UI
                                 "/swagger/**",
                                 "/swagger-ui.html",

@@ -27,6 +27,7 @@ public enum ErrorCode {
     ADMIN_NOT_FOUND("해당 관리자를 찾을 수 없습니다", HttpStatus.NOT_FOUND),
     COMPOSITION_NOT_FOUND("해당 체성분 정보를 찾을 수 없습니다", HttpStatus.NOT_FOUND),
     REPORT_NOT_FOUND("해당 보고서 찾을 수 없습니다", HttpStatus.NOT_FOUND),
+    GYM_NOT_FOUND("검색 결과가 없습니다", HttpStatus.NOT_FOUND),
 
     // 409 CONFLICT
     DUPLICATE_MEMBER("이미 존재하는 회원입니다", HttpStatus.CONFLICT),

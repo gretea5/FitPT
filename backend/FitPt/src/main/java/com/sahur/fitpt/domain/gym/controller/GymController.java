@@ -31,10 +31,10 @@ public class GymController {
     @Operation(summary = "체육관 검색", description = "키워드로 체육관을 검색합니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "검색 성공"),
-            @ApiResponse(responseCode = "400", description = "잘못된 요청 (2글자 미만의 검색어)")
+            @ApiResponse(responseCode = "400", description = "잘못된 요청")
     })
     public ResponseEntity<List<GymResponseDto>> searchGyms(
-            @Parameter(description = "검색 키워드 (2글자 이상)", required = true)
+            @Parameter(description = "검색 키워드", required = true)
             @RequestParam String keyword) {
         return ResponseEntity.ok(gymService.searchGymsByKeyword(keyword));
     }
