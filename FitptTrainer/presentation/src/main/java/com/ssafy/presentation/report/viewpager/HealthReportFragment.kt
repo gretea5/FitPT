@@ -112,6 +112,47 @@ class HealthReportFragment : BaseFragment<FragmentHealthReportBinding>(
         }
     }
 
+    private fun observeViewModel() {
+        reportViewModel.isAddButtonEnabled.observe(viewLifecycleOwner) { isEnabled ->
+            binding.ibReportHealthWorkoutAdd.apply {
+                isClickable = isEnabled
+                setImageResource(
+                    if (isEnabled) R.drawable.ib_report_workout_add_on
+                    else R.drawable.ib_report_workout_add_off
+                )
+            }
+        }
+    }
+
+    private fun initRecyclerView() {
+        val initialList = mutableListOf<WorkoutItem>()
+
+        healthReportAdapter = HealthReportAdapter(initialList) {
+            updateAddButtonState()
+        }
+        binding.rvReportWorkoutList.adapter = healthReportAdapter
+        binding.rvReportWorkoutList.layoutManager = LinearLayoutManager(requireContext())
+    }
+
+    private fun updateAddButtonState() {
+        val lastItem = healthReportAdapter.items.lastOrNull()
+        val isValid = lastItem?.isEditing == true &&
+                lastItem.name.isNotBlank() &&
+                lastItem.score.isNotBlank()
+
+        binding.ibReportHealthWorkoutAdd.apply {
+            isEnabled = isValid
+            setImageResource(
+                if (isValid) R.drawable.ib_report_workout_add_on
+                else R.drawable.ib_report_workout_add_off
+            )
+        }
+
+        // ViewModel에도 반영
+        reportViewModel.updateName(lastItem?.name ?: "")
+        reportViewModel.updateScore(lastItem?.score ?: "")
+    }
+
     // 근육 초기화 설정
     private fun initMuscles() {
         binding.apply {
