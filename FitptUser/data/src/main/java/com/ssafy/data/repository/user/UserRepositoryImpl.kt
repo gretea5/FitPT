@@ -67,6 +67,19 @@ internal class UserRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun deleteUserInfo(): Flow<ResponseStatus<Unit>> {
+        return flow {
+            val result = ApiResponseHandler().handle {
+                val memberId = dataStore.user.firstOrNull()!!.memberId
+                userService.deleteUserInfo(memberId)
+            }.first() // ✅ 첫 번째 값만 가져옴
+            when (result) {
+                is ApiResponse.Success -> emit(ResponseStatus.Success(Unit))
+                is ApiResponse.Error -> emit(ResponseStatus.Error(result.error.toDomainModel()))
+            }
+        }
+    }
+
     /*override suspend fun login(accessToken: String): Flow<ResponseStatus<JwtToken>> {
         return flow {
             ApiResponseHandler().handle {

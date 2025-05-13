@@ -8,4 +8,5 @@ import kotlinx.coroutines.flow.Flow
 interface UserRepository {
     suspend fun getUserInfo(): Flow<ResponseStatus<UserInfo>>
     suspend fun updateUserInfo(userInfo: UserInfo): Flow<ResponseStatus<Unit>>
+    suspend fun deleteUserInfo() : Flow<ResponseStatus<Unit>>
 }

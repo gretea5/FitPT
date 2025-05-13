@@ -7,6 +7,7 @@ import com.ssafy.data.datasource.UserDataStoreSource
 import com.ssafy.domain.model.base.ResponseStatus
 import com.ssafy.domain.model.login.Gym
 import com.ssafy.domain.model.login.UserInfo
+import com.ssafy.domain.usecase.user.DeleteUserInfoUsecase
 import com.ssafy.domain.usecase.user.GetUserInfoUsecase
 import com.ssafy.domain.usecase.user.UpdateUserInfoUsecase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,6 +25,7 @@ import javax.inject.Inject
 class UserInfoViewModel @Inject constructor(
     private val getUserInfoUseCase: GetUserInfoUsecase,
     private val updateUserInfoUsecase: UpdateUserInfoUsecase,
+    private val deleteUserInfoUsecase: DeleteUserInfoUsecase,
     private val dataStoreSource: UserDataStoreSource
 ) : ViewModel() {
     private val _userInfo = MutableStateFlow<UserInfoState>(UserInfoState.Initial)
@@ -65,6 +67,28 @@ class UserInfoViewModel @Inject constructor(
     fun updateUser(userInfo: UserInfo) {
         viewModelScope.launch {
             updateUserInfoUsecase(userInfo)
+                .onStart { setLoading() }
+                .catch { e ->
+                    Log.e("UserFragment", "에러 발생: ${e.message}", e)
+                }
+                .first()
+                .let { uiState ->
+                    when(uiState) {
+                        is ResponseStatus.Success -> {
+                            Log.d("UserFragment", "User sdf: ${_userInfo.value}")
+                        }
+                        is ResponseStatus.Error -> {
+                            _userInfo.value = UserInfoState.Error(uiState.error.message)
+                            Log.d("UserFragment", "updateUser: ${_userInfo.value}")
+                        }
+                    }
+                }
+        }
+    }
+
+    fun deleteUser() {
+        viewModelScope.launch {
+            deleteUserInfoUsecase()
                 .onStart { setLoading() }
                 .catch { e ->
                     Log.e("UserFragment", "에러 발생: ${e.message}", e)
