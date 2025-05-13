@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.fragment.app.viewModels
 import com.ssafy.domain.model.report.MuscleGroup
 import com.ssafy.presentation.R
 import com.ssafy.presentation.base.BaseFragment
@@ -18,7 +19,7 @@ class HealthReportFragment : BaseFragment<FragmentHealthReportBinding>(
     R.layout.fragment_health_report
 ) {
     private lateinit var muscleGroups: List<MuscleGroup>
-    private lateinit var reportViewModel: HealthReportViewModel
+    private val reportViewModel: HealthReportViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
