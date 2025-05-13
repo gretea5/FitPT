@@ -1,5 +1,7 @@
 package com.ssafy.data.network.api
 
+import com.ssafy.data.network.response.report.ReportDetailResponse
+import com.ssafy.data.network.response.report.ReportListResponseItem
 import retrofit2.http.GET
 import retrofit2.http.Query
 import retrofit2.Response
@@ -10,14 +12,8 @@ import retrofit2.http.Path
 
 interface ReportService {
     @GET("reports")
-    suspend fun getReportList(@Query("memberId") memberId: Int) :Response<Unit>
-
-    @POST("reports")
-    suspend fun createReport() : Response<Unit>
+    suspend fun getReportList(@Query("memberId") memberId: Int) :Response<List<ReportListResponseItem>>
 
     @GET("reports/{reportId}")
-    suspend fun getDetailReport(@Path("reportId") reportId: Int) : Response<Unit>
-
-    @PATCH("reports/{reportsId")
-    suspend fun updateReport() : Response<Unit>
+    suspend fun getDetailReport(@Path("reportId") reportId: Int) : Response<ReportDetailResponse>
 }

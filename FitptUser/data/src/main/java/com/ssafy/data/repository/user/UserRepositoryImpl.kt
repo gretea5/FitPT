@@ -47,7 +47,7 @@ internal class UserRepositoryImpl @Inject constructor(
         return flow {
             val result = ApiResponseHandler().handle {
                 val memberId = dataStore.user.firstOrNull()!!.memberId
-                userService.updateUserInfo(3,
+                userService.updateUserInfo(memberId,
                     UserRequest(
                         adminId = userInfo.admin.toLong(),
                         memberBirth = userInfo.memberBirth,

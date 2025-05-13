@@ -162,8 +162,6 @@ class MeasureFragment : BaseFragment<FragmentMeasureBinding>(
 
     override fun handleFitrusCompMeasured(result: Map<String, String>) {
         if (dialog.isShowing) dialog.dismiss()
-        binding.tvResult.text = result.map { "${it.key} : ${it.value}" }.joinToString("\n")
-        Log.d(TAG,result.toString())
         lifecycleScope.launch {
             val user = userDataStoreSource.user.first()!!
             val detail = CompositionDetail(
@@ -182,6 +180,7 @@ class MeasureFragment : BaseFragment<FragmentMeasureBinding>(
             measureViewModel.createBody(detail)
         }
         measuring = false
+        showToast("측정이 완료되어 개인 측정에 추가되었습니다")
         manager.disconnectFitrus()
     }
 
@@ -205,6 +204,10 @@ class MeasureFragment : BaseFragment<FragmentMeasureBinding>(
         binding.btnMeasureStart.isEnabled = false
         binding.ivFitrusUse.isVisible = false
         binding.tvDescription.isVisible = false
+        binding.tvWeight.isVisible = true
+        binding.etWeight.isVisible = true
+        binding.btnWeight.isVisible = true
+        binding.etWeight.text.clear()
     }
 
     override fun handleFitrusPpgMeasured(result: Map<String, Any>) {

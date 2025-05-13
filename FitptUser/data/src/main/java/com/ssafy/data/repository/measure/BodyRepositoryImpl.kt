@@ -30,8 +30,7 @@ internal class BodyRepositoryImpl  @Inject constructor(
         return flow {
             val result = ApiResponseHandler().handle {
                 val user = dataStore.user.firstOrNull()
-                Log.d(TAG,user.toString())
-                bodyService.getBodyList(3,sort,order)
+                bodyService.getBodyList(user!!.memberId,sort,order)
             }.first() // ✅ 첫 번째 값만 가져옴
             when (result) {
                 is ApiResponse.Success ->
