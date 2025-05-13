@@ -6,16 +6,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.RecyclerView
-import com.ssafy.domain.model.report.WorkoutItem
+import com.ssafy.domain.model.report.WorkoutNameScoreItem
 import com.ssafy.presentation.databinding.ListItemReportWorkoutBinding
 
 class HealthReportAdapter(
-    var items: MutableList<WorkoutItem>,
+    var items: MutableList<WorkoutNameScoreItem>,
     private val onItemChanged: () -> Unit
 ) : RecyclerView.Adapter<HealthReportAdapter.HealthReportViewHolder>() {
 
     inner class HealthReportViewHolder(private val binding: ListItemReportWorkoutBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: WorkoutItem) {
+        fun bind(item: WorkoutNameScoreItem) {
             if (item.isEditing) {
                 binding.apply {
                     clReportWorkoutItemEditMode.visibility = View.VISIBLE
@@ -48,7 +48,7 @@ class HealthReportAdapter(
 
     fun addEditItem() {
         if (items.lastOrNull()?.isEditing == true) return
-        items.add(WorkoutItem("", "", true))
+        items.add(WorkoutNameScoreItem("", "", true))
         notifyItemInserted(items.lastIndex)
     }
 
