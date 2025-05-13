@@ -20,9 +20,10 @@ import com.ssafy.presentation.base.BaseFragment
 import com.ssafy.presentation.databinding.FragmentUserWorkoutInfoBinding
 import com.ssafy.presentation.user.adapter.UserWorkoutInfoMonthAdapter
 import com.ssafy.presentation.util.CommonUtils
+import dagger.hilt.android.AndroidEntryPoint
 
 private const val TAG = "UserWorkoutInfoFragment_FitPT"
-
+@AndroidEntryPoint
 class UserWorkoutInfoFragment : BaseFragment<FragmentUserWorkoutInfoBinding>(
     FragmentUserWorkoutInfoBinding::bind,
     R.layout.fragment_user_workout_info

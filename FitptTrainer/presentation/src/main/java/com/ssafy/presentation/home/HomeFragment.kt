@@ -2,17 +2,15 @@ package com.ssafy.presentation.home
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import com.ssafy.presentation.R
 import com.ssafy.presentation.base.BaseFragment
 import com.ssafy.presentation.databinding.FragmentHomeBinding
-import com.ssafy.presentation.databinding.FragmentLoginBinding
+import dagger.hilt.android.AndroidEntryPoint
 
 private const val TAG = "HomeFragment_FitPT"
 
+@AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding>(
     FragmentHomeBinding::bind,
     R.layout.fragment_home

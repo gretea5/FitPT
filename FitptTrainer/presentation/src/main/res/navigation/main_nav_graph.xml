@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/reportEditFragment">
+    app:startDestination="@id/homeFragment">
 
     <fragment
         android:id="@+id/schedulingFragment"
@@ -27,4 +27,16 @@
         android:name="com.ssafy.presentation.report.ReportEditFragment"
         android:label="fragment_reportEdit"
         tools:layout="@layout/fragment_report_edit"/>
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.ssafy.presentation.home.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_schedulingFragment"
+            app:destination="@id/schedulingFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_userWorkoutInfoFragment"
+            app:destination="@id/userWorkoutInfoFragment" />
+    </fragment>
 </navigation>

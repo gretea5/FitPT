@@ -25,11 +25,12 @@ import com.kizitonwose.calendar.view.MonthHeaderFooterBinder
 import com.ssafy.presentation.databinding.FragmentScheduleBinding
 import com.ssafy.presentation.schedule.adapter.Member
 import com.ssafy.presentation.schedule.adapter.ScheduleMemberAdapter
+import dagger.hilt.android.AndroidEntryPoint
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.format.TextStyle
 import java.util.Locale
-
+@AndroidEntryPoint
 class ScheduleFragment : BaseFragment<FragmentScheduleBinding>(
     FragmentScheduleBinding::bind,
     R.layout.fragment_schedule
