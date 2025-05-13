@@ -61,6 +61,7 @@ class HealthReportFragment : BaseFragment<FragmentHealthReportBinding>(
                 }
             }
 
+            // 운동 추가
             cvReportWorkoutAddWorkout.setOnClickListener {
                 setAllMuscleClickable(true)
                 resetAllMuscleViewsToGray()
@@ -72,10 +73,28 @@ class HealthReportFragment : BaseFragment<FragmentHealthReportBinding>(
 
                 cvReportWorkoutAddWorkout.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.secondary_gray))
                 cvReportWorkoutAddWorkout.isEnabled = false
+
+                // Edit 모드 아이템 추가
+                healthReportAdapter.addEditItem()
             }
 
             ibReportHealthWorkoutAdd.setOnClickListener {
+                healthReportAdapter.finalizeLastItem()
 
+                // 추가 입력 막기
+                setAllMuscleClickable(false)
+                resetAllMuscleViewsToGray()
+                ibReportHealthWorkoutAdd.isVisible = false
+                ibReportHealthWorkoutDelete.isVisible = false
+
+                etReportHealthContent.text.clear()
+                etReportHealthContent.isEnabled = false
+
+                cvReportWorkoutAddWorkout.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.highlight_orange))
+                cvReportWorkoutAddWorkout.isEnabled = true
+
+                // ViewModel 입력값 초기화
+                reportViewModel.clearInputs()
             }
 
             ibReportHealthWorkoutDelete.setOnClickListener {
