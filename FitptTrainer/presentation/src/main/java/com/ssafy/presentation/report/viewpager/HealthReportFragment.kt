@@ -108,6 +108,8 @@ class HealthReportFragment : BaseFragment<FragmentHealthReportBinding>(
 
                 cvReportWorkoutAddWorkout.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.highlight_orange))
                 cvReportWorkoutAddWorkout.isEnabled = true
+
+                healthReportAdapter.removeEditModeItem()
             }
         }
     }

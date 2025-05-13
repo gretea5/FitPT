@@ -52,6 +52,14 @@ class HealthReportAdapter(
         notifyItemInserted(items.lastIndex)
     }
 
+    fun removeEditModeItem() {
+        val index = items.indexOfFirst { it.isEditing }
+        if (index != -1) {
+            items.removeAt(index)
+            notifyItemRemoved(index)
+        }
+    }
+
     fun finalizeLastItem() {
         items.lastOrNull()?.let {
             it.isEditing = false
