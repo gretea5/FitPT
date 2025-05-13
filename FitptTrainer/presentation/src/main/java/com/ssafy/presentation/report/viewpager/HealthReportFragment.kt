@@ -1,25 +1,24 @@
 package com.ssafy.presentation.report.viewpager
 
-import android.graphics.Color
-import android.graphics.drawable.VectorDrawable
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.MotionEvent
+import android.util.Log
 import android.view.View
-import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import com.ssafy.domain.model.report.MuscleGroup
 import com.ssafy.presentation.R
 import com.ssafy.presentation.base.BaseFragment
 import com.ssafy.presentation.databinding.FragmentHealthReportBinding
+import com.ssafy.presentation.report.viewmodel.HealthReportViewModel
+
+private const val TAG = "HealthReportFragment_FitPT"
 
 class HealthReportFragment : BaseFragment<FragmentHealthReportBinding>(
     FragmentHealthReportBinding::bind,
     R.layout.fragment_health_report
 ) {
-    private lateinit var muscleViews: List<Pair<List<ImageView>, String>>
+    private lateinit var muscleGroups: List<MuscleGroup>
+    private lateinit var reportViewModel: HealthReportViewModel
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -27,8 +26,7 @@ class HealthReportFragment : BaseFragment<FragmentHealthReportBinding>(
         initEvent()
     }
 
-    fun initEvent() {
-
+    private fun initEvent() {
         binding.apply {
             tgReportMuscles.addOnButtonCheckedListener { group, checkedId, isChecked ->
                 val frontButton = binding.btnReportMusclesFront
@@ -43,16 +41,15 @@ class HealthReportFragment : BaseFragment<FragmentHealthReportBinding>(
                 } else if (checkedId == R.id.btn_report_muscles_back && isChecked) {
                     backButton.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.highlight_orange))
                     frontButton.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.main_gray))
-
                     clReportHealthMusclesFront.isVisible = false
                     clReportHealthMusclesBack.isVisible = true
                 }
             }
 
-            muscleViews.forEach { (viewGroup, tagKey) ->
-                viewGroup.forEach { imageView ->
+            muscleGroups.forEach { group ->
+                group.imageViews.forEach { imageView ->
                     imageView.setOnClickListener {
-                        toggleMuscleGroupSelection(viewGroup, tagKey)
+                        toggleMuscleGroupSelection(group)
                     }
                 }
             }
@@ -62,6 +59,9 @@ class HealthReportFragment : BaseFragment<FragmentHealthReportBinding>(
                 resetAllMuscleViewsToGray()
                 ibReportHealthWorkoutAdd.isVisible = true
                 ibReportHealthWorkoutDelete.isVisible = true
+
+                etReportHealthContent.text.clear()
+                etReportHealthContent.isEnabled = true
 
                 cvReportWorkoutAddWorkout.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.secondary_gray))
                 cvReportWorkoutAddWorkout.isEnabled = false
@@ -77,79 +77,82 @@ class HealthReportFragment : BaseFragment<FragmentHealthReportBinding>(
                 ibReportHealthWorkoutAdd.isVisible = false
                 ibReportHealthWorkoutDelete.isVisible = false
 
+                etReportHealthContent.text.clear()
+                etReportHealthContent.isEnabled = false
+
                 cvReportWorkoutAddWorkout.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.highlight_orange))
                 cvReportWorkoutAddWorkout.isEnabled = true
             }
         }
     }
 
-    fun initMuscles() {
+    // 근육 초기화 설정
+    private fun initMuscles() {
         binding.apply {
-            muscleViews = listOf(
-                listOf(ivMuscleFrontChest) to "chest",
-                listOf(ivMuscleFrontShoulderLeft, ivMuscleFrontShoulderRight) to "shoulder_front",
-                listOf(ivMuscleFrontAbs) to "abs",
-                listOf(ivMuscleFrontBicepsLeft, ivMuscleFrontBicepsRight) to "biceps",
-                listOf(ivMuscleFrontForearmLeft, ivMuscleFrontForearmRight) to "forearm_front",
-                listOf(ivMuscleFrontQuadricepsLeft, ivMuscleFrontQuadricepsRight) to "quariceps",
-                listOf(ivMuscleFrontTibialisLeft, ivMuscleFrontTibialisRight) to "tilialis",
+            muscleGroups = listOf(
+                MuscleGroup("chest", listOf(ivMuscleFrontChest)),
+                MuscleGroup("shoulder_front", listOf(ivMuscleFrontShoulderLeft, ivMuscleFrontShoulderRight)),
+                MuscleGroup("abs", listOf(ivMuscleFrontAbs)),
+                MuscleGroup("biceps", listOf(ivMuscleFrontBicepsLeft, ivMuscleFrontBicepsRight)),
+                MuscleGroup("forearm_front", listOf(ivMuscleFrontForearmLeft, ivMuscleFrontForearmRight)),
+                MuscleGroup("quariceps", listOf(ivMuscleFrontQuadricepsLeft, ivMuscleFrontQuadricepsRight)),
+                MuscleGroup("tilialis", listOf(ivMuscleFrontTibialisLeft, ivMuscleFrontTibialisRight)),
 
-                listOf(ivMuscleBackTrapezius) to "trapezius",
-                listOf(ivMuscleBackRotatorLeft, ivMuscleBackRotatorRight) to "rotator",
-                listOf(ivMuscleBackLatsLeft, ivMuscleBackLatsRight) to "lats",
-                listOf(ivMuscleBackErectorSpinae) to "spinae",
-                listOf(ivMuscleBackDeltoidLeft, ivMuscleBackDeltoidRight) to "shoulder_back",
-                listOf(ivMuscleBackTricepsLeft, ivMuscleBackTricepsRight) to "triceps",
-                listOf(ivMuscleBackForearmLeft, ivMuscleBackForearmRight) to "forearm_back",
-                listOf(ivMuscleBackGluteusMaximus) to "gluteus",
-                listOf(ivMuscleBackHamstringLeft, ivMuscleBackHamstringRight) to "hamstring",
-                listOf(ivMuscleBackTricepsLowerLegLeft, ivMuscleBackTricepsLowerLegRight) to "lower_leg",
+                MuscleGroup("trapezius", listOf(ivMuscleBackTrapezius)),
+                MuscleGroup("rotator", listOf(ivMuscleBackRotatorLeft, ivMuscleBackRotatorRight)),
+                MuscleGroup("lats", listOf(ivMuscleBackLatsLeft, ivMuscleBackLatsRight)),
+                MuscleGroup("spinae", listOf(ivMuscleBackErectorSpinae)),
+                MuscleGroup("shoulder_back", listOf(ivMuscleBackDeltoidLeft, ivMuscleBackDeltoidRight)),
+                MuscleGroup("triceps", listOf(ivMuscleBackTricepsLeft, ivMuscleBackTricepsRight)),
+                MuscleGroup("forearm_back", listOf(ivMuscleBackForearmLeft, ivMuscleBackForearmRight)),
+                MuscleGroup("gluteus", listOf(ivMuscleBackGluteusMaximus)),
+                MuscleGroup("hamstring", listOf(ivMuscleBackHamstringLeft, ivMuscleBackHamstringRight)),
+                MuscleGroup("lower_leg", listOf(ivMuscleBackTricepsLowerLegLeft, ivMuscleBackTricepsLowerLegRight))
             )
         }
 
         setAllMuscleClickable(false)
     }
 
-    // 근육 선택 시 색 변환
-    private fun toggleMuscleGroupSelection(imageViews: List<ImageView>, tagKey: String) {
-        val mainBlue = ContextCompat.getColor(requireContext(), R.color.main_blue)
-        val mainGray = ContextCompat.getColor(requireContext(), R.color.secondary_gray)
+    // 선택한 근육 색 변경
+    private fun toggleMuscleGroupSelection(group: MuscleGroup) {
+        val color = ContextCompat.getColor(
+            requireContext(),
+            if (group.isSelected) R.color.secondary_gray else R.color.main_blue
+        )
 
-        val currentTag = imageViews.first().getTag(R.id.muscle_tag_key) as? String
-        val isBlue = currentTag == tagKey
-
-        val newColor = if (isBlue) mainGray else mainBlue
-        val newTag = if (isBlue) "gray" else tagKey
-
-        imageViews.forEach { iv ->
+        group.imageViews.forEach { iv ->
             val drawable = iv.drawable.mutate()
-            drawable.setTint(newColor)
+            drawable.setTint(color)
             iv.setImageDrawable(drawable)
-            iv.setTag(R.id.muscle_tag_key, newTag)
         }
+
+        group.isSelected = !group.isSelected
+
+        Log.d(TAG, "toggleMuscleGroupSelection: ${group.key}")
     }
 
-    // 모든 근육을 회색으로
+    // 모든 근육 회색으로 변경
     fun resetAllMuscleViewsToGray() {
         val grayColor = ContextCompat.getColor(requireContext(), R.color.secondary_gray)
 
-        muscleViews.forEach { (imageViews, _) ->
-            imageViews.forEach { iv ->
+        muscleGroups.forEach { group ->
+            group.imageViews.forEach { iv ->
                 val drawable = iv.drawable.mutate()
                 drawable.setTint(grayColor)
                 iv.setImageDrawable(drawable)
-                iv.setTag(R.id.muscle_tag_key, "gray")
             }
+            group.isSelected = false
+            Log.d(TAG, "resetAllMuscleViewsToGray: ${group.key}")
         }
     }
 
-    // 모든 근육 선택 가능 여부 설정
+    // 근육 선택 가능 여부 설정
     fun setAllMuscleClickable(flag: Boolean) {
-        muscleViews.forEach { (imageViews, _) ->
-            imageViews.forEach { iv ->
+        muscleGroups.forEach { group ->
+            group.imageViews.forEach { iv ->
                 iv.isEnabled = flag
             }
-
         }
     }
 }
