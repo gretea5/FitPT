@@ -1,6 +1,12 @@
 package com.ssafy.domain.model.auth
 
+import com.ssafy.domain.model.base.BaseModel
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class TrainerLogin (
-    val trainerLoginId: String,
-    val trainerPw: String
-)
+    val trainerId: Int,
+    val trainerName: String,
+    val accessToken: String,
+    val refreshToken: String
+) : BaseModel
