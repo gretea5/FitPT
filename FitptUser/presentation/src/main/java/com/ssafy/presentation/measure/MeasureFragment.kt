@@ -12,18 +12,32 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.onesoftdigm.fitrus.device.sdk.FitrusBleDelegate
 import com.onesoftdigm.fitrus.device.sdk.FitrusDevice
 import com.onesoftdigm.fitrus.device.sdk.Gender
+import com.ssafy.data.datasource.UserDataStoreSource
+import com.ssafy.domain.model.login.UserInfo
+import com.ssafy.domain.model.measure.CompositionDetail
 import com.ssafy.presentation.R
 import com.ssafy.presentation.base.BaseFragment
 import com.ssafy.presentation.databinding.FragmentLoginBinding
 import com.ssafy.presentation.databinding.FragmentMeasureBinding
+import com.ssafy.presentation.home.viewModel.UserInfoViewModel
+import com.ssafy.presentation.measurement_record.viewModel.MeasureViewModel
+import com.ssafy.presentation.util.CommonUtils
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 import kotlin.math.round
 
 
 private const val TAG = "MeasureFragment"
+
+@AndroidEntryPoint
 class MeasureFragment : BaseFragment<FragmentMeasureBinding>(
     FragmentMeasureBinding::bind,
     R.layout.fragment_measure
@@ -33,6 +47,10 @@ class MeasureFragment : BaseFragment<FragmentMeasureBinding>(
     private var type: String = "comp"
     private lateinit var dialog: ProgressDialog
 
+    @Inject
+    lateinit var userDataStoreSource: UserDataStoreSource
+
+    private val measureViewModel: MeasureViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -118,13 +136,17 @@ class MeasureFragment : BaseFragment<FragmentMeasureBinding>(
         dialog.show()
         when (type) {
             "comp" -> {
-                manager.startFitrusCompMeasure(
-                    Gender.valueOf("MALE"),
-                    170f,
-                    50f,
-                    "1976/11/07",
-                    0.0f,
-                )
+                lifecycleScope.launch {
+                    val user = userDataStoreSource.user.first()!!
+                    Log.d(TAG,CommonUtils.formatMeasureCreatedAt(user.memberBirth))
+                    manager.startFitrusCompMeasure(
+                        Gender.valueOf(if (user.memberGender == "남성") "MALE" else "FEMALE"),
+                        user.memberHeight.toFloat(),
+                        binding.etWeight.text.toString().toFloat(),
+                        CommonUtils.formatMeasureCreatedAt(user.memberBirth),
+                        0.0f,
+                    )
+                }
             }
         }
     }
@@ -142,6 +164,23 @@ class MeasureFragment : BaseFragment<FragmentMeasureBinding>(
         if (dialog.isShowing) dialog.dismiss()
         binding.tvResult.text = result.map { "${it.key} : ${it.value}" }.joinToString("\n")
         Log.d(TAG,result.toString())
+        lifecycleScope.launch {
+            val user = userDataStoreSource.user.first()!!
+            val detail = CompositionDetail(
+                bfm = result["bfm"]?.toDoubleOrNull() ?: 0.0,
+                bfp = result["bfp"]?.toDoubleOrNull() ?: 0.0,
+                bmr = result["bmr"]?.toDoubleOrNull() ?: 0.0,
+                bodyAge = result["bodyAge"]?.toIntOrNull() ?: 0,
+                ecw = result["ecw"]?.toDoubleOrNull() ?: 0.0,
+                icw = result["icw"]?.toDoubleOrNull() ?: 0.0,
+                memberId = user.memberId.toLong(),
+                mineral = result["mineral"]?.toDoubleOrNull() ?: 0.0,
+                protein = result["protein"]?.toDoubleOrNull() ?: 0.0,
+                smm = result["smm"]?.toDoubleOrNull() ?: 0.0,
+                weight = binding.etWeight.text.toString().toDouble()
+            )
+            measureViewModel.createBody(detail)
+        }
         measuring = false
         manager.disconnectFitrus()
     }

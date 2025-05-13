@@ -56,7 +56,7 @@ class MeasureListFragment : BaseFragment<FragmentMeasureListBinding>(
                             Log.d(TAG,state.getBodyList.get(1).toString())
                             val adapter = MeasureListAdapter(
                                 state.getBodyList.map {
-                                    MeasureRecordItem(it.bfp, it.bmr, it.weight,it.createdAt) // 매핑
+                                    MeasureRecordItem(it.bfp, it.smm, it.weight,it.createdAt) // 매핑
                                 }
                             ) { item, index ->
                                 val current = state.getBodyList[index]

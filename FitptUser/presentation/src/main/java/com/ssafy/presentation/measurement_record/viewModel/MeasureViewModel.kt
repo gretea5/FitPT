@@ -75,6 +75,32 @@ class MeasureViewModel @Inject constructor(
     }
 
 
+    fun createBody(userDetail: CompositionDetail) {
+        viewModelScope.launch {
+            createBodyUsecase(userDetail)
+                .onStart { setLoading() }
+                .catch { e ->
+
+                }
+                .firstOrNull()
+                .let { uiState ->
+                    when(uiState) {
+                        is ResponseStatus.Success -> {
+                            Log.d(TAG,uiState.data.toString())
+                            //_getBodyListInfo.value = GetBodyListInfoState.Success(uiState.data)
+                        }
+                        is ResponseStatus.Error -> {
+                            Log.d(TAG,uiState.error.message)
+                            _getBodyListInfo.value =
+                                GetBodyListInfoState.Error(uiState.error.message)
+                        }
+                        else -> Log.d("MeasureViewModel", "fetchUser: else error")
+                    }
+                }
+        }
+    }
+
+
     fun setMeasureDetailInfo(measureDetail: MesureDetail) {
         _measureDetailInfo.value = measureDetail
     }

@@ -76,7 +76,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
         observeModel()
         initEvent()
         initCalendar()
-        initView()
+        //initView()
         lineChart = binding.chartBodyGraph
         setupLineChart()
         setLineChartData()
@@ -244,6 +244,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
         }
     }
 
+    /*
     fun initView(){
         val text = "김동현님의 체성분 그래프"
         val spannableString = SpannableString(text)
@@ -269,7 +270,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
             Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
         )
         binding.tvPtCalendar.text = spannableString2
-    }
+    }*/
 
     private fun setupTabButtons() {
         val buttons = listOf(
