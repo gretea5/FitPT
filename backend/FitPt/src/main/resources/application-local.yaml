@@ -61,6 +61,11 @@ firebase:
 fcm:
   api-url: ${FCM_API_URL}
 
+jwt:
+  secret: ${JWT_SECRET}
+  expiration:
+    access: 3600000 # 1시간
+    refresh: 604800000 #일주일
 
 springdoc:
   swagger-ui:
