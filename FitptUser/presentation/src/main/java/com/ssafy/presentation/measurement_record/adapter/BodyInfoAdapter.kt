@@ -2,6 +2,7 @@ package com.ssafy.presentation.measurement_record.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.ssafy.domain.model.measure.BodyInfoItem
 import com.ssafy.presentation.databinding.ItemBodyCompositionBinding
@@ -22,6 +23,7 @@ class BodyInfoAdapter(
 
             binding.root.setOnClickListener {
                 onItemClick(item)
+                binding.clMeasureDetail.isVisible = !binding.clMeasureDetail.isVisible
             }
         }
     }
