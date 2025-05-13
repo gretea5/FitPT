@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import com.ssafy.presentation.R
 import com.ssafy.presentation.base.BaseFragment
 import com.ssafy.presentation.databinding.FragmentHealthReportBinding
@@ -36,9 +37,15 @@ class HealthReportFragment : BaseFragment<FragmentHealthReportBinding>(
                 if (checkedId == R.id.btn_report_muscles_front && isChecked) {
                     frontButton.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.highlight_orange))
                     backButton.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.main_gray))
+                    clReportHealthMusclesFront.isVisible = true
+                    clReportHealthMusclesBack.isVisible = false
+
                 } else if (checkedId == R.id.btn_report_muscles_back && isChecked) {
                     backButton.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.highlight_orange))
                     frontButton.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.main_gray))
+
+                    clReportHealthMusclesFront.isVisible = false
+                    clReportHealthMusclesBack.isVisible = true
                 }
             }
 
@@ -48,6 +55,30 @@ class HealthReportFragment : BaseFragment<FragmentHealthReportBinding>(
                         toggleMuscleGroupSelection(viewGroup, tagKey)
                     }
                 }
+            }
+
+            cvReportWorkoutAddWorkout.setOnClickListener {
+                setAllMuscleClickable(true)
+                resetAllMuscleViewsToGray()
+                ibReportHealthWorkoutAdd.isVisible = true
+                ibReportHealthWorkoutDelete.isVisible = true
+
+                cvReportWorkoutAddWorkout.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.secondary_gray))
+                cvReportWorkoutAddWorkout.isEnabled = false
+            }
+
+            ibReportHealthWorkoutAdd.setOnClickListener {
+
+            }
+
+            ibReportHealthWorkoutDelete.setOnClickListener {
+                setAllMuscleClickable(false)
+                resetAllMuscleViewsToGray()
+                ibReportHealthWorkoutAdd.isVisible = false
+                ibReportHealthWorkoutDelete.isVisible = false
+
+                cvReportWorkoutAddWorkout.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.highlight_orange))
+                cvReportWorkoutAddWorkout.isEnabled = true
             }
         }
     }
@@ -75,6 +106,8 @@ class HealthReportFragment : BaseFragment<FragmentHealthReportBinding>(
                 listOf(ivMuscleBackTricepsLowerLegLeft, ivMuscleBackTricepsLowerLegRight) to "lower_leg",
             )
         }
+
+        setAllMuscleClickable(false)
     }
 
     // 근육 선택 시 색 변환
