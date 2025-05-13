@@ -1,10 +1,15 @@
 package com.ssafy.presentation.report.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.ssafy.domain.model.report.HealthReportWorkout
+import com.ssafy.domain.model.report.MuscleGroup
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 
 private const val TAG = "HealthReportViewModel_FitPT"
@@ -24,6 +29,12 @@ class HealthReportViewModel @Inject constructor() : ViewModel() {
     private val _isAnyMuscleSelected = MutableLiveData<Boolean>(false)
     val isAnyMuscleSelected: LiveData<Boolean> = _isAnyMuscleSelected
 
+    private val _selectedMuscleIds = MutableStateFlow<List<Int>>(emptyList())
+    val selectedMuscleIds: StateFlow<List<Int>> = _selectedMuscleIds
+
+    private val _workoutReportList = MutableStateFlow<List<HealthReportWorkout>>(emptyList())
+    val workoutReportList: StateFlow<List<HealthReportWorkout>> = _workoutReportList
+
     private val _isAddButtonEnabled = MediatorLiveData<Boolean>().apply {
         fun check() {
             value = isValidInput(
@@ -38,6 +49,45 @@ class HealthReportViewModel @Inject constructor() : ViewModel() {
         addSource(_score) { check() }
         addSource(_description) { check() }
         addSource(_isAnyMuscleSelected) { check() }
+    }
+
+    fun addWorkoutReport() {
+        val name = _name.value?.trim().orEmpty()
+        val score = _score.value?.trim().orEmpty()
+        val description = _description.value?.trim().orEmpty()
+        val muscles = _selectedMuscleIds.value
+
+        if (name.isNotBlank() && score.isNotBlank() && description.isNotBlank() && muscles.isNotEmpty()) {
+            val newReport = HealthReportWorkout(
+                exerciseName = name,
+                exerciseAchievement = score,
+                exerciseComment = description,
+                activationMuscleId = muscles.sorted()
+            )
+
+            _workoutReportList.value = _workoutReportList.value + newReport
+
+            Log.d(TAG, "addWorkoutReport: ${newReport}")
+            Log.d(TAG, "addWorkoutReport: ${_workoutReportList.value}")
+            
+            clearInputs()
+        }
+    }
+
+    fun toggleMuscleSelection(muscleGroup: MuscleGroup) {
+        muscleGroup.isSelected = !muscleGroup.isSelected
+
+        val currentList = _selectedMuscleIds.value.toMutableList()
+        if (muscleGroup.isSelected) {
+            if (muscleGroup.id !in currentList) {
+                currentList.add(muscleGroup.id)
+            }
+        } else {
+            currentList.remove(muscleGroup.id)
+        }
+
+        _selectedMuscleIds.value = currentList
+        _isAnyMuscleSelected.value = currentList.isNotEmpty()
     }
 
     val isAddButtonEnabled: LiveData<Boolean> = _isAddButtonEnabled
