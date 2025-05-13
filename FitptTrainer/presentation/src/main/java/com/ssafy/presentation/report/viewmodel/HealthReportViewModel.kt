@@ -10,23 +10,48 @@ import javax.inject.Inject
 private const val TAG = "HealthReportViewModel_FitPT"
 
 @HiltViewModel
-class HealthReportViewModel @Inject constructor(
-    // usercase, datastore 추가 필요
-) : ViewModel() {
+class HealthReportViewModel @Inject constructor() : ViewModel() {
+
     private val _name = MutableLiveData<String>("")
     val name: LiveData<String> = _name
 
     private val _score = MutableLiveData<String>("")
     val score: LiveData<String> = _score
 
+    private val _description = MutableLiveData<String>("")
+    val description: LiveData<String> = _description
+
+    private val _isAnyMuscleSelected = MutableLiveData<Boolean>(false)
+    val isAnyMuscleSelected: LiveData<Boolean> = _isAnyMuscleSelected
+
     private val _isAddButtonEnabled = MediatorLiveData<Boolean>().apply {
-        addSource(_name) { value = isValidInput(_name.value, _score.value) }
-        addSource(_score) { value = isValidInput(_name.value, _score.value) }
+        fun check() {
+            value = isValidInput(
+                _name.value,
+                _score.value,
+                _description.value,
+                _isAnyMuscleSelected.value
+            )
+        }
+
+        addSource(_name) { check() }
+        addSource(_score) { check() }
+        addSource(_description) { check() }
+        addSource(_isAnyMuscleSelected) { check() }
     }
+
     val isAddButtonEnabled: LiveData<Boolean> = _isAddButtonEnabled
 
-    private fun isValidInput(name: String?, score: String?): Boolean {
-        return !name.isNullOrBlank() && !score.isNullOrBlank()
+    private fun isValidInput(
+        name: String?,
+        score: String?,
+        description: String?,
+        muscleSelected: Boolean?
+    ): Boolean {
+        return !name.isNullOrBlank() &&
+                !score.isNullOrBlank() &&
+                !description.isNullOrBlank() &&
+                muscleSelected == true
     }
 
     fun updateName(newName: String) {
@@ -37,8 +62,18 @@ class HealthReportViewModel @Inject constructor(
         _score.value = newScore
     }
 
+    fun updateDescription(desc: String) {
+        _description.value = desc
+    }
+
+    fun updateMuscleSelection(isSelected: Boolean) {
+        _isAnyMuscleSelected.value = isSelected
+    }
+
     fun clearInputs() {
         _name.value = ""
         _score.value = ""
+        _description.value = ""
+        _isAnyMuscleSelected.value = false
     }
 }

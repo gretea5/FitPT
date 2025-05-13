@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ssafy.domain.model.report.MuscleGroup
@@ -61,7 +62,7 @@ class HealthReportFragment : BaseFragment<FragmentHealthReportBinding>(
                 }
             }
 
-            // 운동 추가
+            // 운동 등록
             cvReportWorkoutAddWorkout.setOnClickListener {
                 setAllMuscleClickable(true)
                 resetAllMuscleViewsToGray()
@@ -78,6 +79,7 @@ class HealthReportFragment : BaseFragment<FragmentHealthReportBinding>(
                 healthReportAdapter.addEditItem()
             }
 
+            // 운동 추가 완료
             ibReportHealthWorkoutAdd.setOnClickListener {
                 healthReportAdapter.finalizeLastItem()
 
@@ -97,6 +99,7 @@ class HealthReportFragment : BaseFragment<FragmentHealthReportBinding>(
                 reportViewModel.clearInputs()
             }
 
+            // 운동 삭제
             ibReportHealthWorkoutDelete.setOnClickListener {
                 setAllMuscleClickable(false)
                 resetAllMuscleViewsToGray()
@@ -110,6 +113,11 @@ class HealthReportFragment : BaseFragment<FragmentHealthReportBinding>(
                 cvReportWorkoutAddWorkout.isEnabled = true
 
                 healthReportAdapter.removeEditModeItem()
+            }
+
+            // 운동별 성과 상세 기록 텍스트 감지
+            etReportHealthContent.addTextChangedListener {
+                reportViewModel.updateDescription(it?.toString() ?: "")
             }
         }
     }
@@ -198,7 +206,8 @@ class HealthReportFragment : BaseFragment<FragmentHealthReportBinding>(
 
         group.isSelected = !group.isSelected
 
-        Log.d(TAG, "toggleMuscleGroupSelection: ${group.key}")
+        val anySelected = muscleGroups.any { it.isSelected }
+        reportViewModel.updateMuscleSelection(anySelected)
     }
 
     // 모든 근육 회색으로 변경
