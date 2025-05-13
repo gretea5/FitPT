@@ -167,24 +167,24 @@ class HealthReportFragment : BaseFragment<FragmentHealthReportBinding>(
     private fun initMuscles() {
         binding.apply {
             muscleGroups = listOf(
-                MuscleGroup("chest", listOf(ivMuscleFrontChest)),
-                MuscleGroup("shoulder_front", listOf(ivMuscleFrontShoulderLeft, ivMuscleFrontShoulderRight)),
-                MuscleGroup("abs", listOf(ivMuscleFrontAbs)),
-                MuscleGroup("biceps", listOf(ivMuscleFrontBicepsLeft, ivMuscleFrontBicepsRight)),
-                MuscleGroup("forearm_front", listOf(ivMuscleFrontForearmLeft, ivMuscleFrontForearmRight)),
-                MuscleGroup("quariceps", listOf(ivMuscleFrontQuadricepsLeft, ivMuscleFrontQuadricepsRight)),
-                MuscleGroup("tilialis", listOf(ivMuscleFrontTibialisLeft, ivMuscleFrontTibialisRight)),
+                MuscleGroup(1, "chest", listOf(ivMuscleFrontChest)),
+                MuscleGroup(2, "shoulder_front", listOf(ivMuscleFrontShoulderLeft, ivMuscleFrontShoulderRight)),
+                MuscleGroup(3, "abs", listOf(ivMuscleFrontAbs)),
+                MuscleGroup(4, "biceps", listOf(ivMuscleFrontBicepsLeft, ivMuscleFrontBicepsRight)),
+                MuscleGroup(5, "forearm_front", listOf(ivMuscleFrontForearmLeft, ivMuscleFrontForearmRight)),
+                MuscleGroup(6, "quariceps", listOf(ivMuscleFrontQuadricepsLeft, ivMuscleFrontQuadricepsRight)),
+                MuscleGroup(7, "tilialis", listOf(ivMuscleFrontTibialisLeft, ivMuscleFrontTibialisRight)),
 
-                MuscleGroup("trapezius", listOf(ivMuscleBackTrapezius)),
-                MuscleGroup("rotator", listOf(ivMuscleBackRotatorLeft, ivMuscleBackRotatorRight)),
-                MuscleGroup("lats", listOf(ivMuscleBackLatsLeft, ivMuscleBackLatsRight)),
-                MuscleGroup("spinae", listOf(ivMuscleBackErectorSpinae)),
-                MuscleGroup("shoulder_back", listOf(ivMuscleBackDeltoidLeft, ivMuscleBackDeltoidRight)),
-                MuscleGroup("triceps", listOf(ivMuscleBackTricepsLeft, ivMuscleBackTricepsRight)),
-                MuscleGroup("forearm_back", listOf(ivMuscleBackForearmLeft, ivMuscleBackForearmRight)),
-                MuscleGroup("gluteus", listOf(ivMuscleBackGluteusMaximus)),
-                MuscleGroup("hamstring", listOf(ivMuscleBackHamstringLeft, ivMuscleBackHamstringRight)),
-                MuscleGroup("lower_leg", listOf(ivMuscleBackTricepsLowerLegLeft, ivMuscleBackTricepsLowerLegRight))
+                MuscleGroup(8, "trapezius", listOf(ivMuscleBackTrapezius)),
+                MuscleGroup(9, "rotator", listOf(ivMuscleBackRotatorLeft, ivMuscleBackRotatorRight)),
+                MuscleGroup(10, "shoulder_back", listOf(ivMuscleBackDeltoidLeft, ivMuscleBackDeltoidRight)),
+                MuscleGroup(11, "triceps", listOf(ivMuscleBackTricepsLeft, ivMuscleBackTricepsRight)),
+                MuscleGroup(12, "forearm_back", listOf(ivMuscleBackForearmLeft, ivMuscleBackForearmRight)),
+                MuscleGroup(13, "lats", listOf(ivMuscleBackLatsLeft, ivMuscleBackLatsRight)),
+                MuscleGroup(14, "spinae", listOf(ivMuscleBackErectorSpinae)),
+                MuscleGroup(15, "gluteus", listOf(ivMuscleBackGluteusMaximus)),
+                MuscleGroup(16, "hamstring", listOf(ivMuscleBackHamstringLeft, ivMuscleBackHamstringRight)),
+                MuscleGroup(17, "lower_leg", listOf(ivMuscleBackTricepsLowerLegLeft, ivMuscleBackTricepsLowerLegRight))
             )
         }
 
