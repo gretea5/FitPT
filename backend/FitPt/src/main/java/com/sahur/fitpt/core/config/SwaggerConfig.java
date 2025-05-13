@@ -42,7 +42,7 @@ public class SwaggerConfig {
                         .addSecuritySchemes("bearerAuth", securityScheme)) // 보안 스키마 추가
                 .servers(Arrays.asList(               // 서버 목록 추가
                         new Server().url("http://localhost:8080").description("Local Server"),
-                        new Server().url("http://k12s208.p.ssafy.io:9090").description("Production Server")
+                        new Server().url("https://k12s208.p.ssafy.io").description("Production Server")
                 ));
     }
 }
