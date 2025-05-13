@@ -22,6 +22,5 @@ public interface MemberService {
     // 회원 탈퇴 (논리적 삭제)
     Long deleteMember(Long memberId);
 
-    // 트레이너별 회원 목록 조회
-    List<MemberResponseDto> getMembersByTrainer(Long trainerId);
+    List<MemberResponseDto> getMyMembers(Long trainerId);
 }

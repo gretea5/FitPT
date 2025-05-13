@@ -14,6 +14,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 
@@ -39,6 +41,8 @@ public class SecurityConfig {
                         // 인증 없이 접근 가능한 경로 설정
                         .requestMatchers(
                                 "/api/auth/**",          // 인증 관련 API
+                                "/api/trainers/login",
+                                "/api/test/**",
                                 "/swagger-ui/**",        // Swagger UI
                                 "/swagger/**",
                                 "/swagger-ui.html",
@@ -54,8 +58,10 @@ public class SecurityConfig {
                                 "/favicon.ico"
                         ).permitAll()
                         // 역할별 접근 권한 설정
-                        .requestMatchers("/api/trainer/**").hasRole("TRAINER")// 트레이너 전용
-                        .requestMatchers("/api/member/**").hasRole("MEMBER")  // 회원 전용
+                        .requestMatchers("/api/trainers").hasRole("TRAINER")
+                        .requestMatchers("/api/trainers/**").hasRole("TRAINER")// 트레이너 전용
+                        .requestMatchers("/api/members").hasRole("TRAINER") // 목록 조회는 트레이너만
+                        .requestMatchers("/api/members/**").hasAnyRole("MEMBER", "TRAINER")  // 회원과 트레이너 접근 가능
                         .anyRequest().authenticated()    // 그 외 요청은 인증 필요
                 )
                 // JWT 필터 추가
@@ -81,5 +87,10 @@ public class SecurityConfig {
             config.setMaxAge(3600L);                    // pre-flight 요청 캐시 시간 (1시간)
             return config;
         };
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }

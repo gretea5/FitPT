@@ -19,6 +19,7 @@ public enum ErrorCode {
 
     // 403 FORBIDDEN
     FORBIDDEN("접근 권한이 없습니다", HttpStatus.FORBIDDEN),
+    TRAINER_MEMBER_ACCESS_DENIED("해당 회원에 대한 접근 권한이 없습니다", HttpStatus.FORBIDDEN),
 
     // 404 NOT_FOUND
     MEMBER_NOT_FOUND("해당 회원을 찾을 수 없습니다", HttpStatus.NOT_FOUND),
