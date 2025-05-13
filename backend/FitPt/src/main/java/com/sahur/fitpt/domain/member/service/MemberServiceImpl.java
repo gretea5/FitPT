@@ -1,5 +1,7 @@
 package com.sahur.fitpt.domain.member.service;
 
+import com.sahur.fitpt.core.constant.ErrorCode;
+import com.sahur.fitpt.core.exception.CustomException;
 import com.sahur.fitpt.db.entity.Admin;
 import com.sahur.fitpt.db.entity.Member;
 import com.sahur.fitpt.db.entity.Trainer;
@@ -10,7 +12,6 @@ import com.sahur.fitpt.domain.member.dto.MemberRequestDto;
 import com.sahur.fitpt.domain.member.dto.MemberResponseDto;
 import com.sahur.fitpt.domain.member.dto.MemberPartialUpdateDto;
 import com.sahur.fitpt.domain.member.validator.MemberValidator;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -41,12 +42,12 @@ public class MemberServiceImpl implements MemberService {
 
         if (requestDto.getTrainerId() != null) {
             trainer = trainerRepository.findById(requestDto.getTrainerId())
-                    .orElseThrow(() -> new EntityNotFoundException("ID가 " + requestDto.getTrainerId() + "인 트레이너를 찾을 수 없습니다"));
+                    .orElseThrow(() -> new CustomException(ErrorCode.TRAINER_NOT_FOUND));
         }
 
         if (requestDto.getAdminId() != null) {
             admin = adminRepository.findById(requestDto.getAdminId())
-                    .orElseThrow(() -> new EntityNotFoundException("ID가 " + requestDto.getAdminId() + "인 체육관을 찾을 수 없습니다"));
+                    .orElseThrow(() -> new CustomException(ErrorCode.ADMIN_NOT_FOUND));
         }
 
         Member member = Member.builder()
@@ -70,7 +71,7 @@ public class MemberServiceImpl implements MemberService {
     @Transactional(readOnly = true)
     public MemberResponseDto getMember(Long memberId) {
         Member member = memberRepository.findByIdAndNotDeleted(memberId)
-                .orElseThrow(() -> new EntityNotFoundException("ID가 " + memberId + "인 회원을 찾을 수 없습니다"));
+                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 
         memberValidator.validateMemberExists(member, memberId);
         return MemberResponseDto.from(member);
@@ -80,7 +81,7 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     public Long updateMember(Long memberId, MemberRequestDto requestDto) {
         Member member = memberRepository.findByIdAndNotDeleted(memberId)
-                .orElseThrow(() -> new EntityNotFoundException("ID가 " + memberId + "인 회원을 찾을 수 없습니다"));
+                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 
         // 유효성 검사
         memberValidator.validateMemberExists(member, memberId);
@@ -93,12 +94,12 @@ public class MemberServiceImpl implements MemberService {
 
         if (requestDto.getTrainerId() != null) {
             trainer = trainerRepository.findById(requestDto.getTrainerId())
-                    .orElseThrow(() -> new EntityNotFoundException("ID가 " + requestDto.getTrainerId() + "인 트레이너를 찾을 수 없습니다"));
+                    .orElseThrow(() -> new CustomException(ErrorCode.TRAINER_NOT_FOUND));
         }
 
         if (requestDto.getAdminId() != null) {
             admin = adminRepository.findById(requestDto.getAdminId())
-                    .orElseThrow(() -> new EntityNotFoundException("ID가 " + requestDto.getAdminId() + "인 체육관을 찾을 수 없습니다"));
+                    .orElseThrow(() -> new CustomException(ErrorCode.ADMIN_NOT_FOUND));
         }
 
         member.update(
@@ -120,7 +121,7 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     public MemberResponseDto updateMemberPartially(Long memberId, MemberPartialUpdateDto updateDto) {
         Member member = memberRepository.findByIdAndNotDeleted(memberId)
-                .orElseThrow(() -> new EntityNotFoundException("ID가 " + memberId + "인 회원을 찾을 수 없습니다"));
+                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 
         memberValidator.validateMemberExists(member, memberId);
         if (updateDto.getMemberWeight() != null) {
@@ -138,7 +139,7 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     public Long deleteMember(Long memberId) {
         Member member = memberRepository.findByIdAndNotDeleted(memberId)
-                .orElseThrow(() -> new EntityNotFoundException("ID가 " + memberId + "인 회원을 찾을 수 없습니다"));
+                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 
         memberValidator.validateMemberExists(member, memberId);
 
@@ -150,10 +151,8 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<MemberResponseDto> getMembersByTrainer(Long trainerId) {
-        if (!trainerRepository.existsById(trainerId)) {
-            throw new EntityNotFoundException("ID가 " + trainerId + "인 트레이너를 찾을 수 없습니다");
-        }
+    public List<MemberResponseDto> getMyMembers(Long trainerId) {
+        memberValidator.validateTrainerExists(trainerId);
 
         List<Member> members = memberRepository.findAllByTrainerIdAndNotDeleted(trainerId);
         log.debug("트레이너의 담당 회원 {}명을 조회했습니다: trainerId={}", members.size(), trainerId);

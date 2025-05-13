@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import com.sahur.fitpt.core.constant.Role;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
@@ -61,6 +62,10 @@ public class Member {
     @OneToMany(mappedBy = "member")
     private List<FcmToken> fcmTokens = new ArrayList<>();
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role;
+
     public void update(String memberName, String memberGender, LocalDateTime memberBirth,
                        Float memberHeight, Float memberWeight, Trainer trainer, Admin admin) {
         this.memberName = memberName;
@@ -80,5 +85,7 @@ public class Member {
     public void delete() {
         this.isDeleted = true;
     }
+
+
 
 }

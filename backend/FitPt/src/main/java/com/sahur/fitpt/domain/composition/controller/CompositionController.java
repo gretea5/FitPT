@@ -27,8 +27,8 @@ public class CompositionController {
     @GetMapping
     @Operation(summary = "내 체성분 조회", description = "회원의 체성분을 조회하는 API")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "201", content = @Content(mediaType = "application/json")),
-        @ApiResponse(responseCode = "400", content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "201", content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "400", content = @Content(mediaType = "application/json")),
     })
     @Parameters({
             @Parameter(name = "memberId", description = "회원 Id", example = "1"),

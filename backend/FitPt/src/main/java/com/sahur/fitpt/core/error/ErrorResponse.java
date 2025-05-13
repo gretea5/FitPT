@@ -8,8 +8,7 @@ import org.springframework.http.HttpStatus;
 public class ErrorResponse {
     // 상태코드
     private final int status;
-
-    // 에러 메시지
+    // 에러 메세지
     private final String message;
 
     public ErrorResponse(ErrorCode errorCode) {

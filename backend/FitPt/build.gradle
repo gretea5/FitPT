@@ -40,16 +40,16 @@ dependencies {
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
     // JWT
-//    implementation 'io.jsonwebtoken:jjwt-api:0.12.5'
-//    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.5'
-//    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.5'
+    implementation 'io.jsonwebtoken:jjwt-api:0.12.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.5'
 
     // env
     implementation 'me.paulschwarz:spring-dotenv:4.0.0'
 
     //Security
-//    implementation 'org.springframework.boot:spring-boot-starter-security'
-//    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 
     // 의존성검증
     implementation 'org.springframework.boot:spring-boot-starter-validation'

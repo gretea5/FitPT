@@ -189,7 +189,7 @@ public class ReportServiceImpl implements ReportService {
         );
 
         CompositionLog compositionLog = compositionRepository.findById(report.getCompositionLog().getCompositionLogId())
-            .orElseThrow(() -> new CustomException(ErrorCode.COMPOSITION_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.COMPOSITION_NOT_FOUND));
 
         CompositionResponseDto compositionResponseDto = CompositionResponseDto.fromEntity(compositionLog);
 
