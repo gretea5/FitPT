@@ -29,4 +29,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
             "LEFT JOIN FETCH m.trainer " +
             "WHERE m.memberName = :memberName AND m.isDeleted = false")
     Optional<Member> findByMemberName(@Param("memberName") String memberName);
+
+    boolean existsByMemberIdAndTrainerTrainerId(Long memberId, Long trainerId);
 }
+
