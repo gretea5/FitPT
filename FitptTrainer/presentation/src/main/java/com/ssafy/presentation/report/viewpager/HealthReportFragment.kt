@@ -6,10 +6,13 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.ssafy.domain.model.report.MuscleGroup
+import com.ssafy.domain.model.report.WorkoutItem
 import com.ssafy.presentation.R
 import com.ssafy.presentation.base.BaseFragment
 import com.ssafy.presentation.databinding.FragmentHealthReportBinding
+import com.ssafy.presentation.report.adapter.HealthReportAdapter
 import com.ssafy.presentation.report.viewmodel.HealthReportViewModel
 
 private const val TAG = "HealthReportFragment_FitPT"
@@ -18,13 +21,16 @@ class HealthReportFragment : BaseFragment<FragmentHealthReportBinding>(
     FragmentHealthReportBinding::bind,
     R.layout.fragment_health_report
 ) {
+    private lateinit var healthReportAdapter: HealthReportAdapter
     private lateinit var muscleGroups: List<MuscleGroup>
     private val reportViewModel: HealthReportViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initMuscles()
+        initRecyclerView()
         initEvent()
+        observeViewModel()
     }
 
     private fun initEvent() {
