@@ -18,6 +18,8 @@ import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,7 +30,7 @@ import java.util.List;
 @RequestMapping("/api/members")
 @RequiredArgsConstructor
 @Tag(name = "Member", description = "회원 관리 API")
-@Validated  // 추가
+@Validated
 public class MemberController {
     private final MemberService memberService;
 
@@ -44,7 +46,7 @@ public class MemberController {
     }
 
     @GetMapping("/{memberId}")
-    @TrainerMemberAccess
+    @TrainerMemberAccess(accessType = TrainerMemberAccess.AccessType.BOTH_ALLOWED)
     @Operation(summary = "회원 정보 조회", description = "회원 ID로 회원 정보를 조회합니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "조회 성공"),
@@ -57,8 +59,7 @@ public class MemberController {
         return ResponseEntity.ok(memberService.getMember(memberId));
     }
 
-    @PutMapping("/{memberId}")
-    @TrainerMemberAccess
+    @PutMapping("/me")
     @Operation(summary = "회원 정보 전체 수정", description = "회원의 모든 정보를 수정합니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "수정 성공"),
@@ -66,14 +67,13 @@ public class MemberController {
             @ApiResponse(responseCode = "404", description = "회원을 찾을 수 없음")
     })
     public ResponseEntity<MemberResponseDto> updateMember(
-            @Parameter(description = "수정할 회원 ID", required = true)
-            @PathVariable @Min(value = 1, message = "회원 ID는 1 이상이어야 합니다") Long memberId,
             @Valid @RequestBody MemberRequestDto requestDto) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long memberId = Long.parseLong(authentication.getName());
         return ResponseEntity.ok(memberService.updateMember(memberId, requestDto));
     }
 
-    @PatchMapping("/{memberId}")
-    @TrainerMemberAccess
+    @PatchMapping("/me")
     @Operation(summary = "회원 정보 부분 수정", description = "회원 정보를 부분적으로 수정합니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "수정 성공"),
@@ -81,29 +81,28 @@ public class MemberController {
             @ApiResponse(responseCode = "404", description = "회원을 찾을 수 없음")
     })
     public ResponseEntity<MemberResponseDto> updateMemberPartially(
-            @Parameter(description = "수정할 회원 ID", required = true)
-            @PathVariable @Min(value = 1, message = "회원 ID는 1 이상이어야 합니다") Long memberId,
             @Valid @RequestBody MemberPartialUpdateDto updateDto) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long memberId = Long.parseLong(authentication.getName());
         return ResponseEntity.ok(memberService.updateMemberPartially(memberId, updateDto));
     }
 
-    @DeleteMapping("/{memberId}")
-    @TrainerMemberAccess
+    @DeleteMapping("/me")
     @Operation(summary = "회원 탈퇴", description = "회원을 탈퇴 처리합니다. (논리적 삭제)")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "탈퇴 성공"),
             @ApiResponse(responseCode = "400", description = "잘못된 요청"),
             @ApiResponse(responseCode = "404", description = "회원을 찾을 수 없음")
     })
-    public ResponseEntity<Long> deleteMember(
-            @Parameter(description = "탈퇴할 회원 ID", required = true)
-            @PathVariable @Min(value = 1, message = "회원 ID는 1 이상이어야 합니다") Long memberId) {
+    public ResponseEntity<Long> deleteMember() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long memberId = Long.parseLong(authentication.getName());
         return ResponseEntity.ok(memberService.deleteMember(memberId));
     }
 
     @GetMapping
     @Operation(summary = "담당 회원 목록 조회", description = "현재 로그인한 트레이너의 담당 회원 목록을 조회합니다.")
-    @TrainerMemberAccess
+    @TrainerMemberAccess(accessType = TrainerMemberAccess.AccessType.TRAINER_ONLY)
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "조회 성공"),
             @ApiResponse(responseCode = "403", description = "권한 없음"),

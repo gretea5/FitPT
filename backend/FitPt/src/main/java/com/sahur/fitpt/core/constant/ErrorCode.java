@@ -10,6 +10,11 @@ public enum ErrorCode {
     INVALID_INPUT_VALUE("유효하지 않은 입력값입니다", HttpStatus.BAD_REQUEST),
     INVALID_TOKEN_FORM("유효하지 않은 토큰 형식입니다", HttpStatus.BAD_REQUEST),
     INVALID_GYM_NAME("잘못된 헬스장 이름입니다.", HttpStatus.BAD_REQUEST),
+    INVALID_SCHEDULE_TIME("유효하지 않은 일정 시간입니다", HttpStatus.BAD_REQUEST),
+    INVALID_SCHEDULE_DURATION("유효하지 않은 일정 기간입니다", HttpStatus.BAD_REQUEST),
+    INVALID_SCHEDULE_DATE("유효하지 않은 일정 날짜입니다", HttpStatus.BAD_REQUEST),
+    SCHEDULE_TIME_OVERLAP("해당 시간에 이미 일정이 존재합니다", HttpStatus.BAD_REQUEST),
+    INVALID_DATE_FORMAT("날짜 형식이 올바르지 않습니다", HttpStatus.BAD_REQUEST),
 
     // 401 UNAUTHORIZED
     UNAUTHORIZED("인증되지 않은 요청입니다", HttpStatus.UNAUTHORIZED),
@@ -21,6 +26,7 @@ public enum ErrorCode {
     // 403 FORBIDDEN
     FORBIDDEN("접근 권한이 없습니다", HttpStatus.FORBIDDEN),
     TRAINER_MEMBER_ACCESS_DENIED("해당 회원에 대한 접근 권한이 없습니다", HttpStatus.FORBIDDEN),
+    ACCESS_DENIED("접근 권한이 없습니다", HttpStatus.FORBIDDEN),
 
     // 404 NOT_FOUND
     MEMBER_NOT_FOUND("해당 회원을 찾을 수 없습니다", HttpStatus.NOT_FOUND),
@@ -29,6 +35,7 @@ public enum ErrorCode {
     COMPOSITION_NOT_FOUND("해당 체성분 정보를 찾을 수 없습니다", HttpStatus.NOT_FOUND),
     REPORT_NOT_FOUND("해당 보고서 찾을 수 없습니다", HttpStatus.NOT_FOUND),
     GYM_NOT_FOUND("검색 결과가 없습니다", HttpStatus.NOT_FOUND),
+    SCHEDULE_NOT_FOUND("해당 일정을 찾을 수 없습니다", HttpStatus.NOT_FOUND),
 
     // 409 CONFLICT
     DUPLICATE_MEMBER("이미 존재하는 회원입니다", HttpStatus.CONFLICT),

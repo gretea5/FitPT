@@ -59,11 +59,6 @@ public class SecurityConfig {
                                 "/webjars/**",            // Webjar 리소스
                                 "/favicon.ico"
                         ).permitAll()
-                        // 역할별 접근 권한 설정
-                        .requestMatchers("/api/trainers").hasRole("TRAINER")
-                        .requestMatchers("/api/trainers/**").hasRole("TRAINER")// 트레이너 전용
-                        .requestMatchers("/api/members").hasRole("TRAINER") // 목록 조회는 트레이너만
-                        .requestMatchers("/api/members/**").hasAnyRole("MEMBER", "TRAINER")  // 회원과 트레이너 접근 가능
                         .anyRequest().authenticated()    // 그 외 요청은 인증 필요
                 )
                 // JWT 필터 추가

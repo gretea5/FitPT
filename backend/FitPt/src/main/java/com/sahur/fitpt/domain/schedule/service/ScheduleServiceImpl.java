@@ -1,5 +1,7 @@
 package com.sahur.fitpt.domain.schedule.service;
 
+import com.sahur.fitpt.core.constant.ErrorCode;
+import com.sahur.fitpt.core.exception.CustomException;
 import com.sahur.fitpt.db.entity.Member;
 import com.sahur.fitpt.db.entity.Schedule;
 import com.sahur.fitpt.db.entity.Trainer;
@@ -25,50 +27,65 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     @Transactional
     public Long createSchedule(ScheduleRequestDto requestDto) {
-        Member member = scheduleValidator.validateAndGetMember(requestDto.getMemberId());
-        Trainer trainer = scheduleValidator.validateAndGetTrainer(requestDto.getTrainerId());
+        log.debug("createSchedule 서비스 시작 - requestDto: {}", requestDto);
 
-        LocalDateTime startTime = requestDto.getStartTime();
-        LocalDateTime endTime = requestDto.getEndTime();
+        try {
+            Member member = scheduleValidator.validateAndGetMember(requestDto.getMemberId());
+            log.debug("회원 검증 완료: {}", member.getMemberId());
 
-        // 시간 유효성 검사
-        scheduleValidator.validateScheduleTime(startTime, endTime);
+            Trainer trainer = scheduleValidator.validateAndGetTrainer(requestDto.getTrainerId());
+            log.debug("트레이너 검증 완료: {}", trainer.getTrainerId());
 
-        // 시간 중복 검사
-        List<Schedule> trainerSchedules = scheduleRepository.findOverlappingSchedulesForTrainer(
-                trainer.getTrainerId(), startTime, endTime);
-        scheduleValidator.validateScheduleTimeOverlap(trainerSchedules, "Trainer");
+            // 트레이너가 해당 회원을 담당하는지 검증
+            scheduleValidator.validateTrainerManagesMember(trainer.getTrainerId(), member.getMemberId());
 
-        List<Schedule> memberSchedules = scheduleRepository.findOverlappingSchedulesForMember(
-                member.getMemberId(), startTime, endTime);
-        scheduleValidator.validateScheduleTimeOverlap(memberSchedules, "Member");
+            LocalDateTime startTime = requestDto.getStartTime();
+            LocalDateTime endTime = requestDto.getEndTime();
+            log.debug("시간 정보 - 시작: {}, 종료: {}", startTime, endTime);
 
-        Schedule schedule = Schedule.builder()
-                .member(member)
-                .trainer(trainer)
-                .startTime(startTime)
-                .endTime(endTime)
-                .scheduleContent(requestDto.getScheduleContent())
-                .build();
+            scheduleValidator.validateScheduleTime(startTime, endTime);
+            log.debug("시간 유효성 검사 완료");
 
-        Schedule savedSchedule = scheduleRepository.save(schedule);
-        log.info("Created new schedule: id={}, trainer={}, member={}, startTime={}",
-                savedSchedule.getScheduleId(),
-                trainer.getTrainerId(),
-                member.getMemberId(),
-                startTime);
+            // 시간 중복 검사
+            List<Schedule> trainerSchedules = scheduleRepository.findOverlappingSchedulesForTrainer(
+                    trainer.getTrainerId(), startTime, endTime);
+            log.debug("트레이너 중복 일정 검사 - 중복 수: {}", trainerSchedules.size());
+            scheduleValidator.validateScheduleTimeOverlap(trainerSchedules, "트레이너");
 
-        return savedSchedule.getScheduleId();
+            List<Schedule> memberSchedules = scheduleRepository.findOverlappingSchedulesForMember(
+                    member.getMemberId(), startTime, endTime);
+            log.debug("회원 중복 일정 검사 - 중복 수: {}", memberSchedules.size());
+            scheduleValidator.validateScheduleTimeOverlap(memberSchedules, "회원");
+
+            Schedule schedule = Schedule.builder()
+                    .member(member)
+                    .trainer(trainer)
+                    .startTime(startTime)
+                    .endTime(endTime)
+                    .scheduleContent(requestDto.getScheduleContent())
+                    .build();
+
+            Schedule savedSchedule = scheduleRepository.save(schedule);
+            log.debug("일정 저장 완료 - ID: {}", savedSchedule.getScheduleId());
+
+            return savedSchedule.getScheduleId();
+        } catch (Exception e) {
+            log.error("일정 생성 중 오류 발생: {}", e.getMessage(), e);
+            throw e;
+        }
     }
 
     @Override
     @Transactional
     public Long updateSchedule(Long scheduleId, ScheduleRequestDto requestDto) {
         Schedule schedule = scheduleRepository.findById(scheduleId)
-                .orElseThrow(() -> new IllegalArgumentException("Schedule not found with ID: " + scheduleId));
+                .orElseThrow(() -> new CustomException(ErrorCode.SCHEDULE_NOT_FOUND));
 
         Member member = scheduleValidator.validateAndGetMember(requestDto.getMemberId());
         Trainer trainer = scheduleValidator.validateAndGetTrainer(requestDto.getTrainerId());
+
+        // 트레이너가 해당 회원을 담당하는지 검증
+        scheduleValidator.validateTrainerManagesMember(trainer.getTrainerId(), member.getMemberId());
 
         LocalDateTime startTime = requestDto.getStartTime();
         LocalDateTime endTime = requestDto.getEndTime();
@@ -81,17 +98,17 @@ public class ScheduleServiceImpl implements ScheduleService {
                         trainer.getTrainerId(), startTime, endTime).stream()
                 .filter(s -> !s.getScheduleId().equals(scheduleId))
                 .collect(Collectors.toList());
-        scheduleValidator.validateScheduleTimeOverlap(trainerSchedules, "Trainer");
+        scheduleValidator.validateScheduleTimeOverlap(trainerSchedules, "트레이너");
 
         List<Schedule> memberSchedules = scheduleRepository.findOverlappingSchedulesForMember(
                         member.getMemberId(), startTime, endTime).stream()
                 .filter(s -> !s.getScheduleId().equals(scheduleId))
                 .collect(Collectors.toList());
-        scheduleValidator.validateScheduleTimeOverlap(memberSchedules, "Member");
+        scheduleValidator.validateScheduleTimeOverlap(memberSchedules, "회원");
 
         schedule.update(member, trainer, startTime, endTime, requestDto.getScheduleContent());
 
-        log.info("Updated schedule: id={}, trainer={}, member={}, startTime={}",
+        log.info("일정 수정 완료: ID={}, 트레이너={}, 회원={}, 시작시간={}",
                 schedule.getScheduleId(),
                 trainer.getTrainerId(),
                 member.getMemberId(),
@@ -104,25 +121,25 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Transactional
     public Long deleteSchedule(Long scheduleId) {
         Schedule schedule = scheduleRepository.findById(scheduleId)
-                .orElseThrow(() -> new IllegalArgumentException("Schedule not found with ID: " + scheduleId));
+                .orElseThrow(() -> new CustomException(ErrorCode.SCHEDULE_NOT_FOUND));
 
         scheduleRepository.delete(schedule);
-
-        log.info("Deleted schedule: id={}", scheduleId);
-
+        log.info("일정 삭제 완료: ID={}", scheduleId);
         return scheduleId;
     }
 
 
-
     @Override
     @Transactional(readOnly = true)
-    public List<ScheduleResponseDto> getSchedulesByDateAndTrainer(int year, int month, int day, Long trainerId) {
-        scheduleValidator.validateTrainerExists(trainerId);
+    public List<ScheduleResponseDto> getSchedulesByDateAndMember(int year, int month, int day, Long memberId) {
+        scheduleValidator.validateMemberExists(memberId);
 
-        log.debug("Searching schedules for trainer {} on {}-{}-{}", trainerId, year, month, day);
-        List<Schedule> schedules = scheduleRepository.findAllByDateAndTrainer(year, month, day, trainerId);
-        log.debug("Found {} schedules in database", schedules.size());
+        LocalDateTime dayStart = LocalDateTime.of(year, month, day, 0, 0);
+        LocalDateTime dayEnd = dayStart.plusDays(1);
+
+        log.debug("회원 {} 일정 조회 - 날짜: {}-{}-{}", memberId, year, month, day);
+        List<Schedule> schedules = scheduleRepository.findAllByDateAndMember(dayStart, dayEnd, memberId);
+        log.debug("조회된 일정 수: {}", schedules.size());
 
         return schedules.stream()
                 .map(ScheduleResponseDto::from)
@@ -131,12 +148,15 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<ScheduleResponseDto> getSchedulesByDateAndMember(int year, int month, int day, Long memberId) {
-        scheduleValidator.validateMemberExists(memberId);
+    public List<ScheduleResponseDto> getSchedulesByDateAndTrainer(int year, int month, int day, Long trainerId) {
+        scheduleValidator.validateTrainerExists(trainerId);
 
-        log.debug("Searching schedules for member {} on {}-{}-{}", memberId, year, month, day);
-        List<Schedule> schedules = scheduleRepository.findAllByDateAndMember(year, month, day, memberId);
-        log.debug("Found {} schedules in database", schedules.size());
+        LocalDateTime dayStart = LocalDateTime.of(year, month, day, 0, 0);
+        LocalDateTime dayEnd = dayStart.plusDays(1);
+
+        log.debug("트레이너 {} 일정 조회 - 날짜: {}-{}-{}", trainerId, year, month, day);
+        List<Schedule> schedules = scheduleRepository.findAllByDateAndTrainer(dayStart, dayEnd, trainerId);
+        log.debug("조회된 일정 수: {}", schedules.size());
 
         return schedules.stream()
                 .map(ScheduleResponseDto::from)
@@ -148,9 +168,12 @@ public class ScheduleServiceImpl implements ScheduleService {
     public List<ScheduleResponseDto> getSchedulesByMonthAndMember(int year, int month, Long memberId) {
         scheduleValidator.validateMemberExists(memberId);
 
-        log.debug("Searching schedules for member {} in {}-{}", memberId, year, month);
-        List<Schedule> schedules = scheduleRepository.findAllByMonthAndMember(year, month, memberId);
-        log.debug("Found {} schedules in database", schedules.size());
+        LocalDateTime monthStart = LocalDateTime.of(year, month, 1, 0, 0);
+        LocalDateTime monthEnd = monthStart.plusMonths(1);
+
+        log.debug("회원 {} 일정 조회 - 년월: {}-{}", memberId, year, month);
+        List<Schedule> schedules = scheduleRepository.findAllByMonthAndMember(monthStart, monthEnd, memberId);
+        log.debug("조회된 일정 수: {}", schedules.size());
 
         return schedules.stream()
                 .map(ScheduleResponseDto::from)
@@ -162,9 +185,12 @@ public class ScheduleServiceImpl implements ScheduleService {
     public List<ScheduleResponseDto> getSchedulesByMonthAndTrainer(int year, int month, Long trainerId) {
         scheduleValidator.validateTrainerExists(trainerId);
 
-        log.debug("Searching schedules for trainer {} in {}-{}", trainerId, year, month);
-        List<Schedule> schedules = scheduleRepository.findAllByMonthAndTrainer(year, month, trainerId);
-        log.debug("Found {} schedules in database", schedules.size());
+        LocalDateTime monthStart = LocalDateTime.of(year, month, 1, 0, 0);
+        LocalDateTime monthEnd = monthStart.plusMonths(1);
+
+        log.debug("트레이너 {} 일정 조회 - 년월: {}-{}", trainerId, year, month);
+        List<Schedule> schedules = scheduleRepository.findAllByMonthAndTrainer(monthStart, monthEnd, trainerId);
+        log.debug("조회된 일정 수: {}", schedules.size());
 
         return schedules.stream()
                 .map(ScheduleResponseDto::from)
