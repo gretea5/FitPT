@@ -65,8 +65,14 @@ class MeasureDetailFragment : BaseFragment<FragmentMeasureDetailBinding>(
     private fun setupRecyclerView() {
         val sampleItems = listOf(
             BodyInfoItem("체중", measureViewModel.measureDetailInfo.value!!.weight.toString()+" kg", "보통"),
+            BodyInfoItem("체지방률", measureViewModel.measureDetailInfo.value!!.smm.toString()+" %", "위험"),
             BodyInfoItem("골격근량", measureViewModel.measureDetailInfo.value!!.bfp.toString()+" kg", "주의"),
-            BodyInfoItem("체지방률", measureViewModel.measureDetailInfo.value!!.smm.toString()+" %", "위험")
+            BodyInfoItem("체지방량", measureViewModel.measureDetailInfo.value!!.bfm.toString()+" kg", "주의"),
+            BodyInfoItem("기초대사량", measureViewModel.measureDetailInfo.value!!.bmr.toString()+" kg", "주의"),
+            BodyInfoItem("체수분", measureViewModel.measureDetailInfo.value!!.icw.toString()+" kg", "주의"),
+            BodyInfoItem("단백질", measureViewModel.measureDetailInfo.value!!.protein.toString()+" kg", "주의"),
+            BodyInfoItem("무기질", measureViewModel.measureDetailInfo.value!!.mineral.toString()+" kg", "주의"),
+            BodyInfoItem("세포외수분비", measureViewModel.measureDetailInfo.value!!.ecw.toString()+" kg", "주의"),
         )
 
         val adapter = BodyInfoAdapter(sampleItems) {

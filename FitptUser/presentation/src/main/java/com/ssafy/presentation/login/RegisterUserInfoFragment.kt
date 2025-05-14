@@ -77,6 +77,7 @@ class RegisterUserInfoFragment : BaseFragment<FragmentRegisterUserInfoBinding>(
     fun initEvent(){
         binding.btnNext.setOnClickListener {
             Log.d(TAG,"안녕")
+            Log.d(TAG,"안녕"+loginViewModel.userJoin.value.toString())
             val intent = Intent(requireContext(), MainActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)

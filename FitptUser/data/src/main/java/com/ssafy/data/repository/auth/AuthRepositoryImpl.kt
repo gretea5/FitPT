@@ -5,14 +5,18 @@ import com.ssafy.data.network.api.AuthService
 import com.ssafy.data.network.common.ApiResponseHandler
 import com.ssafy.data.network.common.ApiResponse
 import com.ssafy.data.network.common.ErrorResponse.Companion.toDomainModel
+import com.ssafy.data.network.request.RegisterUserInfoRequest
 import com.ssafy.data.network.request.UserLoginRequest
 import com.ssafy.data.network.response.JwtTokenResponse.Companion.toDomainModel
+import com.ssafy.data.network.response.RegisterUserResponse.Companion.toDomainModel
 import com.ssafy.domain.model.auth.JwtToken
 import com.ssafy.domain.model.base.ResponseStatus
+import com.ssafy.domain.model.login.UserInfo
 import com.ssafy.domain.repository.auth.AuthRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
@@ -20,12 +24,46 @@ internal class AuthRepositoryImpl @Inject constructor(
     private val authService: AuthService,
     private val dataStore: UserDataStoreSource
 ): AuthRepository {
-    override suspend fun login(accessToken: String): Flow<ResponseStatus<JwtToken>> {
+    override suspend fun login(): Flow<ResponseStatus<JwtToken>> {
         return flow {
             ApiResponseHandler().handle {
+                val kakaoAccess = dataStore.kakaoAccessToken.first()!!
+                val fcmToken = dataStore.fcmToken.first()!!
                 authService.login(
                     UserLoginRequest(
-                        kakaoAccessToken = accessToken,
+                        kakaoAccessToken = kakaoAccess,
+                        fcmToken = fcmToken
+                    )
+                )
+            }.onEach { result ->
+                when (result) {
+                    is ApiResponse.Success -> {
+                        // dataStore.saveUserId(result.data.userId.toLong())
+                        emit(ResponseStatus.Success(result.data.toDomainModel()))
+                    }
+                    is ApiResponse.Error -> {
+                        emit(ResponseStatus.Error(result.error.toDomainModel()))
+                    }
+                }
+            }.collect()
+        }
+    }
+
+    override suspend fun signUp(userInfo: UserInfo): Flow<ResponseStatus<JwtToken>> {
+        return flow {
+            ApiResponseHandler().handle {
+                val kakaoAccess = dataStore.kakaoAccessToken.first()!!
+                val fcmToken = dataStore.fcmToken.first()!!
+                authService.signUp(
+                    RegisterUserInfoRequest(
+                        kakaoAccessToken = kakaoAccess,
+                        fcmToken = fcmToken,
+                        adminId = userInfo.admin,
+                        memberBirth = userInfo.memberBirth,
+                        memberGender = userInfo.memberGender,
+                        memberHeight = userInfo.memberHeight,
+                        memberWeight = userInfo.memberWeight,
+                        memberName = userInfo.memberName
                     )
                 )
             }.onEach { result ->

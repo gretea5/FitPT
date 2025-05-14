@@ -84,6 +84,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
     private val weightEntries = mutableListOf<Entry>()
     private val skeletalMuscleEntries = mutableListOf<Entry>()
     private val bodyFatEntries = mutableListOf<Entry>()
+    private var click = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -430,7 +431,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
                                     Log.e(TAG, "날짜 파싱 오류: ${e.message}")
                                 }
                             }
-                            showWeightData()
+                            if(!click){
+                                showWeightData()
+                                click = true
+                            }
                         }
                         is GetBodyListInfoState.Error -> {
                             Log.d(TAG, "에러: ${state.message}")

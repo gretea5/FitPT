@@ -5,5 +5,6 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class JwtToken(
-    val accessToken: String
+    val accessToken: String,
+    val memberId: Int
 ): BaseModel

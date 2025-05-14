@@ -49,12 +49,12 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(
         binding.ivKakaoMove.setOnClickListener {
             if (!isClick) {
                 isClick = true // 클릭 방지 활성화
-                kakaoLogin()
-                /*val intent = Intent(requireContext(), MainActivity::class.java)
+                //kakaoLogin()
+                val intent = Intent(requireContext(), MainActivity::class.java)
                 startActivity(intent)
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
                 requireActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
-                requireActivity().finishAffinity()*/
+                requireActivity().finishAffinity()
             }
         }
     }
@@ -74,12 +74,15 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(
                     lifecycleScope.launch {
                         Log.d(TAG,"로그인 관련 ${token.accessToken}")
                         userDataStoreSource.saveKakaoAccessToken(token.accessToken)
-                        loginViewModel.login(token.accessToken)
+                        loginViewModel.login()
                         UserApiClient.instance.me { user, error ->
                             if (error != null) {
                                 Log.e(TAG, "사용자 정보 요청 실패", error)
                             } else if (user != null) {
                                 val nickname = user.kakaoAccount?.profile?.nickname
+                                lifecycleScope.launch {
+                                    userDataStoreSource.saveNickname(nickname!!)
+                                }
                                 Log.d(TAG, "사용자 이름: $nickname")
                             }
                         }
@@ -105,10 +108,6 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(
                         requireActivity().finishAffinity()
                     }
                     is LoginStatus.Error -> {
-                        lifecycleScope.launch {
-                            val token = userDataStoreSource.kakaoAccessToken.first()
-                            //loginViewModel.updateAccessToken(token ?: "")
-                        }
                         val currentDestination = findNavController().currentDestination?.id
                         if (currentDestination == R.id.loginFragment) {
                             findNavController().navigate(R.id.action_loginFragment_to_registerUserInfoFragment)
