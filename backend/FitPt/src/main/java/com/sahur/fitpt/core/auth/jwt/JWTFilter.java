@@ -94,7 +94,8 @@ public class JWTFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getServletPath();
-        return path.startsWith("/api/auth/") ||
+        return path.startsWith("/api/auth/kakao/") ||  // 카카오 소셜 회원가입 및 로그인
+                path.startsWith("/api/auth/refresh") ||  // 토큰 재발급
                 path.startsWith("/api/test/") ||
                 path.startsWith("/api/trainers/login") ||
                 path.equals("/api/gyms") ||
