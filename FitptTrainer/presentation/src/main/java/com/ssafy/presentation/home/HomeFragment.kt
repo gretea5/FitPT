@@ -11,7 +11,9 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.view.children
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.CalendarMonth
@@ -21,12 +23,14 @@ import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
 import com.kizitonwose.calendar.view.MonthDayBinder
 import com.kizitonwose.calendar.view.MonthHeaderFooterBinder
 import com.kizitonwose.calendar.view.ViewContainer
+import com.ssafy.domain.model.schedule.Schedule
 import com.ssafy.presentation.R
 import com.ssafy.presentation.base.BaseFragment
 import com.ssafy.presentation.databinding.FragmentHomeBinding
 import com.ssafy.presentation.home.adapter.HomeAdapter
 import com.ssafy.presentation.home.viewmodel.HomeStatus
 import com.ssafy.presentation.home.viewmodel.HomeViewModel
+import com.ssafy.presentation.util.TimeUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
@@ -66,6 +70,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun initObserver() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.homeState.collect { state ->
@@ -82,23 +87,19 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.scheduleItems.collect { scheduleItems -> scheduleAdapter.submitList(scheduleItems) }
+            viewModel.scheduleItems.collect { scheduleItems ->
+                scheduleAdapter.submitList(scheduleItems)
+
+            }
         }
-    }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun fetchSchedules() {
-        val today = LocalDate.now()
-        selectedDate = today
-
-        val formattedMonth = today.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
-
-        viewModel.getSchedules(
-            month = formattedMonth,
-            date = null,
-            trainerId = null,
-            memberId = null
-        )
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.monthlyScheduleItems.collect { scheduleItems ->
+                    updateEventsDatesList(scheduleItems)
+                }
+            }
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -144,8 +145,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
         }
 
         val currentMonth = YearMonth.now()
-
-        addExampleEventList()
 
         val startMonth = currentMonth.minusMonths(120)
         val endMonth = currentMonth.plusMonths(120)
@@ -210,16 +209,52 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
             scrollToMonth(currentMonth)
 
             monthScrollListener = { calendarMonth ->
-                val monthYear = "${calendarMonth.yearMonth.year}/${calendarMonth.yearMonth.monthValue}월"
-                binding.tvMonthYear.text = monthYear
+                val year = calendarMonth.yearMonth.year
+                val month = calendarMonth.yearMonth.monthValue.toString().padStart(2, '0')
+                val formattedDate = "$year-$month"
+
+                binding.tvMonthYear.text = formattedDate
+                viewModel.getMonthlySchedules(formattedDate)
             }
         }
     }
 
-    fun initEvent() {}
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun fetchSchedules() {
+        val today = LocalDate.now()
+        selectedDate = today
+
+        val formattedDate = today.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+        val formattedMonth = today.format(DateTimeFormatter.ofPattern("yyyy-MM"))
+
+        viewModel.getSchedules(
+            month = null,
+            date = formattedDate,
+            trainerId = null,
+            memberId = null
+        )
+
+        viewModel.getMonthlySchedules(formattedMonth)
+    }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun addExampleEventList() {
-        val today = LocalDate.now()
+    private fun updateEventsDatesList(scheduleItems: List<Schedule>) {
+        eventsDatesList.clear()
+
+        val eventDates = scheduleItems.mapNotNull { scheduleItem ->
+            try {
+                val dateStr = TimeUtils.parseDateTime(scheduleItem.startTime).first
+                LocalDate.parse(dateStr)
+            } catch (e: Exception) {
+                Log.e(TAG, "날짜 파싱 오류: ${scheduleItem.startTime}, ${e.message}")
+                null
+            }
+        }.distinct()
+
+        eventsDatesList.addAll(eventDates)
+
+        binding.calendar.notifyCalendarChanged()
     }
+
+    fun initEvent() {}
 }

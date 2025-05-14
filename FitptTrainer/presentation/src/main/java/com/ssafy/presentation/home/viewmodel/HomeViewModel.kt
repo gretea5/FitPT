@@ -17,8 +17,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -41,6 +39,35 @@ class HomeViewModel @Inject constructor(
 
     private val _scheduleItems = MutableStateFlow<List<ScheduleWithMemberInfo>>(emptyList())
     val scheduleItems: StateFlow<List<ScheduleWithMemberInfo>> = _scheduleItems.asStateFlow()
+
+    private val _monthlyScheduleItems = MutableStateFlow<List<Schedule>>(emptyList())
+    val monthlyScheduleItems: StateFlow<List<Schedule>> = _monthlyScheduleItems.asStateFlow()
+
+    fun getMonthlySchedules(month: String) {
+        viewModelScope.launch {
+            try {
+                val storedTrainerId = dataStore.trainerId.first()
+
+                getScheduleUseCase(null, month, storedTrainerId, null).collect { response ->
+                    Log.d(TAG, "getMonthlySchedules 스케쥴 조회: $response")
+                    when (response) {
+                        is ResponseStatus.Success -> {
+                            _monthlyScheduleItems.value = response.data
+                            _homeState.value = HomeStatus.Success(response.data)
+                        }
+                        is ResponseStatus.Error -> {
+                            _homeState.value = HomeStatus.Error(response.error.message)
+                        }
+                    }
+
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "로그인 처리 중 예외 발생: ${e.message}")
+                _homeState.value = HomeStatus.Error("서버와의 연결에 실패했습니다.")
+            }
+
+        }
+    }
 
     fun getSchedules(date: String?, month: String?, trainerId: Long?, memberId: Long?) {
         viewModelScope.launch { 
