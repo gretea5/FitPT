@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
 import com.ssafy.presentation.R
 import com.ssafy.presentation.base.BaseFragment
@@ -24,7 +25,9 @@ class BodyCompositionDietFragment : BaseFragment<FragmentBodyCompositionDietBind
 
     fun initEvevt() {
         binding.apply {
-
+            etReportDietContent.addTextChangedListener {
+                viewModel.setReportComment(it.toString())
+            }
         }
     }
 }

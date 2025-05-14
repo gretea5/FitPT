@@ -35,4 +35,8 @@ class ReportViewModel @Inject constructor() : ViewModel() {
 
         Log.d(TAG, "setReportExercises: ${_reportExercises.value}")
     }
+
+    fun setReportComment(comment: String){
+        _reportComment.value = comment
+    }
 }
