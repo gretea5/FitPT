@@ -9,6 +9,7 @@ public enum ErrorCode {
     INVALID_INPUT_NULL_OR_EMPTY_VALUE("Null 값 또는 빈 값이 입력되었습니다.", HttpStatus.BAD_REQUEST),
     INVALID_INPUT_VALUE("유효하지 않은 입력값입니다", HttpStatus.BAD_REQUEST),
     INVALID_TOKEN_FORM("유효하지 않은 토큰 형식입니다", HttpStatus.BAD_REQUEST),
+    INVALID_GYM_NAME("잘못된 헬스장 이름입니다.", HttpStatus.BAD_REQUEST),
 
     // 401 UNAUTHORIZED
     UNAUTHORIZED("인증되지 않은 요청입니다", HttpStatus.UNAUTHORIZED),

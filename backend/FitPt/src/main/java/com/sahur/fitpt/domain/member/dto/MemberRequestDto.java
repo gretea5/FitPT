@@ -3,17 +3,16 @@ package com.sahur.fitpt.domain.member.dto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Getter
 @NoArgsConstructor
 public class MemberRequestDto {
-    private Long memberId;
-    private Long trainerId;
-    private Long adminId;
     private String memberName;
     private String memberGender;
-    private LocalDateTime memberBirth;
+    private LocalDate memberBirth;
     private Float memberHeight;
     private Float memberWeight;
+    private Long adminId;
+    private String gymName;
 }

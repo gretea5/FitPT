@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import com.sahur.fitpt.core.constant.Role;
 import org.hibernate.annotations.CreationTimestamp;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,7 +42,7 @@ public class Member {
 
     // @CreationTimestamp
     @Column(name = "member_birth")
-    private LocalDateTime memberBirth;
+    private LocalDate memberBirth;
 
     @Column(name = "member_height")
     private Float memberHeight;
@@ -69,7 +69,7 @@ public class Member {
     @Column(nullable = false)
     private Role role;
 
-    public void update(String memberName, String memberGender, LocalDateTime memberBirth,
+    public void update(String memberName, String memberGender, LocalDate memberBirth,
                        Float memberHeight, Float memberWeight, Trainer trainer, Admin admin) {
         this.memberName = memberName;
         this.memberGender = memberGender;
@@ -87,6 +87,15 @@ public class Member {
 
     public void delete() {
         this.isDeleted = true;
+    }
+
+    public void addFcmToken(String token, String macAddr) {
+        FcmToken fcmToken = FcmToken.builder()
+                .member(this)
+                .token(token)
+                .macAddr(macAddr)
+                .build();
+        this.fcmTokens.add(fcmToken);
     }
 
 
