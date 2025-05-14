@@ -87,6 +87,25 @@ class HealthReportViewModel @Inject constructor() : ViewModel() {
         }
     }
 
+    fun deleteSelectedWorkout() {
+        _selectedWorkoutId.value?.let { id ->
+            deleteWorkoutById(id)
+        }
+    }
+
+    fun deleteWorkoutById(id: Long) {
+        val updatedList = _workoutReportList.value.filterNot { it.id == id }
+        _workoutReportList.value = updatedList
+
+        // 삭제 후 선택 상태 초기화
+        if (_selectedWorkoutId.value == id) {
+            _selectedWorkoutId.value = null
+            _selectedWorkoutItem.value = null
+        }
+
+        Log.d(TAG, "deleteWorkoutById: ${_workoutReportList.value}")
+    }
+
     fun toggleMuscleSelection(muscleGroup: MuscleGroup) {
         muscleGroup.isSelected = !muscleGroup.isSelected
 
