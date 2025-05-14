@@ -110,6 +110,20 @@ class HealthReportAdapter(
         }
     }
 
+    fun removeSelectedItem() {
+        val removedIndexes = items.mapIndexedNotNull { index, item ->
+            if (item.isSelected) index else null
+        }
+
+        items.removeIf { it.isSelected }
+
+        removedIndexes.sortedDescending().forEach {
+            notifyItemRemoved(it)
+        }
+
+        Log.d(TAG, "deleteWorkout: ${items}")
+    }
+
     fun finalizeLastItem() {
         items.lastOrNull()?.let {
             Log.d(TAG, "AddWorkout : Adapter: ${it.id}")
