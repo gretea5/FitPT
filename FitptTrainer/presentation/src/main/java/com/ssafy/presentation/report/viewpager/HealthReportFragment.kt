@@ -215,6 +215,24 @@ class HealthReportFragment : BaseFragment<FragmentHealthReportBinding>(
         }
     }
 
+    fun highlightMuscleGroupsByIds(selectedIds: List<Int>) {
+        val context = requireContext()
+        val grayColor = ContextCompat.getColor(context, R.color.secondary_gray)
+        val blueColor = ContextCompat.getColor(context, R.color.main_blue)
+
+        muscleGroups.forEach { group ->
+            val isSelected = group.id in selectedIds
+            val color = if (isSelected) blueColor else grayColor
+
+            group.imageViews.forEach { iv ->
+                val drawable = iv.drawable.mutate()
+                drawable.setTint(color)
+                iv.setImageDrawable(drawable)
+            }
+
+            group.isSelected = isSelected // 상태 반영
+        }
+    }
 
     // 모든 근육 회색으로 변경
     fun resetAllMuscleViewsToGray() {
