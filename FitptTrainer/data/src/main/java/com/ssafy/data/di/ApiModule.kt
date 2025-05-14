@@ -15,7 +15,7 @@ internal class ApiModule {
     @Provides
     @Singleton
     fun provideAuthService(
-        @NoInterceptorRetrofit retrofit: Retrofit
+        @InterceptorRetrofit retrofit: Retrofit
     ): AuthService {
         return retrofit.create(AuthService::class.java)
     }
@@ -23,7 +23,7 @@ internal class ApiModule {
     @Provides
     @Singleton
     fun provideScheduleService(
-        @NoInterceptorRetrofit retrofit: Retrofit
+        @InterceptorRetrofit retrofit: Retrofit
     ): ScheduleService {
         return retrofit.create(ScheduleService::class.java)
     }
