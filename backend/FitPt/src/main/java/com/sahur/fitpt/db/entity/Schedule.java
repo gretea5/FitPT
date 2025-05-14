@@ -41,11 +41,11 @@ public class Schedule {
 
     public void update(Member member, Trainer trainer, LocalDateTime startTime,
                        LocalDateTime endTime, String scheduleContent) {
-        this.member = member;
-        this.trainer = trainer;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.scheduleContent = scheduleContent;
+        if (member != null) this.member = member;
+        if (trainer != null) this.trainer = trainer;
+        if (startTime != null) this.startTime = startTime;
+        if (endTime != null) this.endTime = endTime;
+        if (scheduleContent != null) this.scheduleContent = scheduleContent;
     }
 }
 

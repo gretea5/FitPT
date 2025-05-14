@@ -3,7 +3,6 @@ package com.sahur.fitpt.domain.schedule.service;
 import com.sahur.fitpt.domain.schedule.dto.ScheduleRequestDto;
 import com.sahur.fitpt.domain.schedule.dto.ScheduleResponseDto;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public interface ScheduleService {

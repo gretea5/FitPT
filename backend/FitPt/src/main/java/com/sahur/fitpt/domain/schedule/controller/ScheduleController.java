@@ -1,5 +1,9 @@
 package com.sahur.fitpt.domain.schedule.controller;
 
+import com.sahur.fitpt.core.auth.annotation.TrainerMemberAccess;
+import com.sahur.fitpt.core.auth.annotation.TrainerMemberAccess.Domain;
+import com.sahur.fitpt.core.constant.ErrorCode;
+import com.sahur.fitpt.core.exception.CustomException;
 import com.sahur.fitpt.domain.schedule.dto.ScheduleRequestDto;
 import com.sahur.fitpt.domain.schedule.dto.ScheduleResponseDto;
 import com.sahur.fitpt.domain.schedule.service.ScheduleService;
@@ -13,6 +17,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,8 +31,9 @@ import java.util.List;
 @Tag(name = "Schedule", description = "PT 일정 관리 API")
 public class ScheduleController {
     private final ScheduleService scheduleService;
-
+    
     @PostMapping
+    @TrainerMemberAccess(domain = Domain.SCHEDULE, accessType = TrainerMemberAccess.AccessType.TRAINER_ONLY)
     @Operation(summary = "PT 일정 생성", description = "새로운 PT 일정을 생성합니다.")
     @ApiResponses({
             @ApiResponse(
@@ -39,18 +47,31 @@ public class ScheduleController {
                     content = @Content
             )
     })
-    public ResponseEntity<Long> createSchedule(
-            @RequestBody
-            @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    description = "일정 생성 정보",
-                    required = true,
-                    content = @Content(schema = @Schema(implementation = ScheduleRequestDto.class))
-            ) ScheduleRequestDto requestDto) {
-        Long scheduleId = scheduleService.createSchedule(requestDto);
-        return ResponseEntity.ok(scheduleId);
+    public ResponseEntity<Long> createSchedule(@RequestBody ScheduleRequestDto requestDto) {
+        try {
+            log.debug("일정 생성 컨트롤러 시작 - requestDto: {}", requestDto);
+
+            // 기본 유효성 검사
+            if (requestDto.getMemberId() == null || requestDto.getTrainerId() == null ||
+                    requestDto.getStartTime() == null || requestDto.getEndTime() == null) {
+                log.error("필수 입력값 누락 - requestDto: {}", requestDto);
+                throw new CustomException(ErrorCode.INVALID_INPUT_NULL_OR_EMPTY_VALUE);
+            }
+
+            Long scheduleId = scheduleService.createSchedule(requestDto);
+            log.debug("일정 생성 완료 - scheduleId: {}", scheduleId);
+
+            return ResponseEntity.ok(scheduleId);
+        } catch (Exception e) {
+            log.error("일정 생성 중 오류 발생: {}", e.getMessage(), e);
+            throw e;
+        }
     }
 
+
+
     @PutMapping("/{scheduleId}")
+    @TrainerMemberAccess(domain = Domain.SCHEDULE, accessType = TrainerMemberAccess.AccessType.TRAINER_ONLY)
     @Operation(summary = "PT 일정 수정", description = "기존 PT 일정을 수정합니다.")
     @ApiResponses({
             @ApiResponse(
@@ -83,6 +104,7 @@ public class ScheduleController {
     }
 
     @DeleteMapping("/{scheduleId}")
+    @TrainerMemberAccess(domain = Domain.SCHEDULE, accessType = TrainerMemberAccess.AccessType.TRAINER_ONLY)
     @Operation(summary = "PT 일정 삭제", description = "PT 일정을 삭제합니다.")
     @ApiResponses({
             @ApiResponse(
@@ -104,113 +126,97 @@ public class ScheduleController {
     }
 
     @GetMapping
-    @Operation(summary = "PT 일정 조회", description = "날짜/월별로 트레이너 또는 회원의 PT 일정을 조회합니다.")
+    @TrainerMemberAccess(domain = Domain.SCHEDULE, accessType = TrainerMemberAccess.AccessType.BOTH_ALLOWED)
+    @Operation(summary = "PT 일정 조회", description = "날짜/월별로 PT 일정을 조회합니다.")
     @ApiResponses({
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "일정 조회 성공",
-                    content = @Content(schema = @Schema(implementation = ScheduleResponseDto.class))
-            ),
-            @ApiResponse(
-                    responseCode = "400",
-                    description = "잘못된 요청",
-                    content = @Content
-            )
+            @ApiResponse(responseCode = "200", description = "일정 조회 성공"),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청"),
+            @ApiResponse(responseCode = "403", description = "접근 권한 없음")
     })
     public ResponseEntity<List<ScheduleResponseDto>> getSchedules(
             @Parameter(description = "조회할 날짜 (YYYY-MM-DD 형식)")
             @RequestParam(required = false) String date,
-
             @Parameter(description = "조회할 월 (YYYY-MM 형식)")
-            @RequestParam(required = false) String month,
+            @RequestParam(required = false) String month) {
 
-            @Parameter(description = "트레이너 ID")
-            @RequestParam(required = false) Long trainerId,
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String role = authentication.getAuthorities().stream()
+                .findFirst()
+                .map(GrantedAuthority::getAuthority)
+                .orElseThrow(() -> new CustomException(ErrorCode.UNAUTHORIZED));
+        Long authenticatedId = Long.parseLong(authentication.getName());
 
-            @Parameter(description = "회원 ID")
-            @RequestParam(required = false) Long memberId) {
+        log.debug("인증된 사용자 - ID: {}, Role: {}", authenticatedId, role);
 
+        if (date != null) {
+            return handleDateSearch(date, role, authenticatedId);
+        } else if (month != null) {
+            return handleMonthSearch(month, role, authenticatedId);
+        }
+
+        log.error("날짜 또는 월 파라미터가 필요합니다");
+        throw new CustomException(ErrorCode.INVALID_INPUT_VALUE);
+    }
+
+    private ResponseEntity<List<ScheduleResponseDto>> handleMonthSearch(
+            String month, String role, Long authenticatedId) {
         try {
-            validateParameters(date, month, trainerId, memberId);
-
-            if (date != null) {
-                return handleDateSearch(date, trainerId, memberId);
-            } else if (month != null) {
-                return handleMonthSearch(month, trainerId, memberId);
+            String[] monthParts = month.split("-");
+            if (monthParts.length != 2) {
+                log.error("잘못된 월 형식: {}", month);
+                throw new CustomException(ErrorCode.INVALID_DATE_FORMAT);
             }
 
-            log.warn("Neither date nor month provided");
-            return ResponseEntity.badRequest().build();
+            int year = Integer.parseInt(monthParts[0]);
+            int monthValue = Integer.parseInt(monthParts[1]);
 
-        } catch (Exception e) {
-            return handleException(e);
+            log.debug("일정 조회 - 년월: {}-{}", year, monthValue);
+
+            List<ScheduleResponseDto> result;
+            if (role.equals("ROLE_TRAINER")) {
+                result = scheduleService.getSchedulesByMonthAndTrainer(year, monthValue, authenticatedId);
+                log.debug("트레이너 {} - {}개의 일정 조회됨", authenticatedId, result.size());
+            } else {
+                result = scheduleService.getSchedulesByMonthAndMember(year, monthValue, authenticatedId);
+                log.debug("회원 {} - {}개의 일정 조회됨", authenticatedId, result.size());
+            }
+
+            return ResponseEntity.ok(result);
+        } catch (NumberFormatException e) {
+            log.error("월 파싱 실패: {}", e.getMessage());
+            throw new CustomException(ErrorCode.INVALID_DATE_FORMAT);
         }
     }
 
-    private void validateParameters(String date, String month, Long trainerId, Long memberId) {
-        if (trainerId == null && memberId == null) {
-            log.warn("Neither trainerId nor memberId provided");
-            throw new IllegalArgumentException("Either trainerId or memberId must be provided");
+    private ResponseEntity<List<ScheduleResponseDto>> handleDateSearch(
+            String date, String role, Long authenticatedId) {
+        try {
+            String[] dateParts = date.split("-");
+            if (dateParts.length != 3) {
+                log.error("잘못된 날짜 형식: {}", date);
+                throw new CustomException(ErrorCode.INVALID_DATE_FORMAT);
+            }
+
+            int year = Integer.parseInt(dateParts[0]);
+            int month = Integer.parseInt(dateParts[1]);
+            int day = Integer.parseInt(dateParts[2]);
+
+            log.debug("일정 조회 - 날짜: {}-{}-{}", year, month, day);
+
+            List<ScheduleResponseDto> result;
+            if (role.equals("ROLE_TRAINER")) {
+                result = scheduleService.getSchedulesByDateAndTrainer(year, month, day, authenticatedId);
+                log.debug("트레이너 {} - {}개의 일정 조회됨", authenticatedId, result.size());
+            } else {
+                result = scheduleService.getSchedulesByDateAndMember(year, month, day, authenticatedId);
+                log.debug("회원 {} - {}개의 일정 조회됨", authenticatedId, result.size());
+            }
+
+            return ResponseEntity.ok(result);
+        } catch (NumberFormatException e) {
+            log.error("날짜 파싱 실패: {}", e.getMessage());
+            throw new CustomException(ErrorCode.INVALID_DATE_FORMAT);
         }
     }
 
-    private ResponseEntity<List<ScheduleResponseDto>> handleDateSearch(String date, Long trainerId, Long memberId) {
-        String[] dateParts = date.split("-");
-        if (dateParts.length != 3) {
-            throw new IllegalArgumentException("Invalid date format. Expected YYYY-MM-DD");
-        }
-
-        int year = Integer.parseInt(dateParts[0]);
-        int month = Integer.parseInt(dateParts[1]);
-        int day = Integer.parseInt(dateParts[2]);
-
-        log.debug("Parsed date: year={}, month={}, day={}", year, month, day);
-
-        List<ScheduleResponseDto> result;
-        if (trainerId != null) {
-            result = scheduleService.getSchedulesByDateAndTrainer(year, month, day, trainerId);
-            log.debug("Found {} schedules for trainer {} on date {}", result.size(), trainerId, date);
-        } else {
-            result = scheduleService.getSchedulesByDateAndMember(year, month, day, memberId);
-            log.debug("Found {} schedules for member {} on date {}", result.size(), memberId, date);
-        }
-
-        return ResponseEntity.ok(result);
-    }
-
-    private ResponseEntity<List<ScheduleResponseDto>> handleMonthSearch(String month, Long trainerId, Long memberId) {
-        String[] monthParts = month.split("-");
-        if (monthParts.length != 2) {
-            throw new IllegalArgumentException("Invalid month format. Expected YYYY-MM");
-        }
-
-        int year = Integer.parseInt(monthParts[0]);
-        int monthValue = Integer.parseInt(monthParts[1]);
-
-        log.debug("Parsed month: year={}, month={}", year, monthValue);
-
-        List<ScheduleResponseDto> result;
-        if (trainerId != null) {
-            result = scheduleService.getSchedulesByMonthAndTrainer(year, monthValue, trainerId);
-            log.debug("Found {} schedules for trainer {} in month {}", result.size(), trainerId, month);
-        } else {
-            result = scheduleService.getSchedulesByMonthAndMember(year, monthValue, memberId);
-            log.debug("Found {} schedules for member {} in month {}", result.size(), memberId, month);
-        }
-
-        return ResponseEntity.ok(result);
-    }
-
-    private ResponseEntity<List<ScheduleResponseDto>> handleException(Exception e) {
-        if (e instanceof NumberFormatException) {
-            log.error("Failed to parse date/month values: {}", e.getMessage());
-            return ResponseEntity.badRequest().build();
-        } else if (e instanceof IllegalArgumentException) {
-            log.error("Invalid request: {}", e.getMessage());
-            return ResponseEntity.badRequest().build();
-        } else {
-            log.error("Unexpected error during schedule search: {}", e.getMessage());
-            return ResponseEntity.internalServerError().build();
-        }
-    }
 }
