@@ -32,7 +32,6 @@ internal class UserRepositoryImpl @Inject constructor(
     override suspend fun getUserInfo(): Flow<ResponseStatus<UserInfo>> {
         return flow {
             val result = ApiResponseHandler().handle {
-                val memberId = dataStore.user.firstOrNull()!!.memberId
                 userService.getUserInfo(3)
             }.first() // ✅ 첫 번째 값만 가져옴
             when (result) {

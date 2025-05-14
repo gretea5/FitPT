@@ -63,7 +63,7 @@ class MeasureFragment : BaseFragment<FragmentMeasureBinding>(
     }
 
     fun initial(){
-        manager = FitrusDevice(requireContext(), this, "normal_key")
+        manager = FitrusDevice(requireActivity(), this, "normal_key")
     }
 
     fun initEvent(){

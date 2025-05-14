@@ -34,12 +34,53 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+    <LinearLayout
+        android:id="@+id/layout_exercise_info"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_header">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/text_exercise_type"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="3"
+            android:clickable="false"
+            android:focusable="false"
+            android:padding="16dp"
+            android:text="수행한 운동"
+            android:textSize="16sp"
+            android:backgroundTint="#FF5722"
+            app:cornerRadius="8dp"  />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/text_level"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginRight="8dp"
+            android:clickable="false"
+            android:focusable="false"
+            android:padding="16dp"
+            android:text="성과도"
+            android:textSize="16sp"
+            android:backgroundTint="#FF5722"
+            app:cornerRadius="8dp" />
+    </LinearLayout>
+
+
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_header" />
+        app:layout_constraintTop_toBottomOf="@+id/layout_exercise_info" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
