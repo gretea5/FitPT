@@ -7,8 +7,11 @@ import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.view.children
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.DayPosition
@@ -20,10 +23,15 @@ import com.kizitonwose.calendar.view.ViewContainer
 import com.ssafy.presentation.R
 import com.ssafy.presentation.base.BaseFragment
 import com.ssafy.presentation.databinding.FragmentHomeBinding
+import com.ssafy.presentation.home.viewmodel.HomeStatus
+import com.ssafy.presentation.home.viewmodel.HomeViewModel
+import com.ssafy.presentation.login.viewModel.LoginStatus
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
+import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 import java.util.Locale
 
@@ -35,21 +43,51 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
     R.layout.fragment_home
 ) {
     private val eventsDatesList = mutableListOf<LocalDate>()
+    private val viewModel: HomeViewModel by viewModels()
     private var selectedDate: LocalDate? = null
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initObserver()
         initCalendar()
         initEvent()
+        fetchSchedules()
+    }
+
+    private fun initObserver() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.homeState.collect { state ->
+                when (state) {
+                    is HomeStatus.Idle -> {}
+                    is HomeStatus.Success -> {
+                        Log.d(TAG, "initObserver: ${state.schedules}")
+                    }
+                    is HomeStatus.Error -> {
+                        Toast.makeText(requireContext(), state.message, Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun fetchSchedules() {
+        // 현재 날짜 또는 필요한 날짜 형식으로 변환
+        val today = LocalDate.now()
+        val formattedDate = today.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+        val formattedMonth = today.format(DateTimeFormatter.ofPattern("yyyy-MM"))
+
+        viewModel.getSchedules(
+            month = formattedMonth,
+            date = null,
+            trainerId = null,
+            memberId = null
+        )
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initCalendar() {
-        val currentMonth = YearMonth.now()
-
-        addExampleEventList()
-
         class MonthViewContainer(view: View) : ViewContainer(view) {
             val titlesContainer = view as ViewGroup
         }
@@ -74,6 +112,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
                 }
             }
         }
+
+        val currentMonth = YearMonth.now()
+
+        addExampleEventList()
 
         val startMonth = currentMonth.minusMonths(120)
         val endMonth = currentMonth.plusMonths(120)
