@@ -11,7 +11,6 @@ import com.ssafy.domain.model.member.MemberInfo
 import com.ssafy.domain.repository.member.MemberRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 private const val TAG = "MemberRepositoryImpl_ssafy"
