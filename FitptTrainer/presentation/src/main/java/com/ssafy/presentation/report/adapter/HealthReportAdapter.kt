@@ -10,7 +10,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.RecyclerView
-import com.ssafy.domain.model.report.HealthReportWorkout
+import com.ssafy.domain.model.report.TempHealthReportWorkout
 import com.ssafy.domain.model.report.WorkoutNameScoreItem
 import com.ssafy.presentation.R
 import com.ssafy.presentation.databinding.ListItemReportWorkoutBinding

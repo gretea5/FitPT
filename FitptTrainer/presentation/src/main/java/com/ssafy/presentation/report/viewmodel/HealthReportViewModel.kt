@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.ssafy.domain.model.report.HealthReportWorkout
+import com.ssafy.domain.model.report.TempHealthReportWorkout
 import com.ssafy.domain.model.report.MuscleGroup
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -38,11 +38,11 @@ class HealthReportViewModel @Inject constructor() : ViewModel() {
     private val _selectedWorkoutId = MutableStateFlow<Long?>(null)
     val selectedWorkoutId: StateFlow<Long?> = _selectedWorkoutId
 
-    private val _selectedWorkoutItem = MutableLiveData<HealthReportWorkout?>()
-    val selectedWorkoutItem: LiveData<HealthReportWorkout?> = _selectedWorkoutItem
+    private val _selectedWorkoutItem = MutableLiveData<TempHealthReportWorkout?>()
+    val selectedWorkoutItem: LiveData<TempHealthReportWorkout?> = _selectedWorkoutItem
 
-    private val _workoutReportList = MutableStateFlow<List<HealthReportWorkout>>(emptyList())
-    val workoutReportList: StateFlow<List<HealthReportWorkout>> = _workoutReportList
+    private val _workoutReportList = MutableStateFlow<List<TempHealthReportWorkout>>(emptyList())
+    val workoutReportList: StateFlow<List<TempHealthReportWorkout>> = _workoutReportList
 
     private val _isAddButtonEnabled = MediatorLiveData<Boolean>().apply {
         fun check() {
@@ -70,7 +70,7 @@ class HealthReportViewModel @Inject constructor() : ViewModel() {
         Log.d(TAG, "AddWorkoutReport: ${id}")
 
         if (id != null && name.isNotBlank() && score.isNotBlank() && description.isNotBlank() && muscles.isNotEmpty()) {
-            val newReport = HealthReportWorkout(
+            val newReport = TempHealthReportWorkout(
                 id = id,
                 exerciseName = name,
                 exerciseAchievement = score,
@@ -136,7 +136,7 @@ class HealthReportViewModel @Inject constructor() : ViewModel() {
                 muscleSelected == true
     }
 
-    fun getWorkoutById(id: Long): HealthReportWorkout? {
+    fun getWorkoutById(id: Long): TempHealthReportWorkout? {
         return _workoutReportList.value.find { it.id == id }
     }
 

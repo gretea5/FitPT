@@ -1,6 +1,6 @@
 package com.ssafy.domain.model.report
 
-data class HealthReportWorkout(
+data class TempHealthReportWorkout(
     val id: Long,
     val exerciseName: String,
     val exerciseAchievement: String,
