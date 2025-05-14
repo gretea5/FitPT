@@ -9,57 +9,62 @@
     <View
         android:id="@+id/topDivider"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="2dp"
         android:background="#CCCCCC"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/headerLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/topDivider">
-
-        <TextView
-            android:id="@+id/titleTextView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:background="#DDDDDD"
-            android:gravity="center"
-            android:padding="16dp"
-            android:text="솔더 프레스"
-            android:textColor="#000000"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toStartOf="@id/statusButton"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Button
-            android:id="@+id/statusButton"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:background="#DDDDDD"
-            android:text="중"
-            android:textColor="#000000"
-            android:textSize="18sp"
-            app:layout_constraintBottom_toBottomOf="@id/titleTextView"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/titleTextView" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
+        <!-- 운동 이름 -->
     <TextView
-        android:id="@+id/descriptionTextView"
-        android:layout_width="match_parent"
+        android:id="@+id/tv_exercise_name"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:background="#DDDDDD"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/bg_rounded_gray"
         android:gravity="center"
-        android:padding="24dp"
-        android:text="무계를 잘 못치고 설명 설명 설명 설명 설명 설명설명 설명 설명설명 설명 설명설명 설명 설명설명 설명 설명설명 설명 설명설명 설명 설명설명 설명 설명설명 설명 설명설명 설명 설명설명 설명 설명설명 설명 설명설명 설명 설명"
-        android:textColor="#000000"
-        android:textSize="14sp"
-        app:layout_constraintTop_toBottomOf="@id/headerLayout" />
+        android:padding="12dp"
+        android:text="숄더 프레스"
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/tv_exercise_achievement"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.7" />
 
+        <!-- 성과도 -->
+    <TextView
+        android:id="@+id/tv_exercise_achievement"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/bg_rounded_gray"
+        android:gravity="center"
+        android:padding="12dp"
+        android:text="중"
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tv_exercise_name"
+        app:layout_constraintTop_toTopOf="@+id/tv_exercise_name" />
+
+        <!-- 설명 영역 -->
+    <TextView
+        android:id="@+id/tv_exercise_description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/bg_rounded_gray"
+        android:padding="12dp"
+        android:text="무게를 잘 못치고 설명 설명 설명 설명 설명..."
+        android:textColor="@android:color/black"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/tv_exercise_achievement"
+        app:layout_constraintStart_toStartOf="@+id/tv_exercise_name"
+        app:layout_constraintTop_toBottomOf="@+id/tv_exercise_name"
+        app:layout_constraintWidth_percent="0.87" />
 </androidx.constraintlayout.widget.ConstraintLayout>
