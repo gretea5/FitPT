@@ -75,6 +75,10 @@ class HealthReportAdapter(
                     applyStyle(item)
 
                     root.setOnClickListener {
+                        // 작성 중인 아이템이 있으면 클릭 무시
+                        val isAnyEditing = items.any { it.isEditing }
+                        if (isAnyEditing) return@setOnClickListener
+
                         // 이미 다른 아이템이 선택되어 있다면 클릭 무시
                         val otherSelected = items.any { it.isSelected && it != item }
                         if (otherSelected) return@setOnClickListener
