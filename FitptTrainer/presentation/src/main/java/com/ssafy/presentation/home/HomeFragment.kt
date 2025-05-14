@@ -82,7 +82,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.schedules.collect { schedules -> scheduleAdapter.submitList(schedules) }
+            viewModel.scheduleItems.collect { scheduleItems -> scheduleAdapter.submitList(scheduleItems) }
         }
     }
 

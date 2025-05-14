@@ -5,11 +5,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.ssafy.domain.model.schedule.Schedule
+import com.ssafy.domain.model.schedule.ScheduleWithMemberInfo
 import com.ssafy.presentation.databinding.ListItemScheduleBinding
 import com.ssafy.presentation.util.TimeUtils
 
-class HomeAdapter : ListAdapter<Schedule, HomeAdapter.ScheduleViewHolder>(ScheduleDiffCallback()) {
+class HomeAdapter : ListAdapter<ScheduleWithMemberInfo, HomeAdapter.ScheduleViewHolder>(ScheduleDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ScheduleViewHolder {
         val binding = ListItemScheduleBinding.inflate(
             LayoutInflater.from(parent.context), parent, false
@@ -24,10 +24,10 @@ class HomeAdapter : ListAdapter<Schedule, HomeAdapter.ScheduleViewHolder>(Schedu
     class ScheduleViewHolder(private val binding: ListItemScheduleBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: Schedule) {
+        fun bind(item: ScheduleWithMemberInfo) {
             val startTime = TimeUtils.parseDateTime(item.startTime).second;
             val endTime = TimeUtils.parseDateTime(item.endTime).second;
-            binding.tvScheduleName.text = item.memberId.toString()
+            binding.tvScheduleName.text = item.memberName
             binding.tvScheduleTime.text = "${startTime}~${endTime}"
 
             binding.root.setOnClickListener {
@@ -35,12 +35,12 @@ class HomeAdapter : ListAdapter<Schedule, HomeAdapter.ScheduleViewHolder>(Schedu
         }
     }
 
-    class ScheduleDiffCallback : DiffUtil.ItemCallback<Schedule>() {
-        override fun areItemsTheSame(oldItem: Schedule, newItem: Schedule): Boolean {
+    class ScheduleDiffCallback : DiffUtil.ItemCallback<ScheduleWithMemberInfo>() {
+        override fun areItemsTheSame(oldItem: ScheduleWithMemberInfo, newItem: ScheduleWithMemberInfo): Boolean {
             return oldItem.scheduleId == newItem.scheduleId
         }
 
-        override fun areContentsTheSame(oldItem: Schedule, newItem: Schedule): Boolean {
+        override fun areContentsTheSame(oldItem: ScheduleWithMemberInfo, newItem: ScheduleWithMemberInfo): Boolean {
             return oldItem == newItem
         }
     }
