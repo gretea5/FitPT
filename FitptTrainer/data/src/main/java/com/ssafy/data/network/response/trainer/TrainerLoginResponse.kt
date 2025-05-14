@@ -1,4 +1,4 @@
-package com.ssafy.data.network.response
+package com.ssafy.data.network.response.trainer
 
 import com.ssafy.data.network.common.BaseResponse
 import com.ssafy.data.network.mapper.DataMapper
