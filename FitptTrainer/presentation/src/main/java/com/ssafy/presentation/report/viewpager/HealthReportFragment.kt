@@ -17,6 +17,7 @@ import com.ssafy.presentation.databinding.FragmentHealthReportBinding
 import com.ssafy.presentation.report.adapter.HealthReportAdapter
 import com.ssafy.presentation.report.viewmodel.HealthReportViewModel
 import com.ssafy.presentation.report.viewmodel.ReportViewModel
+import kotlinx.coroutines.flow.observeOn
 
 private const val TAG = "HealthReportFragment_FitPT"
 
@@ -146,6 +147,10 @@ class HealthReportFragment : BaseFragment<FragmentHealthReportBinding>(
                     else R.drawable.ib_report_workout_add_off
                 )
             }
+        }
+
+        reportViewModel.workoutReportList.observe(viewLifecycleOwner) {
+            viewModel.setReportExercises(it)
         }
     }
 
