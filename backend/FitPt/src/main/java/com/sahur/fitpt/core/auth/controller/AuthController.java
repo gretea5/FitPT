@@ -3,6 +3,7 @@ package com.sahur.fitpt.core.auth.controller;
 import com.sahur.fitpt.core.auth.dto.KakaoLoginRequestDto;
 import com.sahur.fitpt.core.auth.dto.KakaoLoginResponseDto;
 import com.sahur.fitpt.core.auth.dto.KakaoSignupRequestDto;
+import com.sahur.fitpt.core.auth.dto.KakaoSignupResponseDto;
 import com.sahur.fitpt.core.auth.dto.TokenRequestDto;
 import com.sahur.fitpt.core.auth.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -21,7 +22,7 @@ public class AuthController {
 
     @PostMapping("/kakao/signup")
     @Operation(summary = "카카오 회원가입", description = "카카오 로그인과 회원가입을 동시에 처리합니다.")
-    public ResponseEntity<KakaoLoginResponseDto> kakaoSignup(
+    public ResponseEntity<KakaoSignupResponseDto> kakaoSignup(
             @RequestBody KakaoSignupRequestDto request
     ) {
         return ResponseEntity.ok(

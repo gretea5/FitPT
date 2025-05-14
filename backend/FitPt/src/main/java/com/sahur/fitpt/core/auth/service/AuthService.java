@@ -2,6 +2,7 @@ package com.sahur.fitpt.core.auth.service;
 
 import com.sahur.fitpt.core.auth.dto.KakaoLoginResponseDto;
 import com.sahur.fitpt.core.auth.dto.KakaoSignupRequestDto;
+import com.sahur.fitpt.core.auth.dto.KakaoSignupResponseDto;
 import com.sahur.fitpt.core.auth.dto.KakaoUserInfo;
 import com.sahur.fitpt.core.auth.jwt.JWTUtil;
 import com.sahur.fitpt.core.constant.ErrorCode;
@@ -38,7 +39,7 @@ public class AuthService {
     private static final String KAKAO_USER_INFO_URI = "https://kapi.kakao.com/v2/user/me";
 
     @Transactional
-    public KakaoLoginResponseDto kakaoSignup(KakaoSignupRequestDto request) {
+    public KakaoSignupResponseDto kakaoSignup(KakaoSignupRequestDto request) {
         // 카카오 사용자 정보 조회
         KakaoUserInfo kakaoUserInfo = getKakaoUserInfo(request.getKakaoAccessToken());
 
@@ -98,7 +99,7 @@ public class AuthService {
         // Refresh 토큰 Redis 저장
         storeRefreshToken(savedMember.getMemberId(), refreshToken);
 
-        return KakaoLoginResponseDto.builder()
+        return KakaoSignupResponseDto.builder()
                 .memberId(savedMember.getMemberId())
                 .memberName(savedMember.getMemberName())
                 .memberGender(savedMember.getMemberGender())
@@ -119,6 +120,8 @@ public class AuthService {
 
         Member member = memberRepository.findByKakaoId(kakaoUserInfo.getId())
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+
+        log.debug("로그인 회원 정보: id={}, name={}", member.getMemberId(), member.getMemberName());
 
         // FCM 토큰 처리
         if (fcmToken != null) {
