@@ -1,18 +1,25 @@
 package com.ssafy.presentation.report.adapter
 
 import android.os.Build.VERSION_CODES.P
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.RecyclerView
+import com.ssafy.domain.model.report.HealthReportWorkout
 import com.ssafy.domain.model.report.WorkoutNameScoreItem
 import com.ssafy.presentation.databinding.ListItemReportWorkoutBinding
 
+private const val TAG = "HealthReportAdapter_FitPT"
+
 class HealthReportAdapter(
     var items: MutableList<WorkoutNameScoreItem>,
-    private val onItemChanged: () -> Unit
+    private val onItemChanged: () -> Unit,
+    private val onItemClicked: (Long) -> Unit
 ) : RecyclerView.Adapter<HealthReportAdapter.HealthReportViewHolder>() {
+
+    private var selectedPosition: Int = RecyclerView.NO_POSITION
 
     inner class HealthReportViewHolder(private val binding: ListItemReportWorkoutBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: WorkoutNameScoreItem) {
@@ -41,14 +48,28 @@ class HealthReportAdapter(
 
                     tvReportWorkoutViewName.setText(item.name)
                     tvReportWorkoutViewScore.setText(item.score)
+
+                    root.setOnClickListener {
+
+                        Log.d(TAG, "SelectedWorkout: ${item.id}")
+                        onItemClicked(item.id)
+                    }
                 }
             }
         }
     }
 
-    fun addEditItem() {
+    fun addEditItem(newId: Long) {
         if (items.lastOrNull()?.isEditing == true) return
-        items.add(WorkoutNameScoreItem("", "", true))
+
+        items.add(
+            WorkoutNameScoreItem(
+                id = newId,
+                name = "",
+                score = "",
+                isEditing = true
+            )
+        )
         notifyItemInserted(items.lastIndex)
     }
 
