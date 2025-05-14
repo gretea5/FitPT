@@ -38,6 +38,9 @@ class HealthReportViewModel @Inject constructor() : ViewModel() {
     private val _selectedWorkoutId = MutableStateFlow<Long?>(null)
     val selectedWorkoutId: StateFlow<Long?> = _selectedWorkoutId
 
+    private val _selectedWorkoutItem = MutableLiveData<HealthReportWorkout?>()
+    val selectedWorkoutItem: LiveData<HealthReportWorkout?> = _selectedWorkoutItem
+
     private val _workoutReportList = MutableStateFlow<List<HealthReportWorkout>>(emptyList())
     val workoutReportList: StateFlow<List<HealthReportWorkout>> = _workoutReportList
 
