@@ -565,6 +565,21 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/cv_report_health_content_line" />
 
+                <TextView
+                    android:id="@+id/tv_report_health_content"
+                    style="@style/Font_Medium_20_main_black"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="20dp"
+                    android:background="@android:color/transparent"
+                    android:visibility="gone"
+                    android:enabled="false"
+                    android:gravity="top"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/cv_report_health_content_line" />
+
                 <ImageButton
                     android:id="@+id/ib_report_health_workout_delete"
                     android:layout_width="wrap_content"
