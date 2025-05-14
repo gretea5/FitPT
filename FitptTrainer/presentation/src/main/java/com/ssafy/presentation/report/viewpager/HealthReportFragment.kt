@@ -104,7 +104,6 @@ class HealthReportFragment : BaseFragment<FragmentHealthReportBinding>(
                 cvReportWorkoutAddWorkout.isEnabled = true
             }
 
-
             // 운동 삭제
             ibReportHealthWorkoutDelete.setOnClickListener {
                 setAllMuscleClickable(false)
@@ -155,6 +154,35 @@ class HealthReportFragment : BaseFragment<FragmentHealthReportBinding>(
 
         binding.rvReportWorkoutList.adapter = healthReportAdapter
         binding.rvReportWorkoutList.layoutManager = LinearLayoutManager(requireContext())
+    }
+
+    private fun updateSelectedWorkoutItem(id: Long, isSelected: Boolean) {
+        binding.ibReportHealthWorkoutDelete.isVisible = true
+
+        reportViewModel.setSelectedWorkoutId(id)
+
+        reportViewModel.selectedWorkoutItem.observe(viewLifecycleOwner) { item ->
+            item?.let {
+                binding.apply {
+                    if (isSelected) {
+                        resetAllMuscleViewsToGray()
+                        highlightMuscleGroupsByIds(it.activationMuscleId)
+
+                        tvReportHealthContent.isVisible = true
+                        etReportHealthContent.isVisible = false
+
+                        tvReportHealthContent.setText(it.exerciseComment)
+                    } else {
+                        resetAllMuscleViewsToGray()
+
+                        tvReportHealthContent.isVisible = false
+                        etReportHealthContent.isVisible = true
+
+                        tvReportHealthContent.setText("")
+                    }
+                }
+            }
+        }
     }
 
     private fun updateAddButtonState() {
