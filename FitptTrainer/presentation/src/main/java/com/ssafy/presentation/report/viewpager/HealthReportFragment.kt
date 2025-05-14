@@ -164,8 +164,6 @@ class HealthReportFragment : BaseFragment<FragmentHealthReportBinding>(
     }
 
     private fun updateSelectedWorkoutItem(id: Long, isSelected: Boolean) {
-        binding.ibReportHealthWorkoutDelete.isVisible = true
-
         reportViewModel.setSelectedWorkoutId(id)
 
         reportViewModel.selectedWorkoutItem.observe(viewLifecycleOwner) { item ->
@@ -177,6 +175,7 @@ class HealthReportFragment : BaseFragment<FragmentHealthReportBinding>(
 
                         tvReportHealthContent.isVisible = true
                         etReportHealthContent.isVisible = false
+                        ibReportHealthWorkoutDelete.isVisible = true
 
                         tvReportHealthContent.setText(it.exerciseComment)
                     } else {
@@ -184,6 +183,7 @@ class HealthReportFragment : BaseFragment<FragmentHealthReportBinding>(
 
                         tvReportHealthContent.isVisible = false
                         etReportHealthContent.isVisible = true
+                        ibReportHealthWorkoutDelete.isVisible = false
 
                         tvReportHealthContent.setText("")
                     }
