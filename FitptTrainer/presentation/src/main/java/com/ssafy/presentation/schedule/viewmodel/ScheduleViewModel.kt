@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ssafy.domain.model.base.ResponseStatus
 import com.ssafy.domain.model.schedule.Schedule
-import com.ssafy.domain.usercase.schedule.GetScheduleUseCase
+import com.ssafy.domain.usecase.schedule.GetScheduleUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
