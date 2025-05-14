@@ -143,9 +143,16 @@ class HealthReportFragment : BaseFragment<FragmentHealthReportBinding>(
     private fun initRecyclerView() {
         val initialList = mutableListOf<WorkoutNameScoreItem>()
 
-        healthReportAdapter = HealthReportAdapter(initialList) {
-            updateAddButtonState()
-        }
+        healthReportAdapter = HealthReportAdapter(
+            initialList,
+            onItemChanged = {
+                updateAddButtonState()
+            },
+            onItemClicked = { selectedId ->
+                reportViewModel.setSelectedWorkoutId(selectedId)
+            },
+        )
+
         binding.rvReportWorkoutList.adapter = healthReportAdapter
         binding.rvReportWorkoutList.layoutManager = LinearLayoutManager(requireContext())
     }
