@@ -83,6 +83,8 @@ class HealthReportAdapter(
 
     fun finalizeLastItem() {
         items.lastOrNull()?.let {
+            Log.d(TAG, "AddWorkout : Adapter: ${it.id}")
+
             it.isEditing = false
             notifyItemChanged(items.lastIndex)
         }
