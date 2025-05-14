@@ -40,7 +40,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // 인증 없이 접근 가능한 경로 설정
                         .requestMatchers(
-                                "/api/auth/**",          // 인증 관련 API
+                                "/api/auth/kakao/**",    // 카카오 로그인/회원가입 API
+                                "/api/auth/refresh",  // // 토큰 재발급
                                 "/api/trainers/login",
                                 "/api/test/**",
                                 "/api/gyms",          // 체육관 키워드 검색 API

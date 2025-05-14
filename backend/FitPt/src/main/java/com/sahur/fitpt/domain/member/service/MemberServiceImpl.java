@@ -11,6 +11,7 @@ import com.sahur.fitpt.db.repository.TrainerRepository;
 import com.sahur.fitpt.domain.member.dto.MemberRequestDto;
 import com.sahur.fitpt.domain.member.dto.MemberResponseDto;
 import com.sahur.fitpt.domain.member.dto.MemberPartialUpdateDto;
+import com.sahur.fitpt.domain.member.dto.MemberSignUpResponseDto;
 import com.sahur.fitpt.domain.member.validator.MemberValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,27 +32,25 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @Transactional
-    public Long createMember(MemberRequestDto requestDto) {
+    public MemberSignUpResponseDto createMember(MemberRequestDto requestDto) {
         // 유효성 검사
         memberValidator.validateGender(requestDto.getMemberGender());
         memberValidator.validateHeight(requestDto.getMemberHeight());
         memberValidator.validateWeight(requestDto.getMemberWeight());
 
-        Trainer trainer = null;
         Admin admin = null;
-
-        if (requestDto.getTrainerId() != null) {
-            trainer = trainerRepository.findById(requestDto.getTrainerId())
-                    .orElseThrow(() -> new CustomException(ErrorCode.TRAINER_NOT_FOUND));
-        }
 
         if (requestDto.getAdminId() != null) {
             admin = adminRepository.findById(requestDto.getAdminId())
                     .orElseThrow(() -> new CustomException(ErrorCode.ADMIN_NOT_FOUND));
+
+            // gymName 검증
+            if (!admin.getGymName().equals(requestDto.getGymName())) {
+                throw new CustomException(ErrorCode.INVALID_GYM_NAME);
+            }
         }
 
         Member member = Member.builder()
-                .trainer(trainer)
                 .admin(admin)
                 .memberName(requestDto.getMemberName())
                 .memberGender(requestDto.getMemberGender())
@@ -64,7 +63,7 @@ public class MemberServiceImpl implements MemberService {
         Member savedMember = memberRepository.save(member);
         log.info("새로운 회원이 등록되었습니다: id={}, name={}", savedMember.getMemberId(), savedMember.getMemberName());
 
-        return savedMember.getMemberId();
+        return MemberSignUpResponseDto.from(savedMember, "dummy_access_token", "dummy_refresh_token");
     }
 
     @Override
@@ -79,7 +78,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @Transactional
-    public Long updateMember(Long memberId, MemberRequestDto requestDto) {
+    public MemberResponseDto updateMember(Long memberId, MemberRequestDto requestDto) {
         Member member = memberRepository.findByIdAndNotDeleted(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 
@@ -89,17 +88,16 @@ public class MemberServiceImpl implements MemberService {
         memberValidator.validateHeight(requestDto.getMemberHeight());
         memberValidator.validateWeight(requestDto.getMemberWeight());
 
-        Trainer trainer = null;
         Admin admin = null;
-
-        if (requestDto.getTrainerId() != null) {
-            trainer = trainerRepository.findById(requestDto.getTrainerId())
-                    .orElseThrow(() -> new CustomException(ErrorCode.TRAINER_NOT_FOUND));
-        }
 
         if (requestDto.getAdminId() != null) {
             admin = adminRepository.findById(requestDto.getAdminId())
                     .orElseThrow(() -> new CustomException(ErrorCode.ADMIN_NOT_FOUND));
+
+            // gymName 검증
+            if (!admin.getGymName().equals(requestDto.getGymName())) {
+                throw new CustomException(ErrorCode.INVALID_GYM_NAME);
+            }
         }
 
         member.update(
@@ -108,13 +106,13 @@ public class MemberServiceImpl implements MemberService {
                 requestDto.getMemberBirth(),
                 requestDto.getMemberHeight(),
                 requestDto.getMemberWeight(),
-                trainer,
+                member.getTrainer(),
                 admin
         );
 
         log.info("회원 정보가 수정되었습니다: id={}, name={}", member.getMemberId(), member.getMemberName());
 
-        return member.getMemberId();
+        return MemberResponseDto.from(member);
     }
 
     @Override

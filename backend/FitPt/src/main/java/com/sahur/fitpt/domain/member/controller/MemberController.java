@@ -4,6 +4,7 @@ import com.sahur.fitpt.core.auth.annotation.TrainerMemberAccess;
 import com.sahur.fitpt.domain.member.dto.MemberRequestDto;
 import com.sahur.fitpt.domain.member.dto.MemberResponseDto;
 import com.sahur.fitpt.domain.member.dto.MemberPartialUpdateDto;
+import com.sahur.fitpt.domain.member.dto.MemberSignUpResponseDto;
 import com.sahur.fitpt.domain.member.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -37,8 +38,8 @@ public class MemberController {
             @ApiResponse(responseCode = "200", description = "회원 등록 성공"),
             @ApiResponse(responseCode = "400", description = "잘못된 요청")
     })
-    public ResponseEntity<Long> createMember(
-            @Valid @RequestBody MemberRequestDto requestDto) {  // @Valid 추가
+    public ResponseEntity<MemberSignUpResponseDto> createMember(
+            @Valid @RequestBody MemberRequestDto requestDto) {
         return ResponseEntity.ok(memberService.createMember(requestDto));
     }
 
@@ -64,7 +65,7 @@ public class MemberController {
             @ApiResponse(responseCode = "400", description = "잘못된 요청"),
             @ApiResponse(responseCode = "404", description = "회원을 찾을 수 없음")
     })
-    public ResponseEntity<Long> updateMember(
+    public ResponseEntity<MemberResponseDto> updateMember(
             @Parameter(description = "수정할 회원 ID", required = true)
             @PathVariable @Min(value = 1, message = "회원 ID는 1 이상이어야 합니다") Long memberId,
             @Valid @RequestBody MemberRequestDto requestDto) {

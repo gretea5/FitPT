@@ -10,4 +10,5 @@ import lombok.NoArgsConstructor;
 public class KakaoLoginRequestDto {
     @Schema(description = "카카오 액세스 토큰", example = "kakao_access_token_example")
     private String kakaoAccessToken;
+    private String fcmToken;
 }
