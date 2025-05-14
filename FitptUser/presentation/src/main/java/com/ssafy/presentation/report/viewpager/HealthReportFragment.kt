@@ -18,6 +18,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.ssafy.presentation.report.HealthReportDialogFragment
 import com.ssafy.presentation.report.viewModel.ReportDetailState
 import com.ssafy.presentation.util.CommonUtils
 import kotlinx.coroutines.flow.firstOrNull
@@ -95,6 +96,15 @@ class HealthReportFragment : BaseFragment<FragmentHealthReportBinding>(
                 imageView?.let {
                     val colorFilter = PorterDuffColorFilter(orangeColor, PorterDuff.Mode.SRC_ATOP)
                     it.colorFilter = colorFilter
+                    it.setOnClickListener {
+                        Log.d(TAG,"클릭"+muscleId.toString())
+                        val dialog = HealthReportDialogFragment().apply {
+                            arguments = Bundle().apply {
+                                putLong("muscleId", muscleId)
+                            }
+                        }
+                        dialog.show(parentFragmentManager, "HealthReportDialog")
+                    }
                 }
             }
         }
