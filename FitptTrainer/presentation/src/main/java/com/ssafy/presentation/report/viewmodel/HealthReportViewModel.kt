@@ -32,6 +32,12 @@ class HealthReportViewModel @Inject constructor() : ViewModel() {
     private val _selectedMuscleIds = MutableStateFlow<List<Int>>(emptyList())
     val selectedMuscleIds: StateFlow<List<Int>> = _selectedMuscleIds
 
+    private val _currentWorkoutId = MutableStateFlow<Long?>(null)
+    val currentWorkoutId: StateFlow<Long?> = _currentWorkoutId
+
+    private val _selectedWorkoutId = MutableStateFlow<Long?>(null)
+    val selectedWorkoutId: StateFlow<Long?> = _selectedWorkoutId
+
     private val _workoutReportList = MutableStateFlow<List<HealthReportWorkout>>(emptyList())
     val workoutReportList: StateFlow<List<HealthReportWorkout>> = _workoutReportList
 
@@ -56,21 +62,25 @@ class HealthReportViewModel @Inject constructor() : ViewModel() {
         val score = _score.value?.trim().orEmpty()
         val description = _description.value?.trim().orEmpty()
         val muscles = _selectedMuscleIds.value
+        val id = _currentWorkoutId.value
 
-        if (name.isNotBlank() && score.isNotBlank() && description.isNotBlank() && muscles.isNotEmpty()) {
+        Log.d(TAG, "AddWorkoutReport: ${id}")
+
+        if (id != null && name.isNotBlank() && score.isNotBlank() && description.isNotBlank() && muscles.isNotEmpty()) {
             val newReport = HealthReportWorkout(
+                id = id,
                 exerciseName = name,
                 exerciseAchievement = score,
                 exerciseComment = description,
-                activationMuscleId = muscles.sorted()
+                activationMuscleId = muscles.sorted(),
             )
 
             _workoutReportList.value = _workoutReportList.value + newReport
 
-            Log.d(TAG, "addWorkoutReport: ${newReport}")
-            Log.d(TAG, "addWorkoutReport: ${_workoutReportList.value}")
-            
+            Log.d(TAG, "addWorkoutReport: $newReport")
             clearInputs()
+
+            _currentWorkoutId.value = null // 저장 후 초기화
         }
     }
 
@@ -102,6 +112,15 @@ class HealthReportViewModel @Inject constructor() : ViewModel() {
                 !score.isNullOrBlank() &&
                 !description.isNullOrBlank() &&
                 muscleSelected == true
+    }
+
+    fun setCurrentWorkoutId(id: Long){
+        _currentWorkoutId.value = id
+    }
+
+    fun setSelectedWorkoutId(id: Long) {
+        _selectedWorkoutId.value = id
+        Log.d(TAG, "SelectedWorkoutId: ${_selectedWorkoutId.value}")
     }
 
     fun updateName(newName: String) {
