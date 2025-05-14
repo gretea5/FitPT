@@ -16,6 +16,12 @@ class ReportViewModel @Inject constructor() : ViewModel() {
     private val _reportExercises = MutableLiveData<List<HealthReportWorkout>>()
     val reportExercises: LiveData<List<HealthReportWorkout>> = _reportExercises
 
+    private val _reportComment = MutableLiveData<String>()
+    val reportComment: LiveData<String> = _reportComment
+
+    private val _reportMeasureId = MutableLiveData<Int>()
+    val reportMeasureId: LiveData<Int> = _reportMeasureId
+
     fun setReportExercises(items: List<TempHealthReportWorkout>) {
         val reportItems = items.map { item ->
             HealthReportWorkout(
