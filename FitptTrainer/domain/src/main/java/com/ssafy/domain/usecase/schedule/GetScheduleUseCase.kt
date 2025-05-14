@@ -1,4 +1,4 @@
-package com.ssafy.domain.usercase.schedule
+package com.ssafy.domain.usecase.schedule
 
 import com.ssafy.domain.model.base.ResponseStatus
 import com.ssafy.domain.model.schedule.Schedule
