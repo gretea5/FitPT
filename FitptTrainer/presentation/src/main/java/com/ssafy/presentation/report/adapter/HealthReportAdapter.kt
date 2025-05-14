@@ -119,6 +119,22 @@ class HealthReportAdapter(
         }
     }
 
+    private fun ListItemReportWorkoutBinding.applyStyle(item: WorkoutNameScoreItem) {
+        val context = root.context
+        val backgroundColor = if (item.isSelected) R.color.main_blue else R.color.white
+        val textColor = if (item.isSelected) R.color.main_white else R.color.main_black
+        val strokeColor = if (item.isEditing) R.color.main_blue else R.color.main_black
+
+        cvReportWorkoutViewContentName.setCardBackgroundColor(ContextCompat.getColor(context, backgroundColor))
+        cvReportWorkoutViewContentScore.setCardBackgroundColor(ContextCompat.getColor(context, backgroundColor))
+
+        tvReportWorkoutViewName.setTextColor(ContextCompat.getColor(context, textColor))
+        tvReportWorkoutViewScore.setTextColor(ContextCompat.getColor(context, textColor))
+
+        cvReportWorkoutViewContentName.strokeColor = ContextCompat.getColor(context, strokeColor)
+        cvReportWorkoutViewContentScore.strokeColor = ContextCompat.getColor(context, strokeColor)
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HealthReportViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = ListItemReportWorkoutBinding.inflate(inflater, parent, false)
