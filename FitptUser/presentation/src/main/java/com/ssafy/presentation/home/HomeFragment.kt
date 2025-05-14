@@ -102,7 +102,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
     }
 
     fun initEvent(){
-        Log.d(TAG,"실행")
         userInfoViewModel.fetchUser()
         binding.ivNotificationMove.setOnClickListener {
             findNavController().navigate(R.id.action_home_fragment_to_notification_fragment)
@@ -290,171 +289,98 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
         selectedButton = button
     }
 
+    private fun showChart(
+        entries: List<Entry>,
+        label: String,
+        colorHex: String,
+        fillDrawableRes: Int,
+        yUnit: String,
+        isPercent: Boolean = false
+    ) {
+        Log.d(TAG, "$label Entries: $entries")
 
-    //차트 관련한 코드
-    private fun showWeightData() {
-        Log.d(TAG, "Weight Entries: $weightEntries")
-        val weightDataSet = LineDataSet(weightEntries, "체중(kg)").apply {
-            color = Color.parseColor("#FF5722")
+        val dataSet = LineDataSet(entries, label).apply {
+            color = Color.parseColor(colorHex)
             lineWidth = 2.5f
             mode = LineDataSet.Mode.CUBIC_BEZIER
             setDrawFilled(true)
-            fillDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.fade_red)
+            fillDrawable = ContextCompat.getDrawable(requireContext(), fillDrawableRes)
             setDrawCircles(true)
             setCircleColor(Color.WHITE)
             circleRadius = 4f
-            setCircleHoleColor(Color.parseColor("#FF5722"))
+            setCircleHoleColor(Color.parseColor(colorHex))
             circleHoleRadius = 2f
             setDrawValues(false)
         }
 
         lineChart.apply {
-            data = LineData(weightDataSet)
-            axisLeft.apply {
-                valueFormatter = object : ValueFormatter() {
-                    override fun getFormattedValue(value: Float): String {
-                        return "${value.toInt()} kg" // kg 단위 추가
-                    }
-                }
-            }
-            setupChartForWeight() // 몸무게용 설정
+            data = LineData(dataSet)
+            setupYAxis(entries, yUnit, isPercent)
+            setupXAxis()
+            axisRight.isEnabled = false
+            setDrawGridBackground(false)
             invalidate()
         }
+    }
+
+    private fun setupYAxis(entries: List<Entry>, unit: String, isPercent: Boolean = false) {
+        lineChart.axisLeft.apply {
+            val minY = entries.minOf { it.y }
+            val maxY = entries.maxOf { it.y }
+            val buffer = (maxY - minY) * 0.2f
+            axisMinimum = (minY - buffer).coerceAtLeast(0f)
+            axisMaximum = maxY + buffer
+            granularity = ((maxY - minY) / 4).coerceAtLeast(1f)
+            setLabelCount(5, true)
+
+            valueFormatter = object : ValueFormatter() {
+                override fun getFormattedValue(value: Float): String {
+                    return if (isPercent) "${value.toInt()}%" else "${value.toInt()} $unit"
+                }
+            }
+        }
+    }
+
+    private fun setupXAxis() {
+        lineChart.xAxis.apply {
+            position = XAxis.XAxisPosition.BOTTOM
+            textColor = Color.parseColor("#AAAAAA")
+            textSize = 12f
+            granularity = 1f
+            setDrawGridLines(false)
+            valueFormatter = IndexAxisValueFormatter(chartDates)
+        }
+    }
+
+    private fun showWeightData() {
+        showChart(
+            entries = weightEntries,
+            label = "체중(kg)",
+            colorHex = "#FF5722",
+            fillDrawableRes = R.drawable.fade_red,
+            yUnit = "kg"
+        )
     }
 
     private fun showSkeletalMuscleData() {
-        Log.d(TAG, "Skeleton Entries: ${skeletalMuscleEntries}Entries")
-        val skeletalMuscleDataSet = LineDataSet(skeletalMuscleEntries, "골격근량(kg)").apply {
-            color = Color.parseColor("#4CAF50")
-            lineWidth = 2.5f
-            mode = LineDataSet.Mode.CUBIC_BEZIER
-            setDrawFilled(true)
-            fillDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.fade_red)
-            setDrawCircles(true)
-            setCircleColor(Color.WHITE)
-            circleRadius = 4f
-            setCircleHoleColor(Color.parseColor("#4CAF50"))
-            circleHoleRadius = 2f
-            setDrawValues(false)
-        }
-
-        lineChart.apply {
-            data = LineData(skeletalMuscleDataSet)
-            axisLeft.apply {
-                valueFormatter = object : ValueFormatter() {
-                    override fun getFormattedValue(value: Float): String {
-                        return "${value.toInt()} kg" // kg 단위 추가
-                    }
-                }
-            }
-            setupChartForSkeletalMuscle() // 골격근량용 설정
-            invalidate()
-        }
+        showChart(
+            entries = skeletalMuscleEntries,
+            label = "골격근량(kg)",
+            colorHex = "#4CAF50",
+            fillDrawableRes = R.drawable.fade_red,
+            yUnit = "kg"
+        )
     }
 
     private fun showBodyFatData() {
-        val bodyFatDataSet = LineDataSet(bodyFatEntries, "체지방량(kg)").apply {
-            color = Color.parseColor("#2196F3")
-            lineWidth = 2.5f
-            mode = LineDataSet.Mode.CUBIC_BEZIER
-            setDrawFilled(true)
-            fillDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.fade_red)
-            setDrawCircles(true)
-            setCircleColor(Color.WHITE)
-            circleRadius = 4f
-            setCircleHoleColor(Color.parseColor("#2196F3"))
-            circleHoleRadius = 2f
-            setDrawValues(false)
-        }
-
-        lineChart.apply {
-            data = LineData(bodyFatDataSet)
-            setupChartForBodyFat() // 체지방량용 설정
-            invalidate()
-        }
-    }
-
-    private fun setupChartForWeight() {
-        lineChart.apply {
-            axisLeft.apply {
-                val minY = weightEntries.minOf { it.y }
-                val maxY = weightEntries.maxOf { it.y }
-                val buffer = (maxY - minY) * 0.2f
-                axisMinimum = (minY - buffer).coerceAtLeast(0f)
-                axisMaximum = maxY + buffer
-                granularity = ((maxY - minY) / 4).coerceAtLeast(1f)
-                setLabelCount(5, true)
-            }
-
-            xAxis.apply {
-                position = XAxis.XAxisPosition.BOTTOM
-                textColor = Color.parseColor("#AAAAAA")
-                textSize = 12f
-                granularity = 1f
-                setDrawGridLines(false) // 격자 선 비활성화
-                valueFormatter = IndexAxisValueFormatter(chartDates) // 날짜 표시
-            }
-
-            axisRight.isEnabled = false // 오른쪽 축 비활성화
-            setDrawGridBackground(false) // 배경 격자선 비활성화
-        }
-    }
-
-    private fun setupChartForSkeletalMuscle() {
-        lineChart.apply {
-            axisLeft.apply {
-                val minSkeletalMuscle = skeletalMuscleEntries.minOf { it.y }
-                val maxSkeletalMuscle = skeletalMuscleEntries.maxOf { it.y }
-                val buffer = (maxSkeletalMuscle - minSkeletalMuscle) * 0.2f
-                axisMinimum = (minSkeletalMuscle - buffer).coerceAtLeast(0f)
-                axisMaximum = maxSkeletalMuscle + buffer
-                granularity = ((maxSkeletalMuscle - minSkeletalMuscle) / 4).coerceAtLeast(1f)
-                setLabelCount(5, true)
-            }
-
-            xAxis.apply {
-                position = XAxis.XAxisPosition.BOTTOM
-                textColor = Color.parseColor("#AAAAAA")
-                textSize = 12f
-                granularity = 1f
-                setDrawGridLines(false) // 격자 선 비활성화
-                valueFormatter = IndexAxisValueFormatter(chartDates) // 날짜 표시
-            }
-
-            axisRight.isEnabled = false // 오른쪽 축 비활성화
-            setDrawGridBackground(false) // 배경 격자선 비활성화
-        }
-    }
-
-    private fun setupChartForBodyFat() {
-        lineChart.apply {
-            axisLeft.apply {
-                val minBodyFat = bodyFatEntries.minOf { it.y }
-                val maxBodyFat = bodyFatEntries.maxOf { it.y }
-                val buffer = (maxBodyFat - minBodyFat) * 0.2f
-                axisMinimum = (minBodyFat - buffer).coerceAtLeast(0f)
-                axisMaximum = maxBodyFat + buffer
-                granularity = ((maxBodyFat - minBodyFat) / 4).coerceAtLeast(1f)
-                setLabelCount(5, true)
-                valueFormatter = object : ValueFormatter() {
-                    override fun getFormattedValue(value: Float): String {
-                        return "${value.toInt()}%"
-                    }
-                }
-            }
-
-            xAxis.apply {
-                position = XAxis.XAxisPosition.BOTTOM
-                textColor = Color.parseColor("#AAAAAA")
-                textSize = 12f
-                granularity = 1f
-                setDrawGridLines(false) // 격자 선 비활성화
-                valueFormatter = IndexAxisValueFormatter(chartDates) // 날짜 표시
-            }
-
-            axisRight.isEnabled = false // 오른쪽 축 비활성화
-            setDrawGridBackground(false) // 배경 격자선 비활성화
-        }
+        showChart(
+            entries = bodyFatEntries,
+            label = "체지방량(%)",
+            colorHex = "#2196F3",
+            fillDrawableRes = R.drawable.fade_red,
+            yUnit = "%",
+            isPercent = true
+        )
     }
 
     fun observeModel() {

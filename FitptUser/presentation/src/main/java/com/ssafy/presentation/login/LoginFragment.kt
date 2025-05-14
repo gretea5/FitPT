@@ -28,6 +28,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+private const val TAG = "LoginFragment"
 @AndroidEntryPoint
 class LoginFragment : BaseFragment<FragmentLoginBinding>(
     FragmentLoginBinding::bind,
@@ -48,12 +49,12 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(
         binding.ivKakaoMove.setOnClickListener {
             if (!isClick) {
                 isClick = true // 클릭 방지 활성화
-                //kakaoLogin()
-                val intent = Intent(requireContext(), MainActivity::class.java)
+                kakaoLogin()
+                /*val intent = Intent(requireContext(), MainActivity::class.java)
                 startActivity(intent)
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
                 requireActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
-                requireActivity().finishAffinity()
+                requireActivity().finishAffinity()*/
             }
         }
     }
@@ -71,9 +72,17 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(
                     isClick = false
                 } else if (token != null) {
                     lifecycleScope.launch {
-                        //Log.d(TAG,"로그인 관련 ${token.accessToken}")
+                        Log.d(TAG,"로그인 관련 ${token.accessToken}")
                         userDataStoreSource.saveKakaoAccessToken(token.accessToken)
                         loginViewModel.login(token.accessToken)
+                        UserApiClient.instance.me { user, error ->
+                            if (error != null) {
+                                Log.e(TAG, "사용자 정보 요청 실패", error)
+                            } else if (user != null) {
+                                val nickname = user.kakaoAccount?.profile?.nickname
+                                Log.d(TAG, "사용자 이름: $nickname")
+                            }
+                        }
                     }
                 }
             }

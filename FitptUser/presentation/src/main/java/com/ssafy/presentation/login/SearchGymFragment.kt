@@ -77,8 +77,7 @@ class SearchGymFragment : BaseFragment<FragmentSearchGymBinding>(
         gymList = mutableListOf()
         gymSearchAdapter = GymSearchAdapter(gymList) { gym->
             selectedGym = gym
-            //loginViewModel.setGym(gym)
-            //mypageViewModel.setGym(gym)
+            loginViewModel.setGym(gym)
             gymInfoViewModel.updateClick(gym)
             updateNextButtonState(true)
         }
