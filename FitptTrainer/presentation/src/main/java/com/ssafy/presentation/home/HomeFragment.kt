@@ -88,14 +88,27 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun fetchSchedules() {
-        // 현재 날짜 또는 필요한 날짜 형식으로 변환
         val today = LocalDate.now()
-        val formattedDate = today.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
-        val formattedMonth = today.format(DateTimeFormatter.ofPattern("yyyy-MM"))
+        selectedDate = today
+
+        val formattedMonth = today.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
 
         viewModel.getSchedules(
             month = formattedMonth,
             date = null,
+            trainerId = null,
+            memberId = null
+        )
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun selectSchedulesByDate(date: LocalDate) {
+        selectedDate = date
+        val formattedDate = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+
+        viewModel.getSchedules(
+            date = formattedDate,
+            month = null,
             trainerId = null,
             memberId = null
         )
@@ -121,6 +134,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
 
                                 binding.calendar.notifyDateChanged(day.date)
                                 oldDate?.let { binding.calendar.notifyDateChanged(it) }
+
+                                selectSchedulesByDate(selectedDate!!)
                             }
                         }
                     }
