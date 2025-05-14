@@ -30,7 +30,7 @@ class LoginViewModel @Inject constructor(
                     when (response) {
                         is ResponseStatus.Success -> {
                             _loginState.value = LoginStatus.Success
-                            //dataStore.saveJwtToken("Bearer " + response.data.accessToken)
+                            dataStore.saveJwtToken("Bearer " + response.data.accessToken)
                         }
                         is ResponseStatus.Error -> {
                             _loginState.value = LoginStatus.Error("로그인에 실패했습니다: ${response.error.message}")
