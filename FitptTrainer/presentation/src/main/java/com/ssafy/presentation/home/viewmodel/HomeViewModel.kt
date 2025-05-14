@@ -22,8 +22,12 @@ class HomeViewModel @Inject constructor(
     private val getScheduleUseCase: GetScheduleUseCase,
     private val dataStore: TrainerDataStoreSource
 ) : ViewModel(){
+
     private val _homeState = MutableStateFlow<HomeStatus>(HomeStatus.Idle)
     val homeState : StateFlow<HomeStatus> = _homeState.asStateFlow()
+
+    private val _schedules = MutableStateFlow<List<Schedule>>(emptyList())
+    val schedules: StateFlow<List<Schedule>> = _schedules.asStateFlow()
 
     fun getSchedules(date: String?, month: String?, trainerId: Long?, memberId: Long?) {
         viewModelScope.launch { 
@@ -34,6 +38,7 @@ class HomeViewModel @Inject constructor(
                     Log.d(TAG, "스케쥴 조회: $response")
                     when (response) {
                         is ResponseStatus.Success -> {
+                            _schedules.value = response.data
                             _homeState.value = HomeStatus.Success(response.data)
                         }
                         is ResponseStatus.Error -> {
