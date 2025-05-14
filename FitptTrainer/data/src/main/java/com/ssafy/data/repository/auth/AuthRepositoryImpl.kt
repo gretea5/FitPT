@@ -7,7 +7,7 @@ import com.ssafy.data.network.common.ApiResponseHandler
 import com.ssafy.data.network.common.ApiResponse
 import com.ssafy.data.network.common.ErrorResponse.Companion.toDomainModel
 import com.ssafy.data.network.request.TrainerLoginRequest
-import com.ssafy.data.network.response.TrainerLoginResponse.Companion.toDomainModel
+import com.ssafy.data.network.response.trainer.TrainerLoginResponse.Companion.toDomainModel
 import com.ssafy.domain.model.auth.TrainerLogin
 import com.ssafy.domain.model.base.ResponseStatus
 import com.ssafy.domain.repository.auth.AuthRepository
