@@ -117,7 +117,14 @@ class HealthReportFragment : BaseFragment<FragmentHealthReportBinding>(
                 cvReportWorkoutAddWorkout.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.highlight_orange))
                 cvReportWorkoutAddWorkout.isEnabled = true
 
+                tvReportHealthContent.isVisible = false
+                etReportHealthContent.isVisible = true
+
+                tvReportHealthContent.setText("")
+
                 healthReportAdapter.removeEditModeItem()
+                healthReportAdapter.removeSelectedItem()
+                reportViewModel.deleteSelectedWorkout()
             }
 
             // 운동별 성과 상세 기록 텍스트 감지
@@ -147,8 +154,8 @@ class HealthReportFragment : BaseFragment<FragmentHealthReportBinding>(
             onItemChanged = {
                 updateAddButtonState()
             },
-            onItemClicked = { selectedId ->
-                reportViewModel.setSelectedWorkoutId(selectedId)
+            onItemClicked = { selectedId, isSelected ->
+                updateSelectedWorkoutItem(selectedId, isSelected)
             },
         )
 
@@ -250,6 +257,7 @@ class HealthReportFragment : BaseFragment<FragmentHealthReportBinding>(
         }
     }
 
+    // 특정 근육만 파란색 하이라이트
     fun highlightMuscleGroupsByIds(selectedIds: List<Int>) {
         val context = requireContext()
         val grayColor = ContextCompat.getColor(context, R.color.secondary_gray)
