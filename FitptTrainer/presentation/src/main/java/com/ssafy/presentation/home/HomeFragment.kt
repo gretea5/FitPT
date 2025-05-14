@@ -12,6 +12,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.view.children
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.DayPosition
@@ -23,9 +24,9 @@ import com.kizitonwose.calendar.view.ViewContainer
 import com.ssafy.presentation.R
 import com.ssafy.presentation.base.BaseFragment
 import com.ssafy.presentation.databinding.FragmentHomeBinding
+import com.ssafy.presentation.home.adapter.HomeAdapter
 import com.ssafy.presentation.home.viewmodel.HomeStatus
 import com.ssafy.presentation.home.viewmodel.HomeViewModel
-import com.ssafy.presentation.login.viewModel.LoginStatus
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
@@ -44,15 +45,25 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
 ) {
     private val eventsDatesList = mutableListOf<LocalDate>()
     private val viewModel: HomeViewModel by viewModels()
+    private val scheduleAdapter by lazy { HomeAdapter() }
+
     private var selectedDate: LocalDate? = null
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initRV()
         initObserver()
         initCalendar()
         initEvent()
         fetchSchedules()
+    }
+
+    private fun initRV() {
+        binding.rvMemberSchedule.apply {
+            adapter = scheduleAdapter
+            layoutManager = LinearLayoutManager(requireContext())
+        }
     }
 
     private fun initObserver() {
@@ -68,6 +79,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
                     }
                 }
             }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.schedules.collect { schedules -> scheduleAdapter.submitList(schedules) }
         }
     }
 
@@ -186,9 +201,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
         }
     }
 
-    fun initEvent() {
-
-    }
+    fun initEvent() {}
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun addExampleEventList() {
