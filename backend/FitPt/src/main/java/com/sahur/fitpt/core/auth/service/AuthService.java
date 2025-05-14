@@ -48,18 +48,12 @@ public class AuthService {
             throw new CustomException(ErrorCode.DUPLICATE_MEMBER);
         }
 
-        // Admin 조회 및 검증
+        // Admin 조회
         Admin admin = null;
         if (request.getAdminId() != null) {
             admin = adminRepository.findById(request.getAdminId())
                     .orElseThrow(() -> new CustomException(ErrorCode.ADMIN_NOT_FOUND));
-
-            if (!admin.getGymName().equals(request.getGymName())) {
-                throw new CustomException(ErrorCode.INVALID_GYM_NAME);
-            }
         }
-
-
 
         // 회원 생성
         Member member = Member.builder()
@@ -74,12 +68,11 @@ public class AuthService {
                 .isDeleted(false)
                 .build();
 
-
         Member savedMember = memberRepository.save(member);
         log.info("새로운 회원이 등록되었습니다: id={}, name={}",
                 savedMember.getMemberId(), savedMember.getMemberName());
 
-        // FCM 토큰 추가 (한 번만 실행)
+        // FCM 토큰 추가
         if (request.getFcmToken() != null) {
             FcmToken fcmToken = FcmToken.builder()
                     .member(savedMember)
