@@ -76,7 +76,10 @@ class HealthReportFragment : BaseFragment<FragmentHealthReportBinding>(
                 cvReportWorkoutAddWorkout.isEnabled = false
 
                 // Edit 모드 아이템 추가
-                healthReportAdapter.addEditItem()
+                val newId = System.currentTimeMillis()
+
+                reportViewModel.setCurrentWorkoutId(newId)
+                healthReportAdapter.addEditItem(newId)
             }
 
             // 운동 추가 완료
