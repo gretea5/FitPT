@@ -1,14 +1,18 @@
 package com.ssafy.presentation.report.adapter
 
 import android.os.Build.VERSION_CODES.P
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.RecyclerView
 import com.ssafy.domain.model.report.HealthReportWorkout
 import com.ssafy.domain.model.report.WorkoutNameScoreItem
+import com.ssafy.presentation.R
 import com.ssafy.presentation.databinding.ListItemReportWorkoutBinding
 
 private const val TAG = "HealthReportAdapter_FitPT"
@@ -16,10 +20,11 @@ private const val TAG = "HealthReportAdapter_FitPT"
 class HealthReportAdapter(
     var items: MutableList<WorkoutNameScoreItem>,
     private val onItemChanged: () -> Unit,
-    private val onItemClicked: (Long) -> Unit
+    private val onItemClicked: (Long, Boolean) -> Unit
 ) : RecyclerView.Adapter<HealthReportAdapter.HealthReportViewHolder>() {
 
-    private var selectedPosition: Int = RecyclerView.NO_POSITION
+    private var nameWatcher: TextWatcher? = null
+    private var scoreWatcher: TextWatcher? = null
 
     inner class HealthReportViewHolder(private val binding: ListItemReportWorkoutBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: WorkoutNameScoreItem) {
@@ -28,31 +33,55 @@ class HealthReportAdapter(
                     clReportWorkoutItemEditMode.visibility = View.VISIBLE
                     clReportWorkoutItemViewMode.visibility = View.GONE
 
+                    // 기존 리스너 제거
+                    nameWatcher?.let { tvReportWorkoutEditName.removeTextChangedListener(it) }
+                    scoreWatcher?.let { tvReportWorkoutEditScore.removeTextChangedListener(it) }
+
                     tvReportWorkoutEditName.setText(item.name)
                     tvReportWorkoutEditScore.setText(item.score)
 
-                    binding.tvReportWorkoutEditName.addTextChangedListener {
-                        item.name = it.toString()
-                        onItemChanged()
+                    nameWatcher = object : TextWatcher {
+                        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+                        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                            item.name = s.toString()
+                            onItemChanged()
+                        }
+
+                        override fun afterTextChanged(s: Editable?) {}
                     }
 
-                    binding.tvReportWorkoutEditScore.addTextChangedListener {
-                        item.score = it.toString()
-                        onItemChanged()
+                    scoreWatcher = object : TextWatcher {
+                        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+                        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                            item.score = s.toString()
+                            onItemChanged()
+                        }
+
+                        override fun afterTextChanged(s: Editable?) {}
                     }
+
+                    tvReportWorkoutEditName.addTextChangedListener(nameWatcher)
+                    tvReportWorkoutEditScore.addTextChangedListener(scoreWatcher)
                 }
             } else {
                 binding.apply {
                     clReportWorkoutItemEditMode.visibility = View.GONE
                     clReportWorkoutItemViewMode.visibility = View.VISIBLE
 
-                    tvReportWorkoutViewName.setText(item.name)
-                    tvReportWorkoutViewScore.setText(item.score)
+                    tvReportWorkoutViewName.text = item.name
+                    tvReportWorkoutViewScore.text = item.score
+
+                    // 카드 스타일 적용
+                    applyStyle(item)
 
                     root.setOnClickListener {
+                        // 이미 다른 아이템이 선택되어 있다면 클릭 무시
+                        val otherSelected = items.any { it.isSelected && it != item }
+                        if (otherSelected) return@setOnClickListener
 
-                        Log.d(TAG, "SelectedWorkout: ${item.id}")
-                        onItemClicked(item.id)
+                        item.isSelected = !item.isSelected
+                        notifyItemChanged(adapterPosition)
+                        onItemClicked(item.id, item.isSelected)
                     }
                 }
             }
