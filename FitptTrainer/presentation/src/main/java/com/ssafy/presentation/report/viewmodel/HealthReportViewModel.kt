@@ -117,13 +117,20 @@ class HealthReportViewModel @Inject constructor() : ViewModel() {
                 muscleSelected == true
     }
 
-    fun setCurrentWorkoutId(id: Long){
+    fun getWorkoutById(id: Long): HealthReportWorkout? {
+        return _workoutReportList.value.find { it.id == id }
+    }
+
+    fun setCurrentWorkoutId(id: Long) {
         _currentWorkoutId.value = id
     }
 
     fun setSelectedWorkoutId(id: Long) {
         _selectedWorkoutId.value = id
         Log.d(TAG, "SelectedWorkoutId: ${_selectedWorkoutId.value}")
+
+        val item = _workoutReportList.value.find { it.id == id }
+        _selectedWorkoutItem.value = item
     }
 
     fun updateName(newName: String) {
