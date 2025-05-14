@@ -18,6 +18,7 @@ import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Date
 import java.util.Locale
@@ -65,11 +66,13 @@ object CommonUtils {
     }
 
     fun formatCreatedAt(isoDateTime: String): String {
-        val inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS", Locale.KOREAN)
-        val outputFormatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 a hh:mm", Locale.KOREAN)
-
-        val dateTime = LocalDateTime.parse(parseFlexibleDateTime(isoDateTime), inputFormatter)
-        return dateTime.format(outputFormatter)
+        val parsedDateTime = parseFlexibleDateTime(isoDateTime)
+        val inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS")
+        val outputFormatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 a hh:mm")
+            .withLocale(Locale.KOREAN) // Korean locale for proper AM/PM display
+        val localDateTime = LocalDateTime.parse(parsedDateTime, inputFormatter)
+        val kstDateTime = localDateTime.plusHours(9)
+        return kstDateTime.format(outputFormatter)
     }
 
     fun parseFlexibleDateTime(dateTimeStr: String): String {
