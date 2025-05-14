@@ -1,5 +1,6 @@
 package com.sahur.fitpt.core.auth.aspect;
 
+import com.sahur.fitpt.core.auth.annotation.TrainerMemberAccess;
 import com.sahur.fitpt.core.constant.ErrorCode;
 import com.sahur.fitpt.core.exception.CustomException;
 import com.sahur.fitpt.db.repository.MemberRepository;
@@ -12,8 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-
-import java.util.Arrays;
+import com.sahur.fitpt.db.repository.ScheduleRepository;
 
 @Slf4j
 @Aspect
@@ -21,68 +21,60 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 public class TrainerMemberAccessAspect {
     private final MemberRepository memberRepository;
+    private final ScheduleRepository scheduleRepository;
 
-    @Around("@annotation(com.sahur.fitpt.core.auth.annotation.TrainerMemberAccess)")
-    public Object checkAccess(ProceedingJoinPoint joinPoint) throws Throwable {
-        // 현재 인증 정보 가져오기
+    @Around("@annotation(trainerMemberAccess)")
+    public Object checkAccess(ProceedingJoinPoint joinPoint, TrainerMemberAccess trainerMemberAccess) throws Throwable {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String role = authentication.getAuthorities().stream()
                 .findFirst()
                 .map(GrantedAuthority::getAuthority)
-                .orElse("");
+                .orElseThrow(() -> new CustomException(ErrorCode.UNAUTHORIZED));
         Long authenticatedId = Long.parseLong(authentication.getName());
 
-        log.debug("인증된 사용자 정보 - ID: {}, 역할: {}", authenticatedId, role);
+        log.debug("Role: {}, AuthenticatedId: {}, Domain: {}, AccessType: {}",
+                role, authenticatedId, trainerMemberAccess.domain(), trainerMemberAccess.accessType());
 
-        // 요청된 회원 ID 추출
-        Long memberId = extractMemberId(joinPoint);
-        log.debug("요청된 회원 ID: {}", memberId);
-
-        // 회원인 경우 본인 확인
-        if ("ROLE_MEMBER".equals(role)) {
-            log.debug("회원 본인 확인 - 요청 ID: {}, 인증된 ID: {}", memberId, authenticatedId);
-            if (memberId.equals(authenticatedId)) {
-                return joinPoint.proceed();
-            }
-            log.debug("회원 본인 확인 실패");
-            throw new CustomException(ErrorCode.FORBIDDEN);
+        // 트레이너 전용 접근 체크
+        if (trainerMemberAccess.accessType() == TrainerMemberAccess.AccessType.TRAINER_ONLY
+                && !"ROLE_TRAINER".equals(role)) {
+            throw new CustomException(ErrorCode.ACCESS_DENIED);
         }
 
-        // 트레이너인 경우 본인 또는 담당 회원 확인
-        if ("ROLE_TRAINER".equals(role)) {
-            // 트레이너 본인 확인
-            if (memberId.equals(authenticatedId)) {
-                log.debug("트레이너 본인 확인 성공");
-                return joinPoint.proceed();
-            }
-
-            // 담당 회원 확인
-            boolean hasAccess = memberRepository.existsByMemberIdAndTrainerTrainerId(
-                    memberId, authenticatedId);
-            log.debug("트레이너의 담당 회원 확인 - 회원 ID: {}, 트레이너 ID: {}, 접근 권한: {}",
-                    memberId, authenticatedId, hasAccess);
-
-            if (hasAccess) {
-                return joinPoint.proceed();
-            }
-
-            log.debug("트레이너 접근 권한 없음");
-            throw new CustomException(ErrorCode.FORBIDDEN);
-        }
-
-        log.debug("알 수 없는 역할: {}", role);
-        throw new CustomException(ErrorCode.FORBIDDEN);
-    }
-
-    private Long extractMemberId(ProceedingJoinPoint joinPoint) {
+        // memberId 파라미터 체크 (PathVariable)
         Object[] args = joinPoint.getArgs();
-        log.debug("메서드 파라미터: {}", Arrays.toString(args));
-
-        for (Object arg : args) {
-            if (arg instanceof Long) {
-                return (Long) arg;
+        if (args.length > 0 && args[0] instanceof Long memberId && trainerMemberAccess.accessType() != TrainerMemberAccess.AccessType.TRAINER_ONLY) {
+            if ("ROLE_TRAINER".equals(role)) {
+                // 트레이너인 경우 담당 회원 체크
+                boolean hasAccess = memberRepository.existsByMemberIdAndTrainerTrainerId(memberId, authenticatedId);
+                if (!hasAccess) {
+                    throw new CustomException(ErrorCode.ACCESS_DENIED);
+                }
+            } else if ("ROLE_MEMBER".equals(role)) {
+                // 회원인 경우 본인 정보 체크
+                if (!memberId.equals(authenticatedId)) {
+                    throw new CustomException(ErrorCode.ACCESS_DENIED);
+                }
             }
         }
-        throw new CustomException(ErrorCode.INVALID_INPUT_VALUE);
+
+        // Schedule 도메인 특별 처리
+        if (trainerMemberAccess.domain() == TrainerMemberAccess.Domain.SCHEDULE) {
+            if ("ROLE_TRAINER".equals(role)) {
+                // scheduleId가 있는 경우 (PUT, DELETE) 해당 일정의 트레이너 체크
+                for (Object arg : args) {
+                    if (arg instanceof Long scheduleId) {
+                        boolean hasAccess = scheduleRepository.existsByScheduleIdAndTrainerTrainerId(
+                                scheduleId, authenticatedId);
+                        if (!hasAccess) {
+                            throw new CustomException(ErrorCode.ACCESS_DENIED);
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+
+        return joinPoint.proceed();
     }
 }
