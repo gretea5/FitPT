@@ -29,20 +29,20 @@ class HealthReportViewModel @Inject constructor() : ViewModel() {
     private val _isAnyMuscleSelected = MutableLiveData<Boolean>(false)
     val isAnyMuscleSelected: LiveData<Boolean> = _isAnyMuscleSelected
 
-    private val _selectedMuscleIds = MutableStateFlow<List<Int>>(emptyList())
-    val selectedMuscleIds: StateFlow<List<Int>> = _selectedMuscleIds
+    private val _selectedMuscleIds = MutableLiveData<List<Int>>(emptyList())
+    val selectedMuscleIds: LiveData<List<Int>> = _selectedMuscleIds
 
-    private val _currentWorkoutId = MutableStateFlow<Long?>(null)
-    val currentWorkoutId: StateFlow<Long?> = _currentWorkoutId
+    private val _currentWorkoutId = MutableLiveData<Long?>(null)
+    val currentWorkoutId: LiveData<Long?> = _currentWorkoutId
 
-    private val _selectedWorkoutId = MutableStateFlow<Long?>(null)
-    val selectedWorkoutId: StateFlow<Long?> = _selectedWorkoutId
+    private val _selectedWorkoutId = MutableLiveData<Long?>(null)
+    val selectedWorkoutId: LiveData<Long?> = _selectedWorkoutId
 
     private val _selectedWorkoutItem = MutableLiveData<TempHealthReportWorkout?>()
     val selectedWorkoutItem: LiveData<TempHealthReportWorkout?> = _selectedWorkoutItem
 
-    private val _workoutReportList = MutableStateFlow<List<TempHealthReportWorkout>>(emptyList())
-    val workoutReportList: StateFlow<List<TempHealthReportWorkout>> = _workoutReportList
+    private val _workoutReportList = MutableLiveData<List<TempHealthReportWorkout>>(emptyList())
+    val workoutReportList: LiveData<List<TempHealthReportWorkout>> = _workoutReportList
 
     private val _isAddButtonEnabled = MediatorLiveData<Boolean>().apply {
         fun check() {
@@ -60,14 +60,16 @@ class HealthReportViewModel @Inject constructor() : ViewModel() {
         addSource(_isAnyMuscleSelected) { check() }
     }
 
+    val isAddButtonEnabled: LiveData<Boolean> = _isAddButtonEnabled
+
     fun addWorkoutReport() {
         val name = _name.value?.trim().orEmpty()
         val score = _score.value?.trim().orEmpty()
         val description = _description.value?.trim().orEmpty()
-        val muscles = _selectedMuscleIds.value
+        val muscles = _selectedMuscleIds.value.orEmpty()
         val id = _currentWorkoutId.value
 
-        Log.d(TAG, "AddWorkoutReport: ${id}")
+        Log.d(TAG, "AddWorkoutReport: $id")
 
         if (id != null && name.isNotBlank() && score.isNotBlank() && description.isNotBlank() && muscles.isNotEmpty()) {
             val newReport = TempHealthReportWorkout(
@@ -78,26 +80,23 @@ class HealthReportViewModel @Inject constructor() : ViewModel() {
                 activationMuscleId = muscles.sorted(),
             )
 
-            _workoutReportList.value = _workoutReportList.value + newReport
+            val currentList = _workoutReportList.value.orEmpty()
+            _workoutReportList.value = currentList + newReport
 
             Log.d(TAG, "addWorkoutReport: $newReport")
             clearInputs()
 
-            _currentWorkoutId.value = null // 저장 후 초기화
+            _currentWorkoutId.value = null
         }
     }
 
     fun deleteSelectedWorkout() {
-        _selectedWorkoutId.value?.let { id ->
-            deleteWorkoutById(id)
-        }
+        _selectedWorkoutId.value?.let { id -> deleteWorkoutById(id) }
     }
 
     fun deleteWorkoutById(id: Long) {
-        val updatedList = _workoutReportList.value.filterNot { it.id == id }
-        _workoutReportList.value = updatedList
+        _workoutReportList.value = _workoutReportList.value?.filterNot { it.id == id }
 
-        // 삭제 후 선택 상태 초기화
         if (_selectedWorkoutId.value == id) {
             _selectedWorkoutId.value = null
             _selectedWorkoutItem.value = null
@@ -109,11 +108,10 @@ class HealthReportViewModel @Inject constructor() : ViewModel() {
     fun toggleMuscleSelection(muscleGroup: MuscleGroup) {
         muscleGroup.isSelected = !muscleGroup.isSelected
 
-        val currentList = _selectedMuscleIds.value.toMutableList()
+        val currentList = _selectedMuscleIds.value?.toMutableList() ?: mutableListOf()
+
         if (muscleGroup.isSelected) {
-            if (muscleGroup.id !in currentList) {
-                currentList.add(muscleGroup.id)
-            }
+            if (muscleGroup.id !in currentList) currentList.add(muscleGroup.id)
         } else {
             currentList.remove(muscleGroup.id)
         }
@@ -121,8 +119,6 @@ class HealthReportViewModel @Inject constructor() : ViewModel() {
         _selectedMuscleIds.value = currentList
         _isAnyMuscleSelected.value = currentList.isNotEmpty()
     }
-
-    val isAddButtonEnabled: LiveData<Boolean> = _isAddButtonEnabled
 
     private fun isValidInput(
         name: String?,
@@ -137,7 +133,7 @@ class HealthReportViewModel @Inject constructor() : ViewModel() {
     }
 
     fun getWorkoutById(id: Long): TempHealthReportWorkout? {
-        return _workoutReportList.value.find { it.id == id }
+        return _workoutReportList.value?.find { it.id == id }
     }
 
     fun setCurrentWorkoutId(id: Long) {
@@ -146,9 +142,9 @@ class HealthReportViewModel @Inject constructor() : ViewModel() {
 
     fun setSelectedWorkoutId(id: Long) {
         _selectedWorkoutId.value = id
-        Log.d(TAG, "SelectedWorkoutId: ${_selectedWorkoutId.value}")
+        Log.d(TAG, "SelectedWorkoutId: $id")
 
-        val item = _workoutReportList.value.find { it.id == id }
+        val item = _workoutReportList.value?.find { it.id == id }
         _selectedWorkoutItem.value = item
     }
 
@@ -173,5 +169,7 @@ class HealthReportViewModel @Inject constructor() : ViewModel() {
         _score.value = ""
         _description.value = ""
         _isAnyMuscleSelected.value = false
+        _selectedMuscleIds.value = emptyList()
     }
 }
+
