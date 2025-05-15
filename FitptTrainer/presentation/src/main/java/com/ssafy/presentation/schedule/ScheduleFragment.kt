@@ -16,6 +16,7 @@ import com.ssafy.presentation.R
 import com.ssafy.presentation.base.BaseFragment
 import java.time.YearMonth
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -46,6 +47,7 @@ class ScheduleFragment : BaseFragment<FragmentScheduleBinding>(
     FragmentScheduleBinding::bind,
     R.layout.fragment_schedule
 ) {
+    private val timeButtonsMap = mutableMapOf<String, Button>()
     private val eventsDatesList = mutableListOf<LocalDate>()
     private val viewModel : ScheduleViewModel by viewModels()
 
@@ -228,13 +230,43 @@ class ScheduleFragment : BaseFragment<FragmentScheduleBinding>(
 
     private fun initObserver() {
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.schedules.collect { schedules -> }
+            viewModel.schedules.collect { schedules ->
+                updateScheduleButtonColors(schedules, 1, timeButtonsMap)
+            }
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.monthlyScheduleItems.collect { scheduleItems ->
                     updateEventsDatesList(scheduleItems)
+                }
+            }
+        }
+    }
+
+    private fun updateScheduleButtonColors(
+        schedules: List<Schedule>,
+        selectedMemberId: Long,
+        timeButtons: Map<String, Button>
+    ) {
+        timeButtons.values.forEach { button ->
+            button.setBackgroundColor(Color.WHITE)
+            button.isEnabled = true
+        }
+
+        // 일정에 따라 버튼 색상 설정
+        schedules.forEach { schedule ->
+            // 시간 형식에 맞게 파싱 (예: "10:00"과 같은 형식으로 변환)
+            val timeKey = TimeUtils.parseDateTime(schedule.startTime).second
+
+            // 해당 시간의 버튼 찾기
+            timeButtons[timeKey]?.let { button ->
+                if (schedule.memberId == selectedMemberId) {
+                    button.setBackgroundColor(ContextCompat.getColor(button.context, R.color.main_red))
+                } else {
+                    // 다른 회원의 일정 - 회색
+                    button.setBackgroundColor(ContextCompat.getColor(button.context, R.color.main_gray))
+                    button.isEnabled = false
                 }
             }
         }
@@ -259,6 +291,7 @@ class ScheduleFragment : BaseFragment<FragmentScheduleBinding>(
                 setOnClickListener(clickListener)
             }
 
+            timeButtonsMap[time] = button
             binding.fbMidButton.addView(button)
         }
 
@@ -274,6 +307,7 @@ class ScheduleFragment : BaseFragment<FragmentScheduleBinding>(
                 setOnClickListener(clickListener)
             }
 
+            timeButtonsMap[time] = button
             binding.fbAfternoonButton.addView(button)
         }
     }
