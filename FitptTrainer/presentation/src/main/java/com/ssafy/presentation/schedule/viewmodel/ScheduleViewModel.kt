@@ -5,7 +5,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ssafy.data.datasource.TrainerDataStoreSource
 import com.ssafy.domain.model.base.ResponseStatus
+import com.ssafy.domain.model.member.MemberInfo
 import com.ssafy.domain.model.schedule.Schedule
+import com.ssafy.domain.usecase.member.GetMembersUseCase
 import com.ssafy.domain.usecase.schedule.GetScheduleUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,10 +23,14 @@ private const val TAG = "ScheduleViewModel_ssafy"
 @HiltViewModel
 class ScheduleViewModel @Inject constructor(
     private val getScheduleUseCase: GetScheduleUseCase,
+    private val getMembersUseCase: GetMembersUseCase,
     private val dataStore: TrainerDataStoreSource
 ) : ViewModel() {
     private val _scheduleState = MutableStateFlow<ScheduleStatus>(ScheduleStatus.Idle)
     val scheduleState: StateFlow<ScheduleStatus> = _scheduleState.asStateFlow()
+
+    private val _members = MutableStateFlow<List<MemberInfo>>(emptyList())
+    val members: StateFlow<List<MemberInfo>> = _members.asStateFlow()
 
     private val _schedules = MutableStateFlow<List<Schedule>>(emptyList())
     val schedules: StateFlow<List<Schedule>> = _schedules.asStateFlow()
@@ -77,7 +83,29 @@ class ScheduleViewModel @Inject constructor(
                 Log.e(TAG, "로그인 처리 중 예외 발생: ${e.message}")
                 _scheduleState.value = ScheduleStatus.Error("서버와의 연결에 실패했습니다.")
             }
+        }
+    }
 
+    fun getMembers() {
+        viewModelScope.launch {
+            try {
+                getMembersUseCase().collect { response ->
+                    Log.d(TAG, "getMembers 회원 조회: $response")
+                    when (response) {
+                        is ResponseStatus.Success -> {
+                            _members.value = response.data
+                            _scheduleState.value = ScheduleStatus.Success
+                        }
+
+                        is ResponseStatus.Error -> {
+                            _scheduleState.value = ScheduleStatus.Error(response.error.message)
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+                Log.d(TAG, "getMembers exception ${e.message}")
+                _scheduleState.value = ScheduleStatus.Error("서버와의 연결에 실패했습니다.")
+            }
         }
     }
 }
