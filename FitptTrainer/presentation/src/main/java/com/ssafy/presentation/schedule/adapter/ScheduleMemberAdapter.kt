@@ -6,13 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
+import com.ssafy.domain.model.member.MemberInfo
 import com.ssafy.presentation.R
-
-data class Member(val name: String, val birthDate: String)
 
 class ScheduleMemberAdapter (
     private val context: Context,
-    private val memberList: List<Member>
+    private val memberList: List<MemberInfo>
 ) : BaseAdapter() {
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
@@ -30,8 +29,8 @@ class ScheduleMemberAdapter (
         val birthDateTextView = view.findViewById<TextView>(R.id.tv_birthdate)
 
         val member = memberList[position]
-        nameTextView.text = member.name
-        birthDateTextView.text = member.birthDate
+        nameTextView.text = member.memberName
+        birthDateTextView.text = member.memberBirth
 
         return view
     }
