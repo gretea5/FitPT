@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.ssafy.presentation.R
@@ -35,7 +36,9 @@ class ReportEditFragment : BaseFragment<FragmentReportEditBinding>(
 
     fun initEvent() {
         binding.apply {
-
+            ibReportBack.setOnClickListener {
+                findNavController().navigate(R.id.action_reportEditFragment_to_userWorkoutInfoFragment)
+            }
         }
     }
 

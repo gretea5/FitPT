@@ -42,6 +42,8 @@
             android:layout_height="wrap_content"
             android:backgroundTint="@color/highlight_orange"
             app:cardCornerRadius="15dp"
+            android:clickable="true"
+            android:focusable="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent">

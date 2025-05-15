@@ -261,5 +261,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
         binding.imageButton.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_schedulingFragment)
         }
+
+        binding.imageButton2.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_userWorkoutInfoFragment)
+        }
     }
 }
