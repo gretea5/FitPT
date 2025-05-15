@@ -2,6 +2,7 @@ package com.ssafy.presentation.schedule
 
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
@@ -16,19 +17,29 @@ import com.ssafy.presentation.base.BaseFragment
 import java.time.YearMonth
 import android.widget.TextView
 import androidx.core.view.children
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.flexbox.FlexboxLayout
 import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.daysOfWeek
 import com.kizitonwose.calendar.view.MonthHeaderFooterBinder
+import com.ssafy.domain.model.schedule.Schedule
 import com.ssafy.presentation.databinding.FragmentScheduleBinding
 import com.ssafy.presentation.schedule.adapter.Member
 import com.ssafy.presentation.schedule.adapter.ScheduleMemberAdapter
+import com.ssafy.presentation.schedule.viewmodel.ScheduleViewModel
+import com.ssafy.presentation.util.TimeUtils
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import java.time.DayOfWeek
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 import java.util.Locale
 
+private const val TAG = "ScheduleFragment_ssafy"
 
 @AndroidEntryPoint
 class ScheduleFragment : BaseFragment<FragmentScheduleBinding>(
@@ -36,6 +47,7 @@ class ScheduleFragment : BaseFragment<FragmentScheduleBinding>(
     R.layout.fragment_schedule
 ) {
     private val eventsDatesList = mutableListOf<LocalDate>()
+    private val viewModel : ScheduleViewModel by viewModels()
 
     private val morningTimeList = listOf(
         "09:00",
@@ -89,8 +101,10 @@ class ScheduleFragment : BaseFragment<FragmentScheduleBinding>(
         super.onViewCreated(view, savedInstanceState)
         initAdapter()
         initCalendar()
+        initObserver()
         initButtonView()
         initEvent()
+        fetchSchedules()
     }
 
     private fun addExampleEventList() {
@@ -134,6 +148,8 @@ class ScheduleFragment : BaseFragment<FragmentScheduleBinding>(
 
                                 binding.calendar.notifyDateChanged(day.date)
                                 oldDate?.let { binding.calendar.notifyDateChanged(it) }
+
+                                selectSchedulesByDate(selectedDate!!)
                             }
                         }
                     }
@@ -200,8 +216,26 @@ class ScheduleFragment : BaseFragment<FragmentScheduleBinding>(
             scrollToMonth(currentMonth)
 
             monthScrollListener = { calendarMonth ->
-                val monthYear = "${calendarMonth.yearMonth.year}/${calendarMonth.yearMonth.monthValue}월"
-                binding.tvMonthYear.text = monthYear
+                val year = calendarMonth.yearMonth.year
+                val month = calendarMonth.yearMonth.monthValue.toString().padStart(2, '0')
+                val formattedDate = "$year-$month"
+
+                binding.tvMonthYear.text = formattedDate
+                viewModel.getMonthlySchedules(formattedDate)
+            }
+        }
+    }
+
+    private fun initObserver() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.schedules.collect { schedules -> }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.monthlyScheduleItems.collect { scheduleItems ->
+                    updateEventsDatesList(scheduleItems)
+                }
             }
         }
     }
@@ -259,5 +293,52 @@ class ScheduleFragment : BaseFragment<FragmentScheduleBinding>(
         binding.tvMemberName.setOnClickListener {
             binding.sMember.performClick()
         }
+    }
+
+    private fun fetchSchedules() {
+        val today = LocalDate.now()
+        selectedDate = today
+
+        val formattedDate = today.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+        val formattedMonth = today.format(DateTimeFormatter.ofPattern("yyyy-MM"))
+
+        viewModel.getSchedules(
+            month = null,
+            date = formattedDate,
+            trainerId = null,
+            memberId = null
+        )
+
+        viewModel.getMonthlySchedules(formattedMonth)
+    }
+
+    private fun selectSchedulesByDate(date: LocalDate) {
+        selectedDate = date
+        val formattedDate = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+
+        viewModel.getSchedules(
+            date = formattedDate,
+            month = null,
+            trainerId = null,
+            memberId = null
+        )
+    }
+    
+    private fun updateEventsDatesList(schedules: List<Schedule>) {
+        eventsDatesList.clear()
+
+        val eventDates = schedules.mapNotNull { schedule ->
+            try {
+                val dateStr = TimeUtils.parseDateTime(schedule.startTime).first
+                LocalDate.parse(dateStr)
+            } catch (e: Exception) {
+                Log.e(TAG, "날짜 파싱 오류: ${schedule.startTime}, ${e.message}")
+                null
+            }
+        }.distinct()
+
+        eventsDatesList.addAll(eventDates)
+
+        binding.calendar.notifyCalendarChanged()
     }
 }
