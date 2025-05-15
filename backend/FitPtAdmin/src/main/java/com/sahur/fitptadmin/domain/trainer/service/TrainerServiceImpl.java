@@ -1,5 +1,6 @@
 package com.sahur.fitptadmin.domain.trainer.service;
 
+import com.sahur.fitptadmin.core.constant.Role;
 import com.sahur.fitptadmin.db.entity.Admin;
 import com.sahur.fitptadmin.db.entity.Member;
 import com.sahur.fitptadmin.db.entity.Trainer;
@@ -61,6 +62,7 @@ public class TrainerServiceImpl implements TrainerService {
                 .trainerPw(encodedPassword)
                 .trainerName(trainerRegisterDto.getTrainerName())
                 .admin(admin)
+                .role(Role.TRAINER)
                 .build();
 
         trainerRepository.save(trainer);
