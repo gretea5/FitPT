@@ -1,5 +1,6 @@
 package com.sahur.fitpt.domain.composition.service;
 
+import com.sahur.fitpt.domain.composition.dto.CompositionDetailResponseDto;
 import com.sahur.fitpt.domain.composition.dto.CompositionRequestDto;
 import com.sahur.fitpt.domain.composition.dto.CompositionResponseDto;
 
@@ -9,7 +10,7 @@ import java.util.Optional;
 public interface CompositionService {
     Long saveComposition(CompositionRequestDto request);
 
-    Optional<CompositionResponseDto> getCompositionById(Long compositionLogId);
+    CompositionDetailResponseDto getCompositionById(Long compositionLogId);
 
     List<CompositionResponseDto> getCompositionsByMemberId(Long memberId);
 

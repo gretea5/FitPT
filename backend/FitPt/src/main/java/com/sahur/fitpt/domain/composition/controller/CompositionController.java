@@ -1,5 +1,6 @@
 package com.sahur.fitpt.domain.composition.controller;
 
+import com.sahur.fitpt.domain.composition.dto.CompositionDetailResponseDto;
 import com.sahur.fitpt.domain.composition.dto.CompositionRequestDto;
 import com.sahur.fitpt.domain.composition.dto.CompositionResponseDto;
 import com.sahur.fitpt.domain.composition.service.CompositionServiceImpl;
@@ -53,10 +54,8 @@ public class CompositionController {
     @Parameters({
             @Parameter(name = "compositionLogId", description = "체성분 Id", example = "1"),
     })
-    public ResponseEntity<CompositionResponseDto> getCompositionById(@PathVariable Long compositionLogId) {
-        return compositionService.getCompositionById(compositionLogId)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<CompositionDetailResponseDto> getCompositionById(@PathVariable Long compositionLogId) {
+        return ResponseEntity.ok(compositionService.getCompositionById(compositionLogId));
     }
 
     @PostMapping
