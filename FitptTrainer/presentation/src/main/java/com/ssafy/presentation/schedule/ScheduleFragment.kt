@@ -222,7 +222,8 @@ class ScheduleFragment : BaseFragment<FragmentScheduleBinding>(
     private fun initObserver() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.schedules.collect { schedules ->
-                updateScheduleButtonColors(schedules, 1, timeButtonsMap)
+                Log.d(TAG, "initObserver: $schedules")
+                updateScheduleButtonColors(schedules, timeButtonsMap)
             }
         }
 
@@ -251,11 +252,15 @@ class ScheduleFragment : BaseFragment<FragmentScheduleBinding>(
 
     private fun updateScheduleButtonColors(
         schedules: List<Schedule>,
-        selectedMemberId: Long,
         timeButtons: Map<String, Button>
     ) {
         timeButtons.values.forEach { button ->
-            button.isEnabled = true
+            button.apply {
+                setBackgroundResource(R.drawable.selector_button_time)
+                setTextColor(Color.BLACK)
+                setOnClickListener(clickListener)
+                isEnabled = true
+            }
         }
 
         schedules.forEach { schedule ->
