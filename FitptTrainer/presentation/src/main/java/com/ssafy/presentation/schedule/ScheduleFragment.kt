@@ -214,6 +214,11 @@ class ScheduleFragment : BaseFragment<FragmentScheduleBinding>(
                 val formattedDate = "$year-$month"
 
                 binding.tvMonthYear.text = formattedDate
+
+                selectedButton?.apply { isSelected = false }
+
+                selectedButton = null
+
                 viewModel.getMonthlySchedules(formattedDate)
             }
         }
@@ -364,6 +369,10 @@ class ScheduleFragment : BaseFragment<FragmentScheduleBinding>(
     }
 
     private fun selectSchedulesByDate(date: LocalDate) {
+        selectedButton?.apply { isSelected = false }
+
+        selectedButton = null
+
         selectedDate = date
         val formattedDate = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
 
