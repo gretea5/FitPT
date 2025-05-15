@@ -10,6 +10,7 @@ import com.ssafy.domain.model.base.ResponseStatus
 import com.ssafy.domain.model.member.MemberInfo
 import com.ssafy.domain.repository.member.MemberRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
@@ -33,6 +34,28 @@ class MemberRepositoryImpl @Inject constructor(
                     }
                     is ApiResponse.Error -> {
                         Log.d(TAG, "getMemberInfoById Error: ${result.error}")
+                        emit(ResponseStatus.Error(result.error.toDomainModel()))
+                    }
+                }
+            }
+        }
+    }
+
+    override suspend fun getMembers(): Flow<ResponseStatus<List<MemberInfo>>> {
+        Log.d(TAG, "getMembers: ")
+        return flow {
+            val responseFlow = ApiResponseHandler().handle {
+                memberService.getMembers()
+            }
+
+            responseFlow.collect { result ->
+                when (result) {
+                    is ApiResponse.Success -> {
+                        Log.d(TAG, "getMembers Success: ${result.data}")
+                        emit(ResponseStatus.Success(result.data.map { it.toDomainModel() }))
+                    }
+                    is ApiResponse.Error -> {
+                        Log.d(TAG, "getMembers Error: ${result.error}")
                         emit(ResponseStatus.Error(result.error.toDomainModel()))
                     }
                 }
