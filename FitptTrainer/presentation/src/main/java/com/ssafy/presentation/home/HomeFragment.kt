@@ -259,7 +259,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
 
     fun initEvent() {
         binding.imageButton.setOnClickListener {
-            findNavController().navigate(R.id.action_homeFragment_to_schedulingFragment)
+            val action = HomeFragmentDirections.actionHomeFragmentToSchedulingFragment()
+            findNavController().navigate(action)
         }
     }
 }
