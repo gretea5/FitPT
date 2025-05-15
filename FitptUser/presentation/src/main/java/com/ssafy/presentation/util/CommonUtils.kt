@@ -84,7 +84,6 @@ object CommonUtils {
         val outputFormatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 a hh:mm")
             .withLocale(Locale.KOREAN) // Korean locale for proper AM/PM display
         val localDateTime = LocalDateTime.parse(parsedDateTime, inputFormatter)
-        val kstDateTime = localDateTime.plusHours(9)
         return localDateTime.format(outputFormatter)
     }
 

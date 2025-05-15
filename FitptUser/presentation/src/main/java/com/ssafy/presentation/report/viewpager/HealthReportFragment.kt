@@ -56,7 +56,7 @@ class HealthReportFragment : BaseFragment<FragmentHealthReportBinding>(
                         is ReportDetailState.Success -> {
                             Log.d(TAG, state.reportDetail.toString())
                             val activationMuscleIds = state.reportDetail.reportExercises
-                                .mapNotNull { it.activation_muscle_id }
+                                .mapNotNull { it.activationMuscleId }
                                 .flatten()
                             highlightMuscles(activationMuscleIds,requireView())
                         }

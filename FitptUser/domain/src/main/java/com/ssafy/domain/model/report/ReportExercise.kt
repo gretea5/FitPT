@@ -6,7 +6,7 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class ReportExercise(
-    val activation_muscle_id: List<Long>,
+    val activationMuscleId: List<Long>,
     val exerciseAchievement: String,
     val exerciseComment: String,
     val exerciseName: String

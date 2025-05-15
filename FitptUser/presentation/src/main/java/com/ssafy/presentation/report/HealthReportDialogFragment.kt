@@ -77,7 +77,7 @@ class HealthReportDialogFragment : DialogFragment() {
 
         private fun setupExerciseRecyclerView(reportDetail: ReportDetailInfo) {
             val filteredExercises = reportDetail.reportExercises.filter {
-                it.activation_muscle_id.contains(muscleId)
+                it.activationMuscleId.contains(muscleId)
             }
             Log.d(TAG,"출력"+filteredExercises.toString())
             val adapter = ExerciseReportAdapter(filteredExercises)
