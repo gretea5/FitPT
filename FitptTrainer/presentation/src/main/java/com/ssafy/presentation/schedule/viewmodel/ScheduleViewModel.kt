@@ -45,12 +45,13 @@ class ScheduleViewModel @Inject constructor(
 
     fun getSchedules(date: String? = null, month: String? = null, trainerId: Long? = null, memberId: Long? = null) {
         viewModelScope.launch {
+            val storedTrainerId = dataStore.trainerId.first()
             _scheduleState.value = ScheduleStatus.Idle
 
             getScheduleUseCase(
                 date = date,
                 month = month,
-                trainerId = trainerId,
+                trainerId = storedTrainerId,
                 memberId = memberId
             ).collectLatest { response ->
                 when (response) {
