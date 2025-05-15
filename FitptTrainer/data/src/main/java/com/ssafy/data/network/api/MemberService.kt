@@ -8,4 +8,7 @@ import retrofit2.http.Path
 interface MemberService {
     @GET("members/{memberId}")
     suspend fun getMemberInfoById(@Path("memberId") memberId: Long): Response<MemberResponse>
+
+    @GET("members")
+    suspend fun getMembers(): Response<List<MemberResponse>>
 }
