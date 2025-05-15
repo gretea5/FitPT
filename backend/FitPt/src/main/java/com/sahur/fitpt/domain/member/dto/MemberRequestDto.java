@@ -14,5 +14,4 @@ public class MemberRequestDto {
     private Float memberHeight;
     private Float memberWeight;
     private Long adminId;
-    private String gymName;
 }

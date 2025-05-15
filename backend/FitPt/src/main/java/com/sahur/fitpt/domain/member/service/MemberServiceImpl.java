@@ -44,10 +44,6 @@ public class MemberServiceImpl implements MemberService {
             admin = adminRepository.findById(requestDto.getAdminId())
                     .orElseThrow(() -> new CustomException(ErrorCode.ADMIN_NOT_FOUND));
 
-            // gymName 검증
-            if (!admin.getGymName().equals(requestDto.getGymName())) {
-                throw new CustomException(ErrorCode.INVALID_GYM_NAME);
-            }
         }
 
         Member member = Member.builder()
@@ -93,11 +89,6 @@ public class MemberServiceImpl implements MemberService {
         if (requestDto.getAdminId() != null) {
             admin = adminRepository.findById(requestDto.getAdminId())
                     .orElseThrow(() -> new CustomException(ErrorCode.ADMIN_NOT_FOUND));
-
-            // gymName 검증
-            if (!admin.getGymName().equals(requestDto.getGymName())) {
-                throw new CustomException(ErrorCode.INVALID_GYM_NAME);
-            }
         }
 
         member.update(
