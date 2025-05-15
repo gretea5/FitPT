@@ -1,6 +1,6 @@
 package com.ssafy.data.network.api
 
-import com.ssafy.data.network.response.ScheduleResponse
+import com.ssafy.data.network.response.schedule.ScheduleResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query

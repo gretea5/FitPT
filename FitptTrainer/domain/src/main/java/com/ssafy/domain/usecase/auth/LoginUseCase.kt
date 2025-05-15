@@ -1,4 +1,4 @@
-package com.ssafy.domain.usercase.auth
+package com.ssafy.domain.usecase.auth
 
 import com.ssafy.domain.model.auth.TrainerLogin
 import com.ssafy.domain.model.base.ResponseStatus

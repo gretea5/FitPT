@@ -7,8 +7,7 @@ import com.ssafy.data.network.common.ApiResponseHandler
 import com.ssafy.data.network.common.ApiResponse
 import com.ssafy.data.network.common.ErrorResponse.Companion.toDomainModel
 import com.ssafy.data.network.request.TrainerLoginRequest
-import com.ssafy.data.network.response.TrainerLoginResponse
-import com.ssafy.data.network.response.TrainerLoginResponse.Companion.toDomainModel
+import com.ssafy.data.network.response.trainer.TrainerLoginResponse.Companion.toDomainModel
 import com.ssafy.domain.model.auth.TrainerLogin
 import com.ssafy.domain.model.base.ResponseStatus
 import com.ssafy.domain.repository.auth.AuthRepository
@@ -32,9 +31,9 @@ internal class AuthRepositoryImpl @Inject constructor(
                     )
                 )
             }.onEach { result ->
-                Log.d("AuthRepositoryImpl", "login: $result")
                 when (result) {
                     is ApiResponse.Success -> {
+                        Log.d("token", result.data.accessToken)
                         dataStore.saveTrainerId(result.data.trainerId.toLong())
                         dataStore.saveJwtToken(result.data.accessToken)
                         emit(ResponseStatus.Success(result.data.toDomainModel()))

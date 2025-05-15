@@ -4,7 +4,7 @@ import com.ssafy.data.network.api.ScheduleService
 import com.ssafy.data.network.common.ApiResponse
 import com.ssafy.data.network.common.ApiResponseHandler
 import com.ssafy.data.network.common.ErrorResponse.Companion.toDomainModel
-import com.ssafy.data.network.response.ScheduleResponse.Companion.toDomainModel
+import com.ssafy.data.network.response.schedule.ScheduleResponse.Companion.toDomainModel
 import com.ssafy.domain.model.base.ResponseStatus
 import com.ssafy.domain.model.schedule.Schedule
 import com.ssafy.domain.repository.schedule.ScheduleRepository

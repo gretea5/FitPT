@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ssafy.data.datasource.TrainerDataStoreSource
 import com.ssafy.domain.model.base.ResponseStatus
-import com.ssafy.domain.usercase.auth.LoginUseCase
+import com.ssafy.domain.usecase.auth.LoginUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -30,7 +30,7 @@ class LoginViewModel @Inject constructor(
                     when (response) {
                         is ResponseStatus.Success -> {
                             _loginState.value = LoginStatus.Success
-                            //dataStore.saveJwtToken("Bearer " + response.data.accessToken)
+                            dataStore.saveJwtToken("Bearer " + response.data.accessToken)
                         }
                         is ResponseStatus.Error -> {
                             _loginState.value = LoginStatus.Error("로그인에 실패했습니다: ${response.error.message}")
