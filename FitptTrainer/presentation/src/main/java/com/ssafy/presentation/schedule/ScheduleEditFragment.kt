@@ -88,7 +88,6 @@ class ScheduleEditFragment : BaseFragment<FragmentScheduleEditBinding>(
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d(TAG, "onViewCreated: ${args.trainerId}")
@@ -98,7 +97,6 @@ class ScheduleEditFragment : BaseFragment<FragmentScheduleEditBinding>(
         initEvent()
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun addExampleEventList() {
         val today = LocalDate.now()
 
@@ -113,7 +111,6 @@ class ScheduleEditFragment : BaseFragment<FragmentScheduleEditBinding>(
         binding.sMember.adapter = adapter
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun initCalendar() {
         val currentMonth = YearMonth.now()
 
