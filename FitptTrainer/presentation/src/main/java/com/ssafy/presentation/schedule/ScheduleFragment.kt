@@ -26,9 +26,9 @@ import com.google.android.flexbox.FlexboxLayout
 import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.daysOfWeek
 import com.kizitonwose.calendar.view.MonthHeaderFooterBinder
+import com.ssafy.domain.model.member.MemberInfo
 import com.ssafy.domain.model.schedule.Schedule
 import com.ssafy.presentation.databinding.FragmentScheduleBinding
-import com.ssafy.presentation.schedule.adapter.Member
 import com.ssafy.presentation.schedule.adapter.ScheduleMemberAdapter
 import com.ssafy.presentation.schedule.viewmodel.ScheduleViewModel
 import com.ssafy.presentation.util.TimeUtils
@@ -72,17 +72,7 @@ class ScheduleFragment : BaseFragment<FragmentScheduleBinding>(
         "23:00",
     )
 
-    private val memberList = listOf(
-        Member("박장훈", "2000.01.07"),
-        Member("안세호", "1997.07.11"),
-        Member("김두영", "1998.05.29"),
-        Member("김기훈", "1997.09.27"),
-        Member("김동현", "1999.07.30"),
-        Member("권경탁", "1996.12.31")
-    )
-
     private var selectedButton: Button? = null
-
     private var selectedDate: LocalDate? = null
 
     private val clickListener = View.OnClickListener { view ->
@@ -107,6 +97,7 @@ class ScheduleFragment : BaseFragment<FragmentScheduleBinding>(
         initButtonView()
         initEvent()
         fetchSchedules()
+        fetchMembers()
     }
 
     private fun addExampleEventList() {
@@ -119,7 +110,7 @@ class ScheduleFragment : BaseFragment<FragmentScheduleBinding>(
     }
 
     private fun initAdapter() {
-        val adapter = ScheduleMemberAdapter(requireContext(), memberList)
+        val adapter = ScheduleMemberAdapter(requireContext(), emptyList())
         binding.sMember.adapter = adapter
     }
 
@@ -242,6 +233,12 @@ class ScheduleFragment : BaseFragment<FragmentScheduleBinding>(
                 }
             }
         }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.members.collect() { members -> updateMemberAdapter(members) }
+            }
+        }
     }
 
     private fun updateScheduleButtonColors(
@@ -263,6 +260,11 @@ class ScheduleFragment : BaseFragment<FragmentScheduleBinding>(
                 button.isEnabled = false
             }
         }
+    }
+
+    private fun updateMemberAdapter(members: List<MemberInfo>) {
+        val adapter = ScheduleMemberAdapter(requireContext(), members)
+        binding.sMember.adapter = adapter
     }
 
     fun setEventsData(events: List<LocalDate>) {
@@ -308,8 +310,8 @@ class ScheduleFragment : BaseFragment<FragmentScheduleBinding>(
     private fun initEvent() {
         binding.sMember.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val selectedMember = parent?.getItemAtPosition(position) as Member
-                binding.tvMemberName.text = selectedMember.name
+                val selectedMember = parent?.getItemAtPosition(position) as MemberInfo
+                binding.tvMemberName.text = selectedMember.memberName
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -337,6 +339,10 @@ class ScheduleFragment : BaseFragment<FragmentScheduleBinding>(
         )
 
         viewModel.getMonthlySchedules(formattedMonth)
+    }
+
+    private fun fetchMembers() {
+        viewModel.getMembers()
     }
 
     private fun selectSchedulesByDate(date: LocalDate) {
