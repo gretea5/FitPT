@@ -99,19 +99,21 @@ class EditUserInfoFragment : BaseFragment<FragmentEditUserInfoBinding>(
 
     fun initEvent(){
         binding.btnNext.setOnClickListener {
-            val userInfo = UserInfo(
-                admin = gymInfoViewModel.tempgymInfo.value!!.adminId,
-                memberName = userInfoViewModel.temporaryUserInfo.value!!.memberName,
-                memberGender = userInfoViewModel.temporaryUserInfo.value!!.memberGender,
-                memberHeight = userInfoViewModel.temporaryUserInfo.value!!.memberHeight,
-                memberWeight = userInfoViewModel.temporaryUserInfo.value!!.memberWeight,
-                memberBirth = userInfoViewModel.temporaryUserInfo.value!!.memberBirth,
-                trainerId = userInfoViewModel.temporaryUserInfo.value!!.trainerId
-            )
-            // 데이터 업데이트
-            userInfoViewModel.updateUser(userInfo)
-            // DataStore에 저장하고, 저장 완료 후 UI 갱신
             viewLifecycleOwner.lifecycleScope.launch {
+                val memberId = userDataStoreSource.user.first()!!.memberId
+                val userInfo = UserInfo(
+                    memberId = memberId,
+                    admin = gymInfoViewModel.tempgymInfo.value!!.adminId,
+                    memberName = userInfoViewModel.temporaryUserInfo.value!!.memberName,
+                    memberGender = userInfoViewModel.temporaryUserInfo.value!!.memberGender,
+                    memberHeight = userInfoViewModel.temporaryUserInfo.value!!.memberHeight,
+                    memberWeight = userInfoViewModel.temporaryUserInfo.value!!.memberWeight,
+                    memberBirth = userInfoViewModel.temporaryUserInfo.value!!.memberBirth,
+                    trainerId = userInfoViewModel.temporaryUserInfo.value!!.trainerId
+                )
+                // 데이터 업데이트
+                userInfoViewModel.updateUser(userInfo)
+
                 userDataStoreSource.saveUser(userInfo)  // 데이터 저장 시작
                 userDataStoreSource.user.collect { user ->  // 저장된 데이터 가져오기
                     Log.d(TAG, "UserInfo from DataStore: $user")

@@ -33,7 +33,6 @@ internal class UserRepositoryImpl @Inject constructor(
         return flow {
             val result = ApiResponseHandler().handle {
                 val memberId = dataStore.user.first()!!.memberId
-                //Log.d(TAG,memberId.toString())
                 userService.getUserInfo(memberId)
             }.first() // ✅ 첫 번째 값만 가져옴
             when (result) {
@@ -54,6 +53,7 @@ internal class UserRepositoryImpl @Inject constructor(
         return flow {
             val result = ApiResponseHandler().handle {
                 val memberId = dataStore.user.firstOrNull()!!.memberId
+                Log.d(TAG,"일정"+memberId.toString())
                 userService.updateUserInfo(
                     UserRequest(
                         adminId = userInfo.admin.toLong(),

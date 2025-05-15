@@ -31,6 +31,8 @@ internal class AuthRepositoryImpl @Inject constructor(
             ApiResponseHandler().handle {
                 val kakaoAccess = dataStore.kakaoAccessToken.first()!!
                 val fcmToken = dataStore.fcmToken.first()!!
+                Log.d(TAG,kakaoAccess)
+                Log.d(TAG,fcmToken)
                 authService.login(
                     UserLoginRequest(
                         kakaoAccessToken = kakaoAccess,

@@ -85,7 +85,7 @@ object CommonUtils {
             .withLocale(Locale.KOREAN) // Korean locale for proper AM/PM display
         val localDateTime = LocalDateTime.parse(parsedDateTime, inputFormatter)
         val kstDateTime = localDateTime.plusHours(9)
-        return kstDateTime.format(outputFormatter)
+        return localDateTime.format(outputFormatter)
     }
 
     fun parseFlexibleDateTime(dateTimeStr: String): String {
@@ -102,10 +102,10 @@ object CommonUtils {
     }
 
     fun formatMeasureCreatedAt(createdAt: String): String {
-        val inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
+        val inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         val outputFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd")
-        val dateTime = LocalDateTime.parse(createdAt, inputFormatter)
-        return dateTime.format(outputFormatter)
+        val date = LocalDate.parse(createdAt, inputFormatter)
+        return date.format(outputFormatter)
     }
 
     fun convertToCurrentYearDate(dateString: String): String {

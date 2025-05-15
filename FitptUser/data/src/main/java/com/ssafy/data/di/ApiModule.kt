@@ -35,7 +35,7 @@ internal class ApiModule {
     @Provides
     @Singleton
     fun provideGymService(
-        @InterceptorRetrofit retrofit: Retrofit
+        @NoInterceptorRetrofit retrofit: Retrofit
     ): GymService {
         return retrofit.create(GymService::class.java)
     }
