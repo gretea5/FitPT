@@ -146,7 +146,6 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-
     </androidx.core.widget.NestedScrollView>
 
     <androidx.constraintlayout.widget.ConstraintLayout
