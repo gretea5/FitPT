@@ -11,4 +11,12 @@ interface ScheduleRepository {
         trainerId: Long? = null,
         memberId: Long? = null
     ): Flow<ResponseStatus<List<Schedule>>>
+
+    suspend fun createSchedule(
+        memberId: Long? = null,
+        startTime: String? = null,
+        endTime: String? = null,
+        scheduleContent: String? = null,
+        trainerId: Long? = null
+    ): Flow<ResponseStatus<Long>>
 }
