@@ -4,6 +4,7 @@ import com.ssafy.data.network.api.ScheduleService
 import com.ssafy.data.network.common.ApiResponse
 import com.ssafy.data.network.common.ApiResponseHandler
 import com.ssafy.data.network.common.ErrorResponse.Companion.toDomainModel
+import com.ssafy.data.network.request.schedule.ScheduleRequest
 import com.ssafy.data.network.response.schedule.ScheduleResponse.Companion.toDomainModel
 import com.ssafy.domain.model.base.ResponseStatus
 import com.ssafy.domain.model.schedule.Schedule
@@ -40,6 +41,37 @@ class ScheduleRepositoryImpl @Inject constructor(
                         emit(ResponseStatus.Success(result.data.map { scheduleResponse ->
                             scheduleResponse.toDomainModel()
                         }))
+                    }
+                    is ApiResponse.Error -> {
+                        emit(ResponseStatus.Error(result.error.toDomainModel()))
+                    }
+                }
+            }.collect()
+        }
+    }
+
+    override suspend fun createSchedule(
+        memberId: Long?,
+        startTime: String?,
+        endTime: String?,
+        scheduleContent: String?,
+        trainerId: Long?
+    ): Flow<ResponseStatus<Long>> {
+        return flow {
+            ApiResponseHandler().handle {
+                scheduleService.createSchedule(
+                    ScheduleRequest(
+                        memberId = memberId!!,
+                        startTime = startTime!!,
+                        endTime = endTime!!,
+                        scheduleContent = scheduleContent!!,
+                        trainerId = trainerId!!
+                    )
+                )
+            }.onEach { result ->
+                when(result) {
+                    is ApiResponse.Success -> {
+                        emit(ResponseStatus.Success(result.data))
                     }
                     is ApiResponse.Error -> {
                         emit(ResponseStatus.Error(result.error.toDomainModel()))
