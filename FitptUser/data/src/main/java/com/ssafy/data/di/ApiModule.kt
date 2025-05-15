@@ -27,7 +27,7 @@ internal class ApiModule {
     @Provides
     @Singleton
     fun provideBodyService(
-        @NoInterceptorRetrofit retrofit: Retrofit
+        @InterceptorRetrofit retrofit: Retrofit
     ): BodyService {
         return retrofit.create(BodyService::class.java)
     }
@@ -35,7 +35,7 @@ internal class ApiModule {
     @Provides
     @Singleton
     fun provideGymService(
-        @NoInterceptorRetrofit retrofit: Retrofit
+        @InterceptorRetrofit retrofit: Retrofit
     ): GymService {
         return retrofit.create(GymService::class.java)
     }
@@ -43,7 +43,7 @@ internal class ApiModule {
     @Provides
     @Singleton
     fun provideReportService(
-        @NoInterceptorRetrofit retrofit: Retrofit
+        @InterceptorRetrofit retrofit: Retrofit
     ): ReportService {
         return retrofit.create(ReportService::class.java)
     }
@@ -51,7 +51,7 @@ internal class ApiModule {
     @Provides
     @Singleton
     fun provideScheduleService(
-        @NoInterceptorRetrofit retrofit: Retrofit
+        @InterceptorRetrofit retrofit: Retrofit
     ): ScheduleService {
         return retrofit.create(ScheduleService::class.java)
     }
@@ -59,7 +59,7 @@ internal class ApiModule {
     @Provides
     @Singleton
     fun provideUserService(
-        @NoInterceptorRetrofit retrofit: Retrofit
+        @InterceptorRetrofit retrofit: Retrofit
     ): UserService {
         return retrofit.create(UserService::class.java)
     }

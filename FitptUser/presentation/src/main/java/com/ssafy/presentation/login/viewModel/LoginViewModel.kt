@@ -28,8 +28,8 @@ class LoginViewModel @Inject constructor(
     private val _loginState = MutableStateFlow<LoginStatus>(LoginStatus.Idle) // 🔥 null 기본값 추가
     val loginState : StateFlow<LoginStatus> = _loginState.asStateFlow()
 
-    private val _signUpState = MutableStateFlow<SignUpStatus>(SignUpStatus.Idle) // 🔥 null 기본값 추가
-    val signUpState : StateFlow<SignUpStatus> = _signUpState.asStateFlow()
+    private val _signUpSuccess = MutableStateFlow<Boolean?>(null)
+    val signUpSuccess: StateFlow<Boolean?> get() = _signUpSuccess
 
     //체육관 저장
     private val _selectedGym = MutableStateFlow<Gym?>(null)
@@ -65,19 +65,19 @@ class LoginViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 signUpUsecase(userInfo).collect { response ->
+                    Log.d(TAG,userInfo.toString())
                     when (response) {
                         is ResponseStatus.Success -> {
-                            _signUpState.value = SignUpStatus.Success
+                            _signUpSuccess.value = true
                             dataStore.saveJwtToken("Bearer " + response.data.accessToken)
                         }
                         is ResponseStatus.Error -> {
-                            _signUpState.value = SignUpStatus.Error("로그인에 실패했습니다: ${response.error.message}")
+                            _signUpSuccess.value = false
                         }
                     }
                 }
             } catch (e: Exception) {
                 Log.e(TAG, "로그인 처리 중 예외 발생: ${e.message}")
-                _signUpState.value = SignUpStatus.Error("서버와의 연결에 실패했습니다.")
             }
         }
     }

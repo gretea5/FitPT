@@ -325,15 +325,29 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
     }
 
     private fun setupYAxis(entries: List<Entry>, unit: String, isPercent: Boolean = false) {
+        if (entries.isEmpty()) {
+            Log.w(TAG, "setupYAxis: entries가 비어 있습니다.")
+            lineChart.axisLeft.apply {
+                axisMinimum = 0f
+                axisMaximum = 100f // 기본값 설정 (단위나 차트 종류에 따라 조절 가능)
+                granularity = 25f
+                setLabelCount(5, true)
+                valueFormatter = object : ValueFormatter() {
+                    override fun getFormattedValue(value: Float): String {
+                        return if (isPercent) "${value.toInt()}%" else "${value.toInt()} $unit"
+                    }
+                }
+            }
+            return
+        }
+        val minY = entries.minOf { it.y }
+        val maxY = entries.maxOf { it.y }
+        val buffer = (maxY - minY) * 0.2f
         lineChart.axisLeft.apply {
-            val minY = entries.minOf { it.y }
-            val maxY = entries.maxOf { it.y }
-            val buffer = (maxY - minY) * 0.2f
             axisMinimum = (minY - buffer).coerceAtLeast(0f)
             axisMaximum = maxY + buffer
             granularity = ((maxY - minY) / 4).coerceAtLeast(1f)
             setLabelCount(5, true)
-
             valueFormatter = object : ValueFormatter() {
                 override fun getFormattedValue(value: Float): String {
                     return if (isPercent) "${value.toInt()}%" else "${value.toInt()} $unit"

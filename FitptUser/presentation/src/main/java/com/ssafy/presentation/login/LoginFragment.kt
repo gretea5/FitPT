@@ -49,12 +49,12 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(
         binding.ivKakaoMove.setOnClickListener {
             if (!isClick) {
                 isClick = true // 클릭 방지 활성화
-                //kakaoLogin()
-                val intent = Intent(requireContext(), MainActivity::class.java)
+                kakaoLogin()
+                /*val intent = Intent(requireContext(), MainActivity::class.java)
                 startActivity(intent)
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
                 requireActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
-                requireActivity().finishAffinity()
+                requireActivity().finishAffinity()*/
             }
         }
     }

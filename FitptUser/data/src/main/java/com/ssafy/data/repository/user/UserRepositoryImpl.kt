@@ -32,11 +32,19 @@ internal class UserRepositoryImpl @Inject constructor(
     override suspend fun getUserInfo(): Flow<ResponseStatus<UserInfo>> {
         return flow {
             val result = ApiResponseHandler().handle {
-                userService.getUserInfo(3)
+                val memberId = dataStore.user.first()!!.memberId
+                //Log.d(TAG,memberId.toString())
+                userService.getUserInfo(memberId)
             }.first() // ✅ 첫 번째 값만 가져옴
             when (result) {
-                is ApiResponse.Success -> emit(ResponseStatus.Success(result.data.toDomainModel()))
-                is ApiResponse.Error -> emit(ResponseStatus.Error(result.error.toDomainModel()))
+                is ApiResponse.Success -> {
+                    Log.d(TAG, "유저 정보 가져오기 성공: ${result.data}")
+                    emit(ResponseStatus.Success(result.data.toDomainModel()))
+                }
+                is ApiResponse.Error -> {
+                    Log.e(TAG, "유저 정보 가져오기 실패 - 코드: ${result.error.code}, 메시지: ${result.error.message}")
+                    emit(ResponseStatus.Error(result.error.toDomainModel()))
+                }
             }
         }
     }
@@ -46,7 +54,7 @@ internal class UserRepositoryImpl @Inject constructor(
         return flow {
             val result = ApiResponseHandler().handle {
                 val memberId = dataStore.user.firstOrNull()!!.memberId
-                userService.updateUserInfo(memberId,
+                userService.updateUserInfo(
                     UserRequest(
                         adminId = userInfo.admin.toLong(),
                         memberBirth = userInfo.memberBirth,
@@ -69,8 +77,7 @@ internal class UserRepositoryImpl @Inject constructor(
     override suspend fun deleteUserInfo(): Flow<ResponseStatus<Unit>> {
         return flow {
             val result = ApiResponseHandler().handle {
-                val memberId = dataStore.user.firstOrNull()!!.memberId
-                userService.deleteUserInfo(memberId)
+                userService.deleteUserInfo()
             }.first() // ✅ 첫 번째 값만 가져옴
             when (result) {
                 is ApiResponse.Success -> emit(ResponseStatus.Success(Unit))

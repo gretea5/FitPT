@@ -20,6 +20,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeParseException
 import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
@@ -37,19 +38,31 @@ object CommonUtils {
     }
 
     fun getKoreanAge(dateString: String): String {
-        val formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME
-        val birthDateTime = LocalDateTime.parse(dateString, formatter)
-        val birthYear = birthDateTime.year
+        val birthDate: LocalDate = try {
+            val dateTime = LocalDateTime.parse(dateString, DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+            dateTime.toLocalDate()
+        } catch (e: DateTimeParseException) {
+            LocalDate.parse(dateString, DateTimeFormatter.ISO_LOCAL_DATE)
+        }
+        val birthYear = birthDate.year
         val currentYear = LocalDate.now().year
         val koreanAge = currentYear - birthYear + 1
         return "${koreanAge}세"
     }
 
     fun formatBirthToYYYYMMDD(birth: String): String {
-        val inputFormatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME
         val outputFormatter = DateTimeFormatter.ofPattern("yyyyMMdd")
-        val dateTime = LocalDateTime.parse(birth, inputFormatter)
-        return dateTime.format(outputFormatter)
+        return try {
+            val dateTime = LocalDateTime.parse(birth, DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+            dateTime.toLocalDate().format(outputFormatter)
+        } catch (e: DateTimeParseException) {
+            try {
+                val date = LocalDate.parse(birth, DateTimeFormatter.ISO_LOCAL_DATE)
+                date.format(outputFormatter)
+            } catch (e2: DateTimeParseException) {
+                "Invalid date format"
+            }
+        }
     }
 
     fun formatBirthDate(inputDate: String): String? {
@@ -94,6 +107,17 @@ object CommonUtils {
         val dateTime = LocalDateTime.parse(createdAt, inputFormatter)
         return dateTime.format(outputFormatter)
     }
+
+    fun convertToCurrentYearDate(dateString: String): String {
+        val inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        val outputFormatter = DateTimeFormatter.ofPattern("yyyyMMdd")
+        val parsedDate = LocalDate.parse(dateString, inputFormatter)
+        val currentYear = LocalDate.now().year
+        // 입력 날짜에서 연도만 현재 연도로 바꾸기
+        val updatedDate = parsedDate.withYear(currentYear)
+        return updatedDate.format(outputFormatter)
+    }
+
 
     fun formatNumber(number: String): String {
         return try {

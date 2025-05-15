@@ -138,7 +138,7 @@ class MeasureFragment : BaseFragment<FragmentMeasureBinding>(
             "comp" -> {
                 lifecycleScope.launch {
                     val user = userDataStoreSource.user.first()!!
-                    Log.d(TAG,CommonUtils.formatMeasureCreatedAt(user.memberBirth))
+                    Log.d(TAG,user.memberBirth.toString())
                     manager.startFitrusCompMeasure(
                         Gender.valueOf(if (user.memberGender == "남성") "MALE" else "FEMALE"),
                         user.memberHeight.toFloat(),
@@ -177,6 +177,7 @@ class MeasureFragment : BaseFragment<FragmentMeasureBinding>(
                 smm = result["smm"]?.toDoubleOrNull() ?: 0.0,
                 weight = binding.etWeight.text.toString().toDouble()
             )
+            Log.d(TAG,"측정 값"+detail.toString())
             measureViewModel.createBody(detail)
         }
         measuring = false

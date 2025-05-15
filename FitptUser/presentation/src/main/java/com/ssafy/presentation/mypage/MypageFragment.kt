@@ -23,6 +23,7 @@ import kotlinx.coroutines.launch
 import java.time.LocalDate
 import javax.inject.Inject
 
+
 @AndroidEntryPoint
 class MypageFragment : BaseFragment<FragmentMypageBinding>(
     FragmentMypageBinding::bind,
@@ -54,6 +55,8 @@ class MypageFragment : BaseFragment<FragmentMypageBinding>(
     fun initView() {
         lifecycleScope.launch {
             val user = userDataStore.user.first() // 최초 값 한 번만 가져오기
+            //Log.d("hello","안녕")
+            Log.d("hello",user.toString())
             user?.let {
                 val koreanAge = CommonUtils.getKoreanAge(it?.memberBirth!!)
                 binding.tvProfileName.text = it?.memberName  // nickname을 TextView에 설정

@@ -18,7 +18,9 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager
 import android.widget.PopupWindow
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.ssafy.domain.model.login.UserInfo
 
 import com.ssafy.presentation.R;
 import com.ssafy.presentation.base.BaseFragment
@@ -27,6 +29,7 @@ import com.ssafy.presentation.databinding.FragmentLoginBinding
 import com.ssafy.presentation.databinding.FragmentRegisterUserInfoBinding
 import com.ssafy.presentation.databinding.PopupGenderMenuBinding
 import com.ssafy.presentation.login.viewModel.LoginViewModel
+import com.ssafy.presentation.util.CommonUtils
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Calendar
 
@@ -42,6 +45,7 @@ class RegisterUserInfoFragment : BaseFragment<FragmentRegisterUserInfoBinding>(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
+        observeViewModel()
         initEvent()
         initValidation()
         updateButtonState()
@@ -76,13 +80,22 @@ class RegisterUserInfoFragment : BaseFragment<FragmentRegisterUserInfoBinding>(
 
     fun initEvent(){
         binding.btnNext.setOnClickListener {
-            Log.d(TAG,"안녕")
-            Log.d(TAG,"안녕"+loginViewModel.userJoin.value.toString())
-            val intent = Intent(requireContext(), MainActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(intent)
-            requireActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
-            requireActivity().finishAffinity()
+            Log.d(TAG,binding.etWeight.text.toString())
+            Log.d(TAG,binding.etHeight.text.toString())
+            Log.d(TAG,CommonUtils.formatBirthDate(binding.etBirth.text.toString())!!)
+            Log.d(TAG,binding.tvGender.text.toString())
+
+            loginViewModel.signUpUser(
+                UserInfo(
+                    memberId = 0,
+                    memberName = "",
+                    admin = loginViewModel.selectedGym.value!!.adminId,
+                    memberWeight = binding.etWeight.text.toString().toDouble(),
+                    memberHeight = binding.etHeight.text.toString().toDouble(),
+                    memberBirth = CommonUtils.formatBirthDate(binding.etBirth.text.toString())!!,
+                    memberGender = binding.tvGender.text.toString()
+                )
+            )
         }
         binding.cvGym.setOnClickListener {
             findNavController().navigate(R.id.action_registerUserInfoFragment_to_searchGymFragment)
@@ -277,6 +290,32 @@ class RegisterUserInfoFragment : BaseFragment<FragmentRegisterUserInfoBinding>(
         } else {
             binding.btnNext.setBackgroundColor(resources.getColor(R.color.disabled, null))
             binding.btnNext.isActivated = false
+        }
+    }
+
+    private fun observeViewModel() {
+        lifecycleScope.launchWhenStarted {
+            loginViewModel.signUpSuccess.collect { success ->
+                when (success) {
+                    true -> {
+                        // 회원가입 성공 시 화면 이동
+                        val intent = Intent(requireContext(), MainActivity::class.java)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+                        startActivity(intent)
+                        requireActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+                        requireActivity().finishAffinity()
+                    }
+
+                    false -> {
+                        // 실패 시 토스트만 띄우기
+                        showToast("회원가입에 실패했습니다. 다시 시도해주세요.")
+                    }
+
+                    null -> {
+                        // 초기 상태: 아무 처리하지 않음
+                    }
+                }
+            }
         }
     }
 }

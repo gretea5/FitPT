@@ -43,7 +43,7 @@ class UserInfoViewModel @Inject constructor(
             getUserInfoUseCase()
                 .onStart { setLoading() }
                 .catch { e ->
-
+                    Log.e("UserFragment", "에러 발생: ${e.message}", e)
                 }
                 .firstOrNull()
                 .let { uiState ->

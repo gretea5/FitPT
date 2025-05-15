@@ -20,11 +20,11 @@ interface UserService {
     @GET("members/{memberId}")
     suspend fun getUserInfo(@Path("memberId") memberId : Int) : Response<GetUserInfoResponse>
 
-    @PUT("members/{memberId}")
-    suspend fun updateUserInfo(@Path("memberId") memberId: Int,@Body userRequest: UserRequest) :Response<Unit>
+    @PUT("members/me")
+    suspend fun updateUserInfo(@Body userRequest: UserRequest) :Response<Unit>
 
-    @DELETE("members/{memberId}")
-    suspend fun deleteUserInfo(@Path("memberId") memberId: Int) : Response<Unit>
+    @DELETE("members/me")
+    suspend fun deleteUserInfo() : Response<Unit>
 
     @PATCH("members/{memberId}")
     suspend fun updatePartitionUserInfo(@Path("memberId") memberId: Int,@Body userBodyInfo: UserBodyInfo) :Response<Unit>
