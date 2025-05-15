@@ -81,22 +81,22 @@ class ScheduleFragment : BaseFragment<FragmentScheduleBinding>(
         Member("권경탁", "1996.12.31")
     )
 
-    private val selectedButtons = mutableListOf<Button>()
+    private var selectedButton: Button? = null
 
     private var selectedDate: LocalDate? = null
 
     private val clickListener = View.OnClickListener { view ->
         val button = view as Button
 
-        if (button.isSelected) {
+        selectedButton?.let { it.isSelected = false }
+
+        if (selectedButton == button) {
             button.isSelected = false
-            selectedButtons.remove(button)
+            selectedButton = null
         } else {
             button.isSelected = true
-            selectedButtons.add(button)
+            selectedButton = button
         }
-
-        binding.btnRegister.isEnabled = selectedButtons.isNotEmpty()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -250,7 +250,6 @@ class ScheduleFragment : BaseFragment<FragmentScheduleBinding>(
         timeButtons: Map<String, Button>
     ) {
         timeButtons.values.forEach { button ->
-            button.setBackgroundColor(Color.WHITE)
             button.isEnabled = true
         }
 
@@ -259,15 +258,9 @@ class ScheduleFragment : BaseFragment<FragmentScheduleBinding>(
             // 시간 형식에 맞게 파싱 (예: "10:00"과 같은 형식으로 변환)
             val timeKey = TimeUtils.parseDateTime(schedule.startTime).second
 
-            // 해당 시간의 버튼 찾기
             timeButtons[timeKey]?.let { button ->
-                if (schedule.memberId == selectedMemberId) {
-                    button.setBackgroundColor(ContextCompat.getColor(button.context, R.color.main_red))
-                } else {
-                    // 다른 회원의 일정 - 회색
-                    button.setBackgroundColor(ContextCompat.getColor(button.context, R.color.main_gray))
-                    button.isEnabled = false
-                }
+                button.setBackgroundColor(ContextCompat.getColor(button.context, R.color.main_gray))
+                button.isEnabled = false
             }
         }
     }
