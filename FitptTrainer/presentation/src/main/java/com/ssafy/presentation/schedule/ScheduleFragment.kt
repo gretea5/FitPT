@@ -1,7 +1,6 @@
 package com.ssafy.presentation.schedule
 
 import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +15,6 @@ import com.ssafy.presentation.R
 import com.ssafy.presentation.base.BaseFragment
 import java.time.YearMonth
 import android.widget.TextView
-import androidx.annotation.RequiresApi
 import androidx.core.view.children
 import com.google.android.flexbox.FlexboxLayout
 import com.kizitonwose.calendar.core.CalendarMonth
@@ -30,6 +28,8 @@ import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.format.TextStyle
 import java.util.Locale
+
+
 @AndroidEntryPoint
 class ScheduleFragment : BaseFragment<FragmentScheduleBinding>(
     FragmentScheduleBinding::bind,
@@ -85,7 +85,6 @@ class ScheduleFragment : BaseFragment<FragmentScheduleBinding>(
         binding.btnRegister.isEnabled = selectedButtons.isNotEmpty()
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initAdapter()
@@ -94,7 +93,6 @@ class ScheduleFragment : BaseFragment<FragmentScheduleBinding>(
         initEvent()
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun addExampleEventList() {
         val today = LocalDate.now()
 
@@ -109,7 +107,6 @@ class ScheduleFragment : BaseFragment<FragmentScheduleBinding>(
         binding.sMember.adapter = adapter
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun initCalendar() {
         val currentMonth = YearMonth.now()
 
