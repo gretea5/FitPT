@@ -1,14 +1,12 @@
 package com.ssafy.presentation.home
 
 import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.core.view.children
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -53,7 +51,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
     private lateinit var scheduleAdapter : HomeAdapter
     private var selectedDate: LocalDate? = null
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initRV()
@@ -74,7 +71,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun initObserver() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.homeState.collect { state ->
@@ -106,7 +102,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun selectSchedulesByDate(date: LocalDate) {
         selectedDate = date
         val formattedDate = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
@@ -119,7 +114,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
         )
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun initCalendar() {
         class MonthViewContainer(view: View) : ViewContainer(view) {
             val titlesContainer = view as ViewGroup
@@ -223,7 +217,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun fetchSchedules() {
         val today = LocalDate.now()
         selectedDate = today
@@ -241,7 +234,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
         viewModel.getMonthlySchedules(formattedMonth)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun updateEventsDatesList(scheduleItems: List<Schedule>) {
         eventsDatesList.clear()
 
