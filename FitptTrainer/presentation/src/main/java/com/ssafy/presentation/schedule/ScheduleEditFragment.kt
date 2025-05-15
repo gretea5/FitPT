@@ -3,6 +3,7 @@ package com.ssafy.presentation.schedule
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
@@ -10,6 +11,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.core.view.children
+import androidx.navigation.fragment.navArgs
 import com.google.android.flexbox.FlexboxLayout
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.CalendarMonth
@@ -30,12 +32,16 @@ import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.TextStyle
 import java.util.Locale
+
+private const val TAG = "ScheduleEditFragment_ssafy"
+
 @AndroidEntryPoint
 class ScheduleEditFragment : BaseFragment<FragmentScheduleEditBinding>(
     FragmentScheduleEditBinding::bind,
     R.layout.fragment_schedule_edit
 ) {
     private val eventsDatesList = mutableListOf<LocalDate>()
+    private val args : ScheduleEditFragmentArgs by navArgs()
 
     private val morningTimeList = listOf(
         "09:00",
@@ -85,6 +91,7 @@ class ScheduleEditFragment : BaseFragment<FragmentScheduleEditBinding>(
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Log.d(TAG, "onViewCreated: ${args.trainerId}")
         initAdapter()
         initCalendar()
         initButtonView()
