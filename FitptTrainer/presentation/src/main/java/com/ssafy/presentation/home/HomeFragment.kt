@@ -14,6 +14,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.CalendarMonth
@@ -256,5 +257,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
         binding.calendar.notifyCalendarChanged()
     }
 
-    fun initEvent() {}
+    fun initEvent() {
+        binding.imageButton.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_schedulingFragment)
+        }
+    }
 }
