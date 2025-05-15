@@ -9,7 +9,6 @@ pluginManagement {
         }
         mavenCentral()
         gradlePluginPortal()
-        maven("https://jitpack.io")
     }
 }
 dependencyResolutionManagement {
@@ -18,6 +17,7 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
         maven("https://jitpack.io")
+        maven { url = uri("https://git.onesoftdigm.dev/api/v4/projects/100/packages/maven") }
     }
 }
 

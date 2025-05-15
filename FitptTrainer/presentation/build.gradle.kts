@@ -10,7 +10,7 @@ android {
     compileSdk = 35
 
     defaultConfig {
-        minSdk = 24
+        minSdk = 30
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
     }
@@ -69,6 +69,8 @@ dependencies {
     //implementation("com.google.firebase:firebase-messaging-ktx")
 
     implementation ("com.google.android.flexbox:flexbox:3.0.0")
+
+    implementation(libs.fitrus.est.device)
 }
 
 kapt {

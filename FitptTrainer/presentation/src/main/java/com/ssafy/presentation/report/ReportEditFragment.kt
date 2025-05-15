@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
+import androidx.fragment.app.activityViewModels
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.ssafy.presentation.R
@@ -14,6 +15,7 @@ import com.ssafy.presentation.base.BaseFragment
 import com.ssafy.presentation.databinding.FragmentReportEditBinding
 import com.ssafy.presentation.report.adapter.ReportViewPagerAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import com.ssafy.presentation.report.viewmodel.ReportViewModel
 
 private const val TAG = "ReportEditFragment_FitPT"
 
@@ -23,10 +25,10 @@ class ReportEditFragment : BaseFragment<FragmentReportEditBinding>(
     R.layout.fragment_report_edit
 ) {
     private lateinit var viewPagerAdapter: ReportViewPagerAdapter
+    private val viewModel: ReportViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d(TAG, "onViewCreated: ")
         initTabLayout()
         initEvent()
     }
