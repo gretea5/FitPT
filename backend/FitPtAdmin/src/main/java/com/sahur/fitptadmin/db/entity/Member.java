@@ -1,11 +1,13 @@
 package com.sahur.fitptadmin.db.entity;
 
+import com.sahur.fitptadmin.core.constant.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +22,9 @@ public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long memberId;
+
+    @Column(name = "kakao_id", unique = true)
+    private Long kakaoId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "trainer_id")
@@ -37,7 +42,7 @@ public class Member {
 
     // @CreationTimestamp
     @Column(name = "member_birth")
-    private LocalDateTime memberBirth;
+    private LocalDate memberBirth;
 
     @Column(name = "member_height")
     private Float memberHeight;
@@ -60,7 +65,11 @@ public class Member {
     @OneToMany(mappedBy = "member")
     private List<FcmToken> fcmTokens = new ArrayList<>();
 
-    public void update(String memberName, String memberGender, LocalDateTime memberBirth,
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role;
+
+    public void update(String memberName, String memberGender, LocalDate memberBirth,
                        Float memberHeight, Float memberWeight, Trainer trainer, Admin admin) {
         this.memberName = memberName;
         this.memberGender = memberGender;

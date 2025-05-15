@@ -205,9 +205,17 @@
                                         </div>
                                         <div class="mb-3 position-relative">
                                             <label class="form-label text-dark">트레이너 비밀번호</label>
-                                            <input type="password" class="form-control rounded-3 pe-5" name="trainerPw" id="trainerPwInput" required>
+                                            <input type="password" class="form-control rounded-3 pe-5" name="trainerPw" id="trainerPwEditInput" required>
                                             <i class="fa-solid fa-eye position-absolute top-50 end-0 translate-middle-y me-3"
-                                               style="cursor: pointer;" onclick="togglePassword(this)"></i>
+                                               style="cursor: pointer;" onclick="toggleEditPassword(this)"></i>
+                                        </div>
+                                        <!-- ✅ 비밀번호 확인 입력 칸 추가 -->
+                                        <div class="mb-3 position-relative">
+                                            <label class="form-label text-dark">비밀번호 확인</label>
+                                            <input type="password" class="form-control rounded-3 pe-5"
+                                                   name="trainerPwConfirm" id="trainerPwConfirmEditInput" required>
+                                            <i class="fa-solid fa-eye position-absolute top-50 end-0 translate-middle-y me-3"
+                                               style="cursor: pointer;" onclick="toggleEditPasswordConfirm(this)"></i>
                                         </div>
                                         <div th:if="${editErrorMsg}" class="alert alert-danger" role="alert"
                                              th:text="${editErrorMsg}">
@@ -305,6 +313,22 @@
 
         function togglePassword(icon) {
             const input = document.getElementById('trainerPwInput');
+            const isPassword = input.type === "password";
+            input.type = isPassword ? "text" : "password";
+            icon.classList.toggle('fa-eye');
+            icon.classList.toggle('fa-eye-slash');
+        }
+
+        function toggleEditPassword(icon) {
+            const input = document.getElementById('trainerPwEditInput');
+            const isPassword = input.type === "password";
+            input.type = isPassword ? "text" : "password";
+            icon.classList.toggle('fa-eye');
+            icon.classList.toggle('fa-eye-slash');
+        }
+
+        function toggleEditPasswordConfirm(icon) {
+            const input = document.getElementById('trainerPwConfirmEditInput');
             const isPassword = input.type === "password";
             input.type = isPassword ? "text" : "password";
             icon.classList.toggle('fa-eye');

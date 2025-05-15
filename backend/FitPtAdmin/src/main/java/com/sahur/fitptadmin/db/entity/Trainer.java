@@ -1,5 +1,6 @@
 package com.sahur.fitptadmin.db.entity;
 
+import com.sahur.fitptadmin.core.constant.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -33,6 +34,10 @@ public class Trainer {
 
     @Column(name = "trainer_pw", nullable = false)
     private String trainerPw;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role = Role.TRAINER;
 
     @OneToMany(mappedBy = "trainer")
     private List<Schedule> schedules = new ArrayList<>();
