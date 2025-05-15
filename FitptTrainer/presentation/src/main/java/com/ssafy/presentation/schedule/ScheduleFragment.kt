@@ -258,14 +258,15 @@ class ScheduleFragment : BaseFragment<FragmentScheduleBinding>(
             button.isEnabled = true
         }
 
-        // 일정에 따라 버튼 색상 설정
         schedules.forEach { schedule ->
-            // 시간 형식에 맞게 파싱 (예: "10:00"과 같은 형식으로 변환)
             val timeKey = TimeUtils.parseDateTime(schedule.startTime).second
 
             timeButtons[timeKey]?.let { button ->
-                button.setBackgroundColor(ContextCompat.getColor(button.context, R.color.main_gray))
-                button.isEnabled = false
+                button.apply {
+                    setBackgroundResource(R.drawable.bg_stroke_gray_8dp)
+                    setTextColor(ContextCompat.getColor(button.context, R.color.main_gray))
+                    isEnabled = false
+                }
             }
         }
     }
