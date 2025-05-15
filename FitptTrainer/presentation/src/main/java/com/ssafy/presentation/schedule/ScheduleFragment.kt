@@ -22,6 +22,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import com.google.android.flexbox.FlexboxLayout
 import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.daysOfWeek
@@ -175,7 +176,6 @@ class ScheduleFragment : BaseFragment<FragmentScheduleBinding>(
                 }
             }
 
-            // dayBinder 수정
             dayBinder = object : MonthDayBinder<DayViewContainer> {
                 override fun create(view: View) = DayViewContainer(view)
 
@@ -223,6 +223,14 @@ class ScheduleFragment : BaseFragment<FragmentScheduleBinding>(
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.schedules.collect { schedules ->
                 updateScheduleButtonColors(schedules, 1, timeButtonsMap)
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.createdScheduleId.collect { scheduleId ->
+                scheduleId?.let {
+                    findNavController().popBackStack()
+                }
             }
         }
 
@@ -322,6 +330,10 @@ class ScheduleFragment : BaseFragment<FragmentScheduleBinding>(
         binding.tvMemberName.setOnClickListener {
             binding.sMember.performClick()
         }
+
+        binding.btnRegister.setOnClickListener {
+            createSchedule()
+        }
     }
 
     private fun fetchSchedules() {
@@ -373,5 +385,34 @@ class ScheduleFragment : BaseFragment<FragmentScheduleBinding>(
         eventsDatesList.addAll(eventDates)
 
         binding.calendar.notifyCalendarChanged()
+    }
+
+    private fun createSchedule() {
+        val selectedMember = binding.sMember.selectedItem as MemberInfo
+        val memberId = selectedMember.memberId
+
+        val selectedDate = this.selectedDate
+        if (selectedDate == null) {
+            showToast("날짜를 선택해주세요")
+            return
+        }
+
+        val selectedButton = this.selectedButton
+        if (selectedButton == null) {
+            showToast("시간을 선택해주세요")
+            return
+        }
+
+        val scheduleContent = binding.etDetail.text.toString()
+        if (scheduleContent.isBlank()) {
+            showToast("일정 내용을 입력해주세요")
+            return
+        }
+
+        val (startTime, endTime) = TimeUtils.calculateScheduleTimes(selectedDate, selectedButton.text.toString())
+
+        Log.d(TAG, "createSchedule: $memberId $startTime $endTime $scheduleContent")
+
+        viewModel.createSchedule(memberId, startTime, endTime, scheduleContent)
     }
 }
