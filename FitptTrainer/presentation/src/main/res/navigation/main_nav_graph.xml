@@ -38,5 +38,17 @@
         <action
             android:id="@+id/action_homeFragment_to_userWorkoutInfoFragment"
             app:destination="@id/userWorkoutInfoFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_scheduleEditFragment"
+            app:destination="@id/scheduleEditFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/scheduleEditFragment"
+        android:name="com.ssafy.presentation.schedule.ScheduleEditFragment"
+        android:label="fragment_schedule_edit"
+        tools:layout="@layout/fragment_schedule_edit" >
+            <argument
+                android:name="trainerId"
+                app:argType="long" />
     </fragment>
 </navigation>
