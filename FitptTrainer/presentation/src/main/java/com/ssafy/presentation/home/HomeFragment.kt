@@ -50,8 +50,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
 ) {
     private val eventsDatesList = mutableListOf<LocalDate>()
     private val viewModel: HomeViewModel by viewModels()
-    private val scheduleAdapter by lazy { HomeAdapter() }
-
+    private lateinit var scheduleAdapter : HomeAdapter
     private var selectedDate: LocalDate? = null
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -66,6 +65,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
 
     private fun initRV() {
         binding.rvMemberSchedule.apply {
+            scheduleAdapter = HomeAdapter { trainerId ->
+                val action = HomeFragmentDirections.actionHomeFragmentToScheduleEditFragment(trainerId)
+                findNavController().navigate(action)
+            }
             adapter = scheduleAdapter
             layoutManager = LinearLayoutManager(requireContext())
         }
