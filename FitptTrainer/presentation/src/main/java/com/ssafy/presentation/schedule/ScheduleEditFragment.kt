@@ -21,10 +21,10 @@ import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
 import com.kizitonwose.calendar.view.MonthDayBinder
 import com.kizitonwose.calendar.view.MonthHeaderFooterBinder
 import com.kizitonwose.calendar.view.ViewContainer
+import com.ssafy.domain.model.member.MemberInfo
 import com.ssafy.presentation.R
 import com.ssafy.presentation.base.BaseFragment
 import com.ssafy.presentation.databinding.FragmentScheduleEditBinding
-import com.ssafy.presentation.schedule.adapter.Member
 import com.ssafy.presentation.schedule.adapter.ScheduleMemberAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.DayOfWeek
@@ -63,14 +63,7 @@ class ScheduleEditFragment : BaseFragment<FragmentScheduleEditBinding>(
         "22:00",
     )
 
-    private val memberList = listOf(
-        Member("박장훈", "2000.01.07"),
-        Member("안세호", "1997.07.11"),
-        Member("김두영", "1998.05.29"),
-        Member("김기훈", "1997.09.27"),
-        Member("김동현", "1999.07.30"),
-        Member("권경탁", "1996.12.31")
-    )
+    private val memberList = emptyList<MemberInfo>()
 
     private val selectedButtons = mutableListOf<Button>()
 
@@ -251,8 +244,8 @@ class ScheduleEditFragment : BaseFragment<FragmentScheduleEditBinding>(
     private fun initEvent() {
         binding.sMember.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val selectedMember = parent?.getItemAtPosition(position) as Member
-                binding.tvMemberName.text = selectedMember.name
+                val selectedMember = parent?.getItemAtPosition(position) as MemberInfo
+                binding.tvMemberName.text = selectedMember.memberName
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
