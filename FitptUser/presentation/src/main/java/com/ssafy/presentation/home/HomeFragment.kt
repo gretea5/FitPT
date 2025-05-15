@@ -36,11 +36,14 @@ import com.kizitonwose.calendar.core.daysOfWeek
 import com.kizitonwose.calendar.view.MonthDayBinder
 import com.kizitonwose.calendar.view.ViewContainer
 import com.ssafy.data.datasource.UserDataStoreSource
+import com.ssafy.domain.model.home.ScheduleInfo
 import com.ssafy.domain.model.measure_record.MeasureRecordItem
 import com.ssafy.domain.model.measure_record.MesureDetail
 import com.ssafy.locket.utils.CalendarUtils.displayText
 import com.ssafy.presentation.databinding.CalendarDayBinding
 import com.ssafy.presentation.home.viewModel.OpenDialogState
+import com.ssafy.presentation.home.viewModel.ScheduleInfoState
+import com.ssafy.presentation.home.viewModel.ScheduleViewModel
 import com.ssafy.presentation.home.viewModel.SelectedDayState
 import com.ssafy.presentation.home.viewModel.SelectedDayViewModel
 import com.ssafy.presentation.home.viewModel.UserInfoState
@@ -78,9 +81,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
 
     private val userInfoViewModel: UserInfoViewModel by activityViewModels()
     private val measureViewModel: MeasureViewModel by activityViewModels()
+    private val scheduleViewModel : ScheduleViewModel by activityViewModels()
+
+    //일정
+    private val scheduleMap = mutableMapOf<LocalDate, List<ScheduleInfo>>()
     //차트
     private val chartDates = mutableListOf<String>() // X축 날짜
-
     private val weightEntries = mutableListOf<Entry>()
     private val skeletalMuscleEntries = mutableListOf<Entry>()
     private val bodyFatEntries = mutableListOf<Entry>()
@@ -108,6 +114,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
             findNavController().navigate(R.id.action_home_fragment_to_notification_fragment)
         }
         measureViewModel.getBodyList("createdAt","asc")
+        scheduleViewModel.getScheduleList("","2025-05")
     }
 
 
@@ -124,25 +131,20 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
         }
     }
 
-    private fun dateClicked(date: LocalDate) {
-        if(selectedDayViewModel.selectedDay.value is SelectedDayState.Exist == false) {
-            binding.calendar.notifyDateChanged(selectedDate) // 이전 선택값 해제
-            selectedDate = date
-            binding.calendar.notifyDateChanged(date) // 새로운 선택값
-            selectedDayViewModel.setSelectedDay(date)
-            //selectedDayViewModel.setSelectedDayPayments(date.year, date.monthValue, date.dayOfMonth)
-        }
-    }
-
     private fun bindDate(
         date: LocalDate,
         dayText: TextView,
-        paymentText: TextView,
+        scheduleText: TextView,
         isSelectable: Boolean
     ) {
         dayText.text = date.dayOfMonth.toString()
         val fonts = arrayOf(R.font.pretendard_regular, R.font.pretendard_bold)
-
+        val schedules = scheduleMap[date]
+        if (!schedules.isNullOrEmpty()) {
+            scheduleText.text = "• ${schedules.size}개"
+        } else {
+            scheduleText.text = ""
+        }
         if (isSelectable) {
             when {
                 date == selectedDate -> {
@@ -160,7 +162,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
             }
         } else {
             dayText.setTextColor(resources.getColor(R.color.disabled))
-            paymentText.setText(null)
+            scheduleText.setText(null)
         }
     }
 
@@ -231,6 +233,18 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
         updateDayWeekColor()
         initObserver()
     }
+
+    private fun dateClicked(date: LocalDate) {
+        if(selectedDayViewModel.selectedDay.value is SelectedDayState.Exist == false) {
+            binding.calendar.notifyDateChanged(selectedDate) // 이전 선택값 해제
+            selectedDate = date
+            binding.calendar.notifyDateChanged(date) // 새로운 선택값
+            selectedDayViewModel.setSelectedDay(date)
+            //selectedDayViewModel.setSelectedDayPayments(date.year, date.monthValue, date.dayOfMonth)
+        }
+    }
+
+
     private fun initObserver() {
         // 선택된 날짜 갱신
         viewLifecycleOwner.lifecycleScope.launch {
@@ -258,6 +272,17 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
             }
         }
     }
+
+    private fun updateScheduleMap(scheduleList: List<ScheduleInfo>) {
+        scheduleMap.clear()
+        val formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME
+        scheduleMap.putAll(
+            scheduleList.groupBy {
+                LocalDateTime.parse(it.startTime, formatter).toLocalDate()
+            }
+        )
+    }
+
 
     private fun setupTabButtons() {
         val buttons = listOf(
@@ -455,6 +480,21 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
                         }
 
                         else -> Unit
+                    }
+                }
+            }
+        }
+        // 일정 관련 코드
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                scheduleViewModel.scheduleInfo.collect { schedule ->
+                    if (schedule is ScheduleInfoState.Success) {
+                        Log.d(TAG, schedule.scheduleList.toString())
+                        updateScheduleMap(schedule.scheduleList)
+                        binding.calendar.notifyCalendarChanged() // 화면 다시 갱신
+                    }
+                    else{
+                        Log.d(TAG,"실패")
                     }
                 }
             }
