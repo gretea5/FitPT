@@ -6,4 +6,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface MemberRepository {
     suspend fun getMemberInfoById(memberId: Long) : Flow<ResponseStatus<MemberInfo>>
+    suspend fun getMembers() : Flow<ResponseStatus<List<MemberInfo>>>
 }
