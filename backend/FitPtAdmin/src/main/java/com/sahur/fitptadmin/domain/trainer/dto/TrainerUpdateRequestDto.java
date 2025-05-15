@@ -13,4 +13,5 @@ public class TrainerUpdateRequestDto {
     private String trainerName;
     private String trainerLoginId;
     private String trainerPw;
+    private String trainerPwConfirm;
 }

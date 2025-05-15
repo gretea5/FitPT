@@ -4,7 +4,7 @@
       layout:decorate="~{layout/layout}">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
     <title>트레이너 목록</title>
     <style>
         * {
@@ -113,7 +113,7 @@
     <div class="modal fade" id="createTrainerModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content rounded-4 border-0 shadow">
-                <form th:action="@{/admin/trainers}" method="post">
+                <form th:action="@{/admin/trainers}" method="post" onsubmit="return validateTrainerRegisterForm()">
                     <div class="modal-header">
                         <h5 class="modal-title">트레이너 등록</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -129,9 +129,18 @@
                         </div>
                         <div class="mb-3 position-relative">
                             <label class="form-label text-dark">트레이너 비밀번호</label>
-                            <input type="password" class="form-control rounded-3 pe-5" name="trainerPw" id="trainerPwInput" required>
+                            <input type="password" class="form-control rounded-3 pe-5" name="trainerPw"
+                                   id="trainerPwInput" required>
                             <i class="fa-solid fa-eye position-absolute top-50 end-0 translate-middle-y me-3"
                                style="cursor: pointer;" onclick="togglePassword(this)"></i>
+                        </div>
+                        <!-- ✅ 비밀번호 확인 입력 칸 추가 -->
+                        <div class="mb-3 position-relative">
+                            <label class="form-label text-dark">비밀번호 확인</label>
+                            <input type="password" class="form-control rounded-3 pe-5"
+                                   name="trainerPwConfirm" id="trainerPwConfirmRegisterInput" required>
+                            <i class="fa-solid fa-eye position-absolute top-50 end-0 translate-middle-y me-3"
+                               style="cursor: pointer;" onclick="toggleRegisterPasswordConfirm(this)"></i>
                         </div>
                         <div th:if="${registerErrorMsg}" class="alert alert-danger" role="alert"
                              th:text="${registerErrorMsg}">
@@ -190,7 +199,9 @@
                          aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content rounded-4 border-0 shadow">
-                                <form th:action="@{/admin/trainers/{id}(id=${trainer.trainerId})}" method="post">
+                                <form th:action="@{/admin/trainers/{id}(id=${trainer.trainerId})}"
+                                      method="post"
+                                      onsubmit="return validateTrainerEditForm()">
                                     <div class="modal-body pt-1">
                                         <input type="hidden" name="trainerId" th:value="${trainer.trainerId}"/>
                                         <div class="mb-3">
@@ -205,7 +216,8 @@
                                         </div>
                                         <div class="mb-3 position-relative">
                                             <label class="form-label text-dark">트레이너 비밀번호</label>
-                                            <input type="password" class="form-control rounded-3 pe-5" name="trainerPw" id="trainerPwEditInput" required>
+                                            <input type="password" class="form-control rounded-3 pe-5" name="trainerPw"
+                                                   id="trainerPwEditInput" required>
                                             <i class="fa-solid fa-eye position-absolute top-50 end-0 translate-middle-y me-3"
                                                style="cursor: pointer;" onclick="toggleEditPassword(this)"></i>
                                         </div>
@@ -333,6 +345,38 @@
             input.type = isPassword ? "text" : "password";
             icon.classList.toggle('fa-eye');
             icon.classList.toggle('fa-eye-slash');
+        }
+
+        function toggleRegisterPasswordConfirm(icon) {
+            const input = document.getElementById('trainerPwConfirmRegisterInput');
+            const isPassword = input.type === "password";
+            input.type = isPassword ? "text" : "password";
+            icon.classList.toggle('fa-eye');
+            icon.classList.toggle('fa-eye-slash');
+        }
+
+        function validateTrainerEditForm() {
+            const pwInput = document.getElementById('trainerPwEditInput');
+            const confirmInput = document.getElementById('trainerPwConfirmEditInput');
+
+            if (pwInput.value !== confirmInput.value) {
+                alert("비밀번호가 일치하지 않습니다.");
+                confirmInput.focus();
+                return false; // 폼 제출 방지
+            }
+            return true;
+        }
+
+        function validateTrainerRegisterForm() {
+            const pwInput = document.getElementById('trainerPwInput');
+            const confirmInput = document.getElementById('trainerPwConfirmRegisterInput');
+
+            if (pwInput.value !== confirmInput.value) {
+                alert("비밀번호가 일치하지 않습니다.");
+                confirmInput.focus();
+                return false;
+            }
+            return true;
         }
 
     </script>
