@@ -30,6 +30,9 @@
         android:name="com.ssafy.presentation.report.ReportEditFragment"
         android:label="fragment_reportEdit"
         tools:layout="@layout/fragment_report_edit">
+        <argument
+            android:name="memberId"
+            app:argType="long" />
         <action
             android:id="@+id/action_reportEditFragment_to_userWorkoutInfoFragment"
             app:destination="@+id/userWorkoutInfoFragment"/>
