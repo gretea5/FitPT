@@ -62,8 +62,21 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
 
     private fun initRV() {
         binding.rvMemberSchedule.apply {
-            scheduleAdapter = HomeAdapter { trainerId ->
-                val action = HomeFragmentDirections.actionHomeFragmentToScheduleEditFragment(trainerId)
+            scheduleAdapter = HomeAdapter { scheduleWithMemberInfo ->
+                val trainerId = scheduleWithMemberInfo.trainerId
+                val memberName = scheduleWithMemberInfo.memberName
+
+                val startTime = TimeUtils.parseDateTime(scheduleWithMemberInfo.startTime).second;
+                val endTime = TimeUtils.parseDateTime(scheduleWithMemberInfo.endTime).second;
+
+                val timeInfo = "${startTime}~${endTime}"
+
+                val action = HomeFragmentDirections.actionHomeFragmentToScheduleEditFragment(
+                    trainerId = trainerId,
+                    memberName = memberName,
+                    timeInfo = timeInfo
+                )
+
                 findNavController().navigate(action)
             }
             adapter = scheduleAdapter
