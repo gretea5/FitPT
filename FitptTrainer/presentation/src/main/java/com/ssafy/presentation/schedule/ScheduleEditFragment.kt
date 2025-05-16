@@ -1,7 +1,6 @@
 package com.ssafy.presentation.schedule
 
 import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -9,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.Button
 import android.widget.TextView
-import androidx.annotation.RequiresApi
 import androidx.core.view.children
 import androidx.navigation.fragment.navArgs
 import com.google.android.flexbox.FlexboxLayout
@@ -64,10 +62,12 @@ class ScheduleEditFragment : BaseFragment<FragmentScheduleEditBinding>(
     )
 
     private val memberList = emptyList<MemberInfo>()
-
     private val selectedButtons = mutableListOf<Button>()
 
     private var selectedDate: LocalDate? = null
+    private var trainerId: Long? = null
+    private var memberName: String? = null
+    private var timeInfo: String? = null
 
     private val clickListener = View.OnClickListener { view ->
         val button = view as Button
@@ -83,7 +83,7 @@ class ScheduleEditFragment : BaseFragment<FragmentScheduleEditBinding>(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d(TAG, "onViewCreated: ${args.trainerId}")
+        initArgs()
         initAdapter()
         initCalendar()
         initButtonView()
@@ -97,6 +97,14 @@ class ScheduleEditFragment : BaseFragment<FragmentScheduleEditBinding>(
         eventsDatesList.add(today.plusDays(7))
         eventsDatesList.add(today.plusDays(12))
         eventsDatesList.add(today.minusDays(2))
+    }
+
+    private fun initArgs() {
+        trainerId = args.trainerId
+        memberName = args.memberName
+        timeInfo = args.timeInfo
+
+        Log.d(TAG, "initArgs: ${trainerId} ${memberName} $timeInfo")
     }
 
     private fun initAdapter() {
@@ -163,7 +171,6 @@ class ScheduleEditFragment : BaseFragment<FragmentScheduleEditBinding>(
                 }
             }
 
-            // dayBinder 수정
             dayBinder = object : MonthDayBinder<DayViewContainer> {
                 override fun create(view: View) = DayViewContainer(view)
 
@@ -213,7 +220,7 @@ class ScheduleEditFragment : BaseFragment<FragmentScheduleEditBinding>(
         morningTimeList.forEach { time ->
             val button = Button(requireContext()).apply {
                 layoutParams = FlexboxLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
-                    flexBasisPercent = 0.3f  // 30%에 해당
+                    flexBasisPercent = 0.3f
                     setMargins(4, 4, 4, 4)
                 }
                 text = time
@@ -228,7 +235,7 @@ class ScheduleEditFragment : BaseFragment<FragmentScheduleEditBinding>(
         afternoonTimeList.forEach { time ->
             val button = Button(requireContext()).apply {
                 layoutParams = FlexboxLayout.LayoutParams(0,  ViewGroup.LayoutParams.WRAP_CONTENT).apply {
-                    flexBasisPercent = 0.3f  // 30%에 해당
+                    flexBasisPercent = 0.3f
                     setMargins(4, 4, 4, 4)
                 }
                 text = time
