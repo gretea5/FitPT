@@ -7,7 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.core.view.children
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import com.google.android.flexbox.FlexboxLayout
 import com.kizitonwose.calendar.core.CalendarDay
@@ -18,13 +21,18 @@ import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
 import com.kizitonwose.calendar.view.MonthDayBinder
 import com.kizitonwose.calendar.view.MonthHeaderFooterBinder
 import com.kizitonwose.calendar.view.ViewContainer
+import com.ssafy.domain.model.schedule.Schedule
 import com.ssafy.presentation.R
 import com.ssafy.presentation.base.BaseFragment
 import com.ssafy.presentation.databinding.FragmentScheduleEditBinding
+import com.ssafy.presentation.schedule.viewmodel.ScheduleViewModel
+import com.ssafy.presentation.util.TimeUtils
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
+import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 import java.util.Locale
 
@@ -35,8 +43,8 @@ class ScheduleEditFragment : BaseFragment<FragmentScheduleEditBinding>(
     FragmentScheduleEditBinding::bind,
     R.layout.fragment_schedule_edit
 ) {
-    private val eventsDatesList = mutableListOf<LocalDate>()
     private val args : ScheduleEditFragmentArgs by navArgs()
+    private val viewModel : ScheduleViewModel by viewModels()
 
     private val morningTimeList = listOf(
         "09:00",
@@ -58,12 +66,14 @@ class ScheduleEditFragment : BaseFragment<FragmentScheduleEditBinding>(
         "22:00",
     )
 
+    private val timeButtonsMap = mutableMapOf<String, Button>()
     private val selectedButtons = mutableListOf<Button>()
 
     private var selectedDate: LocalDate? = null
     private var trainerId: Long? = null
     private var memberName: String? = null
-    private var timeInfo: String? = null
+    private var startTime: String? = null
+    private var endTime: String? = null
 
     private val clickListener = View.OnClickListener { view ->
         val button = view as Button
@@ -81,32 +91,27 @@ class ScheduleEditFragment : BaseFragment<FragmentScheduleEditBinding>(
         super.onViewCreated(view, savedInstanceState)
         initArgs()
         initCalendar()
+        initObserver()
         initButtonView()
         initEvent()
-    }
-
-    private fun addExampleEventList() {
-        val today = LocalDate.now()
-
-        eventsDatesList.add(today.plusDays(3))
-        eventsDatesList.add(today.plusDays(7))
-        eventsDatesList.add(today.plusDays(12))
-        eventsDatesList.add(today.minusDays(2))
+        fetchDaySchedule()
     }
 
     private fun initArgs() {
         trainerId = args.trainerId
         memberName = args.memberName
-        timeInfo = args.timeInfo
+        startTime = args.startTime
+        endTime = args.endTime
+        selectedDate = LocalDate.parse(args.selectedDate)
 
         binding.tvMemberName.text = memberName
-        binding.tvTimeInfo.text = timeInfo
+        binding.tvTimeInfo.text = "$startTime ~ $endTime"
     }
 
     private fun initCalendar() {
         val currentMonth = YearMonth.now()
-
-        addExampleEventList()
+        val today = LocalDate.now()
+        selectedDate = today
 
         val startMonth = currentMonth.minusMonths(120)
         val endMonth = currentMonth.plusMonths(120)
@@ -123,7 +128,7 @@ class ScheduleEditFragment : BaseFragment<FragmentScheduleEditBinding>(
             init {
                 view.setOnClickListener {
                     day?.let { day ->
-                        if (day.position == DayPosition.MonthDate) {
+                        if (day.position == DayPosition.MonthDate && day.date == selectedDate) {
                             if (selectedDate != day.date) {
                                 val oldDate = selectedDate
                                 selectedDate = day.date
@@ -178,9 +183,6 @@ class ScheduleEditFragment : BaseFragment<FragmentScheduleEditBinding>(
 
                         if (data.date == selectedDate) {
                             container.textView.setBackgroundResource(R.drawable.bg_selected_day)
-                        }
-                        else if (eventsDatesList.contains(data.date)) {
-                            container.textView.setBackgroundResource(R.drawable.bg_event_day)
                         } else {
                             container.textView.background = null
                         }
@@ -201,10 +203,13 @@ class ScheduleEditFragment : BaseFragment<FragmentScheduleEditBinding>(
         }
     }
 
-    fun setEventsData(events: List<LocalDate>) {
-        eventsDatesList.clear()
-        eventsDatesList.addAll(events)
-        binding.calendar.notifyCalendarChanged()
+    private fun initObserver() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.schedules.collect { schedules ->
+                Log.d(TAG, "initObserver: $schedules")
+                updateScheduleButtonColors(schedules, timeButtonsMap)
+            }
+        }
     }
 
     private fun initButtonView() {
@@ -220,6 +225,7 @@ class ScheduleEditFragment : BaseFragment<FragmentScheduleEditBinding>(
                 setOnClickListener(clickListener)
             }
 
+            timeButtonsMap[time] = button
             binding.fbMidButton.addView(button)
         }
 
@@ -235,7 +241,51 @@ class ScheduleEditFragment : BaseFragment<FragmentScheduleEditBinding>(
                 setOnClickListener(clickListener)
             }
 
+            timeButtonsMap[time] = button
             binding.fbAfternoonButton.addView(button)
+        }
+    }
+
+    private fun fetchDaySchedule() {
+        val today = LocalDate.now()
+
+        val formattedDate = today.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+
+        viewModel.getSchedules(
+            month = null,
+            date = formattedDate,
+            trainerId = null,
+            memberId = null
+        )
+    }
+
+    private fun updateScheduleButtonColors(
+        schedules: List<Schedule>,
+        timeButtons: Map<String, Button>
+    ) {
+        timeButtons.values.forEach { button ->
+            button.apply {
+                setBackgroundResource(R.drawable.selector_button_time)
+                setTextColor(Color.BLACK)
+                setOnClickListener(clickListener)
+                isEnabled = true
+            }
+        }
+
+        schedules.forEach { schedule ->
+            val timeKey = TimeUtils.parseDateTime(schedule.startTime).second
+
+            timeButtons[timeKey]?.let { button ->
+                button.apply {
+                    if (timeKey == startTime) {
+                        isSelected = true
+                    } else {
+                        setBackgroundResource(R.drawable.bg_stroke_gray_8dp)
+                        setTextColor(ContextCompat.getColor(button.context, R.color.main_gray))
+                        isEnabled = false
+                    }
+                }
+            }
         }
     }
 

@@ -54,7 +54,13 @@
                 android:name="memberName"
                 app:argType="string" />
             <argument
-                android:name="timeInfo"
+                android:name="startTime"
+                app:argType="string" />
+            <argument
+                android:name="endTime"
+                app:argType="string" />
+            <argument
+                android:name="selectedDate"
                 app:argType="string" />
     </fragment>
 </navigation>
