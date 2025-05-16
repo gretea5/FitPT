@@ -1,7 +1,9 @@
 package com.ssafy.data.di
 
 import com.ssafy.data.network.api.AuthService
+import com.ssafy.data.network.api.BodyService
 import com.ssafy.data.network.api.MemberService
+import com.ssafy.data.network.api.ReportService
 import com.ssafy.data.network.api.ScheduleService
 import dagger.Module
 import dagger.Provides
@@ -35,5 +37,21 @@ internal class ApiModule {
         @InterceptorRetrofit retrofit: Retrofit
     ): MemberService {
         return retrofit.create(MemberService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideReportService(
+        @InterceptorRetrofit retrofit: Retrofit
+    ): ReportService{
+        return retrofit.create(ReportService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideBodyService(
+        @InterceptorRetrofit retrofit: Retrofit
+    ): BodyService{
+        return retrofit.create(BodyService::class.java)
     }
 }

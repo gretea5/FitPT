@@ -20,13 +20,22 @@
         <action
             android:id="@+id/action_userWorkoutInfoFragment_to_reportEditFragment"
             app:destination="@id/reportEditFragment" />
+        <action
+            android:id="@+id/action_userWorkoutInfoFragment_to_homeFragment"
+            app:destination="@+id/homeFragment"/>
     </fragment>
 
     <fragment
         android:id="@+id/reportEditFragment"
         android:name="com.ssafy.presentation.report.ReportEditFragment"
         android:label="fragment_reportEdit"
-        tools:layout="@layout/fragment_report_edit"/>
+        tools:layout="@layout/fragment_report_edit">
+        <action
+            android:id="@+id/action_reportEditFragment_to_userWorkoutInfoFragment"
+            app:destination="@+id/userWorkoutInfoFragment"/>
+    </fragment>
+
+
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.ssafy.presentation.home.HomeFragment"

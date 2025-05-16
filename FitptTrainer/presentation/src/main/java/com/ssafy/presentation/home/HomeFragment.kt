@@ -271,5 +271,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
             val action = HomeFragmentDirections.actionHomeFragmentToSchedulingFragment()
             findNavController().navigate(action)
         }
+
+        binding.imageButton2.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_userWorkoutInfoFragment)
+        }
     }
 }

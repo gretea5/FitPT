@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
@@ -23,6 +24,7 @@ import com.ssafy.presentation.util.CommonUtils
 import dagger.hilt.android.AndroidEntryPoint
 
 private const val TAG = "UserWorkoutInfoFragment_FitPT"
+
 @AndroidEntryPoint
 class UserWorkoutInfoFragment : BaseFragment<FragmentUserWorkoutInfoBinding>(
     FragmentUserWorkoutInfoBinding::bind,
@@ -48,6 +50,14 @@ class UserWorkoutInfoFragment : BaseFragment<FragmentUserWorkoutInfoBinding>(
             ibUserReportDropdownYear.setOnClickListener {
                 showYearDropdownMenu()
             }
+
+            cvAddReport.setOnClickListener {
+                findNavController().navigate(R.id.action_userWorkoutInfoFragment_to_reportEditFragment)
+            }
+
+            ibBack.setOnClickListener {
+                findNavController().navigate(R.id.action_userWorkoutInfoFragment_to_homeFragment)
+            }
         }
     }
 
@@ -65,7 +75,7 @@ class UserWorkoutInfoFragment : BaseFragment<FragmentUserWorkoutInfoBinding>(
         }
     }
 
-    fun initChart(){
+    fun initChart() {
         lineChart = binding.chartUserBodyGraph
 
         lineChart.apply {
