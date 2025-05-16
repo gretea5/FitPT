@@ -17,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -83,24 +82,24 @@ public class CompositionServiceImpl implements CompositionService {
                 .bfp(compositionLog.getBfp())
                 .weight(compositionLog.getWeight())
                 // 분류 결과
-                .weightClassify(classifyWeight(height, weight, gender))
-                .weightColumn(new ArrayList<>(Arrays.asList("미만", "적정", "초과", "많이 초과")))
-                .bfmClassify(classifyBodyFatMass(compositionLog.getBfm(), height, gender))
-                .bfmColumn(new ArrayList<>(Arrays.asList("미만", "적정", "초과", "많이 초과")))
-                .bfpClassify(classifyBodyFatPercentage(compositionLog.getBfp(), gender))
-                .bfpColumn(new ArrayList<>(Arrays.asList("미만", "적정", "초과", "많이 초과")))
-                .smmClassify(classifySkeletalMuscleMass(compositionLog.getSmm(), gender, height))
-                .smmColumn(new ArrayList<>(Arrays.asList("미만", "적정", "초과", "많이 초과")))
-                .bmiClassify(classifyBMI(bmi))
-                .bmiColumn(new ArrayList<>(Arrays.asList("미만", "적정", "초과", "많이 초과")))
-                .tcwClassify(classifyTCW(compositionLog.getIcw(), compositionLog.getEcw(), weight, gender))
-                .tcwColumn(new ArrayList<>(Arrays.asList("미만", "적정", "초과")))
-                .proteinClassify(classifyProtein(compositionLog.getProtein(), weight, gender))
-                .proteinColumn(new ArrayList<>(Arrays.asList("미만", "적정", "초과")))
-                .mineralClassify(classifyMineral(compositionLog.getMineral(), weight, gender))
-                .mineralColumn(new ArrayList<>(Arrays.asList("미만", "적정", "초과")))
-                .ecwRatioClassify(classifyECWRatio(compositionLog.getEcw(), compositionLog.getIcw(), gender))
-                .ecwRatioColumn(new ArrayList<>(Arrays.asList("미만", "적정", "초과")))
+                .weightLabel(classifyWeight(height, weight, gender))
+                .weightCount(4)
+                .bfmLabel(classifyBodyFatMass(compositionLog.getBfm(), height, gender))
+                .bfmCount(4)
+                .bfpLabel(classifyBodyFatPercentage(compositionLog.getBfp(), gender))
+                .bfpCount(4)
+                .smmLabel(classifySkeletalMuscleMass(compositionLog.getSmm(), gender, height))
+                .smmCount(4)
+                .bmiLabel(classifyBMI(bmi))
+                .bmiCount(4)
+                .tcwLabel(classifyTCW(compositionLog.getIcw(), compositionLog.getEcw(), weight, gender))
+                .tcwCount(3)
+                .proteinLabel(classifyProtein(compositionLog.getProtein(), weight, gender))
+                .proteinCount(3)
+                .mineralLabel(classifyMineral(compositionLog.getMineral(), weight, gender))
+                .mineralCount(3)
+                .ecwRatioLabel(classifyECWRatio(compositionLog.getEcw(), compositionLog.getIcw(), gender))
+                .ecwRatioCount(3)
                 .build();
     }
 
@@ -373,7 +372,7 @@ public class CompositionServiceImpl implements CompositionService {
         float standardWeight = heightMeter * heightMeter * 22;
         float ratio = (weight / standardWeight) * 100;
 
-        if(ratio < 90) {
+        if (ratio < 90) {
             return "미만";
         } else if (ratio <= 110) {
             return "적정";

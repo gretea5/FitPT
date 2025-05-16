@@ -24,22 +24,32 @@ public class CompositionDetailResponseDto {
     private Float bfm;
     private Float bfp;
     private Float weight;
-    private String weightClassify;
-    private List<String> weightColumn;
-    private String bfmClassify;
-    private List<String> bfmColumn;
-    private String bfpClassify;
-    private List<String> bfpColumn;
-    private String smmClassify;
-    private List<String> smmColumn;
-    private String bmiClassify;
-    private List<String> bmiColumn;
-    private String tcwClassify;
-    private List<String> tcwColumn;
-    private String proteinClassify;
-    private List<String> proteinColumn;
-    private String mineralClassify;
-    private List<String> mineralColumn;
-    private String ecwRatioClassify;
-    private List<String> ecwRatioColumn;
+
+    private String weightLabel;
+    private Integer weightCount;
+
+    private String bfmLabel;
+    private Integer bfmCount;
+
+    private String bfpLabel;
+    private Integer bfpCount;
+
+    private String smmLabel;
+    private Integer smmCount;
+
+    private String bmiLabel;
+    private Integer bmiCount;
+
+    private String tcwLabel;
+    private Integer tcwCount;
+
+    private String proteinLabel;
+    private Integer proteinCount;
+
+    private String mineralLabel;
+    private Integer mineralCount;
+
+    private String ecwRatioLabel;
+    private Integer ecwRatioCount;
+
 }
