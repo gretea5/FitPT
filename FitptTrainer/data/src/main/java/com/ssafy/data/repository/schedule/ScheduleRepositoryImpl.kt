@@ -83,6 +83,40 @@ class ScheduleRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun updateSchedule(
+        scheduledId: Long,
+        memberId: Long?,
+        trainerId: Long?,
+        startTime: String?,
+        endTime: String?,
+        scheduleContent: String?
+    ): Flow<ResponseStatus<Long>> {
+        return ApiResponseHandler().handle {
+            scheduleService.updateSchedule(
+                scheduledId,
+                ScheduleRequest(
+                    trainerId = trainerId!!,
+                    memberId = memberId!!,
+                    startTime = startTime!!,
+                    endTime = endTime!!,
+                    scheduleContent = scheduleContent!!
+                )
+            )
+        }.map { result ->
+            when (result) {
+                is ApiResponse.Success -> {
+                    Log.d(TAG, "updateSchedule: ${result.data}")
+                    ResponseStatus.Success(result.data)
+                }
+                is ApiResponse.Error -> {
+                    Log.d(TAG, "updateSchedule: ${result.error.toDomainModel().error}")
+                    Log.d(TAG, "updateSchedule: ${result.error.toDomainModel().message}")
+                    ResponseStatus.Error(result.error.toDomainModel())
+                }
+            }
+        }
+    }
+
     override suspend fun deleteSchedule(scheduleId: Long): Flow<ResponseStatus<Long>> {
         Log.d(TAG, "deleteSchedule: $scheduleId")
         return ApiResponseHandler().handle {
