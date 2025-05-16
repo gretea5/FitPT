@@ -25,6 +25,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_marginTop="80dp"
+                    android:visibility="invisible"
                     app:layout_constraintBottom_toTopOf="@+id/tg_report_muscles"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

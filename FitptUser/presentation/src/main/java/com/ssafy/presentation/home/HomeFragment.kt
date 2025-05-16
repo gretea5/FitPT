@@ -84,6 +84,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
 
     //일정
     private val scheduleMap = mutableMapOf<LocalDate, List<ScheduleInfo>>()
+    @Inject
+    lateinit var userDataStoreSource: UserDataStoreSource
     //차트
     private val chartDates = mutableListOf<String>() // X축 날짜
     private val weightEntries = mutableListOf<Entry>()
@@ -469,7 +471,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 userInfoViewModel.userInfo.collect { user ->
                     if (user is UserInfoState.Success) {
-                        binding.tvBodyGraph.text = user.userInfo.memberName+"님의 체성분 그래프"
+                        //binding.tvBodyGraph.text = user.userInfo.memberName+"님의 체성분 그래프"
                     }
                     else{
                         Log.d(TAG,"실패")
@@ -546,7 +548,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
                             if (!click) {
                                 showWeightData()
                                 click = true
-                                binding.chartBodyGraph.visibility = View.VISIBLE
+                                showView()
                             }
                         }
                         is GetBodyListInfoState.Error -> {
@@ -572,6 +574,21 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
                 }
             }
         }
+    }
+
+    fun showView(){
+        lifecycleScope.launch {
+            val userId = userDataStoreSource.user.first()!!.memberName
+            binding.tvBodyGraph.text = userId+"님의 체성분 그래프"
+        }
+        binding.horizontalScrollGraph.visibility = View.VISIBLE
+        binding.chartBodyGraph.visibility = View.VISIBLE
+        binding.tvBodyGraph.visibility = View.VISIBLE
+        binding.clCalendar.visibility = View.VISIBLE
+        binding.tvPtCalendar.visibility = View.VISIBLE
+        binding.tvYearMonth.visibility = View.VISIBLE
+        binding.btnNextMonth.visibility = View.VISIBLE
+        binding.btnPrevMonth.visibility = View.VISIBLE
     }
 }
 

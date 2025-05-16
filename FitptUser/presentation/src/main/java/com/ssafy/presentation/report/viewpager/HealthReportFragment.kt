@@ -59,6 +59,7 @@ class HealthReportFragment : BaseFragment<FragmentHealthReportBinding>(
                                 .mapNotNull { it.activationMuscleId }
                                 .flatten()
                             highlightMuscles(activationMuscleIds,requireView())
+                            binding.clReportHealthMusclesFront.visibility = View.VISIBLE
                         }
                         else -> {}
                     }
