@@ -236,11 +236,16 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
 
     private fun dateClicked(date: LocalDate) {
         if(selectedDayViewModel.selectedDay.value is SelectedDayState.Exist == false) {
+            val schedules = scheduleMap[date]
             binding.calendar.notifyDateChanged(selectedDate) // 이전 선택값 해제
             selectedDate = date
             binding.calendar.notifyDateChanged(date) // 새로운 선택값
-            selectedDayViewModel.setSelectedDay(date)
-            //selectedDayViewModel.setSelectedDayPayments(date.year, date.monthValue, date.dayOfMonth)
+            if (!schedules.isNullOrEmpty()) {
+                selectedDayViewModel.setSelectedDay(date)
+            } else {
+                selectedDayViewModel.clearSelectedDay() // 상태 초기화 (선택만 되고 BottomSheet X)
+                Log.d(TAG, "선택한 날짜($date)에 스케줄 없음 → BottomSheet 열지 않음")
+            }
         }
     }
 
@@ -258,7 +263,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
         viewLifecycleOwner.lifecycleScope.launch {
             selectedDayViewModel.openDialog.collectLatest { dialogState ->
                 if (dialogState is OpenDialogState.Opened && !dialog.isAdded) {
-                    dialog.show(childFragmentManager, "payment")
+                    val schedules = scheduleMap[selectedDate]
+                    if (!schedules.isNullOrEmpty()) {
+                        val dialog = PtCalendarBottomSheetFragment.newInstance(ArrayList(schedules))
+                        dialog.show(childFragmentManager, "payment")
+                    } else {
+                        Log.d(TAG, "openDialog 트리거되었지만 해당 날짜에 스케줄 없음")
+                    }
                 }
             }
         }
@@ -501,3 +512,4 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
         }
     }
 }
+

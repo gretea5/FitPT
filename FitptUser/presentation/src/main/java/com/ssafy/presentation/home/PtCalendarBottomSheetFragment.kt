@@ -18,15 +18,20 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.ssafy.domain.model.home.PtScheduleItem
+import com.ssafy.domain.model.home.ScheduleInfo
 import com.ssafy.locket.utils.CalendarUtils.displayText
 import com.ssafy.presentation.R
 import com.ssafy.presentation.common.MainActivity
 import com.ssafy.presentation.databinding.FragmentPtCalendarBottomSheetBinding
 import com.ssafy.presentation.home.adapter.PtScheduleAdapter
+import com.ssafy.presentation.home.viewModel.ScheduleInfoState
+import com.ssafy.presentation.home.viewModel.ScheduleViewModel
 import com.ssafy.presentation.home.viewModel.SelectedDayState
 import com.ssafy.presentation.home.viewModel.SelectedDayViewModel
 import dagger.hilt.android.internal.managers.ViewComponentManager
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 private const val TAG = "PtCalendarBottomSheetFr"
 class PtCalendarBottomSheetFragment : BottomSheetDialogFragment() {
@@ -34,6 +39,7 @@ class PtCalendarBottomSheetFragment : BottomSheetDialogFragment() {
     private val binding get() = _binding!!
     private var mContext : Context? = null
     private val selectedDayViewModel: SelectedDayViewModel by activityViewModels()
+
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -52,7 +58,7 @@ class PtCalendarBottomSheetFragment : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         initView()
         initEvent()
-        setupRecyclerView()
+        setupInitView()
     }
 
     fun initView(){
@@ -153,16 +159,36 @@ class PtCalendarBottomSheetFragment : BottomSheetDialogFragment() {
         }
     }
 
-    fun setupRecyclerView(){
-        val scheduleItems = listOf(
-            PtScheduleItem("권경탁 트레이너", "오후 8:00~9:00"),
-            PtScheduleItem("박장훈 트레이너", "오전 10:00~11:00")
-        )
-        val adapter = PtScheduleAdapter(scheduleItems) { item ->
+    fun setupInitView(){
+        val schedules = arguments?.getParcelableArrayList<ScheduleInfo>("arg_schedules")
 
+        val formatter = DateTimeFormatter.ofPattern("a h:mm") // 오전/오후 10:00 형식
+
+        val scheduleItems = schedules!!.map { schedule ->
+            val start = LocalDateTime.parse(schedule.startTime, DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+            val end = LocalDateTime.parse(schedule.endTime, DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+
+            val timeRange = "${start.format(formatter)} ~ ${end.format(formatter)}"
+            PtScheduleItem(schedule.trainerName, timeRange)
         }
 
+        val adapter = PtScheduleAdapter(scheduleItems) { item ->
+            // 클릭 리스너 (필요 시 작성)
+        }
+
+        binding.tvCount.text = "PT 총 "+schedules.size.toString()+"건"
         binding.rvPayment.adapter = adapter
         binding.rvPayment.layoutManager = LinearLayoutManager(requireContext())
+    }
+
+    companion object {
+        private const val ARG_SCHEDULES = "arg_schedules"
+        fun newInstance(schedules: ArrayList<ScheduleInfo>): PtCalendarBottomSheetFragment {
+            return PtCalendarBottomSheetFragment().apply {
+                arguments = Bundle().apply {
+                    putParcelableArrayList(ARG_SCHEDULES, ArrayList(schedules)) // ✅ 변환
+                }
+            }
+        }
     }
 }
