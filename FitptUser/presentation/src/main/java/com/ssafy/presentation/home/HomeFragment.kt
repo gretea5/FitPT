@@ -110,9 +110,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
 
     fun initEvent(){
         userInfoViewModel.fetchUser()
-        binding.ivNotificationMove.setOnClickListener {
-            findNavController().navigate(R.id.action_home_fragment_to_notification_fragment)
-        }
         binding.btnPrevMonth.setOnClickListener {
             val currentYearMonth = selectedDayViewModel.selectedYearMonth.value
             val newYearMonth = currentYearMonth.minusMonths(1)

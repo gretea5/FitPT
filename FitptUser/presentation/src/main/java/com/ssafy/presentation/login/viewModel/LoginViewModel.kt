@@ -10,6 +10,7 @@ import com.ssafy.domain.model.login.UserInfo
 import com.ssafy.domain.usecase.auth.LoginUseCase
 import com.ssafy.domain.usecase.auth.SignUpUsecase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -47,6 +48,7 @@ class LoginViewModel @Inject constructor(
                     when (response) {
                         is ResponseStatus.Success -> {
                             _loginState.value = LoginStatus.Success
+                            dataStore.saveUserId(response.data.memberId.toLong())
                             dataStore.saveJwtToken("Bearer " + response.data.accessToken)
                         }
                         is ResponseStatus.Error -> {
@@ -69,6 +71,7 @@ class LoginViewModel @Inject constructor(
                     when (response) {
                         is ResponseStatus.Success -> {
                             _signUpSuccess.value = true
+                            dataStore.saveUserId(response.data.memberId.toLong())
                             dataStore.saveJwtToken("Bearer " + response.data.accessToken)
                         }
                         is ResponseStatus.Error -> {

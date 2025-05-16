@@ -42,6 +42,7 @@ class HealthReportDialogFragment : DialogFragment() {
         override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
             super.onViewCreated(view, savedInstanceState)
             initView()
+            initEvent()
         }
 
         override fun onStart() {
@@ -72,6 +73,12 @@ class HealthReportDialogFragment : DialogFragment() {
                         }
                     }
                 }
+            }
+        }
+
+        fun initEvent(){
+            binding.buttonClose.setOnClickListener {
+                dismiss()
             }
         }
 

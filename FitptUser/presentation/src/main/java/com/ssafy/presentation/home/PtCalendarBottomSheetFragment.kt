@@ -165,8 +165,8 @@ class PtCalendarBottomSheetFragment : BottomSheetDialogFragment() {
         val formatter = DateTimeFormatter.ofPattern("a h:mm") // 오전/오후 10:00 형식
 
         val scheduleItems = schedules!!.map { schedule ->
-            val start = LocalDateTime.parse(schedule.startTime, DateTimeFormatter.ISO_LOCAL_DATE_TIME).plusHours(9)
-            val end = LocalDateTime.parse(schedule.endTime, DateTimeFormatter.ISO_LOCAL_DATE_TIME).plusHours(9)
+            val start = LocalDateTime.parse(schedule.startTime, DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+            val end = LocalDateTime.parse(schedule.endTime, DateTimeFormatter.ISO_LOCAL_DATE_TIME)
             val timeRange = "${start.format(formatter)} ~ ${end.format(formatter)}"
             PtScheduleItem(schedule.trainerName, timeRange)
         }
@@ -174,7 +174,6 @@ class PtCalendarBottomSheetFragment : BottomSheetDialogFragment() {
         val adapter = PtScheduleAdapter(scheduleItems) { item ->
             // 클릭 리스너 (필요 시 작성)
         }
-
         binding.tvCount.text = "PT 총 "+schedules.size.toString()+"건"
         binding.rvPayment.adapter = adapter
         binding.rvPayment.layoutManager = LinearLayoutManager(requireContext())
