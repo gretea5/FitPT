@@ -73,7 +73,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
     private val endMonth = YearMonth.of(today.year, today.monthValue)
     private val daysOfWeek = daysOfWeek(DayOfWeek.MONDAY)
     private val format = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-    val currentMonth = YearMonth.of(2025,5)
     private lateinit var dialog: PtCalendarBottomSheetFragment
     private lateinit var lineChart: LineChart
     private var selectedButton: Button? = null
@@ -113,10 +112,25 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
         binding.ivNotificationMove.setOnClickListener {
             findNavController().navigate(R.id.action_home_fragment_to_notification_fragment)
         }
-        measureViewModel.getBodyList("createdAt","asc")
-        scheduleViewModel.getScheduleList("","2025-05")
-    }
+        binding.btnPrevMonth.setOnClickListener {
+            val currentYearMonth = selectedDayViewModel.selectedYearMonth.value
+            val newYearMonth = currentYearMonth.minusMonths(1)
+            selectedDayViewModel.setYearMonth(
+                newYearMonth
+            )
+        }
 
+        binding.btnNextMonth.setOnClickListener {
+            val currentYearMonth = selectedDayViewModel.selectedYearMonth.value
+            val newYearMonth = currentYearMonth.plusMonths(1)
+            selectedDayViewModel.setYearMonth(
+                newYearMonth
+            )
+        }
+        measureViewModel.getBodyList("createdAt","asc")
+        selectedDayViewModel.initYearMonth()
+        scheduleViewModel.getScheduleList("",selectedDayViewModel.selectedYearMonth.value.toString())
+    }
 
 
     private fun updateDayWeekColor() {
@@ -229,7 +243,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
             override fun create(view: View): DayViewContainer = DayViewContainer(view)
         }
         binding.calendar.setup(startMonth, endMonth, daysOfWeek.first())
-        binding.calendar.scrollToMonth(currentMonth)
         updateDayWeekColor()
         initObserver()
     }
@@ -248,7 +261,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
             }
         }
     }
-
 
     private fun initObserver() {
         // 선택된 날짜 갱신
@@ -279,6 +291,25 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
                     if (user is UserInfoState.Success) {
                         Log.d(TAG,user.userInfo.toString())
                     }
+                }
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                selectedDayViewModel.selectedYearMonth.collectLatest { yearMonth ->
+                    binding.calendar.scrollToMonth(yearMonth)
+                    scheduleViewModel.getScheduleList("",selectedDayViewModel.selectedYearMonth.value.toString())
+                    if (yearMonth >= YearMonth.of(today.year, today.monthValue)) {
+                        binding.btnNextMonth.isEnabled = false
+                    } else if (yearMonth < YearMonth.of(2020, 2)) {
+                        binding.btnPrevMonth.isEnabled = false
+                    } else {
+                        binding.btnPrevMonth.isEnabled = true
+                        binding.btnNextMonth.isEnabled = true
+                    }
+                    // 상단 텍스트 갱신
+                    binding.tvYearMonth.text = getString(R.string.calendar_year_month, yearMonth.year, yearMonth.monthValue)
                 }
             }
         }
@@ -440,7 +471,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
                 userInfoViewModel.userInfo.collect { user ->
                     if (user is UserInfoState.Success) {
                         binding.tvBodyGraph.text = user.userInfo.memberName+"님의 체성분 그래프"
-                        binding.tvPtCalendar.text = user.userInfo.memberName+"님의 PT 일정"
                     }
                     else{
                         Log.d(TAG,"실패")

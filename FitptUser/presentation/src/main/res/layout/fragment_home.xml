@@ -109,7 +109,7 @@
         android:id="@+id/tv_pt_calendar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=""
+        android:text="PT일정"
         android:textSize="20sp"
         android:layout_marginTop="20dp"
         app:layout_constraintStart_toStartOf="@+id/tv_body_graph"
@@ -145,6 +145,39 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/layout_dow" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/tv_year_month"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="2025년 5월"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/cl_calendar"
+        app:layout_constraintEnd_toStartOf="@+id/btn_prev_month"
+        app:layout_constraintTop_toBottomOf="@+id/chart_body_graph" />
+
+    <ImageView
+        android:id="@+id/btn_prev_month"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/ic_calendar_arrow_left"
+        app:layout_constraintBottom_toTopOf="@+id/cl_calendar"
+        app:layout_constraintEnd_toStartOf="@+id/btn_next_month"
+        app:layout_constraintTop_toBottomOf="@+id/chart_body_graph"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <ImageView
+        android:id="@+id/btn_next_month"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="32dp"
+        android:src="@drawable/ic_calendar_arrow_right"
+        app:layout_constraintBottom_toTopOf="@+id/cl_calendar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chart_body_graph"
+        tools:srcCompat="@tools:sample/avatars" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
