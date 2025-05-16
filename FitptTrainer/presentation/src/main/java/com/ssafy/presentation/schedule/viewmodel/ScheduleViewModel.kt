@@ -9,6 +9,7 @@ import com.ssafy.domain.model.member.MemberInfo
 import com.ssafy.domain.model.schedule.Schedule
 import com.ssafy.domain.usecase.member.GetMembersUseCase
 import com.ssafy.domain.usecase.schedule.CreateScheduleUseCase
+import com.ssafy.domain.usecase.schedule.DeleteScheduleUseCase
 import com.ssafy.domain.usecase.schedule.GetScheduleUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,6 +27,7 @@ class ScheduleViewModel @Inject constructor(
     private val getScheduleUseCase: GetScheduleUseCase,
     private val getMembersUseCase: GetMembersUseCase,
     private val createScheduleUseCase: CreateScheduleUseCase,
+    private val deleteScheduleUseCase: DeleteScheduleUseCase,
     private val dataStore: TrainerDataStoreSource
 ) : ViewModel() {
     private val _scheduleState = MutableStateFlow<ScheduleStatus>(ScheduleStatus.Idle)
@@ -42,6 +44,9 @@ class ScheduleViewModel @Inject constructor(
 
     private val _createdScheduleId = MutableStateFlow<Long?>(null)
     val createdScheduleId: StateFlow<Long?> = _createdScheduleId.asStateFlow()
+
+    private val _deletedScheduleId = MutableStateFlow<Long?>(null)
+    val deletedScheduleId: StateFlow<Long?> = _deletedScheduleId.asStateFlow()
 
     fun getSchedules(date: String? = null, month: String? = null, trainerId: Long? = null, memberId: Long? = null) {
         viewModelScope.launch {
@@ -141,6 +146,33 @@ class ScheduleViewModel @Inject constructor(
                 }
             } catch (e: Exception) {
                 Log.d(TAG, "createSchedule exception ${e.message}")
+                _scheduleState.value = ScheduleStatus.Error("서버와의 연결에 실패했습니다.")
+            }
+        }
+    }
+
+    fun deleteSchedule(scheduleId: Long) {
+        viewModelScope.launch {
+            try {
+                Log.d(TAG, "deleteSchedule: $scheduleId")
+
+                deleteScheduleUseCase(scheduleId).collect { response ->
+                    Log.d(TAG, "deleteSchedule: $response")
+
+                    when (response) {
+                        is ResponseStatus.Success -> {
+                            _deletedScheduleId.value = response.data
+                            _scheduleState.value = ScheduleStatus.Success
+                        }
+                        is ResponseStatus.Error -> {
+                            _scheduleState.value = ScheduleStatus.Error(response.error.message)
+                        }
+                    }
+                }
+
+
+            } catch (e: Exception) {
+                Log.d(TAG, "deleteSchedule exception ${e.message}")
                 _scheduleState.value = ScheduleStatus.Error("서버와의 연결에 실패했습니다.")
             }
         }
