@@ -532,13 +532,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
                                     skeletalMuscleEntries.add(
                                         Entry(
                                             index.toFloat(),
-                                            bodyInfo.bfp.toFloat()
+                                            bodyInfo.smm.toFloat()
                                         )
                                     )
                                     bodyFatEntries.add(
                                         Entry(
                                             index.toFloat(),
-                                            bodyInfo.smm.toFloat()
+                                            bodyInfo.bfp.toFloat()
                                         )
                                     )
                                 } catch (e: Exception) {

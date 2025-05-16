@@ -165,9 +165,8 @@ class PtCalendarBottomSheetFragment : BottomSheetDialogFragment() {
         val formatter = DateTimeFormatter.ofPattern("a h:mm") // 오전/오후 10:00 형식
 
         val scheduleItems = schedules!!.map { schedule ->
-            val start = LocalDateTime.parse(schedule.startTime, DateTimeFormatter.ISO_LOCAL_DATE_TIME)
-            val end = LocalDateTime.parse(schedule.endTime, DateTimeFormatter.ISO_LOCAL_DATE_TIME)
-
+            val start = LocalDateTime.parse(schedule.startTime, DateTimeFormatter.ISO_LOCAL_DATE_TIME).plusHours(9)
+            val end = LocalDateTime.parse(schedule.endTime, DateTimeFormatter.ISO_LOCAL_DATE_TIME).plusHours(9)
             val timeRange = "${start.format(formatter)} ~ ${end.format(formatter)}"
             PtScheduleItem(schedule.trainerName, timeRange)
         }

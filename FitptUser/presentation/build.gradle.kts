@@ -70,6 +70,8 @@ dependencies {
     // FCM 사용 위한 plugins
     implementation("com.google.firebase:firebase-messaging-ktx")
 
+    implementation("com.github.LottieFiles:dotlottie-android:0.5.0")
+
     implementation(libs.fitrus.est.device)
 }
 
