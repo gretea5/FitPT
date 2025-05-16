@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import android.widget.Button
 import android.widget.TextView
 import androidx.core.view.children
@@ -19,11 +18,9 @@ import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
 import com.kizitonwose.calendar.view.MonthDayBinder
 import com.kizitonwose.calendar.view.MonthHeaderFooterBinder
 import com.kizitonwose.calendar.view.ViewContainer
-import com.ssafy.domain.model.member.MemberInfo
 import com.ssafy.presentation.R
 import com.ssafy.presentation.base.BaseFragment
 import com.ssafy.presentation.databinding.FragmentScheduleEditBinding
-import com.ssafy.presentation.schedule.adapter.ScheduleMemberAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -61,7 +58,6 @@ class ScheduleEditFragment : BaseFragment<FragmentScheduleEditBinding>(
         "22:00",
     )
 
-    private val memberList = emptyList<MemberInfo>()
     private val selectedButtons = mutableListOf<Button>()
 
     private var selectedDate: LocalDate? = null
@@ -84,7 +80,6 @@ class ScheduleEditFragment : BaseFragment<FragmentScheduleEditBinding>(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initArgs()
-        initAdapter()
         initCalendar()
         initButtonView()
         initEvent()
@@ -104,12 +99,8 @@ class ScheduleEditFragment : BaseFragment<FragmentScheduleEditBinding>(
         memberName = args.memberName
         timeInfo = args.timeInfo
 
-        Log.d(TAG, "initArgs: ${trainerId} ${memberName} $timeInfo")
-    }
-
-    private fun initAdapter() {
-        val adapter = ScheduleMemberAdapter(requireContext(), memberList)
-        binding.sMember.adapter = adapter
+        binding.tvMemberName.text = memberName
+        binding.tvTimeInfo.text = timeInfo
     }
 
     private fun initCalendar() {
@@ -248,20 +239,5 @@ class ScheduleEditFragment : BaseFragment<FragmentScheduleEditBinding>(
         }
     }
 
-    private fun initEvent() {
-        binding.sMember.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val selectedMember = parent?.getItemAtPosition(position) as MemberInfo
-                binding.tvMemberName.text = selectedMember.memberName
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                binding.tvMemberName.text = "회원 선택"
-            }
-        }
-
-        binding.tvMemberName.setOnClickListener {
-            binding.sMember.performClick()
-        }
-    }
+    private fun initEvent() {}
 }
