@@ -113,8 +113,6 @@ class ScheduleEditFragment : BaseFragment<FragmentScheduleEditBinding>(
     private fun initCalendar() {
         val currentMonth = YearMonth.now()
 
-        val startMonth = currentMonth.minusMonths(120)
-        val endMonth = currentMonth.plusMonths(120)
         val firstDayOfWeek = firstDayOfWeekFromLocale()
 
         class MonthViewContainer(view: View) : ViewContainer(view) {
@@ -193,7 +191,7 @@ class ScheduleEditFragment : BaseFragment<FragmentScheduleEditBinding>(
                 }
             }
 
-            setup(startMonth, endMonth, firstDayOfWeek)
+            setup(currentMonth, currentMonth, firstDayOfWeek)
             scrollToMonth(currentMonth)
         }
     }
