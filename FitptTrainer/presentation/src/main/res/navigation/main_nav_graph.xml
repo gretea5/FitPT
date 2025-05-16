@@ -50,5 +50,11 @@
             <argument
                 android:name="trainerId"
                 app:argType="long" />
+            <argument
+                android:name="memberName"
+                app:argType="string" />
+            <argument
+                android:name="timeInfo"
+                app:argType="string" />
     </fragment>
 </navigation>
