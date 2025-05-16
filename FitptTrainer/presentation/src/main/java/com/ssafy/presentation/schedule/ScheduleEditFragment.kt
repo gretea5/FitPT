@@ -32,6 +32,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
@@ -73,6 +75,7 @@ class ScheduleEditFragment : BaseFragment<FragmentScheduleEditBinding>(
     private var selectedDate: LocalDate? = null
     private var scheduleId: Long? = null
     private var trainerId: Long? = null
+    private var memberId: Long? = null
     private var memberName: String? = null
     private var startTime: String? = null
     private var endTime: String? = null
@@ -107,6 +110,7 @@ class ScheduleEditFragment : BaseFragment<FragmentScheduleEditBinding>(
 
         scheduleId = args.scheduleId
         trainerId = args.trainerId
+        memberId = args.memberId
         memberName = args.memberName
         startTime = args.startTime
         endTime = args.endTime
@@ -218,6 +222,14 @@ class ScheduleEditFragment : BaseFragment<FragmentScheduleEditBinding>(
                 }
             }
         }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.updatedScheduleId.collect { scheduleId ->
+                scheduleId?.let {
+                    findNavController().popBackStack()
+                }
+            }
+        }
     }
 
     private fun initButtonView() {
@@ -301,6 +313,32 @@ class ScheduleEditFragment : BaseFragment<FragmentScheduleEditBinding>(
     private fun initEvent() {
         binding.btnDelete.setOnClickListener {
             scheduleId?.let { viewModel.deleteSchedule(it) }
+        }
+
+        binding.btnEdit.setOnClickListener {
+            scheduleId?.let {
+                val selectedStartTime = selectedButton?.text.toString()
+                val selectedEndTime = TimeUtils.addOneHour(selectedStartTime)
+
+                val startTime = LocalTime.parse(selectedStartTime, DateTimeFormatter.ofPattern("HH:mm"))
+                val endTime = LocalTime.parse(selectedEndTime, DateTimeFormatter.ofPattern("HH:mm"))
+
+                val startDateTime = LocalDateTime.of(selectedDate, startTime)
+                val endDateTime = LocalDateTime.of(selectedDate, endTime)
+
+                val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
+                val formattedStartDateTime = startDateTime.format(formatter)
+                val formattedEndDateTime = endDateTime.format(formatter)
+
+                viewModel.updateSchedule(
+                    scheduledId = it,
+                    memberId = memberId!!,
+                    trainerId = trainerId!!,
+                    startTime = formattedStartDateTime!!,
+                    endTime = formattedEndDateTime!!,
+                    scheduleContent = scheduleContent!!
+                )
+            }
         }
     }
 }
