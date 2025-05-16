@@ -98,6 +98,7 @@ public class Member {
         this.fcmTokens.add(fcmToken);
     }
 
-
-
+    public void reactivate() {
+        this.isDeleted = false;
+    }
 }
