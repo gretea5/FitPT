@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.ssafy.presentation.R
@@ -25,6 +26,9 @@ class ReportEditFragment : BaseFragment<FragmentReportEditBinding>(
     FragmentReportEditBinding::bind,
     R.layout.fragment_report_edit
 ) {
+    private var memberId : Long? = null
+    private val args: ReportEditFragmentArgs by navArgs()
+    
     private lateinit var viewPagerAdapter: ReportViewPagerAdapter
     private val viewModel: ReportViewModel by activityViewModels()
 
@@ -32,6 +36,9 @@ class ReportEditFragment : BaseFragment<FragmentReportEditBinding>(
         super.onViewCreated(view, savedInstanceState)
         initTabLayout()
         initEvent()
+        
+        memberId = args.memberId
+        Log.d(TAG, "onViewCreated: $memberId")
     }
 
     fun initEvent() {

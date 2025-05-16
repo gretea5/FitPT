@@ -3,12 +3,14 @@ package com.ssafy.presentation.user
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
@@ -19,9 +21,13 @@ import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.ssafy.presentation.R
 import com.ssafy.presentation.base.BaseFragment
 import com.ssafy.presentation.databinding.FragmentUserWorkoutInfoBinding
+import com.ssafy.presentation.report.ReportEditFragmentArgs
+import com.ssafy.presentation.user.adapter.UserWorkoutInfoListAdapter
 import com.ssafy.presentation.user.adapter.UserWorkoutInfoMonthAdapter
+import com.ssafy.presentation.user.viewmodel.UserWorkoutInfoViewModel
 import com.ssafy.presentation.util.CommonUtils
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 private const val TAG = "UserWorkoutInfoFragment_FitPT"
 
@@ -33,16 +39,37 @@ class UserWorkoutInfoFragment : BaseFragment<FragmentUserWorkoutInfoBinding>(
     private lateinit var monthAdapter: UserWorkoutInfoMonthAdapter
     private lateinit var lineChart: LineChart
 
+    private var memberId : Long? = null
+    private val viewModel: UserWorkoutInfoViewModel by viewModels()
+    private val userWorkoutInfoListAdapter = UserWorkoutInfoListAdapter { memberInfo ->
+        memberId = memberInfo.memberId
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initSetting()
+        initObserver()
         initRecyclerView()
         initChart()
         initEvent()
+        fetchMembers()
+    }
+
+    private fun initObserver() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.members.collect {
+                userWorkoutInfoListAdapter.submitList(it)
+            }
+        }
+    }
+
+    private fun fetchMembers() {
+        viewModel.getMembers()
     }
 
     fun initEvent() {
         binding.apply {
+
             layoutUserReportYear.setOnClickListener {
                 showYearDropdownMenu()
             }
@@ -52,7 +79,10 @@ class UserWorkoutInfoFragment : BaseFragment<FragmentUserWorkoutInfoBinding>(
             }
 
             cvAddReport.setOnClickListener {
-                findNavController().navigate(R.id.action_userWorkoutInfoFragment_to_reportEditFragment)
+                memberId?.let {
+                    val action = UserWorkoutInfoFragmentDirections.actionUserWorkoutInfoFragmentToReportEditFragment(it)
+                    findNavController().navigate(action)
+                }
             }
 
             ibBack.setOnClickListener {
@@ -72,6 +102,12 @@ class UserWorkoutInfoFragment : BaseFragment<FragmentUserWorkoutInfoBinding>(
         binding.rvUserReportMonth.apply {
             adapter = monthAdapter
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        }
+
+        binding.rvMemberList.apply {
+            adapter = userWorkoutInfoListAdapter
+            layoutManager = LinearLayoutManager(requireContext())
+            addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
         }
     }
 
@@ -184,7 +220,7 @@ class UserWorkoutInfoFragment : BaseFragment<FragmentUserWorkoutInfoBinding>(
     private fun showYearDropdownMenu() {
         val yearList = listOf("2025년", "2024년", "2023년", "2022년")
 
-        val popupMenu = androidx.appcompat.widget.PopupMenu(requireContext(), binding.tvUserReportYear)
+        val popupMenu = PopupMenu(requireContext(), binding.tvUserReportYear)
         yearList.forEachIndexed { index, year ->
             popupMenu.menu.add(0, index, index, year)
         }
