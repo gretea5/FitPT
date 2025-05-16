@@ -11,7 +11,8 @@ spring:
   data:
     redis:
       host: localhost
-      port: 36379
+      port: 6379
+      password: ssafy
 
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect

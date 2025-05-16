@@ -6,6 +6,7 @@ import com.sahur.fitpt.db.entity.*;
 import com.sahur.fitpt.db.repository.*;
 
 import com.sahur.fitpt.domain.composition.dto.CompositionResponseDto;
+import com.sahur.fitpt.domain.firebase.service.FirebaseCloudMessageService;
 import com.sahur.fitpt.domain.report.dto.*;
 
 import jakarta.transaction.Transactional;
@@ -99,6 +100,7 @@ public class ReportServiceImpl implements ReportService {
         }
 
         workOutMuscleRepository.saveAll(allWorkoutMuscles);
+
 
         return savedReport.getReportId();
     }

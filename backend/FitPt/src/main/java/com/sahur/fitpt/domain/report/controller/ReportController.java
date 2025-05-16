@@ -1,6 +1,8 @@
 package com.sahur.fitpt.domain.report.controller;
 
 
+import com.sahur.fitpt.domain.firebase.service.FcmNotificationService;
+import com.sahur.fitpt.domain.firebase.service.FirebaseCloudMessageService;
 import com.sahur.fitpt.domain.report.dto.ReportDetailResponseDto;
 import com.sahur.fitpt.domain.report.dto.ReportRequestDto;
 import com.sahur.fitpt.domain.report.dto.ReportResponseDto;
@@ -27,6 +29,7 @@ import java.util.List;
 @Tag(name = "Report", description = "보고서 API")
 public class ReportController {
     private final ReportService reportService;
+    private final FcmNotificationService fcmNotificationService;
 
     @PostMapping
     @Operation(summary = "보고서 작성", description = "트레이너 PT의 보고서를 작성하는 API")
@@ -36,7 +39,11 @@ public class ReportController {
             @ApiResponse(responseCode = "404", content = @Content(mediaType = "application/json")),
     })
     public ResponseEntity<Long> createReport(@RequestBody ReportRequestDto requestDto) {
-        return new ResponseEntity<>(reportService.createReport(requestDto), HttpStatus.CREATED);
+
+        Long savedReportId = reportService.createReport(requestDto);
+        fcmNotificationService.sendNotificationToUser(requestDto.getMemberId(), savedReportId, "헬스 리포트 도착! \uD83D\uDCAA", "체성분 분석, 운동 기록 등 상세한 보고서를 확인해보세요.");
+
+        return new ResponseEntity<>(savedReportId, HttpStatus.CREATED);
     }
 
     @PatchMapping("/{reportId}")
