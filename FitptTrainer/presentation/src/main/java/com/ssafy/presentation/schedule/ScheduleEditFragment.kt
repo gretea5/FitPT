@@ -111,7 +111,6 @@ class ScheduleEditFragment : BaseFragment<FragmentScheduleEditBinding>(
     private fun initCalendar() {
         val currentMonth = YearMonth.now()
         val today = LocalDate.now()
-        selectedDate = today
 
         val startMonth = currentMonth.minusMonths(120)
         val endMonth = currentMonth.plusMonths(120)
@@ -247,9 +246,9 @@ class ScheduleEditFragment : BaseFragment<FragmentScheduleEditBinding>(
     }
 
     private fun fetchDaySchedule() {
-        val today = LocalDate.now()
+        val date = args.selectedDate
 
-        val formattedDate = today.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+        val formattedDate = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
 
         viewModel.getSchedules(
             month = null,
