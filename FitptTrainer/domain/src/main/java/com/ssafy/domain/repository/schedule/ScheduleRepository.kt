@@ -10,7 +10,7 @@ interface ScheduleRepository {
         month: String? = null,
         trainerId: Long? = null,
         memberId: Long? = null
-    ): Flow<ResponseStatus<List<Schedule>>>
+    ) : Flow<ResponseStatus<List<Schedule>>>
 
     suspend fun createSchedule(
         memberId: Long? = null,
@@ -18,5 +18,7 @@ interface ScheduleRepository {
         endTime: String? = null,
         scheduleContent: String? = null,
         trainerId: Long? = null
-    ): Flow<ResponseStatus<Long>>
+    ) : Flow<ResponseStatus<Long>>
+
+    suspend fun deleteSchedule(scheduleId: Long) : Flow<ResponseStatus<Long>>
 }
