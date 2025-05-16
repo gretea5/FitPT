@@ -15,6 +15,8 @@ data class GetUserInfoResponse(
     val memberName: String,
     val memberWeight: Int,
     val trainerId: Int,
+    val trainerName: String,
+    val gymName: String,
 ) :BaseResponse{
     companion object : DataMapper<GetUserInfoResponse, UserInfo> {
         override fun GetUserInfoResponse.toDomainModel(): UserInfo {
@@ -26,7 +28,9 @@ data class GetUserInfoResponse(
                 memberHeight = this.memberHeight.toDouble(),
                 memberWeight = this.memberWeight.toDouble(),
                 memberBirth = this.memberBirth,
-                trainerId = this.trainerId
+                trainerId = this.trainerId,
+                trainerName = this.trainerName,
+                gymName = this.gymName
             )
         }
     }

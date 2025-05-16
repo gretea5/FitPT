@@ -101,7 +101,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
         // 초기 선택 버튼 설정 (몸무게)
         selectButton(binding.btnWeight)
         // 차트를 보이게 설정
-        lineChart.visibility = View.VISIBLE
         lineChart.setScaleEnabled(false)
         lineChart.setPinchZoom(false)
         lineChart.setDoubleTapToZoomEnabled(false)
@@ -486,40 +485,73 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
                         is GetBodyListInfoState.Loading -> {
                             Log.d(TAG, "로딩 중...")
                         }
+
                         is GetBodyListInfoState.Success -> {
                             val list = state.getBodyList
                             Log.d(TAG, "데이터 수신 성공: $list")
 
-                            // 데이터 정렬 (날짜 순)
-                            val sortedList = list.sortedBy { it.weight }
+                            // ✅ 날짜별 가장 늦은 시간 데이터만 추출
+                            val latestPerDate = list
+                                .mapNotNull { item ->
+                                    try {
+                                        val parsedDateTime = LocalDateTime.parse(item.createdAt)
+                                        item to parsedDateTime
+                                    } catch (e: Exception) {
+                                        Log.e(TAG, "날짜 파싱 실패: ${e.message}")
+                                        null
+                                    }
+                                }
+                                .groupBy { (_, dateTime) -> dateTime.toLocalDate() }
+                                .mapValues { (_, entries) -> entries.maxByOrNull { it.second } }
+                                .values
+                                .map { it!!.first }
 
+                            // ✅ 정렬 (원하는 기준 - 예: 날짜 또는 체중)
+                            val sortedList = latestPerDate.sortedBy {
+                                LocalDateTime.parse(it.createdAt) // 날짜 기준 정렬
+                            }
                             chartDates.clear()
                             weightEntries.clear()
                             skeletalMuscleEntries.clear()
                             bodyFatEntries.clear()
-
                             sortedList.forEachIndexed { index, bodyInfo ->
                                 try {
                                     val outputFormatter = DateTimeFormatter.ofPattern("MM-dd")
-                                    val dateTime = LocalDateTime.parse(bodyInfo.createdAt) // ISO 형식 자동 파싱
+                                    val dateTime = LocalDateTime.parse(bodyInfo.createdAt)
                                     val formattedDate = dateTime.format(outputFormatter)
+
                                     chartDates.add(formattedDate)
-                                    weightEntries.add(Entry(index.toFloat(), bodyInfo.weight.toFloat()))
-                                    skeletalMuscleEntries.add(Entry(index.toFloat(), bodyInfo.bfp.toFloat()))
-                                    bodyFatEntries.add(Entry(index.toFloat(), bodyInfo.smm.toFloat()))
+                                    weightEntries.add(
+                                        Entry(
+                                            index.toFloat(),
+                                            bodyInfo.weight.toFloat()
+                                        )
+                                    )
+                                    skeletalMuscleEntries.add(
+                                        Entry(
+                                            index.toFloat(),
+                                            bodyInfo.bfp.toFloat()
+                                        )
+                                    )
+                                    bodyFatEntries.add(
+                                        Entry(
+                                            index.toFloat(),
+                                            bodyInfo.smm.toFloat()
+                                        )
+                                    )
                                 } catch (e: Exception) {
                                     Log.e(TAG, "날짜 파싱 오류: ${e.message}")
                                 }
                             }
-                            if(!click){
+                            if (!click) {
                                 showWeightData()
                                 click = true
+                                binding.chartBodyGraph.visibility = View.VISIBLE
                             }
                         }
                         is GetBodyListInfoState.Error -> {
                             Log.d(TAG, "에러: ${state.message}")
                         }
-
                         else -> Unit
                     }
                 }

@@ -32,7 +32,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text=""
+        android:text="체성분 그래프"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="@+id/imageView"
         app:layout_constraintTop_toBottomOf="@+id/imageView" />
@@ -95,8 +95,8 @@
 
     <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/chart_body_graph"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="355dp"
+        android:layout_height="236dp"
         android:paddingBottom="20dp"
         android:visibility="invisible"
         app:layout_constraintDimensionRatio="1.3802:1"

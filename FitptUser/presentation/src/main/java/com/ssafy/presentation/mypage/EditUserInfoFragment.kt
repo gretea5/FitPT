@@ -21,6 +21,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.ssafy.data.datasource.UserDataStoreSource
+import com.ssafy.domain.model.login.Gym
 import com.ssafy.domain.model.login.UserInfo
 import com.ssafy.presentation.R
 import com.ssafy.presentation.base.BaseFragment
@@ -87,8 +88,8 @@ class EditUserInfoFragment : BaseFragment<FragmentEditUserInfoBinding>(
                 val user = userDataStoreSource.user.first()
                 user?.let {
                     userInfoViewModel.setTemporaryUserInfo(it) // 초기화
-                    Log.d(TAG,"보여주세요"+userInfoViewModel.temporaryUserInfo.value.toString())
                     applyUserInfoToUI(it)
+                    gymInfoViewModel.updateClick(Gym(it.admin,it.gymName,""))
                 }
             }
         }
@@ -101,15 +102,18 @@ class EditUserInfoFragment : BaseFragment<FragmentEditUserInfoBinding>(
         binding.btnNext.setOnClickListener {
             viewLifecycleOwner.lifecycleScope.launch {
                 val memberId = userDataStoreSource.user.first()!!.memberId
+                Log.d(TAG,gymInfoViewModel.tempgymInfo.value?.adminId.toString()+" "+gymInfoViewModel.tempgymInfo.value?.gymName)
                 val userInfo = UserInfo(
                     memberId = memberId,
-                    admin = gymInfoViewModel.tempgymInfo.value!!.adminId,
+                    admin = gymInfoViewModel.tempgymInfo.value?.adminId?:1,
                     memberName = userInfoViewModel.temporaryUserInfo.value!!.memberName,
                     memberGender = userInfoViewModel.temporaryUserInfo.value!!.memberGender,
                     memberHeight = userInfoViewModel.temporaryUserInfo.value!!.memberHeight,
                     memberWeight = userInfoViewModel.temporaryUserInfo.value!!.memberWeight,
                     memberBirth = userInfoViewModel.temporaryUserInfo.value!!.memberBirth,
-                    trainerId = userInfoViewModel.temporaryUserInfo.value!!.trainerId
+                    trainerId = userInfoViewModel.temporaryUserInfo.value!!.trainerId,
+                    gymName = gymInfoViewModel.tempgymInfo.value?.gymName?:"",
+                    trainerName = userInfoViewModel.temporaryUserInfo.value!!.trainerName,
                 )
                 // 데이터 업데이트
                 userInfoViewModel.updateUser(userInfo)
@@ -218,9 +222,7 @@ class EditUserInfoFragment : BaseFragment<FragmentEditUserInfoBinding>(
         if(binding.tvGender.text!=""){
             binding.layoutGender.setBackgroundResource(R.drawable.bg_card_border_active)
         }
-        if(binding.tvGym.text!=""){
-            binding.layoutGym.setBackgroundResource(R.drawable.bg_card_border_active)
-        }
+        binding.layoutGym.setBackgroundResource(R.drawable.bg_card_border_active)
     }
 
     private fun validateAllInputs(): Boolean {
@@ -346,5 +348,6 @@ class EditUserInfoFragment : BaseFragment<FragmentEditUserInfoBinding>(
         binding.etWeight.setText(user.memberWeight?.toInt()?.toString() ?: "")
         binding.etHeight.setText(user.memberHeight?.toInt()?.toString() ?: "")
         binding.tvGender.text = if (user.memberGender == "남성") "남성" else "여성"
+        binding.tvGym.setText(user.gymName)
     }
 }

@@ -8,7 +8,7 @@ import com.ssafy.presentation.databinding.ItemMeasureRecordBinding
 import com.ssafy.presentation.util.CommonUtils
 
 class MeasureListAdapter(
-    private val items: List<MeasureRecordItem>,
+    private var items: List<MeasureRecordItem>,
     private val onItemClick: (MeasureRecordItem,Int) -> Unit // 클릭 리스너 콜백 추가
 ) : RecyclerView.Adapter<MeasureListAdapter.MeasureViewHolder>() {
 
@@ -37,4 +37,9 @@ class MeasureListAdapter(
     }
 
     override fun getItemCount(): Int = items.size
+
+    fun updateList(newList: List<MeasureRecordItem>) {
+        this.items = newList
+        notifyDataSetChanged()
+    }
 }
