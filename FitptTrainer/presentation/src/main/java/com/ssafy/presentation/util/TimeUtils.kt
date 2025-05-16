@@ -1,6 +1,7 @@
 package com.ssafy.presentation.util
 
 import java.time.LocalDate
+import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
 object TimeUtils {
@@ -20,5 +21,15 @@ object TimeUtils {
         val endTime = "${selectedDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))}T${endHour.toString().padStart(2, '0')}:00:00"
 
         return Pair(startTime, endTime)
+    }
+
+    fun addOneHour(timeStr: String): String {
+        val formatter = DateTimeFormatter.ofPattern("HH:mm")
+
+        val time = LocalTime.parse(timeStr, formatter)
+
+        val newTime = time.plusHours(1)
+
+        return newTime.format(formatter)
     }
 }
