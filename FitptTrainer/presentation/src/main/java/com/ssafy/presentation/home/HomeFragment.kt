@@ -64,6 +64,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
         binding.rvMemberSchedule.apply {
             scheduleAdapter = HomeAdapter { scheduleWithMemberInfo ->
                 val trainerId = scheduleWithMemberInfo.trainerId
+                val memberId = scheduleWithMemberInfo.memberId
                 val scheduleId = scheduleWithMemberInfo.scheduleId
                 val memberName = scheduleWithMemberInfo.memberName
 
@@ -75,6 +76,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
 
                 val action = HomeFragmentDirections.actionHomeFragmentToScheduleEditFragment(
                     scheduleId = scheduleId,
+                    memberId = memberId,
                     trainerId = trainerId,
                     memberName = memberName,
                     startTime = startTime,
