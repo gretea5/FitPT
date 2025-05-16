@@ -11,6 +11,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.flexbox.FlexboxLayout
 import com.kizitonwose.calendar.core.CalendarDay
@@ -70,10 +71,12 @@ class ScheduleEditFragment : BaseFragment<FragmentScheduleEditBinding>(
     private var selectedButton: Button? = null
 
     private var selectedDate: LocalDate? = null
+    private var scheduleId: Long? = null
     private var trainerId: Long? = null
     private var memberName: String? = null
     private var startTime: String? = null
     private var endTime: String? = null
+    private var scheduleContent: String? = null
 
     private val clickListener = View.OnClickListener { view ->
         val button = view as Button
@@ -100,14 +103,18 @@ class ScheduleEditFragment : BaseFragment<FragmentScheduleEditBinding>(
     }
 
     private fun initArgs() {
+        selectedDate = LocalDate.parse(args.selectedDate)
+
+        scheduleId = args.scheduleId
         trainerId = args.trainerId
         memberName = args.memberName
         startTime = args.startTime
         endTime = args.endTime
-        selectedDate = LocalDate.parse(args.selectedDate)
+        scheduleContent = args.scheduleContent
 
         binding.tvMemberName.text = memberName
         binding.tvTimeInfo.text = "$startTime ~ $endTime"
+        binding.etDetail.setText(scheduleContent.toString())
     }
 
     private fun initCalendar() {
@@ -203,6 +210,14 @@ class ScheduleEditFragment : BaseFragment<FragmentScheduleEditBinding>(
                 updateScheduleButtonColors(schedules, timeButtonsMap)
             }
         }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.deletedScheduleId.collect { scheduleId ->
+                scheduleId?.let {
+                    findNavController().popBackStack()
+                }
+            }
+        }
     }
 
     private fun initButtonView() {
@@ -283,5 +298,9 @@ class ScheduleEditFragment : BaseFragment<FragmentScheduleEditBinding>(
         }
     }
 
-    private fun initEvent() {}
+    private fun initEvent() {
+        binding.btnDelete.setOnClickListener {
+            scheduleId?.let { viewModel.deleteSchedule(it) }
+        }
+    }
 }
