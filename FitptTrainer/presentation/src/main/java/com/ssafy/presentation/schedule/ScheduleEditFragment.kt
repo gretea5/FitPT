@@ -67,7 +67,7 @@ class ScheduleEditFragment : BaseFragment<FragmentScheduleEditBinding>(
     )
 
     private val timeButtonsMap = mutableMapOf<String, Button>()
-    private val selectedButtons = mutableListOf<Button>()
+    private var selectedButton: Button? = null
 
     private var selectedDate: LocalDate? = null
     private var trainerId: Long? = null
@@ -78,12 +78,14 @@ class ScheduleEditFragment : BaseFragment<FragmentScheduleEditBinding>(
     private val clickListener = View.OnClickListener { view ->
         val button = view as Button
 
+        selectedButton?.let { it.isSelected = false }
+
         if (button.isSelected) {
             button.isSelected = false
-            selectedButtons.remove(button)
+            selectedButton = null
         } else {
             button.isSelected = true
-            selectedButtons.add(button)
+            selectedButton = button
         }
     }
 
@@ -110,7 +112,6 @@ class ScheduleEditFragment : BaseFragment<FragmentScheduleEditBinding>(
 
     private fun initCalendar() {
         val currentMonth = YearMonth.now()
-        val today = LocalDate.now()
 
         val startMonth = currentMonth.minusMonths(120)
         val endMonth = currentMonth.plusMonths(120)
@@ -194,11 +195,6 @@ class ScheduleEditFragment : BaseFragment<FragmentScheduleEditBinding>(
 
             setup(startMonth, endMonth, firstDayOfWeek)
             scrollToMonth(currentMonth)
-
-            monthScrollListener = { calendarMonth ->
-                val monthYear = "${calendarMonth.yearMonth.year}/${calendarMonth.yearMonth.monthValue}월"
-                binding.tvMonthYear.text = monthYear
-            }
         }
     }
 
@@ -278,6 +274,7 @@ class ScheduleEditFragment : BaseFragment<FragmentScheduleEditBinding>(
                 button.apply {
                     if (timeKey == startTime) {
                         isSelected = true
+                        selectedButton = button
                     } else {
                         setBackgroundResource(R.drawable.bg_stroke_gray_8dp)
                         setTextColor(ContextCompat.getColor(button.context, R.color.main_gray))
