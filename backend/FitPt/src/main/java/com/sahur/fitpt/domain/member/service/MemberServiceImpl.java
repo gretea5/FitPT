@@ -3,6 +3,7 @@ package com.sahur.fitpt.domain.member.service;
 import com.sahur.fitpt.core.constant.ErrorCode;
 import com.sahur.fitpt.core.exception.CustomException;
 import com.sahur.fitpt.db.entity.Admin;
+import com.sahur.fitpt.db.entity.FcmToken;
 import com.sahur.fitpt.db.entity.Member;
 import com.sahur.fitpt.db.entity.Trainer;
 import com.sahur.fitpt.db.repository.AdminRepository;
@@ -13,6 +14,8 @@ import com.sahur.fitpt.domain.member.dto.MemberResponseDto;
 import com.sahur.fitpt.domain.member.dto.MemberPartialUpdateDto;
 import com.sahur.fitpt.domain.member.dto.MemberSignUpResponseDto;
 import com.sahur.fitpt.domain.member.validator.MemberValidator;
+import org.springframework.data.redis.core.RedisTemplate;
+import com.sahur.fitpt.db.repository.FcmTokenRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -29,6 +32,8 @@ public class MemberServiceImpl implements MemberService {
     private final TrainerRepository trainerRepository;
     private final AdminRepository adminRepository;
     private final MemberValidator memberValidator;
+    private final FcmTokenRepository fcmTokenRepository;
+    private final RedisTemplate<String, String> redisTemplate;
 
     @Override
     @Transactional
@@ -58,7 +63,6 @@ public class MemberServiceImpl implements MemberService {
 
         Member savedMember = memberRepository.save(member);
         log.info("새로운 회원이 등록되었습니다: id={}, name={}", savedMember.getMemberId(), savedMember.getMemberName());
-
         return MemberSignUpResponseDto.from(savedMember, "dummy_access_token", "dummy_refresh_token");
     }
 
@@ -132,10 +136,28 @@ public class MemberServiceImpl implements MemberService {
 
         memberValidator.validateMemberExists(member, memberId);
 
-        member.delete();
-        log.info("회원이 삭제되었습니다: id={}", memberId);
+        try {
+            // FCM 토큰 삭제
+            List<FcmToken> fcmTokens = fcmTokenRepository.findByMember_MemberId(memberId);
+            fcmTokenRepository.deleteAll(fcmTokens);
 
-        return memberId;
+            // 리프레시 토큰 삭제
+            String redisKey = "RT:" + memberId;
+            Boolean isDeleted = redisTemplate.delete(redisKey);
+            if (Boolean.TRUE.equals(isDeleted)) {
+                log.debug("리프레시 토큰 삭제 완료: {}", redisKey);
+            }
+
+            // 회원 삭제 처리
+            member.delete();
+
+            log.info("회원이 탈퇴처리 되었습니다: id={}", memberId);
+
+            return memberId;
+        } catch (Exception e) {
+            log.error("회원 탈퇴 처리 중 오류 발생: {}", e.getMessage());
+            throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @Override
