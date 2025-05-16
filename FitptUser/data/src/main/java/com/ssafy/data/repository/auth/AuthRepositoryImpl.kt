@@ -46,6 +46,7 @@ internal class AuthRepositoryImpl @Inject constructor(
                         emit(ResponseStatus.Success(result.data.toDomainModel()))
                     }
                     is ApiResponse.Error -> {
+                        Log.d(TAG,result.error.toDomainModel().toString())
                         emit(ResponseStatus.Error(result.error.toDomainModel()))
                     }
                 }

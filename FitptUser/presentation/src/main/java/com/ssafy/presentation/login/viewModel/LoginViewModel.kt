@@ -47,9 +47,9 @@ class LoginViewModel @Inject constructor(
                 loginUseCase().collect { response ->
                     when (response) {
                         is ResponseStatus.Success -> {
-                            _loginState.value = LoginStatus.Success
                             dataStore.saveUserId(response.data.memberId.toLong())
                             dataStore.saveJwtToken("Bearer " + response.data.accessToken)
+                            _loginState.value = LoginStatus.Success
                         }
                         is ResponseStatus.Error -> {
                             _loginState.value = LoginStatus.Error("로그인에 실패했습니다: ${response.error.message}")
@@ -70,9 +70,9 @@ class LoginViewModel @Inject constructor(
                     Log.d(TAG,userInfo.toString())
                     when (response) {
                         is ResponseStatus.Success -> {
-                            _signUpSuccess.value = true
                             dataStore.saveUserId(response.data.memberId.toLong())
                             dataStore.saveJwtToken("Bearer " + response.data.accessToken)
+                            _signUpSuccess.value = true
                         }
                         is ResponseStatus.Error -> {
                             _signUpSuccess.value = false

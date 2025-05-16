@@ -464,18 +464,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
     }
 
     fun observeModel() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                userInfoViewModel.userInfo.collect { user ->
-                    if (user is UserInfoState.Success) {
-                        //binding.tvBodyGraph.text = user.userInfo.memberName+"님의 체성분 그래프"
-                    }
-                    else{
-                        Log.d(TAG,"실패")
-                    }
-                }
-            }
-        }
+
 
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
