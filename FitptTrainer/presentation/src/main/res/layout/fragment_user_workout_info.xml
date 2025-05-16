@@ -110,7 +110,7 @@
                 app:layout_constraintTop_toBottomOf="@id/tv_user_user_list_title" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_user_user_list"
+                android:id="@+id/rv_member_list"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_marginTop="20dp"
