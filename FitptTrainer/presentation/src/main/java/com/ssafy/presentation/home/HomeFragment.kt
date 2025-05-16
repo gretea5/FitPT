@@ -64,18 +64,23 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
         binding.rvMemberSchedule.apply {
             scheduleAdapter = HomeAdapter { scheduleWithMemberInfo ->
                 val trainerId = scheduleWithMemberInfo.trainerId
+                val scheduleId = scheduleWithMemberInfo.scheduleId
                 val memberName = scheduleWithMemberInfo.memberName
 
                 val selectedDate = TimeUtils.parseDateTime(scheduleWithMemberInfo.startTime).first
                 val startTime = TimeUtils.parseDateTime(scheduleWithMemberInfo.startTime).second
                 val endTime = TimeUtils.parseDateTime(scheduleWithMemberInfo.endTime).second
 
+                val scheduleContent = scheduleWithMemberInfo.scheduleContent
+
                 val action = HomeFragmentDirections.actionHomeFragmentToScheduleEditFragment(
+                    scheduleId = scheduleId,
                     trainerId = trainerId,
                     memberName = memberName,
                     startTime = startTime,
                     endTime = endTime,
-                    selectedDate = selectedDate
+                    selectedDate = selectedDate,
+                    scheduleContent = scheduleContent
                 )
 
                 findNavController().navigate(action)
