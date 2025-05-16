@@ -41,7 +41,7 @@ import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 import java.util.Locale
 
-private const val TAG = "ScheduleFragment_ssafy"
+private const val TAG = "ScheduleFrasgment_ssafy"
 
 @AndroidEntryPoint
 class ScheduleFragment : BaseFragment<FragmentScheduleBinding>(
@@ -220,6 +220,15 @@ class ScheduleFragment : BaseFragment<FragmentScheduleBinding>(
                 selectedButton = null
 
                 viewModel.getMonthlySchedules(formattedDate)
+
+                timeButtonsMap.values.forEach { button ->
+                    button.apply {
+                        setBackgroundResource(R.drawable.selector_button_time)
+                        setTextColor(Color.BLACK)
+                        setOnClickListener(clickListener)
+                        isEnabled = true
+                    }
+                }
             }
         }
     }
