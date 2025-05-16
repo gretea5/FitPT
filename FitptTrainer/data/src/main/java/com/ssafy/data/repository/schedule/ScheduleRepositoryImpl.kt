@@ -1,5 +1,6 @@
 package com.ssafy.data.repository.schedule
 
+import android.util.Log
 import com.ssafy.data.network.api.ScheduleService
 import com.ssafy.data.network.common.ApiResponse
 import com.ssafy.data.network.common.ApiResponseHandler
@@ -12,6 +13,7 @@ import com.ssafy.domain.repository.schedule.ScheduleRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
@@ -78,6 +80,20 @@ class ScheduleRepositoryImpl @Inject constructor(
                     }
                 }
             }.collect()
+        }
+    }
+
+    override suspend fun deleteSchedule(scheduleId: Long): Flow<ResponseStatus<Long>> {
+        Log.d(TAG, "deleteSchedule: $scheduleId")
+        return ApiResponseHandler().handle {
+            Log.d(TAG, "deleteSchedule handle: $scheduleId")
+            scheduleService.deleteSchedule(scheduleId)
+        }.map { result ->
+            Log.d(TAG, "deleteSchedule map: $result")
+            when (result) {
+                is ApiResponse.Success -> ResponseStatus.Success(result.data)
+                is ApiResponse.Error -> ResponseStatus.Error(result.error.toDomainModel())
+            }
         }
     }
 }
