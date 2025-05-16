@@ -63,6 +63,9 @@
                 android:name="trainerId"
                 app:argType="long" />
             <argument
+                android:name="memberId"
+                app:argType="long" />
+            <argument
                 android:name="memberName"
                 app:argType="string" />
             <argument
