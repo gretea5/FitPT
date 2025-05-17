@@ -346,46 +346,6 @@
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/tv_user_info_detail_weight" />
 
-                            <TextView
-                                android:id="@+id/tv_user_info_detail_fat"
-                                style="@style/Font_Medium_20_main_black"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="4dp"
-                                android:text="체지방률"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/tv_user_info_detail_height" />
-
-                            <TextView
-                                android:id="@+id/tv_user_info_detail_fat_content"
-                                style="@style/Font_Medium_20_main_black"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="4dp"
-                                android:text="15%"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/tv_user_info_detail_height" />
-
-                            <TextView
-                                android:id="@+id/tv_user_info_detail_muscles"
-                                style="@style/Font_Medium_20_main_black"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="4dp"
-                                android:text="근육량"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/tv_user_info_detail_fat" />
-
-                            <TextView
-                                android:id="@+id/tv_user_info_detail_muscles_content"
-                                style="@style/Font_Medium_20_main_black"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="4dp"
-                                android:text="20kg"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/tv_user_info_detail_fat" />
-
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
                     </androidx.core.widget.NestedScrollView>
