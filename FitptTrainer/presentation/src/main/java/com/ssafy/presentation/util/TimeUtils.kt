@@ -43,4 +43,11 @@ object TimeUtils {
             return "날짜 형식 오류"
         }
     }
+
+    fun formatDateToMonthDay(dateString: String): String {
+        val dateTime = LocalDateTime.parse(dateString)
+        val formatter = DateTimeFormatter.ofPattern("MM/dd")
+
+        return dateTime.format(formatter)
+    }
 }
