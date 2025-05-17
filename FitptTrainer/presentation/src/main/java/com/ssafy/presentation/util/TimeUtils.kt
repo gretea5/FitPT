@@ -1,15 +1,15 @@
 package com.ssafy.presentation.util
 
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
 object TimeUtils {
     fun parseDateTime(dateTimeString: String): Pair<String, String> {
-            // "T"를 기준으로 날짜와 시간 분리
             val parts = dateTimeString.split("T")
-            val date = parts[0]  // "2025-05-17"
-            val time = parts[1].substring(0, 5)  // "17:30" (초 부분 제거)
+            val date = parts[0]
+            val time = parts[1].substring(0, 5)
 
             return Pair(date, time)
         }
@@ -31,5 +31,16 @@ object TimeUtils {
         val newTime = time.plusHours(1)
 
         return newTime.format(formatter)
+    }
+
+    fun formatDateTime(dateTimeString: String): String {
+        try {
+            val dateTime = LocalDateTime.parse(dateTimeString)
+            val formatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 a hh:mm")
+
+            return dateTime.format(formatter)
+        } catch (e: Exception) {
+            return "날짜 형식 오류"
+        }
     }
 }
