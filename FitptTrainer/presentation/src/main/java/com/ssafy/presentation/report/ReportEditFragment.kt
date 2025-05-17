@@ -16,6 +16,7 @@ import com.ssafy.presentation.R
 import com.ssafy.presentation.base.BaseFragment
 import com.ssafy.presentation.databinding.FragmentReportEditBinding
 import com.ssafy.presentation.report.adapter.ReportViewPagerAdapter
+import com.ssafy.presentation.report.viewmodel.MeasureViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import com.ssafy.presentation.report.viewmodel.ReportViewModel
 
@@ -31,6 +32,7 @@ class ReportEditFragment : BaseFragment<FragmentReportEditBinding>(
     
     private lateinit var viewPagerAdapter: ReportViewPagerAdapter
     private val viewModel: ReportViewModel by activityViewModels()
+    private val measureViewModel: MeasureViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -38,6 +40,7 @@ class ReportEditFragment : BaseFragment<FragmentReportEditBinding>(
         initEvent()
         
         memberId = args.memberId
+        measureViewModel.updateMember(memberId!!.toInt())
         Log.d(TAG, "onViewCreated: $memberId")
     }
 

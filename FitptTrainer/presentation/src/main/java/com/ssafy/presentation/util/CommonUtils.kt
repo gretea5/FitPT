@@ -5,6 +5,8 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import androidx.core.content.ContextCompat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 object CommonUtils {
 
@@ -54,4 +56,10 @@ object CommonUtils {
         return spannableString
     }
 
+    fun formatMeasureCreatedAt(createdAt: String): String {
+        val inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        val outputFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd")
+        val date = LocalDate.parse(createdAt, inputFormatter)
+        return date.format(outputFormatter)
+    }
 }

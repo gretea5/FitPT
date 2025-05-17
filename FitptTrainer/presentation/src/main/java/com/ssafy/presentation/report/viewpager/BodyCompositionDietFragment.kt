@@ -14,7 +14,9 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
 import com.onesoftdigm.fitrus.device.sdk.FitrusBleDelegate
 import com.onesoftdigm.fitrus.device.sdk.FitrusDevice
@@ -23,9 +25,11 @@ import com.ssafy.domain.model.measure.CompositionDetail
 import com.ssafy.presentation.R
 import com.ssafy.presentation.base.BaseFragment
 import com.ssafy.presentation.databinding.FragmentBodyCompositionDietBinding
+import com.ssafy.presentation.home.viewmodel.HomeViewModel
 import com.ssafy.presentation.report.ReportEditFragmentArgs
 import com.ssafy.presentation.report.viewmodel.MeasureViewModel
 import com.ssafy.presentation.report.viewmodel.ReportViewModel
+import com.ssafy.presentation.report.viewmodel.UserInfoState
 import com.ssafy.presentation.util.CommonUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -38,15 +42,14 @@ class BodyCompositionDietFragment : BaseFragment<FragmentBodyCompositionDietBind
 ), FitrusBleDelegate {
     private val viewModel: ReportViewModel by activityViewModels()
 
+
     private val measureViewModel : MeasureViewModel by activityViewModels()
 
     private lateinit var manager: FitrusDevice
     private var measuring: Boolean = false
     private var type: String = "comp"
     private lateinit var dialog: ProgressDialog
-    private val args: ReportEditFragmentArgs by navArgs()
     private var memberId : Long? = 0
-
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -61,7 +64,8 @@ class BodyCompositionDietFragment : BaseFragment<FragmentBodyCompositionDietBind
 
     fun initial(){
         manager = FitrusDevice(requireActivity(), this, "normal_key")
-        memberId = args.memberId
+        memberId = measureViewModel.memberId.value.toLong()
+        measureViewModel.fetchUser(memberId!!.toInt())
     }
 
     fun initEvent() {
@@ -135,22 +139,17 @@ class BodyCompositionDietFragment : BaseFragment<FragmentBodyCompositionDietBind
         when (type) {
             "comp" -> {
                 lifecycleScope.launch {
-                    //val user = userDataStoreSource.user.first()!!
-                    /*Log.d(TAG,user.memberBirth.toString())
-                    manager.startFitrusCompMeasure(
-                        Gender.valueOf(if (user.memberGender == "남성") "MALE" else "FEMALE"),
-                        user.memberHeight.toFloat(),
-                        binding.etWeight.text.toString().toFloat(),
-                        CommonUtils.formatMeasureCreatedAt(user.memberBirth),
-                        0.0f,
-                    )*/
-                    manager.startFitrusCompMeasure(
-                        Gender.valueOf("MALE"),
-                        170.0f,
-                        binding.etWeightInput.text.toString().toFloat(),
-                        "2020/05/03",
-                        0.0f,
-                    )
+                    val state = measureViewModel.userInfo.value
+                    if (state is UserInfoState.Success) {
+                        val user = state.userInfo
+                        manager.startFitrusCompMeasure(
+                            Gender.valueOf(if (user.memberGender == "남성") "MALE" else "FEMALE"),
+                            user.memberHeight.toFloat(),
+                            binding.etWeightInput.text.toString().toFloat(),
+                            CommonUtils.formatMeasureCreatedAt(user.memberBirth),
+                            0.0f,
+                        )
+                    }
                 }
             }
         }
@@ -211,5 +210,4 @@ class BodyCompositionDietFragment : BaseFragment<FragmentBodyCompositionDietBind
     override fun handleFitrusTempMeasured(result: Map<String, String>) {
         TODO("Not yet implemented")
     }
-
 }
