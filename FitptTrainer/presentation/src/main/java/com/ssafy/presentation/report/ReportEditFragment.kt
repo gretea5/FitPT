@@ -8,17 +8,23 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import com.ssafy.data.datasource.TrainerDataStoreSource
 import com.ssafy.presentation.R
 import com.ssafy.presentation.base.BaseFragment
 import com.ssafy.presentation.databinding.FragmentReportEditBinding
 import com.ssafy.presentation.report.adapter.ReportViewPagerAdapter
+import com.ssafy.presentation.report.viewmodel.CreateBodyInfoState
 import com.ssafy.presentation.report.viewmodel.MeasureViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import com.ssafy.presentation.report.viewmodel.ReportViewModel
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 private const val TAG = "ReportEditFragment_FitPT"
 
@@ -33,6 +39,8 @@ class ReportEditFragment : BaseFragment<FragmentReportEditBinding>(
     private lateinit var viewPagerAdapter: ReportViewPagerAdapter
     private val viewModel: ReportViewModel by activityViewModels()
     private val measureViewModel: MeasureViewModel by activityViewModels()
+    @Inject
+    lateinit var trainerDataStoreSource: TrainerDataStoreSource
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -48,6 +56,29 @@ class ReportEditFragment : BaseFragment<FragmentReportEditBinding>(
         binding.apply {
             ibReportBack.setOnClickListener {
                 findNavController().navigate(R.id.action_reportEditFragment_to_userWorkoutInfoFragment)
+            }
+        }
+        binding.btnAddReport.setOnClickListener {
+            val state = measureViewModel.measureCreateInfo.value
+            if(state is CreateBodyInfoState.Success){
+                val compositionLog = state.measureCreate
+                Log.d(TAG,compositionLog.toString())
+            }
+            lifecycleScope.launch {
+                val trainerId = trainerDataStoreSource.trainerId.first()
+                if(!viewModel.reportExercises.value!!.isEmpty()&&state is CreateBodyInfoState.Success&&!viewModel.reportComment.value.isNullOrEmpty()){
+                    showToast("다 측정이 되었습니다.")
+                    
+                }
+                else if(viewModel.reportExercises.value!!.isEmpty()){
+                    showToast("수행한 운동을 작성해주세요")
+                }
+                else if(state is CreateBodyInfoState.Initial){
+                    showToast("체성분 측정을 해주세요")
+                }
+                else if(viewModel.reportComment.value.isNullOrEmpty()){
+                    showToast("식단 코칭을 작성해주세요")
+                }
             }
         }
     }

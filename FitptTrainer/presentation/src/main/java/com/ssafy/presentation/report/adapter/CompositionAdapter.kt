@@ -20,8 +20,8 @@ class CompositionAdapter(private val items: List<CompositionCondition>) : Recycl
         val item = items[position]
         with(holder.binding) {
             tvBodyMeasureTitle.text = item.bodyTitle
-            scoreBotong.text = item.bodyCondition
-            tvStatus.text = "${item.count}점"
+            tvBotongScore.text = item.bodyCondition
+            tvStatus.text = "${item.bodyCondition}"
         }
     }
 

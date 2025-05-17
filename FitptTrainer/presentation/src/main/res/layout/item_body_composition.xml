@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
     <!-- "몸무게" TextView -->
@@ -13,282 +13,210 @@
         android:id="@+id/cl_measure_detail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
+        android:layout_marginStart="36dp"
         android:background="@android:color/white"
+        android:paddingVertical="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/tv_body_measure_title"
         app:layout_constraintTop_toTopOf="parent">
 
-        <!-- Container card with rounded corners -->
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
+        <!-- 첫 번째 항목: 미달 -->
+        <LinearLayout
+            android:id="@+id/item_midal"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            app:cardElevation="2dp"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:gravity="center"
+            android:orientation="vertical"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="80dp">
+            <TextView
+                android:id="@+id/tv_midal_score"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:text="55점"
+                android:textColor="#000000"
+                android:textSize="14sp" />
 
-                <!-- 미달 Button -->
-
-                <!-- Vertical Divider 1 -->
-                <TextView
-                    android:id="@+id/score_botong2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="79.8"
-                    android:textColor="@android:color/black"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toTopOf="@+id/btn_botong"
-                    app:layout_constraintEnd_toStartOf="@+id/guideline2"
-                    app:layout_constraintStart_toStartOf="@+id/guideline1"
-                    app:layout_constraintTop_toTopOf="parent" />
+            <androidx.cardview.widget.CardView
+                android:id="@+id/btn_midal"
+                android:layout_width="120dp"
+                android:layout_height="40dp"
+                app:cardBackgroundColor="#FFA7A7"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp">
 
                 <TextView
-                    android:id="@+id/score_botong3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="79.8"
-                    android:textColor="@android:color/black"
+                    android:layout_gravity="center"
+                    android:text="미달"
+                    android:textColor="@android:color/white"
                     android:textSize="16sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toTopOf="@+id/btn_botong"
-                    app:layout_constraintEnd_toStartOf="@+id/guideline3"
-                    app:layout_constraintHorizontal_bias="0.492"
-                    app:layout_constraintStart_toStartOf="@+id/guideline2"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.555" />
+                    android:textStyle="bold" />
+
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+
+        <!-- Divider 1 -->
+        <View
+            android:id="@+id/divider1"
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:layout_marginHorizontal="4dp"
+            android:background="#DDDDDD"
+            app:layout_constraintBottom_toBottomOf="@+id/item_midal"
+            app:layout_constraintStart_toEndOf="@id/item_midal"
+            app:layout_constraintTop_toTopOf="@+id/item_midal" />
+
+        <!-- 두 번째 항목: 정상 -->
+        <LinearLayout
+            android:id="@+id/item_botong"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintStart_toEndOf="@id/divider1"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/tv_botong_score"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:text="77점"
+                android:textColor="#000000"
+                android:textSize="14sp" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/btn_botong"
+                android:layout_width="120dp"
+                android:layout_height="40dp"
+                app:cardBackgroundColor="#7ECEF4"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp">
 
                 <TextView
-                    android:id="@+id/score_botong4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="79.8"
-                    android:textColor="@android:color/black"
+                    android:layout_gravity="center"
+                    android:text="정상"
+                    android:textColor="@android:color/white"
                     android:textSize="16sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toTopOf="@+id/btn_botong"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.29"
-                    app:layout_constraintStart_toStartOf="@+id/guideline3"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.526" />
+                    android:textStyle="bold" />
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+
+        <!-- Divider 2 -->
+        <View
+            android:id="@+id/divider2"
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:layout_marginHorizontal="4dp"
+            android:background="#DDDDDD"
+            app:layout_constraintBottom_toBottomOf="@+id/item_botong"
+            app:layout_constraintStart_toEndOf="@id/item_botong"
+            app:layout_constraintTop_toTopOf="@+id/item_botong" />
+
+        <!-- 세 번째 항목: 나쁨 -->
+        <LinearLayout
+            android:id="@+id/item_chogwa"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintStart_toEndOf="@id/divider2"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/tv_chogwa_score"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:text="33점"
+                android:textColor="#000000"
+                android:textSize="14sp" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/btn_chogwa"
+                android:layout_width="120dp"
+                android:layout_height="40dp"
+                app:cardBackgroundColor="#F44336"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp">
 
                 <TextView
-                    android:id="@+id/score_botong5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="79.8"
-                    android:textColor="@android:color/black"
+                    android:layout_gravity="center"
+                    android:text="나쁨"
+                    android:textColor="@android:color/white"
                     android:textSize="16sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toTopOf="@+id/btn_botong"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.804"
-                    app:layout_constraintStart_toStartOf="@+id/guideline3"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.526" />
+                    android:textStyle="bold" />
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
 
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/btn_midal"
-                    android:layout_width="150dp"
-                    android:layout_height="40dp"
-                    android:layout_marginStart="80dp"
-                    android:layout_marginEnd="4dp"
-                    app:cardBackgroundColor="#FFA7A7"
-                    app:cardCornerRadius="12dp"
-                    app:cardElevation="0dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/guideline1"
-                    app:layout_constraintHorizontal_bias="0.952"
-                    app:layout_constraintStart_toStartOf="parent">
+        <!-- Divider 3 -->
+        <View
+            android:id="@+id/divider3"
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:layout_marginHorizontal="4dp"
+            android:background="#DDDDDD"
+            app:layout_constraintBottom_toBottomOf="@+id/item_chogwa"
+            app:layout_constraintStart_toEndOf="@id/item_chogwa"
+            app:layout_constraintTop_toTopOf="parent" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="미달"
-                        android:textColor="@android:color/white"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
+        <!-- 네 번째 항목: 매우 나쁨 -->
+        <LinearLayout
+            android:id="@+id/item_many_chogwa"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintStart_toEndOf="@id/divider3"
+            app:layout_constraintTop_toTopOf="parent">
 
-                </androidx.cardview.widget.CardView>
+            <TextView
+                android:id="@+id/tv_many_chogwa_score"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:text="15점"
+                android:textColor="#000000"
+                android:textSize="14sp" />
 
-                <View
-                    android:id="@+id/divider1"
-                    android:layout_width="1dp"
-                    android:layout_height="0dp"
-                    android:background="#E0E0E0"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="@+id/guideline1"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <!-- 보통 Button with Score -->
-
-                <!-- Vertical Divider 2 -->
-
-                <View
-                    android:id="@+id/divider2"
-                    android:layout_width="1dp"
-                    android:layout_height="0dp"
-                    android:background="#E0E0E0"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="@+id/guideline2"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <!-- 초과 Button -->
-
-                <!-- Vertical Divider 3 -->
-
-                <!-- 많이초과 Button -->
-
-                <!-- Guidelines for proportional layout -->
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/btn_chogwa"
-                    android:layout_width="150dp"
-                    android:layout_height="40dp"
-                    android:layout_marginStart="4dp"
-                    app:cardBackgroundColor="#F44336"
-                    app:cardCornerRadius="12dp"
-                    app:cardElevation="0dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/btn_many_chogwa"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toEndOf="@+id/guideline2">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="나쁨"
-                        android:textColor="@android:color/white"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-
-                </androidx.cardview.widget.CardView>
-
-                <View
-                    android:id="@+id/divider3"
-                    android:layout_width="1dp"
-                    android:layout_height="0dp"
-                    android:layout_marginStart="188dp"
-                    android:background="#E0E0E0"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="@+id/guideline3"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="1.0" />
-
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/btn_many_chogwa"
-                    android:layout_width="150dp"
-                    android:layout_height="40dp"
-                    android:layout_marginStart="4dp"
-                    android:layout_marginEnd="4dp"
-                    android:layout_marginBottom="4dp"
-                    app:cardBackgroundColor="#F44336"
-                    app:cardCornerRadius="12dp"
-                    app:cardElevation="0dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toEndOf="@+id/guideline3">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="매우 나쁨"
-                        android:textColor="@android:color/white"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-                </androidx.cardview.widget.CardView>
-
-                <androidx.constraintlayout.widget.Guideline
-                    android:id="@+id/guideline1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:layout_constraintGuide_begin="149dp" />
-
-                <androidx.constraintlayout.widget.Guideline
-                    android:id="@+id/guideline2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:layout_constraintGuide_begin="321dp" />
-
-                <androidx.constraintlayout.widget.Guideline
-                    android:id="@+id/guideline3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:layout_constraintGuide_begin="285dp" />
+            <androidx.cardview.widget.CardView
+                android:id="@+id/btn_many_chogwa"
+                android:layout_width="120dp"
+                android:layout_height="40dp"
+                app:cardBackgroundColor="#C62828"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp">
 
                 <TextView
-                    android:id="@+id/score_botong"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="79.8"
-                    android:textColor="@android:color/black"
+                    android:layout_gravity="center"
+                    android:text="매우 나쁨"
+                    android:textColor="@android:color/white"
                     android:textSize="16sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toTopOf="@+id/btn_botong"
-                    app:layout_constraintEnd_toStartOf="@+id/guideline1"
-                    app:layout_constraintHorizontal_bias="0.476"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.5" />
+                    android:textStyle="bold" />
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
 
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/btn_botong"
-                    android:layout_width="150dp"
-                    android:layout_height="40dp"
-                    app:cardBackgroundColor="#7ECEF4"
-                    app:cardCornerRadius="12dp"
-                    app:cardElevation="0dp"
-                    tools:layout_editor_absoluteX="158dp"
-                    tools:layout_editor_absoluteY="41dp">
-
-                    <TextView
-                        android:id="@+id/text_botong"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="정상"
-                        android:textColor="@android:color/white"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-                </androidx.cardview.widget.CardView>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </androidx.cardview.widget.CardView>
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <TextView
-        android:id="@+id/tv_body_measure_title"
-        android:layout_width="83dp"
-        android:layout_height="20dp"
-        android:layout_marginStart="24dp"
-        android:fontFamily="@font/pretendard_bold"
-        android:text="몸무게"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/cl_measure_detail"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
         android:id="@+id/status_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
+        android:layout_marginStart="50dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/cl_measure_detail"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -309,5 +237,16 @@
             android:textSize="14sp" />
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_body_measure_title"
+        android:layout_width="83dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="32dp"
+        android:fontFamily="@font/pretendard_bold"
+        android:text="몸무게"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

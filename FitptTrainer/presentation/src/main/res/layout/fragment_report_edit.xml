@@ -37,35 +37,22 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cv_report_add_report"
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_add_report"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/main_gray"
-            app:cardCornerRadius="15dp"
+            android:text="작성 완료"
+            android:textColor="@color/white"
+            android:textAppearance="@style/Font_Bold_14_main_white"
+            app:cornerRadius="15dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="20dp"
-                android:paddingVertical="16dp">
-
-                <TextView
-                    style="@style/Font_Bold_14_main_white"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="작성 완료"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </androidx.cardview.widget.CardView>
+            app:layout_constraintTop_toTopOf="parent"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="16dp"
+            />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
