@@ -1,4 +1,4 @@
-package com.ssafy.presentation.user.viewmodel
+package com.ssafy.presentation.member.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.ViewModel

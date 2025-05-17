@@ -14,7 +14,7 @@
 
     <fragment
         android:id="@+id/userWorkoutInfoFragment"
-        android:name="com.ssafy.presentation.user.UserWorkoutInfoFragment"
+        android:name="com.ssafy.presentation.member.UserWorkoutInfoFragment"
         android:label="fragment_userWorkoutInfo"
         tools:layout="@layout/fragment_user_workout_info" >
         <action

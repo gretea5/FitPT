@@ -1,4 +1,4 @@
-package com.ssafy.presentation.user.adapter
+package com.ssafy.presentation.member.adapter
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater

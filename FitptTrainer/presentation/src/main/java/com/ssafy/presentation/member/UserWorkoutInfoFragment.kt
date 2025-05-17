@@ -1,4 +1,4 @@
-package com.ssafy.presentation.user
+package com.ssafy.presentation.member
 
 import android.graphics.Color
 import android.os.Bundle
@@ -20,10 +20,10 @@ import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.ssafy.presentation.R
 import com.ssafy.presentation.base.BaseFragment
 import com.ssafy.presentation.databinding.FragmentUserWorkoutInfoBinding
-import com.ssafy.presentation.user.adapter.UserWorkoutInfoMemberListAdapter
-import com.ssafy.presentation.user.adapter.UserWorkoutInfoMonthAdapter
-import com.ssafy.presentation.user.adapter.UserWorkoutInfoReportListAdapter
-import com.ssafy.presentation.user.viewmodel.UserWorkoutInfoViewModel
+import com.ssafy.presentation.member.adapter.UserWorkoutInfoMemberListAdapter
+import com.ssafy.presentation.member.adapter.UserWorkoutInfoMonthAdapter
+import com.ssafy.presentation.member.adapter.UserWorkoutInfoReportListAdapter
+import com.ssafy.presentation.member.viewmodel.UserWorkoutInfoViewModel
 import com.ssafy.presentation.util.CommonUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
