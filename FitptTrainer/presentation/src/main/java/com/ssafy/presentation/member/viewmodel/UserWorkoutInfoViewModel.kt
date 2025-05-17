@@ -4,8 +4,10 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ssafy.domain.model.base.ResponseStatus
+import com.ssafy.domain.model.measure.CompositionItem
 import com.ssafy.domain.model.member.MemberInfo
 import com.ssafy.domain.model.report.ReportList
+import com.ssafy.domain.usecase.measure.GetBodyListUsecase
 import com.ssafy.domain.usecase.member.GetMemberInfoByIdUseCase
 import com.ssafy.domain.usecase.member.GetMembersUseCase
 import com.ssafy.domain.usecase.report.GetReportListUsecase
@@ -22,7 +24,8 @@ private const val TAG = "UserWorkoutInfoViewMode_ssafy"
 class UserWorkoutInfoViewModel @Inject constructor(
     private val getMembersUseCase: GetMembersUseCase,
     private val getReportListUseCase: GetReportListUsecase,
-    private val getMemberInfoByIdUseCase: GetMemberInfoByIdUseCase
+    private val getMemberInfoByIdUseCase: GetMemberInfoByIdUseCase,
+    private val getBodyListUseCase: GetBodyListUsecase
 ) : ViewModel() {
     private val _workoutState = MutableStateFlow<UserWorkoutInfoStatus>(UserWorkoutInfoStatus.Idle)
     val workoutState: StateFlow<UserWorkoutInfoStatus> = _workoutState.asStateFlow()
@@ -35,6 +38,9 @@ class UserWorkoutInfoViewModel @Inject constructor(
 
     private val _reports = MutableStateFlow<List<ReportList>>(emptyList())
     val reports: StateFlow<List<ReportList>> = _reports.asStateFlow()
+
+    private val _composition = MutableStateFlow<List<CompositionItem>>(emptyList())
+    val composition: StateFlow<List<CompositionItem>> = _composition.asStateFlow()
 
     fun getMembers() {
         viewModelScope.launch {
@@ -102,6 +108,34 @@ class UserWorkoutInfoViewModel @Inject constructor(
 
             } catch (e: Exception) {
                 Log.d(TAG, "getMembers exception ${e.message}")
+                _workoutState.value = UserWorkoutInfoStatus.Error("서버와의 연결에 실패했습니다.")
+            }
+        }
+    }
+
+    fun getComposition(memberId: Long) {
+        viewModelScope.launch {
+            try {
+                getBodyListUseCase(
+                    memberId = memberId.toInt(),
+                    sort = "createdAt",
+                    order = "desc"
+                ).collect { response ->
+                    Log.d(TAG, "getComposition: ${response}")
+
+                    when(response) {
+                        is ResponseStatus.Success -> {
+                            _composition.value = response.data
+                            _workoutState.value = UserWorkoutInfoStatus.Success
+                        }
+                        is ResponseStatus.Error -> {
+                            _workoutState.value =
+                                UserWorkoutInfoStatus.Error(response.error.message)
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+                Log.d(TAG, "getComposition exception ${e.message}")
                 _workoutState.value = UserWorkoutInfoStatus.Error("서버와의 연결에 실패했습니다.")
             }
         }
