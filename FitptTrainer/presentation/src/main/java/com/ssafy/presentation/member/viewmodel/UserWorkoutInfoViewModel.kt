@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.ssafy.domain.model.base.ResponseStatus
 import com.ssafy.domain.model.member.MemberInfo
 import com.ssafy.domain.model.report.ReportList
+import com.ssafy.domain.usecase.member.GetMemberInfoByIdUseCase
 import com.ssafy.domain.usecase.member.GetMembersUseCase
 import com.ssafy.domain.usecase.report.GetReportListUsecase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,13 +21,17 @@ private const val TAG = "UserWorkoutInfoViewMode_ssafy"
 @HiltViewModel
 class UserWorkoutInfoViewModel @Inject constructor(
     private val getMembersUseCase: GetMembersUseCase,
-    private val getReportListUseCase: GetReportListUsecase
+    private val getReportListUseCase: GetReportListUsecase,
+    private val getMemberInfoByIdUseCase: GetMemberInfoByIdUseCase
 ) : ViewModel() {
     private val _workoutState = MutableStateFlow<UserWorkoutInfoStatus>(UserWorkoutInfoStatus.Idle)
     val workoutState: StateFlow<UserWorkoutInfoStatus> = _workoutState.asStateFlow()
 
     private val _members = MutableStateFlow<List<MemberInfo>>(emptyList())
     val members: StateFlow<List<MemberInfo>> = _members.asStateFlow()
+
+    private val _member = MutableStateFlow<MemberInfo?>(null)
+    val member: StateFlow<MemberInfo?> = _member.asStateFlow()
 
     private val _reports = MutableStateFlow<List<ReportList>>(emptyList())
     val reports: StateFlow<List<ReportList>> = _reports.asStateFlow()
@@ -70,6 +75,31 @@ class UserWorkoutInfoViewModel @Inject constructor(
                         }
                     }
                 }
+            } catch (e: Exception) {
+                Log.d(TAG, "getMembers exception ${e.message}")
+                _workoutState.value = UserWorkoutInfoStatus.Error("서버와의 연결에 실패했습니다.")
+            }
+        }
+    }
+
+    fun getMember(memberId: Long) {
+        viewModelScope.launch {
+            try {
+                getMemberInfoByIdUseCase(memberId = memberId).collect { response ->
+                    Log.d(TAG, "getMember: ${response}")
+
+                    when(response) {
+                        is ResponseStatus.Success -> {
+                            _member.value = response.data
+                            _workoutState.value = UserWorkoutInfoStatus.Success
+                        }
+                        is ResponseStatus.Error -> {
+                            _workoutState.value =
+                                UserWorkoutInfoStatus.Error(response.error.message)
+                        }
+                    }
+                }
+
             } catch (e: Exception) {
                 Log.d(TAG, "getMembers exception ${e.message}")
                 _workoutState.value = UserWorkoutInfoStatus.Error("서버와의 연결에 실패했습니다.")
