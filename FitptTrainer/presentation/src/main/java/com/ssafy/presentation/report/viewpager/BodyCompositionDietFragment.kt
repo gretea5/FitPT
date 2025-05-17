@@ -18,15 +18,19 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.onesoftdigm.fitrus.device.sdk.FitrusBleDelegate
 import com.onesoftdigm.fitrus.device.sdk.FitrusDevice
 import com.onesoftdigm.fitrus.device.sdk.Gender
+import com.ssafy.domain.model.measure.CompositionCondition
 import com.ssafy.domain.model.measure.CompositionDetail
+import com.ssafy.domain.model.measure.CompositionItem
 import com.ssafy.presentation.R
 import com.ssafy.presentation.base.BaseFragment
 import com.ssafy.presentation.databinding.FragmentBodyCompositionDietBinding
 import com.ssafy.presentation.home.viewmodel.HomeViewModel
 import com.ssafy.presentation.report.ReportEditFragmentArgs
+import com.ssafy.presentation.report.adapter.CompositionAdapter
 import com.ssafy.presentation.report.viewmodel.CreateBodyInfoState
 import com.ssafy.presentation.report.viewmodel.GetBodyDetailInfoState
 import com.ssafy.presentation.report.viewmodel.MeasureViewModel
@@ -231,9 +235,13 @@ class BodyCompositionDietFragment : BaseFragment<FragmentBodyCompositionDietBind
                         }
                         is GetBodyDetailInfoState.Success -> {
                             Log.d(TAG,"측정 상세 값"+state.getBodydetail.toString())
+                            val bodyDetail = state.getBodydetail
+                            Log.d(TAG, "측정 상세 값: $bodyDetail")
 
-
-
+                            val list = convertToConditionList(bodyDetail)
+                            val adapter = CompositionAdapter(list)
+                            binding.rvReportMeasureResult.adapter = adapter
+                            binding.rvReportMeasureResult.layoutManager = LinearLayoutManager(requireContext())
                         }
                         is GetBodyDetailInfoState.Error -> {
 
@@ -243,5 +251,19 @@ class BodyCompositionDietFragment : BaseFragment<FragmentBodyCompositionDietBind
                 }
             }
         }
+    }
+
+    private fun convertToConditionList(data: CompositionItem): List<CompositionCondition> {
+        return listOf(
+            CompositionCondition("몸무게", data.weightLabel, data.weightCount),
+            CompositionCondition("체지방량", data.bfmLabel, data.bfmCount),
+            CompositionCondition("체지방률", data.bfpLabel, data.bfpCount),
+            CompositionCondition("골격근량", data.smmLabel, data.smmCount),
+            CompositionCondition("BMI", data.bmiLabel, data.bmiCount),
+            CompositionCondition("체수분량", data.tcwLabel, data.tcwCount),
+            CompositionCondition("단백질", data.proteinLabel, data.proteinCount),
+            CompositionCondition("무기질", data.mineralLabel, data.mineralCount),
+            CompositionCondition("세포외수분비", data.ecwRatioLabel, data.ecwRatioCount)
+        )
     }
 }
