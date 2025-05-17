@@ -233,7 +233,7 @@ class BodyCompositionDietFragment : BaseFragment<FragmentBodyCompositionDietBind
                             Log.d(TAG,"측정 상세 값"+state.getBodydetail.toString())
 
 
-                            
+
                         }
                         is GetBodyDetailInfoState.Error -> {
 
