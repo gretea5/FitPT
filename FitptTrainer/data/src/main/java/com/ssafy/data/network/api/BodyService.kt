@@ -14,7 +14,7 @@ interface BodyService {
     suspend fun getBodyList(@Query("memberId") memberId: Int,@Query("sort") sort :String,@Query("order") order: String) : Response<List<CompositionItem>>
 
     @POST("body-composition")
-    suspend fun createBody(@Body compositionDetail: CompositionDetail) : Response<Unit>
+    suspend fun createBody(@Body compositionDetail: CompositionDetail) : Response<Int>
 
     @GET("body-composition/{compositionLogId}")
     suspend fun getBodyDetailInfo(@Path("compositionLogId") compositionLogId: Int) : Response<CompositionItem>

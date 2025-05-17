@@ -21,7 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="디바이스와의 연결을 위해 위 그림처럼 전윈 버튼을 눌러주세요."
+            android:text="본인의 현재 몸무게를 설정해주세요"
             app:layout_constraintVertical_bias="0.3"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

@@ -15,12 +15,16 @@ import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.navArgs
 import com.onesoftdigm.fitrus.device.sdk.FitrusBleDelegate
 import com.onesoftdigm.fitrus.device.sdk.FitrusDevice
 import com.onesoftdigm.fitrus.device.sdk.Gender
+import com.ssafy.domain.model.measure.CompositionDetail
 import com.ssafy.presentation.R
 import com.ssafy.presentation.base.BaseFragment
 import com.ssafy.presentation.databinding.FragmentBodyCompositionDietBinding
+import com.ssafy.presentation.report.ReportEditFragmentArgs
+import com.ssafy.presentation.report.viewmodel.MeasureViewModel
 import com.ssafy.presentation.report.viewmodel.ReportViewModel
 import com.ssafy.presentation.util.CommonUtils
 import dagger.hilt.android.AndroidEntryPoint
@@ -33,11 +37,17 @@ class BodyCompositionDietFragment : BaseFragment<FragmentBodyCompositionDietBind
     R.layout.fragment_body_composition_diet
 ), FitrusBleDelegate {
     private val viewModel: ReportViewModel by activityViewModels()
+
+    private val measureViewModel : MeasureViewModel by activityViewModels()
+
     private lateinit var manager: FitrusDevice
     private var measuring: Boolean = false
     private var type: String = "comp"
     private lateinit var dialog: ProgressDialog
-    private var memberId : Long? = 7
+    private val args: ReportEditFragmentArgs by navArgs()
+    private var memberId : Long? = 0
+
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -51,6 +61,7 @@ class BodyCompositionDietFragment : BaseFragment<FragmentBodyCompositionDietBind
 
     fun initial(){
         manager = FitrusDevice(requireActivity(), this, "normal_key")
+        memberId = args.memberId
     }
 
     fun initEvent() {
@@ -64,7 +75,8 @@ class BodyCompositionDietFragment : BaseFragment<FragmentBodyCompositionDietBind
         }
 
         binding.btnWeight.setOnClickListener {
-
+            binding.clWeight.isVisible = false
+            binding.clReportBleExplanation.isVisible = true
         }
         binding.etWeightInput.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -135,7 +147,7 @@ class BodyCompositionDietFragment : BaseFragment<FragmentBodyCompositionDietBind
                     manager.startFitrusCompMeasure(
                         Gender.valueOf("MALE"),
                         170.0f,
-                        50.0f,
+                        binding.etWeightInput.text.toString().toFloat(),
                         "2020/05/03",
                         0.0f,
                     )
@@ -155,8 +167,7 @@ class BodyCompositionDietFragment : BaseFragment<FragmentBodyCompositionDietBind
 
     override fun handleFitrusCompMeasured(result: Map<String, String>) {
         if (dialog.isShowing) dialog.dismiss()
-        /*lifecycleScope.launch {
-            val user = userDataStoreSource.user.first()!!
+        lifecycleScope.launch {
             val detail = CompositionDetail(
                 bfm = result["bfm"]?.toDoubleOrNull() ?: 0.0,
                 bfp = result["bfp"]?.toDoubleOrNull() ?: 0.0,
@@ -164,15 +175,15 @@ class BodyCompositionDietFragment : BaseFragment<FragmentBodyCompositionDietBind
                 bodyAge = result["bodyAge"]?.toIntOrNull() ?: 0,
                 ecw = result["ecw"]?.toDoubleOrNull() ?: 0.0,
                 icw = result["icw"]?.toDoubleOrNull() ?: 0.0,
-                memberId = user.memberId.toLong(),
+                memberId = memberId!!.toLong(),
                 mineral = result["mineral"]?.toDoubleOrNull() ?: 0.0,
                 protein = result["protein"]?.toDoubleOrNull() ?: 0.0,
                 smm = result["smm"]?.toDoubleOrNull() ?: 0.0,
-                weight = binding.etWeight.text.toString().toDouble()
+                weight = binding.etWeightInput.text.toString().toDouble()
             )
             Log.d(TAG,"측정 값"+detail.toString())
             measureViewModel.createBody(detail)
-        }*/
+        }
         Log.d(TAG,result.toString())
         measuring = false
         showToast("측정이 완료되어 개인 측정에 추가되었습니다")
