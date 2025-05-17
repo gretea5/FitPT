@@ -17,6 +17,7 @@ import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
+import com.ssafy.domain.model.member.MemberInfo
 import com.ssafy.presentation.R
 import com.ssafy.presentation.base.BaseFragment
 import com.ssafy.presentation.databinding.FragmentUserWorkoutInfoBinding
@@ -44,6 +45,7 @@ class UserWorkoutInfoFragment : BaseFragment<FragmentUserWorkoutInfoBinding>(
         memberId = memberInfo.memberId
 
         viewModel.getReports(memberInfo.memberId.toInt())
+        viewModel.getMember(memberInfo.memberId)
     }
 
     private val useWorkoutInfoReportListAdapter = UserWorkoutInfoReportListAdapter { reportList ->
@@ -72,15 +74,29 @@ class UserWorkoutInfoFragment : BaseFragment<FragmentUserWorkoutInfoBinding>(
                 useWorkoutInfoReportListAdapter.submitList(it)
             }
         }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.member.collect {
+                initMemberView(it)
+            }
+        }
     }
 
     private fun fetchMembers() {
         viewModel.getMembers()
     }
 
+    private fun initMemberView(memberInfo: MemberInfo?) {
+        memberInfo?.let {
+            binding.tvUserInfoDetailBirthContent.text = memberInfo.memberBirth
+            binding.tvUserInfoDetailGenderContent.text = memberInfo.memberGender
+            binding.tvUserInfoDetailHeightContent.text = memberInfo.memberHeight.toString()
+            binding.tvUserInfoDetailWeightContent.text = memberInfo.memberWeight.toString()
+        }
+    }
+
     fun initEvent() {
         binding.apply {
-
             layoutUserReportYear.setOnClickListener {
                 showYearDropdownMenu()
             }
