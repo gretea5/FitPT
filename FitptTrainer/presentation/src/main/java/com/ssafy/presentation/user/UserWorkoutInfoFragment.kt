@@ -9,7 +9,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.mikephil.charting.charts.LineChart
@@ -21,9 +20,9 @@ import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.ssafy.presentation.R
 import com.ssafy.presentation.base.BaseFragment
 import com.ssafy.presentation.databinding.FragmentUserWorkoutInfoBinding
-import com.ssafy.presentation.report.ReportEditFragmentArgs
-import com.ssafy.presentation.user.adapter.UserWorkoutInfoListAdapter
+import com.ssafy.presentation.user.adapter.UserWorkoutInfoMemberListAdapter
 import com.ssafy.presentation.user.adapter.UserWorkoutInfoMonthAdapter
+import com.ssafy.presentation.user.adapter.UserWorkoutInfoReportListAdapter
 import com.ssafy.presentation.user.viewmodel.UserWorkoutInfoViewModel
 import com.ssafy.presentation.util.CommonUtils
 import dagger.hilt.android.AndroidEntryPoint
@@ -41,8 +40,14 @@ class UserWorkoutInfoFragment : BaseFragment<FragmentUserWorkoutInfoBinding>(
 
     private var memberId : Long? = null
     private val viewModel: UserWorkoutInfoViewModel by viewModels()
-    private val userWorkoutInfoListAdapter = UserWorkoutInfoListAdapter { memberInfo ->
+    private val userWorkoutInfoMemberListAdapter = UserWorkoutInfoMemberListAdapter { memberInfo ->
         memberId = memberInfo.memberId
+
+        viewModel.getReports(memberInfo.memberId.toInt())
+    }
+
+    private val useWorkoutInfoReportListAdapter = UserWorkoutInfoReportListAdapter { reportList ->
+        //보고서 상세 조회 들어가는 로직 추가(예정) => Navigation 추가
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -58,7 +63,13 @@ class UserWorkoutInfoFragment : BaseFragment<FragmentUserWorkoutInfoBinding>(
     private fun initObserver() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.members.collect {
-                userWorkoutInfoListAdapter.submitList(it)
+                userWorkoutInfoMemberListAdapter.submitList(it)
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.reports.collect {
+                useWorkoutInfoReportListAdapter.submitList(it)
             }
         }
     }
@@ -105,7 +116,13 @@ class UserWorkoutInfoFragment : BaseFragment<FragmentUserWorkoutInfoBinding>(
         }
 
         binding.rvMemberList.apply {
-            adapter = userWorkoutInfoListAdapter
+            adapter = userWorkoutInfoMemberListAdapter
+            layoutManager = LinearLayoutManager(requireContext())
+            addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
+        }
+
+        binding.rvUserReportList.apply {
+            adapter = useWorkoutInfoReportListAdapter
             layoutManager = LinearLayoutManager(requireContext())
             addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
         }
