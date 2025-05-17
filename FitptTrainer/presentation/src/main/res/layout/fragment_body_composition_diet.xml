@@ -7,6 +7,71 @@
     tools:context=".report.viewpager.BodyCompositionDietFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_report_ble_explanation"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.65">
+
+        <ImageView
+            android:id="@+id/iv_report_ble"
+            android:layout_width="350dp"
+            android:layout_height="350dp"
+            android:src="@drawable/measure_bluetooth"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_report_ble_explanation"
+            style="@style/Font_SemiBold_20_main_black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="디바이스와의 연결을 위해 위 그림처럼 전윈 버튼을 눌러주세요."
+            app:layout_constraintBottom_toTopOf="@+id/cv_report_ble"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_report_ble" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cv_report_ble"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/main_gray"
+            android:clickable="false"
+            android:focusable="false"
+            app:cardCornerRadius="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintWidth_percent="0.5">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="12dp">
+
+                <TextView
+                    android:id="@+id/btn_ble_start"
+                    style="@style/Font_SemiBold_24_main_white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="블루투스 연결하기"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_report_measure_explanation"
         android:layout_width="0dp"
         android:layout_height="match_parent"
@@ -20,7 +85,7 @@
             android:id="@+id/iv_report_measure"
             android:layout_width="350dp"
             android:layout_height="350dp"
-            android:src="@drawable/measure_bluetooth"
+            android:src="@drawable/image_measure_fitrus"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -31,7 +96,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="디바이스와의 연결을 위해 위 그림처럼 전윈 버튼을 눌러주세요."
+            android:text="측정하기를 클릭하시면 됩니다"
             app:layout_constraintBottom_toTopOf="@+id/cv_report_workout_add_workout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -56,6 +121,7 @@
                 android:padding="12dp">
 
                 <TextView
+                    android:id="@+id/btn_measure_start"
                     style="@style/Font_SemiBold_24_main_white"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -71,9 +137,12 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollview_measure_result"
         android:layout_width="0dp"
         android:layout_height="match_parent"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
