@@ -5,7 +5,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ssafy.domain.model.base.ResponseStatus
 import com.ssafy.domain.model.member.MemberInfo
+import com.ssafy.domain.model.report.ReportList
 import com.ssafy.domain.usecase.member.GetMembersUseCase
+import com.ssafy.domain.usecase.report.GetReportListUsecase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,13 +19,17 @@ private const val TAG = "UserWorkoutInfoViewMode_ssafy"
 
 @HiltViewModel
 class UserWorkoutInfoViewModel @Inject constructor(
-    private val getMembersUseCase: GetMembersUseCase
+    private val getMembersUseCase: GetMembersUseCase,
+    private val getReportListUseCase: GetReportListUsecase
 ) : ViewModel() {
     private val _workoutState = MutableStateFlow<UserWorkoutInfoStatus>(UserWorkoutInfoStatus.Idle)
     val workoutState: StateFlow<UserWorkoutInfoStatus> = _workoutState.asStateFlow()
 
     private val _members = MutableStateFlow<List<MemberInfo>>(emptyList())
     val members: StateFlow<List<MemberInfo>> = _members.asStateFlow()
+
+    private val _reports = MutableStateFlow<List<ReportList>>(emptyList())
+    val reports: StateFlow<List<ReportList>> = _reports.asStateFlow()
 
     fun getMembers() {
         viewModelScope.launch {
@@ -36,6 +42,29 @@ class UserWorkoutInfoViewModel @Inject constructor(
                             _workoutState.value = UserWorkoutInfoStatus.Success
                         }
 
+                        is ResponseStatus.Error -> {
+                            _workoutState.value = UserWorkoutInfoStatus.Error(response.error.message)
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+                Log.d(TAG, "getMembers exception ${e.message}")
+                _workoutState.value = UserWorkoutInfoStatus.Error("서버와의 연결에 실패했습니다.")
+            }
+        }
+    }
+
+    fun getReports(memberId : Int) {
+        viewModelScope.launch {
+            try {
+                getReportListUseCase(memberId = memberId).collect { response ->
+                    Log.d(TAG, "getReports: ${response}")
+
+                    when (response) {
+                        is ResponseStatus.Success -> {
+                            _reports.value = response.data
+                            _workoutState.value = UserWorkoutInfoStatus.Success
+                        }
                         is ResponseStatus.Error -> {
                             _workoutState.value = UserWorkoutInfoStatus.Error(response.error.message)
                         }
