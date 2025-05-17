@@ -9,9 +9,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ssafy.domain.model.member.MemberInfo
 import com.ssafy.presentation.databinding.ItemWorkoutMemberBinding
 
-class UserWorkoutInfoListAdapter(
+class UserWorkoutInfoMemberListAdapter(
     private val onItemSelected: ((MemberInfo) -> Unit)
-) : ListAdapter<MemberInfo, UserWorkoutInfoListAdapter.ViewHolder>(MemberInfoDiffCallback()) {
+) : ListAdapter<MemberInfo, UserWorkoutInfoMemberListAdapter.ViewHolder>(MemberInfoDiffCallback()) {
     private var selectedPosition = -1
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
