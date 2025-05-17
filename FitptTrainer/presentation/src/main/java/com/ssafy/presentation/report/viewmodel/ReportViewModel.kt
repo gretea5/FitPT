@@ -69,7 +69,6 @@ class ReportViewModel @Inject constructor(
                         is ResponseStatus.Success -> {
                             Log.d("CreateReport", "Report created. ID: ${response.data}")
                         }
-
                         is ResponseStatus.Error -> {
                             Log.e("CreateReport", "Failed to create report: ${response.error.message}")
                         }

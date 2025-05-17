@@ -14,6 +14,7 @@ import androidx.navigation.fragment.navArgs
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.ssafy.data.datasource.TrainerDataStoreSource
+import com.ssafy.domain.model.report.Report
 import com.ssafy.presentation.R
 import com.ssafy.presentation.base.BaseFragment
 import com.ssafy.presentation.databinding.FragmentReportEditBinding
@@ -37,7 +38,7 @@ class ReportEditFragment : BaseFragment<FragmentReportEditBinding>(
     private val args: ReportEditFragmentArgs by navArgs()
     
     private lateinit var viewPagerAdapter: ReportViewPagerAdapter
-    private val viewModel: ReportViewModel by activityViewModels()
+    private val reportViewModel: ReportViewModel by activityViewModels()
     private val measureViewModel: MeasureViewModel by activityViewModels()
     @Inject
     lateinit var trainerDataStoreSource: TrainerDataStoreSource
@@ -66,17 +67,25 @@ class ReportEditFragment : BaseFragment<FragmentReportEditBinding>(
             }
             lifecycleScope.launch {
                 val trainerId = trainerDataStoreSource.trainerId.first()
-                if(!viewModel.reportExercises.value!!.isEmpty()&&state is CreateBodyInfoState.Success&&!viewModel.reportComment.value.isNullOrEmpty()){
+                if(!reportViewModel.reportExercises.value!!.isEmpty()&&state is CreateBodyInfoState.Success&&!reportViewModel.reportComment.value.isNullOrEmpty()){
                     showToast("다 측정이 되었습니다.")
-                    
+                    reportViewModel.createReport(
+                        Report(
+                            memberId = memberId!!.toInt(),
+                            compositionLogId = state.measureCreate,
+                            reportComment = reportViewModel.reportComment.value.toString(),
+                            reportExercises = reportViewModel.reportExercises.value!!,
+                            trainerId = trainerId!!.toInt()
+                        )
+                    )
                 }
-                else if(viewModel.reportExercises.value!!.isEmpty()){
+                else if(reportViewModel.reportExercises.value!!.isEmpty()){
                     showToast("수행한 운동을 작성해주세요")
                 }
                 else if(state is CreateBodyInfoState.Initial){
                     showToast("체성분 측정을 해주세요")
                 }
-                else if(viewModel.reportComment.value.isNullOrEmpty()){
+                else if(reportViewModel.reportComment.value.isNullOrEmpty()){
                     showToast("식단 코칭을 작성해주세요")
                 }
             }
