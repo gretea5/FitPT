@@ -8,21 +8,28 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.ssafy.data.datasource.TrainerDataStoreSource
 import com.ssafy.domain.model.report.Report
+import com.ssafy.domain.usecase.member.GetMembersUseCase
 import com.ssafy.presentation.R
 import com.ssafy.presentation.base.BaseFragment
 import com.ssafy.presentation.databinding.FragmentReportEditBinding
+import com.ssafy.presentation.report.adapter.CompositionAdapter
 import com.ssafy.presentation.report.adapter.ReportViewPagerAdapter
 import com.ssafy.presentation.report.viewmodel.CreateBodyInfoState
+import com.ssafy.presentation.report.viewmodel.GetBodyDetailInfoState
 import com.ssafy.presentation.report.viewmodel.MeasureViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import com.ssafy.presentation.report.viewmodel.ReportViewModel
+import com.ssafy.presentation.report.viewmodel.UserInfoState
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -46,11 +53,17 @@ class ReportEditFragment : BaseFragment<FragmentReportEditBinding>(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initTabLayout()
+        observeUserList()
         initEvent()
-        
         memberId = args.memberId
         measureViewModel.updateMember(memberId!!.toInt())
-        Log.d(TAG, "onViewCreated: $memberId")
+        measureViewModel.fetchUser(memberId!!.toInt())
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        measureViewModel.resetCreateBody()
+        //reportViewModel.resetReport()
     }
 
     fun initEvent() {
@@ -78,6 +91,7 @@ class ReportEditFragment : BaseFragment<FragmentReportEditBinding>(
                             trainerId = trainerId!!.toInt()
                         )
                     )
+                    findNavController().popBackStack()
                 }
                 else if(reportViewModel.reportExercises.value!!.isEmpty()){
                     showToast("수행한 운동을 작성해주세요")
@@ -133,5 +147,25 @@ class ReportEditFragment : BaseFragment<FragmentReportEditBinding>(
             })
         }.attach()
 
+    }
+
+    private fun observeUserList() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                measureViewModel.userInfo.collect { state ->
+                    when (state) {
+                        is UserInfoState.Loading -> {
+                        }
+                        is UserInfoState.Success -> {
+                            binding.tvReportTitle.text = state.userInfo.memberName
+                        }
+                        is UserInfoState.Error -> {
+
+                        }
+                        else -> Unit
+                    }
+                }
+            }
+        }
     }
 }

@@ -101,4 +101,9 @@ class ReportViewModel @Inject constructor(
     fun setReportComment(comment: String) {
         _reportComment.value = comment
     }
+    fun resetReport(){
+        _reportExercises.value = emptyList()
+        _reportComment.value = ""
+        _reportMeasureId.value = 0
+    }
 }

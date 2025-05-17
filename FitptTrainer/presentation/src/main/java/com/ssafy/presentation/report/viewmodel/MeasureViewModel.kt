@@ -118,6 +118,10 @@ class MeasureViewModel @Inject constructor(
     fun updateMember(memberId: Int){
         _memberId.value = memberId
     }
+
+    fun resetCreateBody(){
+        _measureCreateInfo.value = CreateBodyInfoState.Initial
+    }
 }
 
 sealed class CreateBodyInfoState {

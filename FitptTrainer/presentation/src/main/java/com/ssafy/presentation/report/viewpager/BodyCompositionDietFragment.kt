@@ -71,7 +71,6 @@ class BodyCompositionDietFragment : BaseFragment<FragmentBodyCompositionDietBind
     fun initial(){
         manager = FitrusDevice(requireActivity(), this, "normal_key")
         memberId = measureViewModel.memberId.value.toLong()
-        measureViewModel.fetchUser(memberId!!.toInt())
         observeBodyList()
     }
 
@@ -251,6 +250,8 @@ class BodyCompositionDietFragment : BaseFragment<FragmentBodyCompositionDietBind
                 }
             }
         }
+
+
     }
 
     private fun convertToConditionList(data: CompositionItem): List<CompositionCondition> {
