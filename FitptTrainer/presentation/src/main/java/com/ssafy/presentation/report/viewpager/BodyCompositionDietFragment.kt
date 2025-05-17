@@ -27,6 +27,8 @@ import com.ssafy.presentation.base.BaseFragment
 import com.ssafy.presentation.databinding.FragmentBodyCompositionDietBinding
 import com.ssafy.presentation.home.viewmodel.HomeViewModel
 import com.ssafy.presentation.report.ReportEditFragmentArgs
+import com.ssafy.presentation.report.viewmodel.CreateBodyInfoState
+import com.ssafy.presentation.report.viewmodel.GetBodyDetailInfoState
 import com.ssafy.presentation.report.viewmodel.MeasureViewModel
 import com.ssafy.presentation.report.viewmodel.ReportViewModel
 import com.ssafy.presentation.report.viewmodel.UserInfoState
@@ -66,6 +68,7 @@ class BodyCompositionDietFragment : BaseFragment<FragmentBodyCompositionDietBind
         manager = FitrusDevice(requireActivity(), this, "normal_key")
         memberId = measureViewModel.memberId.value.toLong()
         measureViewModel.fetchUser(memberId!!.toInt())
+        observeBodyList()
     }
 
     fun initEvent() {
@@ -180,13 +183,12 @@ class BodyCompositionDietFragment : BaseFragment<FragmentBodyCompositionDietBind
                 smm = result["smm"]?.toDoubleOrNull() ?: 0.0,
                 weight = binding.etWeightInput.text.toString().toDouble()
             )
-            Log.d(TAG,"측정 값"+detail.toString())
-            measureViewModel.createBody(detail)
+            measureViewModel.createBody(detail) {
+                measuring = false
+                showToast("측정이 완료되어 개인 측정에 추가되었습니다")
+                manager.disconnectFitrus()
+            }
         }
-        Log.d(TAG,result.toString())
-        measuring = false
-        showToast("측정이 완료되어 개인 측정에 추가되었습니다")
-        manager.disconnectFitrus()
     }
 
     override fun handleFitrusConnected() {
@@ -199,8 +201,17 @@ class BodyCompositionDietFragment : BaseFragment<FragmentBodyCompositionDietBind
     }
 
     override fun handleFitrusDisconnected() {
-        binding.clReportBleExplanation.isVisible = true
         binding.clReportMeasureExplanation.isVisible = false
+        binding.scrollviewMeasureResult.isVisible = true
+        val state = measureViewModel.measureCreateInfo.value
+        if(state is CreateBodyInfoState.Success){
+            val compositionLog = state.measureCreate
+            measureViewModel.getBodyDetailInfo(compositionLog)
+            Log.d(TAG,"끝났습니다")
+        }
+        else if(state is CreateBodyInfoState.Error){
+            Log.d(TAG,"실패하였습니다.")
+        }
     }
 
     override fun handleFitrusPpgMeasured(result: Map<String, Any>) {
@@ -209,5 +220,28 @@ class BodyCompositionDietFragment : BaseFragment<FragmentBodyCompositionDietBind
 
     override fun handleFitrusTempMeasured(result: Map<String, String>) {
         TODO("Not yet implemented")
+    }
+
+    private fun observeBodyList() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                measureViewModel.getBodyDetailInfo.collect { state ->
+                    when (state) {
+                        is GetBodyDetailInfoState.Loading -> {
+                        }
+                        is GetBodyDetailInfoState.Success -> {
+                            Log.d(TAG,"측정 상세 값"+state.getBodydetail.toString())
+
+
+                            
+                        }
+                        is GetBodyDetailInfoState.Error -> {
+
+                        }
+                        else -> Unit
+                    }
+                }
+            }
+        }
     }
 }

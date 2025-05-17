@@ -26,6 +26,7 @@ private const val TAG = "MeasureViewModel"
 class MeasureViewModel @Inject constructor(
     private val createBodyUsecase: CreateBodyUsecase,
     private val getMemberInfoByIdUseCase: GetMemberInfoByIdUseCase,
+    private val getBodyDetailUsecase: GetBodyDetailUsecase,
 ) : ViewModel() {
 
     private val _memberId = MutableStateFlow<Int>(0)
@@ -37,8 +38,11 @@ class MeasureViewModel @Inject constructor(
     private val _userInfo = MutableStateFlow<UserInfoState>(UserInfoState.Initial)
     val userInfo: StateFlow<UserInfoState> = _userInfo.asStateFlow()
 
+    private val _getBodyDetailInfo = MutableStateFlow<GetBodyDetailInfoState>(GetBodyDetailInfoState.Initial)
+    val getBodyDetailInfo: StateFlow<GetBodyDetailInfoState> = _getBodyDetailInfo.asStateFlow()
 
-    fun createBody(userDetail: CompositionDetail) {
+
+    fun createBody(userDetail: CompositionDetail, onFinished: () -> Unit) {
         viewModelScope.launch {
             createBodyUsecase(userDetail)
                 .onStart {  }
@@ -51,6 +55,7 @@ class MeasureViewModel @Inject constructor(
                         is ResponseStatus.Success -> {
                             Log.d(TAG,uiState.data.toString())
                             _measureCreateInfo.value = CreateBodyInfoState.Success(uiState.data)
+                            onFinished()
                         }
                         is ResponseStatus.Error -> {
                             Log.d(TAG,uiState.error.message)
@@ -85,6 +90,30 @@ class MeasureViewModel @Inject constructor(
         }
     }
 
+    fun getBodyDetailInfo(compositionLogId: Int) {
+        viewModelScope.launch {
+            getBodyDetailUsecase(compositionLogId)
+                .onStart {  }
+                .catch { e ->
+                    Log.e("UserFragment", "에러 발생: ${e.message}", e)
+                }
+                .firstOrNull()
+                .let { uiState ->
+                    when(uiState) {
+                        is ResponseStatus.Success -> {
+                            _getBodyDetailInfo.value = GetBodyDetailInfoState.Success(uiState.data)
+                            Log.d("UserFragment", "User: ${_userInfo.value}")
+                        }
+                        is ResponseStatus.Error -> {
+                            _getBodyDetailInfo.value = GetBodyDetailInfoState.Error(uiState.error.message)
+                            Log.d("UserFragment", "fetchUser: ${_userInfo.value}")
+                        }
+                        else -> Log.d("UserFragment", "fetchUser: else error")
+                    }
+                }
+        }
+    }
+
 
     fun updateMember(memberId: Int){
         _memberId.value = memberId
@@ -103,4 +132,11 @@ sealed class UserInfoState {
     object Loading: UserInfoState()
     data class Success(val userInfo: MemberInfo): UserInfoState()
     data class Error(val message: String): UserInfoState()
+}
+
+sealed class GetBodyDetailInfoState {
+    object Initial: GetBodyDetailInfoState()
+    object Loading: GetBodyDetailInfoState()
+    data class Success(val getBodydetail: CompositionItem): GetBodyDetailInfoState()
+    data class Error(val message: String): GetBodyDetailInfoState()
 }

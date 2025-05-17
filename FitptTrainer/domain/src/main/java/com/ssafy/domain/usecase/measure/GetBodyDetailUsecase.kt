@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 
-class GetBodyDetailUsecase @Inject constructor(private val bodyRepository: BodyRepository, private val dataStoreRepository: DataStoreRepository){
+class GetBodyDetailUsecase @Inject constructor(private val bodyRepository: BodyRepository){
     suspend operator fun invoke(compositionLogId :Int): Flow<ResponseStatus<CompositionItem>> {
         return bodyRepository.getBodyDetail(compositionLogId)
     }
