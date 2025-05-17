@@ -17,19 +17,17 @@ internal class BodyRepositoryImpl  @Inject constructor(
     private val bodyService: BodyService,
 ): BodyRepository {
 
-    override suspend fun getBodyList(
+    override suspend fun getComposition(
         memberId: Int,
         sort: String,
         order: String
     ): Flow<ResponseStatus<List<CompositionItem>>> {
         return flow {
             val result = ApiResponseHandler().handle {
-
-                bodyService.getBodyList(memberId,sort,order)
-            }.first() // ✅ 첫 번째 값만 가져옴
+                bodyService.getComposition(memberId,sort,order)
+            }.first()
             when (result) {
-                is ApiResponse.Success ->
-                    emit(ResponseStatus.Success(result.data))
+                is ApiResponse.Success -> emit(ResponseStatus.Success(result.data))
                 is ApiResponse.Error -> emit(ResponseStatus.Error(result.error.toDomainModel()))
             }
         }
