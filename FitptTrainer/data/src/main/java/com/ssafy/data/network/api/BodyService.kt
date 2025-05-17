@@ -11,12 +11,11 @@ import retrofit2.http.Query
 
 interface BodyService {
     @GET("body-composition")
-    suspend fun getBodyList(@Query("memberId") memberId: Int,@Query("sort") sort :String,@Query("order") order: String) : Response<List<CompositionItem>>
+    suspend fun getComposition(@Query("memberId") memberId: Int, @Query("sort") sort: String, @Query("order") order: String) : Response<List<CompositionItem>>
 
     @POST("body-composition")
     suspend fun createBody(@Body compositionDetail: CompositionDetail) : Response<Unit>
 
     @GET("body-composition/{compositionLogId}")
     suspend fun getBodyDetailInfo(@Path("compositionLogId") compositionLogId: Int) : Response<CompositionItem>
-
 }
