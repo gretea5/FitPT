@@ -155,16 +155,17 @@
                 android:backgroundTint="@color/white"
                 android:src="@drawable/ib_user_detail"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/imageButton"
+                app:layout_constraintEnd_toStartOf="@+id/ib_schedule_register"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageButton
-                android:id="@+id/imageButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:id="@+id/ib_schedule_register"
+                android:layout_width="84dp"
+                android:layout_height="84dp"
                 android:layout_marginEnd="32dp"
+                android:scaleType="fitCenter"
                 android:backgroundTint="@color/white"
-                android:src="@drawable/ib_add_schedule"
+                android:src="@drawable/ic_schedule_plus"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/imageButton3"
                 app:layout_constraintTop_toTopOf="parent" />
