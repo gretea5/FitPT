@@ -64,7 +64,15 @@ class UserWorkoutInfoFragment : BaseFragment<FragmentUserWorkoutInfoBinding>(
     }
 
     private val useWorkoutInfoReportListAdapter = UserWorkoutInfoReportListAdapter { reportList ->
-        //보고서 상세 조회 들어가는 로직 추가(예정) => Navigation 추가
+        val memberId = reportList.memberId.toLong()
+        val reportId = reportList.reportId.toLong()
+
+        val action = UserWorkoutInfoFragmentDirections.actionUserWorkoutInfoFragmentToReportEditFragment(
+            memberId = memberId,
+            reportId = reportId
+        )
+
+        findNavController().navigate(action)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
