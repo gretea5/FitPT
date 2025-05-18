@@ -33,6 +33,10 @@
         <argument
             android:name="memberId"
             app:argType="long" />
+        <argument
+            android:name="reportId"
+            android:defaultValue="-1L"
+            app:argType="long" />
         <action
             android:id="@+id/action_reportEditFragment_to_userWorkoutInfoFragment"
             app:destination="@+id/userWorkoutInfoFragment"/>
