@@ -279,7 +279,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
             findNavController().navigate(action)
         }
 
-        binding.imageButton2.setOnClickListener {
+        binding.ibWorkout.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_userWorkoutInfoFragment)
         }
     }
