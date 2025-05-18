@@ -1,17 +1,17 @@
 package com.ssafy.domain.model.measure
 
 data class CompositionItem(
+    val compositionLogId: Int,
+    val memberId: Int,
+    val createdAt: String,
+    val protein: Double,
+    val bmr: Double,
+    val mineral: Double,
+    val bodyAge: Int,
+    val smm: Double,
+    val icw: Double,
+    val ecw: Double,
     val bfm: Double,
     val bfp: Double,
-    val bmr: Double,
-    val bodyAge: Int,
-    val compositionLogId: Int,
-    val createdAt: String,
-    val ecw: Double,
-    val icw: Double,
-    val memberId: Int,
-    val mineral: Double,
-    val protein: Double,
-    val smm: Double,
     val weight: Double
 )

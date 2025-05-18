@@ -1,4 +1,4 @@
-package com.ssafy.presentation.user
+package com.ssafy.presentation.member
 
 import android.graphics.Color
 import android.os.Bundle
@@ -9,7 +9,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.mikephil.charting.charts.LineChart
@@ -18,14 +17,17 @@ import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
+import com.ssafy.domain.model.measure.CompositionItem
+import com.ssafy.domain.model.member.MemberInfo
 import com.ssafy.presentation.R
 import com.ssafy.presentation.base.BaseFragment
 import com.ssafy.presentation.databinding.FragmentUserWorkoutInfoBinding
-import com.ssafy.presentation.report.ReportEditFragmentArgs
-import com.ssafy.presentation.user.adapter.UserWorkoutInfoListAdapter
-import com.ssafy.presentation.user.adapter.UserWorkoutInfoMonthAdapter
-import com.ssafy.presentation.user.viewmodel.UserWorkoutInfoViewModel
+import com.ssafy.presentation.member.adapter.UserWorkoutInfoMemberListAdapter
+import com.ssafy.presentation.member.adapter.UserWorkoutInfoMonthAdapter
+import com.ssafy.presentation.member.adapter.UserWorkoutInfoReportListAdapter
+import com.ssafy.presentation.member.viewmodel.UserWorkoutInfoViewModel
 import com.ssafy.presentation.util.CommonUtils
+import com.ssafy.presentation.util.TimeUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -39,10 +41,38 @@ class UserWorkoutInfoFragment : BaseFragment<FragmentUserWorkoutInfoBinding>(
     private lateinit var monthAdapter: UserWorkoutInfoMonthAdapter
     private lateinit var lineChart: LineChart
 
+    private var memberInfos: MemberInfo? = null
     private var memberId : Long? = null
     private val viewModel: UserWorkoutInfoViewModel by viewModels()
-    private val userWorkoutInfoListAdapter = UserWorkoutInfoListAdapter { memberInfo ->
+
+    private var composition = mutableListOf<CompositionItem>()
+    private var dateArray = arrayOf<String>()
+    private var dateEntries = arrayOf<Double>()
+
+    private val userWorkoutInfoMemberListAdapter = UserWorkoutInfoMemberListAdapter { memberInfo ->
+        memberInfos = memberInfo
         memberId = memberInfo.memberId
+
+        binding.btnSkeletalMuscle.isSelected = true
+        binding.btnWeight.isSelected = false
+        binding.btnBmi.isSelected = false
+        binding.btnBodyFat.isSelected = false
+
+        viewModel.getReports(memberInfo.memberId.toInt())
+        viewModel.getMember(memberInfo.memberId)
+        viewModel.getComposition(memberInfo.memberId)
+    }
+
+    private val useWorkoutInfoReportListAdapter = UserWorkoutInfoReportListAdapter { reportList ->
+        val memberId = reportList.memberId.toLong()
+        val reportId = reportList.reportId.toLong()
+
+        val action = UserWorkoutInfoFragmentDirections.actionUserWorkoutInfoFragmentToReportEditFragment(
+            memberId = memberId,
+            reportId = reportId
+        )
+
+        findNavController().navigate(action)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -58,7 +88,31 @@ class UserWorkoutInfoFragment : BaseFragment<FragmentUserWorkoutInfoBinding>(
     private fun initObserver() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.members.collect {
-                userWorkoutInfoListAdapter.submitList(it)
+                userWorkoutInfoMemberListAdapter.submitList(it)
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.filteredReports.collect {
+                useWorkoutInfoReportListAdapter.submitList(it)
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.reports.collect {
+                useWorkoutInfoReportListAdapter.submitList(it)
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.member.collect {
+                initMemberView(it)
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.composition.collect {
+                composition = it.toMutableList()
             }
         }
     }
@@ -67,9 +121,17 @@ class UserWorkoutInfoFragment : BaseFragment<FragmentUserWorkoutInfoBinding>(
         viewModel.getMembers()
     }
 
+    private fun initMemberView(memberInfo: MemberInfo?) {
+        memberInfo?.let {
+            binding.tvUserInfoDetailBirthContent.text = memberInfo.memberBirth
+            binding.tvUserInfoDetailGenderContent.text = memberInfo.memberGender
+            binding.tvUserInfoDetailHeightContent.text = memberInfo.memberHeight.toString()
+            binding.tvUserInfoDetailWeightContent.text = memberInfo.memberWeight.toString()
+        }
+    }
+
     fun initEvent() {
         binding.apply {
-
             layoutUserReportYear.setOnClickListener {
                 showYearDropdownMenu()
             }
@@ -88,6 +150,54 @@ class UserWorkoutInfoFragment : BaseFragment<FragmentUserWorkoutInfoBinding>(
             ibBack.setOnClickListener {
                 findNavController().navigate(R.id.action_userWorkoutInfoFragment_to_homeFragment)
             }
+
+            btnSkeletalMuscle.setOnClickListener {
+                btnSkeletalMuscle.isSelected = true
+                btnWeight.isSelected = false
+                btnBmi.isSelected = false
+                btnBodyFat.isSelected = false
+
+                dateArray = composition.map { TimeUtils.formatDateToMonthDay(it.createdAt) }.toTypedArray()
+                dateEntries = composition.map { it.smm }.toTypedArray()
+
+                initChart()
+            }
+
+            btnWeight.setOnClickListener {
+                btnWeight.isSelected = true
+                btnSkeletalMuscle.isSelected = false
+                btnBmi.isSelected = false
+                btnBodyFat.isSelected = false
+
+                dateArray = composition.map { TimeUtils.formatDateToMonthDay(it.createdAt) }.toTypedArray()
+                dateEntries = composition.map { it.weight }.toTypedArray()
+
+                initChart()
+            }
+
+            btnBmi.setOnClickListener {
+                btnBmi.isSelected = true
+                btnSkeletalMuscle.isSelected = false
+                btnWeight.isSelected = false
+                btnBodyFat.isSelected = false
+
+                dateArray = composition.map { TimeUtils.formatDateToMonthDay(it.createdAt) }.toTypedArray()
+                dateEntries = composition.map { it.weight / (memberInfos!!.memberWeight * memberInfos!!.memberWeight) }.toTypedArray()
+
+                initChart()
+            }
+
+            btnBodyFat.setOnClickListener {
+                btnBodyFat.isSelected = true
+                btnSkeletalMuscle.isSelected = false
+                btnWeight.isSelected = false
+                btnBmi.isSelected = false
+
+                dateArray = composition.map { TimeUtils.formatDateToMonthDay(it.createdAt) }.toTypedArray()
+                dateEntries = composition.map { it.bfm }.toTypedArray()
+
+                initChart()
+            }
         }
     }
 
@@ -95,8 +205,8 @@ class UserWorkoutInfoFragment : BaseFragment<FragmentUserWorkoutInfoBinding>(
         val months = listOf("전체", "1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월")
 
         monthAdapter = UserWorkoutInfoMonthAdapter(requireContext(), months) { selectedMonth ->
-            Log.d(TAG, "initRecyclerView: ${selectedMonth}")
-            // 여기서 클릭된 월에 따라 동작 처리
+            viewModel.setSelectedMonth(selectedMonth)
+            viewModel.filterReportsByYearAndMonth()
         }
 
         binding.rvUserReportMonth.apply {
@@ -105,7 +215,13 @@ class UserWorkoutInfoFragment : BaseFragment<FragmentUserWorkoutInfoBinding>(
         }
 
         binding.rvMemberList.apply {
-            adapter = userWorkoutInfoListAdapter
+            adapter = userWorkoutInfoMemberListAdapter
+            layoutManager = LinearLayoutManager(requireContext())
+            addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
+        }
+
+        binding.rvUserReportList.apply {
+            adapter = useWorkoutInfoReportListAdapter
             layoutManager = LinearLayoutManager(requireContext())
             addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
         }
@@ -141,8 +257,8 @@ class UserWorkoutInfoFragment : BaseFragment<FragmentUserWorkoutInfoBinding>(
                 setDrawGridLines(false)
 
                 // X축 날짜 데이터 설정
-                val dates = arrayOf("01/10", "01/25", "02/11", "02/19", "03/13", "03/27", "04/01", "04/12", "04/22")
-                valueFormatter = IndexAxisValueFormatter(dates)
+                val dates = dateArray
+                valueFormatter = IndexAxisValueFormatter(dateArray)
             }
 
             // Y축 설정
@@ -164,17 +280,10 @@ class UserWorkoutInfoFragment : BaseFragment<FragmentUserWorkoutInfoBinding>(
             //animateX(1000)
         }
 
-        // 데이터 포인트 생성
-        val entries = ArrayList<Entry>().apply {
-            add(Entry(0f, 10f))    // 01/10, 값: 10
-            add(Entry(1f, 30f))    // 01/25, 값: 30
-            add(Entry(2f, 50f))    // 02/11, 값: 50
-            add(Entry(3f, 45f))    // 02/19, 값: 45
-            add(Entry(4f, 40f))    // 03/13, 값: 40
-            add(Entry(5f, 60f))    // 03/27, 값: 60
-            add(Entry(6f, 80f))    // 04/01, 값: 80
-            add(Entry(7f, 75f))    // 04/12, 값: 75
-            add(Entry(8f, 85f))    // 04/22, 값: 85
+        val entries = ArrayList<Entry>()
+
+        dateEntries.forEachIndexed { index, value ->
+            entries.add(Entry(index.toFloat(), value.toFloat()))
         }
 
         // 데이터셋 생성 및 스타일 설정
@@ -215,6 +324,12 @@ class UserWorkoutInfoFragment : BaseFragment<FragmentUserWorkoutInfoBinding>(
 
             tvUserUserListTitle.text = changeText
         }
+
+
+        val currentYear = TimeUtils.getCurrentYear()
+        binding.tvUserReportYear.text = "${currentYear}년"
+        viewModel.setSelectedYear(currentYear)
+        viewModel.setSelectedMonth("전체")
     }
 
     private fun showYearDropdownMenu() {
@@ -228,7 +343,11 @@ class UserWorkoutInfoFragment : BaseFragment<FragmentUserWorkoutInfoBinding>(
         popupMenu.setOnMenuItemClickListener { menuItem ->
             val selectedYear = yearList[menuItem.itemId]
             binding.tvUserReportYear.text = selectedYear
-            // 선택된 연도에 따라 데이터를 필터링하거나 업데이트하는 로직 추가
+
+            val year = selectedYear.replace("년", "").toInt()
+            viewModel.setSelectedYear(year)
+            viewModel.filterReportsByYearAndMonth()
+
             true
         }
 

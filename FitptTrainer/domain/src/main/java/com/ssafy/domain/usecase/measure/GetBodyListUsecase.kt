@@ -8,6 +8,6 @@ import javax.inject.Inject
 
 class GetBodyListUsecase @Inject constructor(private val bodyRepository: BodyRepository){
     suspend operator fun invoke(memberId: Int, sort :String,order: String): Flow<ResponseStatus<List<CompositionItem>>> {
-        return bodyRepository.getBodyList(memberId, sort,order)
+        return bodyRepository.getComposition(memberId, sort,order)
     }
 }
