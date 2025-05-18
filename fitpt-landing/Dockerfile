@@ -17,7 +17,7 @@ COPY . .
 RUN npm run build
 
 # --- Production Stage ---
-# 7 Nginx 경량화 버전을 기반 이미지로 사용용
+# 7 Nginx 경량화 버전을 기반 이미지로 사용
 FROM nginx:alpine
 
 # 8 빌드 스테이지에서 빌드된 결과물을 Nginx 웹 루트 경로로 복사
