@@ -85,6 +85,12 @@ class UserWorkoutInfoFragment : BaseFragment<FragmentUserWorkoutInfoBinding>(
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.filteredReports.collect {
+                useWorkoutInfoReportListAdapter.submitList(it)
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
             viewModel.reports.collect {
                 useWorkoutInfoReportListAdapter.submitList(it)
             }
@@ -191,8 +197,8 @@ class UserWorkoutInfoFragment : BaseFragment<FragmentUserWorkoutInfoBinding>(
         val months = listOf("전체", "1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월")
 
         monthAdapter = UserWorkoutInfoMonthAdapter(requireContext(), months) { selectedMonth ->
-            Log.d(TAG, "initRecyclerView: ${selectedMonth}")
-            // 여기서 클릭된 월에 따라 동작 처리
+            viewModel.setSelectedMonth(selectedMonth)
+            viewModel.filterReportsByYearAndMonth()
         }
 
         binding.rvUserReportMonth.apply {
@@ -310,6 +316,12 @@ class UserWorkoutInfoFragment : BaseFragment<FragmentUserWorkoutInfoBinding>(
 
             tvUserUserListTitle.text = changeText
         }
+
+
+        val currentYear = TimeUtils.getCurrentYear()
+        binding.tvUserReportYear.text = "${currentYear}년"
+        viewModel.setSelectedYear(currentYear)
+        viewModel.setSelectedMonth("전체")
     }
 
     private fun showYearDropdownMenu() {
@@ -323,7 +335,11 @@ class UserWorkoutInfoFragment : BaseFragment<FragmentUserWorkoutInfoBinding>(
         popupMenu.setOnMenuItemClickListener { menuItem ->
             val selectedYear = yearList[menuItem.itemId]
             binding.tvUserReportYear.text = selectedYear
-            // 선택된 연도에 따라 데이터를 필터링하거나 업데이트하는 로직 추가
+
+            val year = selectedYear.replace("년", "").toInt()
+            viewModel.setSelectedYear(year)
+            viewModel.filterReportsByYearAndMonth()
+
             true
         }
 

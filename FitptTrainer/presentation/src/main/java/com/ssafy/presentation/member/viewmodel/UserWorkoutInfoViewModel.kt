@@ -11,6 +11,7 @@ import com.ssafy.domain.usecase.measure.GetBodyListUsecase
 import com.ssafy.domain.usecase.member.GetMemberInfoByIdUseCase
 import com.ssafy.domain.usecase.member.GetMembersUseCase
 import com.ssafy.domain.usecase.report.GetReportListUsecase
+import com.ssafy.presentation.util.TimeUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -39,8 +40,15 @@ class UserWorkoutInfoViewModel @Inject constructor(
     private val _reports = MutableStateFlow<List<ReportList>>(emptyList())
     val reports: StateFlow<List<ReportList>> = _reports.asStateFlow()
 
+    private val _filteredReports = MutableStateFlow<List<ReportList>>(emptyList())
+    val filteredReports = _filteredReports.asStateFlow()
+
     private val _composition = MutableStateFlow<List<CompositionItem>>(emptyList())
     val composition: StateFlow<List<CompositionItem>> = _composition.asStateFlow()
+
+    private var allReports = listOf<ReportList>()
+    private var selectedYear: Int = TimeUtils.getCurrentYear()
+    private var selectedMonth: Int = 0 // 0은 전체 월을 의미
 
     fun getMembers() {
         viewModelScope.launch {
@@ -74,6 +82,8 @@ class UserWorkoutInfoViewModel @Inject constructor(
                     when (response) {
                         is ResponseStatus.Success -> {
                             _reports.value = response.data
+                            allReports = response.data
+                            filterReportsByYearAndMonth()
                             _workoutState.value = UserWorkoutInfoStatus.Success
                         }
                         is ResponseStatus.Error -> {
@@ -86,6 +96,37 @@ class UserWorkoutInfoViewModel @Inject constructor(
                 _workoutState.value = UserWorkoutInfoStatus.Error("서버와의 연결에 실패했습니다.")
             }
         }
+    }
+
+    fun filterReportsByYearAndMonth() {
+        viewModelScope.launch {
+            val filtered = allReports.filter { report ->
+                val reportDate = TimeUtils.parseDate(report.createdAt)
+                val reportYear = TimeUtils.getYearFromDate(reportDate)
+                val reportMonth = TimeUtils.getMonthFromDate(reportDate)
+
+                (reportYear == selectedYear) && (selectedMonth == 0 || reportMonth == selectedMonth)
+            }
+            _filteredReports.value = filtered.toList()
+        }
+    }
+
+    fun setSelectedYear(year: Int) {
+        setSelectedMonth("전체")
+        selectedYear = year
+        filterReportsByYearAndMonth()
+    }
+
+    // UserWorkoutInfoViewModel에 수정
+    fun setSelectedMonth(monthText: String) {
+        selectedMonth = when (monthText) {
+            "전체" -> 0 // 전체 월을 의미하는 0
+            else -> {
+                // "1월", "2월" 등에서 숫자만 추출
+                monthText.replace("월", "").toInt()
+            }
+        }
+        filterReportsByYearAndMonth()
     }
 
     fun getMember(memberId: Long) {
