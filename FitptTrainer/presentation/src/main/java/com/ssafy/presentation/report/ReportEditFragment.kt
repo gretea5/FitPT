@@ -32,6 +32,9 @@ import com.ssafy.presentation.report.viewmodel.ReportViewModel
 import com.ssafy.presentation.report.viewmodel.UserInfoState
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import javax.inject.Inject
 
 private const val TAG = "ReportEditFragment_FitPT"
@@ -167,7 +170,10 @@ class ReportEditFragment : BaseFragment<FragmentReportEditBinding>(
                         is UserInfoState.Loading -> {
                         }
                         is UserInfoState.Success -> {
-                            binding.tvReportTitle.text = state.userInfo.memberName
+                            val currentDate = SimpleDateFormat("yyyy/MM/dd", Locale.getDefault()).format(
+                                Date()
+                            )
+                            binding.tvReportTitle.text = "${state.userInfo.memberName} $currentDate 보고서"
                         }
                         is UserInfoState.Error -> {
 
