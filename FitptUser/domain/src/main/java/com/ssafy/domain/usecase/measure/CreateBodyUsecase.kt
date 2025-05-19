@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class CreateBodyUsecase @Inject constructor(private val bodyRepository: BodyRepository, private val dataStoreRepository: DataStoreRepository){
-    suspend operator fun invoke(compositionDetail: CompositionDetail): Flow<ResponseStatus<Unit>> {
+    suspend operator fun invoke(compositionDetail: CompositionDetail): Flow<ResponseStatus<Int>> {
         return bodyRepository.createBody(compositionDetail)
     }
 }

@@ -39,6 +39,9 @@ class MeasureViewModel @Inject constructor(
     private val _getBodyDetailInfo = MutableStateFlow<GetBodyDetailInfoState>(GetBodyDetailInfoState.Initial)
     val getBodyDetailInfo: StateFlow<GetBodyDetailInfoState> = _getBodyDetailInfo.asStateFlow()
 
+    private val _createBodyInfo = MutableStateFlow<CreateBodyInfoState>(CreateBodyInfoState.Initial)
+    val createBodyInfo: StateFlow<CreateBodyInfoState> = _createBodyInfo.asStateFlow()
+
     private val _measureDetailInfo = MutableStateFlow<MesureDetail?>(null)
     val measureDetailInfo: StateFlow<MesureDetail?> = _measureDetailInfo.asStateFlow()
 
@@ -76,7 +79,7 @@ class MeasureViewModel @Inject constructor(
     }
 
 
-    fun createBody(userDetail: CompositionDetail) {
+    fun createBody(userDetail: CompositionDetail, onFinished: () -> Unit) {
         viewModelScope.launch {
             createBodyUsecase(userDetail)
                 .onStart { setLoading() }
@@ -88,12 +91,13 @@ class MeasureViewModel @Inject constructor(
                     when(uiState) {
                         is ResponseStatus.Success -> {
                             Log.d(TAG,uiState.data.toString())
-                            //_getBodyListInfo.value = GetBodyListInfoState.Success(uiState.data)
+                            _createBodyInfo.value = CreateBodyInfoState.Success(uiState.data)
+                            onFinished()
                         }
                         is ResponseStatus.Error -> {
                             Log.d(TAG,uiState.error.message)
-                            _getBodyListInfo.value =
-                                GetBodyListInfoState.Error(uiState.error.message)
+                            _createBodyInfo.value =
+                                CreateBodyInfoState.Error(uiState.error.message)
                         }
                         else -> Log.d("MeasureViewModel", "fetchUser: else error")
                     }
@@ -147,4 +151,11 @@ sealed class GetBodyDetailInfoState {
     object Loading: GetBodyDetailInfoState()
     data class Success(val getBodydetail: CompositionDetailInfo): GetBodyDetailInfoState()
     data class Error(val message: String): GetBodyDetailInfoState()
+}
+
+sealed class CreateBodyInfoState {
+    object Initial: CreateBodyInfoState()
+    object Loading: CreateBodyInfoState()
+    data class Success(val compositionLog: Int): CreateBodyInfoState()
+    data class Error(val message: String): CreateBodyInfoState()
 }

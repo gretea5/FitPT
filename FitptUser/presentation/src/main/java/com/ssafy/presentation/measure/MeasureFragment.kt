@@ -13,19 +13,26 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.onesoftdigm.fitrus.device.sdk.FitrusBleDelegate
 import com.onesoftdigm.fitrus.device.sdk.FitrusDevice
 import com.onesoftdigm.fitrus.device.sdk.Gender
 import com.ssafy.data.datasource.UserDataStoreSource
 import com.ssafy.domain.model.login.UserInfo
+import com.ssafy.domain.model.measure.BodyInfoItem
 import com.ssafy.domain.model.measure.CompositionDetail
 import com.ssafy.presentation.R
 import com.ssafy.presentation.base.BaseFragment
 import com.ssafy.presentation.databinding.FragmentLoginBinding
 import com.ssafy.presentation.databinding.FragmentMeasureBinding
 import com.ssafy.presentation.home.viewModel.UserInfoViewModel
+import com.ssafy.presentation.measurement_record.adapter.BodyInfoAdapter
+import com.ssafy.presentation.measurement_record.viewModel.CreateBodyInfoState
+import com.ssafy.presentation.measurement_record.viewModel.GetBodyDetailInfoState
 import com.ssafy.presentation.measurement_record.viewModel.MeasureViewModel
 import com.ssafy.presentation.util.CommonUtils
 import dagger.hilt.android.AndroidEntryPoint
@@ -57,12 +64,14 @@ class MeasureFragment : BaseFragment<FragmentMeasureBinding>(
 
         dialog = ProgressDialog(requireContext())
         dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER)
-
+        observeBodyDetailList()
         initial()
         initEvent()
     }
 
+
     fun initial(){
+        binding.rvBodyCompositionResult.isVisible = false
         manager = FitrusDevice(requireActivity(), this, "normal_key")
     }
 
@@ -177,12 +186,12 @@ class MeasureFragment : BaseFragment<FragmentMeasureBinding>(
                 smm = result["smm"]?.toDoubleOrNull() ?: 0.0,
                 weight = binding.etWeight.text.toString().toDouble()
             )
-            Log.d(TAG,"측정 값"+detail.toString())
-            measureViewModel.createBody(detail)
+            measureViewModel.createBody(detail) {
+                measuring = false
+                showToast("측정이 완료되어 개인 측정에 추가되었습니다")
+                manager.disconnectFitrus()
+            }
         }
-        measuring = false
-        showToast("측정이 완료되어 개인 측정에 추가되었습니다")
-        manager.disconnectFitrus()
     }
 
     override fun handleFitrusConnected() {
@@ -205,9 +214,11 @@ class MeasureFragment : BaseFragment<FragmentMeasureBinding>(
         binding.btnMeasureStart.isEnabled = false
         binding.ivFitrusUse.isVisible = false
         binding.tvDescription.isVisible = false
-        binding.tvWeight.isVisible = true
-        binding.etWeight.isVisible = true
-        binding.btnWeight.isVisible = true
+        binding.rvBodyCompositionResult.isVisible = true
+        val state = measureViewModel.createBodyInfo.value
+        if(state is CreateBodyInfoState.Success){
+            measureViewModel.getBodyDetailInfo(state.compositionLog)
+        }
         binding.etWeight.text.clear()
     }
 
@@ -217,5 +228,48 @@ class MeasureFragment : BaseFragment<FragmentMeasureBinding>(
 
     override fun handleFitrusTempMeasured(result: Map<String, String>) {
         TODO("Not yet implemented")
+    }
+
+    private fun observeBodyDetailList() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                measureViewModel.getBodyDetailInfo.collect { state ->
+                    when (state) {
+                        is GetBodyDetailInfoState.Loading -> {
+                        }
+
+                        is GetBodyDetailInfoState.Success -> {
+                            val info = state.getBodydetail
+                            Log.d(TAG,"시작되었습니다"+info.toString())
+
+                            // 소수점 한 자리로 포맷
+                            fun format1(value: Double): String = String.format("%.1f", value)
+                            val sampleItems = listOf(
+                                BodyInfoItem("체지방률", format1(info.bfp) + " %", info.bfpLabel),
+                                BodyInfoItem("골격근량", format1(info.smm) + " kg", info.smmLabel),
+                                BodyInfoItem("체지방량", format1(info.bfm) + " kg", info.bfmLabel),
+                                BodyInfoItem("기초대사량", format1(info.bmr) + " kcal", "적정"),
+                                BodyInfoItem("단백질", format1(info.protein) + " kg", info.proteinLabel),
+                                BodyInfoItem("무기질", format1(info.mineral) + " kg", info.mineralLabel),
+                                BodyInfoItem("세포외수분비", format1(info.ecw) + " kg", info.ecwRatioLabel),
+                            )
+
+                            val adapter = BodyInfoAdapter(sampleItems) {
+
+                            }
+                            binding.rvBodyCompositionResult.adapter = adapter
+                            binding.rvBodyCompositionResult.layoutManager =
+                                LinearLayoutManager(requireContext())
+                        }
+
+                        is GetBodyDetailInfoState.Error -> {
+
+                        }
+
+                        else -> Unit
+                    }
+                }
+            }
+        }
     }
 }

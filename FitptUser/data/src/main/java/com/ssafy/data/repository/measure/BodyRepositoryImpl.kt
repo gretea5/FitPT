@@ -41,7 +41,7 @@ internal class BodyRepositoryImpl  @Inject constructor(
         }
     }
 
-    override suspend fun createBody(compositionDetail: CompositionDetail): Flow<ResponseStatus<Unit>> {
+    override suspend fun createBody(compositionDetail: CompositionDetail): Flow<ResponseStatus<Int>> {
         return flow {
             val result = ApiResponseHandler().handle {
                 bodyService.createBody(compositionDetail)
