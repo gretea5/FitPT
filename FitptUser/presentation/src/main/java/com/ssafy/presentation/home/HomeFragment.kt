@@ -558,7 +558,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
 
     fun showView(){
         lifecycleScope.launch {
-            val userId = userDataStoreSource.user.first()!!.memberName
+            val userId = userDataStoreSource.nickname.firstOrNull()
             binding.tvBodyGraph.text = userId+"님의 체성분 그래프"
         }
         binding.horizontalScrollGraph.visibility = View.VISIBLE
