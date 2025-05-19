@@ -54,6 +54,7 @@ import com.ssafy.presentation.measurement_record.viewModel.MeasureViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.yield
 import java.time.DayOfWeek
@@ -109,7 +110,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
     }
 
     fun initEvent(){
-        userInfoViewModel.fetchUser()
         binding.btnPrevMonth.setOnClickListener {
             val currentYearMonth = selectedDayViewModel.selectedYearMonth.value
             val newYearMonth = currentYearMonth.minusMonths(1)
@@ -125,6 +125,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
                 newYearMonth
             )
         }
+
+        userInfoViewModel.fetchUser()
         measureViewModel.getBodyList("createdAt","asc")
         selectedDayViewModel.initYearMonth()
         scheduleViewModel.getScheduleList("",selectedDayViewModel.selectedYearMonth.value.toString())
@@ -279,15 +281,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
                         dialog.show(childFragmentManager, "payment")
                     } else {
                         Log.d(TAG, "openDialog 트리거되었지만 해당 날짜에 스케줄 없음")
-                    }
-                }
-            }
-        }
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                userInfoViewModel.userInfo.collect { user ->
-                    if (user is UserInfoState.Success) {
-                        Log.d(TAG,user.userInfo.toString())
                     }
                 }
             }
@@ -465,7 +458,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
 
     fun observeModel() {
 
-
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 measureViewModel.getBodyListInfo.collect { state ->
@@ -540,7 +532,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
                         is GetBodyListInfoState.Error -> {
                             Log.d(TAG, "에러: ${state.message}")
                         }
-                        else -> Unit
+                        else -> {
+                            Log.d(TAG, "에러: 문제 발생")
+                        }
                     }
                 }
             }
