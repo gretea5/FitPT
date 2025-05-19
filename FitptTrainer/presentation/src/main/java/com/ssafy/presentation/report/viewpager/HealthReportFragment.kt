@@ -47,10 +47,8 @@ class HealthReportFragment : BaseFragment<FragmentHealthReportBinding>(
         initEvent()
         observeReportDetailList()
         initRecyclerView()
-        if(viewModel.reportId.value==-1){
-            observeViewModel()
-        }
-        else{
+        observeViewModel()
+        if(viewModel.reportId.value!=-1){
             val state = viewModel.getReportDetailInfo.value
             if(state is GetReportInfoState.Success){
                 Log.d(TAG,"출력"+state.getReportdetail.toString())
@@ -103,7 +101,7 @@ class HealthReportFragment : BaseFragment<FragmentHealthReportBinding>(
                 val newId = System.currentTimeMillis()
 
                 reportViewModel.setCurrentWorkoutId(newId)
-                healthReportAdapter.addEditItem(newId)
+                healthReportAdapter.addEditItem(newId,0,"","")
             }
 
             // 운동 추가 완료
@@ -341,11 +339,11 @@ class HealthReportFragment : BaseFragment<FragmentHealthReportBinding>(
                                 Log.d(TAG,workout.toString())
                                 val newId = System.currentTimeMillis()
                                 reportViewModel.setCurrentWorkoutId(newId)
-                                healthReportAdapter.addEditItem(newId)
                                 val name = workout.exerciseName
                                 val score = workout.exerciseAchievement
                                 val comment = workout.exerciseComment
                                 val muscles = workout.activationMuscleId
+                                healthReportAdapter.addEditItem(newId,1,name,score)
                                 reportViewModel.getReportaddWorkoutReport(name, score, comment, muscles)
                                 healthReportAdapter.finalizeLastItem()
                             }
