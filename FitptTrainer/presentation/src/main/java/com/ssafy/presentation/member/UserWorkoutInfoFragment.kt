@@ -65,7 +65,6 @@ class UserWorkoutInfoFragment : BaseFragment<FragmentUserWorkoutInfoBinding>(
         binding.btnBmi.isSelected = false
         binding.btnBodyFat.isSelected = false
 
-        // 차트 초기화 - 데이터가 로드되기 전에 빈 차트 표시
         dateArray = arrayOf()
         dateEntries = arrayOf()
 
@@ -224,6 +223,15 @@ class UserWorkoutInfoFragment : BaseFragment<FragmentUserWorkoutInfoBinding>(
     }
 
     private fun updateChartData() {
+        if (userWorkoutInfoMemberListAdapter.getSelectedItem() == null) {
+            dateArray = arrayOf()
+            dateEntries = arrayOf()
+
+            initChart()
+
+            return
+        }
+
         if (composition.isEmpty()) return
 
         dateArray = composition.map { TimeUtils.formatDateToMonthDay(it.createdAt) }.toTypedArray()
