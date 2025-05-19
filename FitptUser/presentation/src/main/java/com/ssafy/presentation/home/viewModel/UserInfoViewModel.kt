@@ -98,6 +98,7 @@ class UserInfoViewModel @Inject constructor(
                     when(uiState) {
                         is ResponseStatus.Success -> {
                             Log.d("UserFragment", "User sdf: ${_userInfo.value}")
+                            dataStoreSource.clearAll()
                         }
                         is ResponseStatus.Error -> {
                             _userInfo.value = UserInfoState.Error(uiState.error.message)
