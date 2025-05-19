@@ -9,7 +9,7 @@ import javax.inject.Inject
 class GetReportDetailUsecase @Inject constructor(
     private val reportRepository: ReportRepository
 ) {
-    suspend fun invoke(reportId: Int): Flow<ResponseStatus<ReportDetail>> {
+    suspend operator fun invoke(reportId: Int): Flow<ResponseStatus<ReportDetail>> {
         return reportRepository.getReportDetail(reportId)
     }
 }

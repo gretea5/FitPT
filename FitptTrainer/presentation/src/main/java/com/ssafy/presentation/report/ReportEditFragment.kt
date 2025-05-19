@@ -26,10 +26,12 @@ import com.ssafy.presentation.report.adapter.CompositionAdapter
 import com.ssafy.presentation.report.adapter.ReportViewPagerAdapter
 import com.ssafy.presentation.report.viewmodel.CreateBodyInfoState
 import com.ssafy.presentation.report.viewmodel.GetBodyDetailInfoState
+import com.ssafy.presentation.report.viewmodel.GetReportInfoState
 import com.ssafy.presentation.report.viewmodel.MeasureViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import com.ssafy.presentation.report.viewmodel.ReportViewModel
 import com.ssafy.presentation.report.viewmodel.UserInfoState
+import com.ssafy.presentation.util.CommonUtils
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -62,11 +64,16 @@ class ReportEditFragment : BaseFragment<FragmentReportEditBinding>(
         initEvent()
         memberId = args.memberId
         reportId = args.reportId
-        if (args.reportId != -1L) {
+        reportViewModel.setReportId(reportId!!.toInt())
+        if (args.reportId == -1L) {
             //수정으로 들어왔을때
+            createReportEvent()
+            measureViewModel.updateMember(memberId!!.toInt())
+            measureViewModel.fetchUser(memberId!!.toInt())
         }
-        measureViewModel.updateMember(memberId!!.toInt())
-        measureViewModel.fetchUser(memberId!!.toInt())
+        else{
+            reportViewModel.getReportDetailInfo(reportId!!.toInt())
+        }
     }
 
     override fun onDestroy() {
@@ -83,6 +90,9 @@ class ReportEditFragment : BaseFragment<FragmentReportEditBinding>(
                 findNavController().navigate(R.id.action_reportEditFragment_to_userWorkoutInfoFragment)
             }
         }
+    }
+
+    fun createReportEvent(){
         binding.btnAddReport.setOnClickListener {
             val state = measureViewModel.measureCreateInfo.value
             if(state is CreateBodyInfoState.Success){
@@ -116,6 +126,8 @@ class ReportEditFragment : BaseFragment<FragmentReportEditBinding>(
             }
         }
     }
+
+
 
     fun initTabLayout() {
         viewPagerAdapter = ReportViewPagerAdapter(requireActivity())
@@ -174,6 +186,26 @@ class ReportEditFragment : BaseFragment<FragmentReportEditBinding>(
                             binding.tvReportTitle.text = "${state.userInfo.memberName} $currentDate 보고서"
                         }
                         is UserInfoState.Error -> {
+
+                        }
+                        else -> Unit
+                    }
+                }
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                reportViewModel.getReportDetailInfo.collect { state ->
+                    when (state) {
+                        is GetReportInfoState.Loading -> {
+                        }
+                        is GetReportInfoState.Success -> {
+                            val currentDate = CommonUtils.formatDateTime(state.getReportdetail.createdAt)
+                            binding.tvReportTitle.text = "$currentDate 보고서"
+                            Log.d(TAG,state.getReportdetail.toString())
+                        }
+                        is GetReportInfoState.Error -> {
 
                         }
                         else -> Unit

@@ -90,6 +90,28 @@ class HealthReportViewModel @Inject constructor() : ViewModel() {
         }
     }
 
+    fun getReportaddWorkoutReport(name: String,score: String,description: String,muscles: List<Int>,id: Long) {
+
+        if (id != null && name.isNotBlank() && score.isNotBlank() && description.isNotBlank() && muscles.isNotEmpty()) {
+            val newReport = TempHealthReportWorkout(
+                id = id,
+                exerciseName = name,
+                exerciseAchievement = score,
+                exerciseComment = description,
+                activationMuscleId = muscles.sorted(),
+            )
+
+            val currentList = _workoutReportList.value.orEmpty()
+            _workoutReportList.value = currentList + newReport
+
+            Log.d(TAG, "addWorkoutReport: $newReport")
+            clearInputs()
+
+            _currentWorkoutId.value = null
+        }
+    }
+
+
     fun deleteSelectedWorkout() {
         _selectedWorkoutId.value?.let { id -> deleteWorkoutById(id) }
     }

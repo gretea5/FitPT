@@ -8,6 +8,9 @@ import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ssafy.domain.model.report.MuscleGroup
 import com.ssafy.domain.model.report.WorkoutNameScoreItem
@@ -15,9 +18,17 @@ import com.ssafy.presentation.R
 import com.ssafy.presentation.base.BaseFragment
 import com.ssafy.presentation.databinding.FragmentHealthReportBinding
 import com.ssafy.presentation.report.adapter.HealthReportAdapter
+import com.ssafy.presentation.report.viewmodel.GetBodyDetailInfoState
+import com.ssafy.presentation.report.viewmodel.GetReportInfoState
 import com.ssafy.presentation.report.viewmodel.HealthReportViewModel
 import com.ssafy.presentation.report.viewmodel.ReportViewModel
+import com.ssafy.presentation.report.viewmodel.UserInfoState
+import com.ssafy.presentation.util.CommonUtils
 import kotlinx.coroutines.flow.observeOn
+import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 private const val TAG = "HealthReportFragment_FitPT"
 
@@ -33,9 +44,18 @@ class HealthReportFragment : BaseFragment<FragmentHealthReportBinding>(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initMuscles()
-        initRecyclerView()
         initEvent()
-        observeViewModel()
+        observeReportDetailList()
+        if(viewModel.reportId.value==-1){
+            initRecyclerView()
+            observeViewModel()
+        }
+        else{
+            val state = viewModel.getReportDetailInfo.value
+            if(state is GetReportInfoState.Success){
+                Log.d(TAG,"출력"+state.getReportdetail.toString())
+            }
+        }
     }
 
     private fun initEvent() {
@@ -304,6 +324,34 @@ class HealthReportFragment : BaseFragment<FragmentHealthReportBinding>(
         muscleGroups.forEach { group ->
             group.imageViews.forEach { iv ->
                 iv.isEnabled = flag
+            }
+        }
+    }
+
+    private fun observeReportDetailList() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.getReportDetailInfo.collect { state ->
+                    when (state) {
+                        is GetReportInfoState.Loading -> {
+                        }
+                        is GetReportInfoState.Success -> {
+                            val reportDetail = state.getReportdetail
+                            reportDetail.reportExercises.forEach { workout ->
+                                val name = workout.exerciseName
+                                val score = workout.exerciseAchievement
+                                val comment = workout.exerciseComment
+                                val muscles = workout.activationMuscleId
+                                val id = System.currentTimeMillis()
+                                reportViewModel.getReportaddWorkoutReport(name, score, comment, muscles, id)
+                            }
+                        }
+                        is GetReportInfoState.Error -> {
+
+                        }
+                        else -> Unit
+                    }
+                }
             }
         }
     }
