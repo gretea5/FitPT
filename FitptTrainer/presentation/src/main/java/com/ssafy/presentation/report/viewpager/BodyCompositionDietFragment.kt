@@ -292,7 +292,7 @@ class BodyCompositionDietFragment : BaseFragment<FragmentBodyCompositionDietBind
                             Log.d(TAG,reportDetail.toString())
                             measureViewModel.getBodyDetailInfo(reportDetail.compositionResponseDto.compositionLogId)
                             binding.clWeight.isVisible = false
-                            binding.rvReportMeasureResult.isVisible = true
+                            binding.scrollviewMeasureResult.isVisible = true
                             Log.d(TAG, reportDetail.toString())
                         }
 
