@@ -111,6 +111,14 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
             viewModel.scheduleItems.collect { scheduleItems ->
                 scheduleAdapter.submitList(scheduleItems)
 
+                // 일정이 비어있는지 확인하고 EmptyView 표시
+                if (scheduleItems.isEmpty()) {
+                    binding.tvEmptySchedule.visibility = View.VISIBLE
+                    binding.rvMemberSchedule.visibility = View.GONE
+                } else {
+                    binding.tvEmptySchedule.visibility = View.GONE
+                    binding.rvMemberSchedule.visibility = View.VISIBLE
+                }
             }
         }
 
