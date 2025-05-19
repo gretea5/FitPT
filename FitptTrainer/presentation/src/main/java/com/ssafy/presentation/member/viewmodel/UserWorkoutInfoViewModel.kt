@@ -117,7 +117,6 @@ class UserWorkoutInfoViewModel @Inject constructor(
         filterReportsByYearAndMonth()
     }
 
-    // UserWorkoutInfoViewModel에 수정
     fun setSelectedMonth(monthText: String) {
         selectedMonth = when (monthText) {
             "전체" -> 0 // 전체 월을 의미하는 0
@@ -160,7 +159,7 @@ class UserWorkoutInfoViewModel @Inject constructor(
                 getBodyListUseCase(
                     memberId = memberId.toInt(),
                     sort = "createdAt",
-                    order = "desc"
+                    order = "asc"
                 ).collect { response ->
                     Log.d(TAG, "getComposition: ${response}")
 
