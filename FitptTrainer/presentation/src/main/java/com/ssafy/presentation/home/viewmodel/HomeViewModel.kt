@@ -8,7 +8,6 @@ import com.ssafy.domain.model.base.ResponseStatus
 import com.ssafy.domain.model.member.MemberInfo
 import com.ssafy.domain.model.schedule.Schedule
 import com.ssafy.domain.model.schedule.ScheduleWithMemberInfo
-import com.ssafy.domain.usecase.auth.LogoutUseCase
 import com.ssafy.domain.usecase.member.GetMemberInfoByIdUseCase
 import com.ssafy.domain.usecase.schedule.GetScheduleUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,7 +26,6 @@ private const val TAG = "HomeViewModel_ssafy"
 class HomeViewModel @Inject constructor(
     private val getScheduleUseCase: GetScheduleUseCase,
     private val getMemberInfoByIdUseCase: GetMemberInfoByIdUseCase,
-    private val logoutUseCase: LogoutUseCase,
     private val dataStore: TrainerDataStoreSource
 ) : ViewModel(){
 
