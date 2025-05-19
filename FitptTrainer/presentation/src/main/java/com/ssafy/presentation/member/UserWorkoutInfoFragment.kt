@@ -2,6 +2,7 @@ package com.ssafy.presentation.member
 
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.ContextCompat
@@ -28,6 +29,7 @@ import com.ssafy.presentation.member.viewmodel.UserWorkoutInfoViewModel
 import com.ssafy.presentation.util.CommonUtils
 import com.ssafy.presentation.util.TimeUtils
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 
 private const val TAG = "UserWorkoutInfoFragment_FitPT"
@@ -55,23 +57,26 @@ class UserWorkoutInfoFragment : BaseFragment<FragmentUserWorkoutInfoBinding>(
         memberInfos = memberInfo
         memberId = memberInfo.memberId
 
+        memberInfos = memberInfo
+        memberId = memberInfo.memberId
+
         binding.btnSkeletalMuscle.isSelected = true
         binding.btnWeight.isSelected = false
         binding.btnBmi.isSelected = false
         binding.btnBodyFat.isSelected = false
 
-        viewModel.getReports(memberInfo.memberId.toInt())
+        // 차트 초기화 - 데이터가 로드되기 전에 빈 차트 표시
+        dateArray = arrayOf()
+        dateEntries = arrayOf()
+
+        viewModel.setSelectedMonth("전체")
         viewModel.getMember(memberInfo.memberId)
         viewModel.getComposition(memberInfo.memberId)
-        viewModel.setSelectedMonth("전체")
+        viewModel.getReports(memberInfo.memberId.toInt())
 
         val currentMonthText = months[selectedMonth]
         viewModel.setSelectedMonth(currentMonthText)
-
         monthAdapter.setSelectedPosition(selectedMonth)
-
-        dateArray = composition.map { TimeUtils.formatDateToMonthDay(it.createdAt) }.toTypedArray()
-        dateEntries = composition.map { it.smm }.toTypedArray()
 
         initChart()
     }
@@ -125,6 +130,8 @@ class UserWorkoutInfoFragment : BaseFragment<FragmentUserWorkoutInfoBinding>(
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.composition.collect {
+                Log.d(TAG, "initObserver: ${composition.joinToString(", ")}")
+                
                 composition = it.toMutableList()
 
                 updateChartData()

@@ -261,7 +261,7 @@
                                 style="@style/Font_Medium_20_main_black"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="사용자 최신 체성분 정보"
+                                android:text="사용자 정보"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />

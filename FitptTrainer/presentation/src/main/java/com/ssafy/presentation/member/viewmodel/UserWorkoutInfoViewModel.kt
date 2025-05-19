@@ -164,6 +164,7 @@ class UserWorkoutInfoViewModel @Inject constructor(
                     order = "asc"
                 ).collect { response ->
                     Log.d(TAG, "getComposition: ${response}")
+                    _composition.value = emptyList()
 
                     when(response) {
                         is ResponseStatus.Success -> {
