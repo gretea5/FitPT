@@ -2,7 +2,6 @@ package com.ssafy.presentation.member
 
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.ContextCompat
@@ -44,10 +43,13 @@ class UserWorkoutInfoFragment : BaseFragment<FragmentUserWorkoutInfoBinding>(
     private var memberInfos: MemberInfo? = null
     private var memberId : Long? = null
     private val viewModel: UserWorkoutInfoViewModel by viewModels()
+    private var selectedMonth = 0
 
     private var composition = mutableListOf<CompositionItem>()
     private var dateArray = arrayOf<String>()
     private var dateEntries = arrayOf<Double>()
+
+    private val months = listOf("전체", "1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월")
 
     private val userWorkoutInfoMemberListAdapter = UserWorkoutInfoMemberListAdapter { memberInfo ->
         memberInfos = memberInfo
@@ -62,6 +64,11 @@ class UserWorkoutInfoFragment : BaseFragment<FragmentUserWorkoutInfoBinding>(
         viewModel.getMember(memberInfo.memberId)
         viewModel.getComposition(memberInfo.memberId)
         viewModel.setSelectedMonth("전체")
+
+        val currentMonthText = months[selectedMonth]
+        viewModel.setSelectedMonth(currentMonthText)
+
+        monthAdapter.setSelectedPosition(selectedMonth)
 
         dateArray = composition.map { TimeUtils.formatDateToMonthDay(it.createdAt) }.toTypedArray()
         dateEntries = composition.map { it.smm }.toTypedArray()
@@ -119,6 +126,8 @@ class UserWorkoutInfoFragment : BaseFragment<FragmentUserWorkoutInfoBinding>(
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.composition.collect {
                 composition = it.toMutableList()
+
+                updateChartData()
             }
         }
     }
@@ -207,10 +216,31 @@ class UserWorkoutInfoFragment : BaseFragment<FragmentUserWorkoutInfoBinding>(
         }
     }
 
-    fun initRecyclerView() {
-        val months = listOf("전체", "1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월")
+    private fun updateChartData() {
+        if (composition.isEmpty()) return
 
-        monthAdapter = UserWorkoutInfoMonthAdapter(requireContext(), months) { selectedMonth ->
+        dateArray = composition.map { TimeUtils.formatDateToMonthDay(it.createdAt) }.toTypedArray()
+
+        when {
+            binding.btnSkeletalMuscle.isSelected -> {
+                dateEntries = composition.map { it.smm }.toTypedArray()
+            }
+            binding.btnWeight.isSelected -> {
+                dateEntries = composition.map { it.weight }.toTypedArray()
+            }
+            binding.btnBmi.isSelected -> {
+                dateEntries = composition.map { it.weight / (memberInfos!!.memberWeight * memberInfos!!.memberWeight) }.toTypedArray()
+            }
+            binding.btnBodyFat.isSelected -> {
+                dateEntries = composition.map { it.bfm }.toTypedArray()
+            }
+        }
+
+        initChart()
+    }
+
+    fun initRecyclerView() {
+        monthAdapter = UserWorkoutInfoMonthAdapter(requireContext(), months) { selectedMonth, position ->
             viewModel.setSelectedMonth(selectedMonth)
             viewModel.filterReportsByYearAndMonth()
         }
@@ -278,11 +308,9 @@ class UserWorkoutInfoFragment : BaseFragment<FragmentUserWorkoutInfoBinding>(
                 gridColor = Color.parseColor("#DDDDDD")
                 gridLineWidth = 0.5f
 
-                // Y축 수치 설정 (0, 25, 50, 75, 100)
                 setLabelCount(5, true)
             }
 
-            // 애니메이션 설정
             //animateX(1000)
         }
 
