@@ -34,6 +34,7 @@ import com.ssafy.presentation.report.ReportEditFragmentArgs
 import com.ssafy.presentation.report.adapter.CompositionAdapter
 import com.ssafy.presentation.report.viewmodel.CreateBodyInfoState
 import com.ssafy.presentation.report.viewmodel.GetBodyDetailInfoState
+import com.ssafy.presentation.report.viewmodel.GetReportInfoState
 import com.ssafy.presentation.report.viewmodel.MeasureViewModel
 import com.ssafy.presentation.report.viewmodel.ReportViewModel
 import com.ssafy.presentation.report.viewmodel.UserInfoState
@@ -51,6 +52,7 @@ class BodyCompositionDietFragment : BaseFragment<FragmentBodyCompositionDietBind
 
 
     private val measureViewModel : MeasureViewModel by activityViewModels()
+    private val reportViewModel : ReportViewModel by activityViewModels()
 
     private lateinit var manager: FitrusDevice
     private var measuring: Boolean = false
@@ -65,8 +67,14 @@ class BodyCompositionDietFragment : BaseFragment<FragmentBodyCompositionDietBind
         dialog = ProgressDialog(requireContext())
         dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER)
 
-        initial()
         initEvent()
+        if(reportViewModel.reportId.value==-1){
+            initial()
+        }
+        else{
+            observeBodyList()
+            observeReportDetailList()
+        }
     }
 
     fun initial(){
@@ -267,5 +275,35 @@ class BodyCompositionDietFragment : BaseFragment<FragmentBodyCompositionDietBind
             CompositionCondition("무기질", data.mineralLabel, data.mineralCount,data.mineral.toString()),
             CompositionCondition("세포외수분비", data.ecwRatioLabel, data.ecwRatioCount,data.ecw.toString())
         )
+    }
+
+
+    private fun observeReportDetailList() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.getReportDetailInfo.collect { state ->
+                    when (state) {
+                        is GetReportInfoState.Loading -> {
+                        }
+
+                        is GetReportInfoState.Success -> {
+                            val reportDetail = state.getReportdetail
+                            binding.etReportDietContent.setText(reportDetail.reportComment)
+                            Log.d(TAG,reportDetail.toString())
+                            measureViewModel.getBodyDetailInfo(reportDetail.compositionResponseDto.compositionLogId)
+                            binding.clWeight.isVisible = false
+                            binding.rvReportMeasureResult.isVisible = true
+                            Log.d(TAG, reportDetail.toString())
+                        }
+
+                        is GetReportInfoState.Error -> {
+
+                        }
+
+                        else -> Unit
+                    }
+                }
+            }
+        }
     }
 }

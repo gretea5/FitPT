@@ -90,8 +90,8 @@ class HealthReportViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-    fun getReportaddWorkoutReport(name: String,score: String,description: String,muscles: List<Int>,id: Long) {
-
+    fun getReportaddWorkoutReport(name: String,score: String,description: String,muscles: List<Int>) {
+        val id = _currentWorkoutId.value
         if (id != null && name.isNotBlank() && score.isNotBlank() && description.isNotBlank() && muscles.isNotEmpty()) {
             val newReport = TempHealthReportWorkout(
                 id = id,
