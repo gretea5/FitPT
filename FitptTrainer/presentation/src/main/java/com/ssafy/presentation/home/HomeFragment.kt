@@ -1,5 +1,6 @@
 package com.ssafy.presentation.home
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -25,10 +26,12 @@ import com.kizitonwose.calendar.view.ViewContainer
 import com.ssafy.domain.model.schedule.Schedule
 import com.ssafy.presentation.R
 import com.ssafy.presentation.base.BaseFragment
+import com.ssafy.presentation.common.MainActivity
 import com.ssafy.presentation.databinding.FragmentHomeBinding
 import com.ssafy.presentation.home.adapter.HomeAdapter
 import com.ssafy.presentation.home.viewmodel.HomeStatus
 import com.ssafy.presentation.home.viewmodel.HomeViewModel
+import com.ssafy.presentation.login.LoginActivity
 import com.ssafy.presentation.util.TimeUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -111,7 +114,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
             viewModel.scheduleItems.collect { scheduleItems ->
                 scheduleAdapter.submitList(scheduleItems)
 
-                // 일정이 비어있는지 확인하고 EmptyView 표시
                 if (scheduleItems.isEmpty()) {
                     binding.tvEmptySchedule.visibility = View.VISIBLE
                     binding.rvMemberSchedule.visibility = View.GONE
@@ -127,6 +129,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
                 viewModel.monthlyScheduleItems.collect { scheduleItems ->
                     updateEventsDatesList(scheduleItems)
                 }
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.isLogout.collect { isLogout ->
+                if (isLogout) navigateToLogin()
             }
         }
     }
@@ -290,5 +298,24 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
         binding.ibWorkout.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_userWorkoutInfoFragment)
         }
+
+        binding.ibLogout.setOnClickListener {
+            viewModel.logout()
+        }
+    }
+
+    private fun navigateToLogin() {
+        val intent = Intent(requireContext(), LoginActivity::class.java)
+
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
+
+        requireActivity().overridePendingTransition(
+            R.anim.slide_in_right, R.anim.slide_out_left
+        )
+
+        requireActivity().finishAffinity()
+
+        viewModel.resetHomeState()
     }
 }
