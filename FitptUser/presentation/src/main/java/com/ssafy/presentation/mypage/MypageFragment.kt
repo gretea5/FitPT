@@ -64,7 +64,7 @@ class MypageFragment : BaseFragment<FragmentMypageBinding>(
                 binding.tvValueHeight.text = it?.memberHeight.toString()+"cm"
                 binding.tvValueWeight.text = it?.memberWeight.toString()+"kg"
                 binding.tvValueGym.text = it?.gymName
-                binding.tvValueTrainer.text = it?.trainerName
+                binding.tvValueTrainer.text = it?.trainerName ?: ""
             }
         }
     }

@@ -13,6 +13,6 @@ data class UserInfo(
     val memberWeight: Double = 0.0,
     val memberBirth: String = "",
     val trainerId: Int=0,
-    val trainerName: String = "",
+    val trainerName: String? = null,
     val gymName: String = ""
 ) : BaseModel
