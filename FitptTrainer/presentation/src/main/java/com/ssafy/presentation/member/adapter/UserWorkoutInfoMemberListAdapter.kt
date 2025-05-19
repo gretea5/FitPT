@@ -30,22 +30,17 @@ class UserWorkoutInfoMemberListAdapter(
         holder.itemView.setOnClickListener {
             val previousSelected = selectedPosition
 
-            if (previousSelected == position) {
-                selectedPosition = -1
-            } else {
-                selectedPosition = position
-            }
+            selectedPosition = position
 
             if (previousSelected != -1) {
                 notifyItemChanged(previousSelected)
             }
             notifyItemChanged(position)
 
-            if (selectedPosition != -1) {
-                onItemSelected.invoke(item)
-            }
+            onItemSelected.invoke(item)
         }
     }
+
 
     class ViewHolder(private val binding: ItemWorkoutMemberBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(memberInfo: MemberInfo, isSelected: Boolean) {

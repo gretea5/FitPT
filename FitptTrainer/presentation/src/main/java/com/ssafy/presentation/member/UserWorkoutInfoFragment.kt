@@ -29,7 +29,6 @@ import com.ssafy.presentation.member.viewmodel.UserWorkoutInfoViewModel
 import com.ssafy.presentation.util.CommonUtils
 import com.ssafy.presentation.util.TimeUtils
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 
 private const val TAG = "UserWorkoutInfoFragment_FitPT"
@@ -223,15 +222,6 @@ class UserWorkoutInfoFragment : BaseFragment<FragmentUserWorkoutInfoBinding>(
     }
 
     private fun updateChartData() {
-        if (userWorkoutInfoMemberListAdapter.getSelectedItem() == null) {
-            dateArray = arrayOf()
-            dateEntries = arrayOf()
-
-            initChart()
-
-            return
-        }
-
         if (composition.isEmpty()) return
 
         dateArray = composition.map { TimeUtils.formatDateToMonthDay(it.createdAt) }.toTypedArray()
@@ -279,6 +269,14 @@ class UserWorkoutInfoFragment : BaseFragment<FragmentUserWorkoutInfoBinding>(
     }
 
     fun initChart() {
+        Log.d(TAG, "initChart: ${userWorkoutInfoMemberListAdapter.getSelectedItem()}")
+
+        if (userWorkoutInfoMemberListAdapter.getSelectedItem() == null) {
+            composition.clear()
+            dateArray = arrayOf()
+            dateEntries = arrayOf()
+        }
+
         lineChart = binding.chartUserBodyGraph
 
         lineChart.apply {
@@ -325,8 +323,6 @@ class UserWorkoutInfoFragment : BaseFragment<FragmentUserWorkoutInfoBinding>(
 
                 setLabelCount(5, true)
             }
-
-            //animateX(1000)
         }
 
         val entries = ArrayList<Entry>()
