@@ -146,6 +146,10 @@ public class AuthService {
         Member member = memberRepository.findByKakaoId(kakaoUserInfo.getId())
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 
+        if (member.isDeleted()) {
+            throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
+        }
+
         log.debug("로그인 회원 정보: id={}, name={}", member.getMemberId(), member.getMemberName());
 
         // FCM 토큰 처리
