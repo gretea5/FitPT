@@ -228,7 +228,7 @@
             android:id="@+id/status_dot"
             android:layout_width="10dp"
             android:layout_height="10dp"
-            android:background="@drawable/circle_blue" />
+            android:background="@drawable/circle_green" />
 
         <TextView
             android:id="@+id/tv_status"

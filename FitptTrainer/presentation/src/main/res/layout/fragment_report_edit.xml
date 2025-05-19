@@ -42,7 +42,7 @@
             android:id="@+id/btn_add_report"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/main_gray"
+            android:backgroundTint="@color/highlight_orange"
             android:text="작성 완료"
             android:textColor="@color/white"
             android:textAppearance="@style/Font_Bold_14_main_white"

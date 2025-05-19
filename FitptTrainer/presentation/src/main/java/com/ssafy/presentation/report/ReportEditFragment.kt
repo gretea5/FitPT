@@ -61,6 +61,10 @@ class ReportEditFragment : BaseFragment<FragmentReportEditBinding>(
         observeUserList()
         initEvent()
         memberId = args.memberId
+        reportId = args.reportId
+        if (args.reportId != -1L) {
+            //수정으로 들어왔을때
+        }
         measureViewModel.updateMember(memberId!!.toInt())
         measureViewModel.fetchUser(memberId!!.toInt())
     }
@@ -69,12 +73,6 @@ class ReportEditFragment : BaseFragment<FragmentReportEditBinding>(
         super.onDestroy()
         measureViewModel.resetCreateBody()
         //reportViewModel.resetReport()
-        reportId = args.reportId
-
-        if (args.reportId != -1L) {
-            //수정으로 들어왔을때
-        }
-
         Log.d(TAG, "onViewCreated: $memberId")
         Log.d(TAG, "onViewCreated: $reportId")
     }

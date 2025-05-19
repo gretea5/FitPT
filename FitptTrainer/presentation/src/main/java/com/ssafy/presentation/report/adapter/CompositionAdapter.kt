@@ -26,17 +26,17 @@ class CompositionAdapter(private val items: List<CompositionCondition>) : Recycl
             if(item.bodyCondition=="미만"){
                 tvMidalScore.visibility = View.VISIBLE
                 tvMidalScore.text = item.bodyScore
-                statusDot.setBackgroundResource(R.drawable.circle_red)
+                statusDot.setBackgroundResource(R.drawable.circle_yellow)
             }
             else if(item.bodyCondition=="적정"){
                 tvBotongScore.visibility = View.VISIBLE
                 tvBotongScore.text = item.bodyScore
-                statusDot.setBackgroundResource(R.drawable.circle_blue)
+                statusDot.setBackgroundResource(R.drawable.circle_green)
             }
             else if(item.bodyCondition=="초과"){
                 tvChogwaScore.visibility = View.VISIBLE
                 tvChogwaScore.text = item.bodyScore
-                statusDot.setBackgroundResource(R.drawable.circle_yellow)
+                statusDot.setBackgroundResource(R.drawable.circle_red)
             }
             else{
                 tvManyChogwaScore.visibility = View.VISIBLE
