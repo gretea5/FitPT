@@ -11,7 +11,7 @@ import com.ssafy.presentation.databinding.ListItemUserMonthBinding
 class UserWorkoutInfoMonthAdapter(
     private val context: Context,
     private val monthList: List<String>,
-    private val onItemClicked: (String, Int) -> Unit
+    private val onItemClicked: (String, Int) -> Boolean
 ) : RecyclerView.Adapter<UserWorkoutInfoMonthAdapter.MonthViewHolder>() {
 
     private var selectedPosition = RecyclerView.NO_POSITION
@@ -49,11 +49,15 @@ class UserWorkoutInfoMonthAdapter(
 
             // 클릭 이벤트
             binding.root.setOnClickListener {
-                val previousSelected = selectedPosition
-                selectedPosition = position
-                notifyItemChanged(previousSelected)
-                notifyItemChanged(selectedPosition)
-                onItemClicked(month, position)
+                val shouldUpdateSelection = onItemClicked(month, position)
+
+                if (shouldUpdateSelection) {
+                    val previousSelected = selectedPosition
+                    selectedPosition = position
+                    notifyItemChanged(previousSelected)
+                    notifyItemChanged(selectedPosition)
+                    onItemClicked(month, position)
+                }
             }
         }
     }

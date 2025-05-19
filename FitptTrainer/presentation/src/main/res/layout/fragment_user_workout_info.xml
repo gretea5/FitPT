@@ -422,10 +422,25 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_marginTop="20dp"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cv_user_report_line" />
+
+            <TextView
+                android:id="@+id/tv_empty_report_list"
+                style="@style/Font_Medium_20_main_black"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="회원을 선택하세요."
+                android:gravity="center"
+                android:textSize="18sp"
+                android:visibility="visible"
+                app:layout_constraintTop_toBottomOf="@+id/cv_user_report_line"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

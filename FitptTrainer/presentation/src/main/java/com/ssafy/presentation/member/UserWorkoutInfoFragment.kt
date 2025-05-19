@@ -56,6 +56,9 @@ class UserWorkoutInfoFragment : BaseFragment<FragmentUserWorkoutInfoBinding>(
         memberInfos = memberInfo
         memberId = memberInfo.memberId
 
+        binding.rvUserReportList.visibility = View.VISIBLE
+        binding.tvEmptyReportList.visibility = View.GONE
+
         memberInfos = memberInfo
         memberId = memberInfo.memberId
 
@@ -153,14 +156,29 @@ class UserWorkoutInfoFragment : BaseFragment<FragmentUserWorkoutInfoBinding>(
     fun initEvent() {
         binding.apply {
             layoutUserReportYear.setOnClickListener {
+                if (memberId == null) {
+                    showToast("회원을 선택해주세요.")
+                    return@setOnClickListener
+                }
+
                 showYearDropdownMenu()
             }
 
             ibUserReportDropdownYear.setOnClickListener {
+                if (memberId == null) {
+                    showToast("회원을 선택해주세요.")
+                    return@setOnClickListener
+                }
+
                 showYearDropdownMenu()
             }
 
             cvAddReport.setOnClickListener {
+                if (memberId == null) {
+                    showToast("회원을 선택해주세요.")
+                    return@setOnClickListener
+                }
+
                 memberId?.let {
                     val action = UserWorkoutInfoFragmentDirections.actionUserWorkoutInfoFragmentToReportEditFragment(it)
                     findNavController().navigate(action)
@@ -172,6 +190,11 @@ class UserWorkoutInfoFragment : BaseFragment<FragmentUserWorkoutInfoBinding>(
             }
 
             btnSkeletalMuscle.setOnClickListener {
+                if (memberId == null) {
+                    showToast("회원을 선택해주세요.")
+                    return@setOnClickListener
+                }
+
                 btnSkeletalMuscle.isSelected = true
                 btnWeight.isSelected = false
                 btnBmi.isSelected = false
@@ -184,6 +207,11 @@ class UserWorkoutInfoFragment : BaseFragment<FragmentUserWorkoutInfoBinding>(
             }
 
             btnWeight.setOnClickListener {
+                if (memberId == null) {
+                    showToast("회원을 선택해주세요.")
+                    return@setOnClickListener
+                }
+
                 btnWeight.isSelected = true
                 btnSkeletalMuscle.isSelected = false
                 btnBmi.isSelected = false
@@ -196,6 +224,11 @@ class UserWorkoutInfoFragment : BaseFragment<FragmentUserWorkoutInfoBinding>(
             }
 
             btnBmi.setOnClickListener {
+                if (memberId == null) {
+                    showToast("회원을 선택해주세요.")
+                    return@setOnClickListener
+                }
+
                 btnBmi.isSelected = true
                 btnSkeletalMuscle.isSelected = false
                 btnWeight.isSelected = false
@@ -208,6 +241,11 @@ class UserWorkoutInfoFragment : BaseFragment<FragmentUserWorkoutInfoBinding>(
             }
 
             btnBodyFat.setOnClickListener {
+                if (memberId == null) {
+                    showToast("회원을 선택해주세요.")
+                    return@setOnClickListener
+                }
+
                 btnBodyFat.isSelected = true
                 btnSkeletalMuscle.isSelected = false
                 btnWeight.isSelected = false
@@ -246,8 +284,14 @@ class UserWorkoutInfoFragment : BaseFragment<FragmentUserWorkoutInfoBinding>(
 
     fun initRecyclerView() {
         monthAdapter = UserWorkoutInfoMonthAdapter(requireContext(), months) { selectedMonth, position ->
-            viewModel.setSelectedMonth(selectedMonth)
-            viewModel.filterReportsByYearAndMonth()
+            if (memberId == null) {
+                showToast("회원을 선택하세요.")
+                false
+            } else {
+                viewModel.setSelectedMonth(selectedMonth)
+                viewModel.filterReportsByYearAndMonth()
+                true
+            }
         }
 
         binding.rvUserReportMonth.apply {
