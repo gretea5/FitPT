@@ -61,6 +61,12 @@ class UserWorkoutInfoFragment : BaseFragment<FragmentUserWorkoutInfoBinding>(
         viewModel.getReports(memberInfo.memberId.toInt())
         viewModel.getMember(memberInfo.memberId)
         viewModel.getComposition(memberInfo.memberId)
+        viewModel.setSelectedMonth("전체")
+
+        dateArray = composition.map { TimeUtils.formatDateToMonthDay(it.createdAt) }.toTypedArray()
+        dateEntries = composition.map { it.smm }.toTypedArray()
+
+        initChart()
     }
 
     private val useWorkoutInfoReportListAdapter = UserWorkoutInfoReportListAdapter { reportList ->
@@ -125,8 +131,8 @@ class UserWorkoutInfoFragment : BaseFragment<FragmentUserWorkoutInfoBinding>(
         memberInfo?.let {
             binding.tvUserInfoDetailBirthContent.text = memberInfo.memberBirth
             binding.tvUserInfoDetailGenderContent.text = memberInfo.memberGender
-            binding.tvUserInfoDetailHeightContent.text = memberInfo.memberHeight.toString()
-            binding.tvUserInfoDetailWeightContent.text = memberInfo.memberWeight.toString()
+            binding.tvUserInfoDetailHeightContent.text = "${memberInfo.memberHeight}cm"
+            binding.tvUserInfoDetailWeightContent.text = "${memberInfo.memberWeight}kg"
         }
     }
 
