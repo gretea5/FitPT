@@ -40,7 +40,7 @@ object TimeUtils {
     fun formatDateTime(dateTimeString: String): String {
         try {
             val dateTime = LocalDateTime.parse(dateTimeString)
-            val formatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 a hh:mm")
+            val formatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일")
 
             return dateTime.format(formatter)
         } catch (e: Exception) {
