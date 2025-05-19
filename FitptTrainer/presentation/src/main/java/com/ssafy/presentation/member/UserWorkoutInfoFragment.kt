@@ -44,12 +44,21 @@ class UserWorkoutInfoFragment : BaseFragment<FragmentUserWorkoutInfoBinding>(
     private var memberInfos: MemberInfo? = null
     private var memberId : Long? = null
     private val viewModel: UserWorkoutInfoViewModel by viewModels()
+    private var selectedMonth = 0
 
     private var composition = mutableListOf<CompositionItem>()
     private var dateArray = arrayOf<String>()
     private var dateEntries = arrayOf<Double>()
 
+    private val months = listOf("전체", "1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월")
+
     private val userWorkoutInfoMemberListAdapter = UserWorkoutInfoMemberListAdapter { memberInfo ->
+        memberInfos = memberInfo
+        memberId = memberInfo.memberId
+
+        binding.rvUserReportList.visibility = View.VISIBLE
+        binding.tvEmptyReportList.visibility = View.GONE
+
         memberInfos = memberInfo
         memberId = memberInfo.memberId
 
@@ -58,9 +67,19 @@ class UserWorkoutInfoFragment : BaseFragment<FragmentUserWorkoutInfoBinding>(
         binding.btnBmi.isSelected = false
         binding.btnBodyFat.isSelected = false
 
-        viewModel.getReports(memberInfo.memberId.toInt())
+        dateArray = arrayOf()
+        dateEntries = arrayOf()
+
+        viewModel.setSelectedMonth("전체")
         viewModel.getMember(memberInfo.memberId)
         viewModel.getComposition(memberInfo.memberId)
+        viewModel.getReports(memberInfo.memberId.toInt())
+
+        val currentMonthText = months[selectedMonth]
+        viewModel.setSelectedMonth(currentMonthText)
+        monthAdapter.setSelectedPosition(selectedMonth)
+
+        initChart()
     }
 
     private val useWorkoutInfoReportListAdapter = UserWorkoutInfoReportListAdapter { reportList ->
@@ -112,7 +131,11 @@ class UserWorkoutInfoFragment : BaseFragment<FragmentUserWorkoutInfoBinding>(
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.composition.collect {
+                Log.d(TAG, "initObserver: ${composition.joinToString(", ")}")
+                
                 composition = it.toMutableList()
+
+                updateChartData()
             }
         }
     }
@@ -125,22 +148,37 @@ class UserWorkoutInfoFragment : BaseFragment<FragmentUserWorkoutInfoBinding>(
         memberInfo?.let {
             binding.tvUserInfoDetailBirthContent.text = memberInfo.memberBirth
             binding.tvUserInfoDetailGenderContent.text = memberInfo.memberGender
-            binding.tvUserInfoDetailHeightContent.text = memberInfo.memberHeight.toString()
-            binding.tvUserInfoDetailWeightContent.text = memberInfo.memberWeight.toString()
+            binding.tvUserInfoDetailHeightContent.text = "${memberInfo.memberHeight}cm"
+            binding.tvUserInfoDetailWeightContent.text = "${memberInfo.memberWeight}kg"
         }
     }
 
     fun initEvent() {
         binding.apply {
             layoutUserReportYear.setOnClickListener {
+                if (memberId == null) {
+                    showToast("회원을 선택해주세요.")
+                    return@setOnClickListener
+                }
+
                 showYearDropdownMenu()
             }
 
             ibUserReportDropdownYear.setOnClickListener {
+                if (memberId == null) {
+                    showToast("회원을 선택해주세요.")
+                    return@setOnClickListener
+                }
+
                 showYearDropdownMenu()
             }
 
             cvAddReport.setOnClickListener {
+                if (memberId == null) {
+                    showToast("회원을 선택해주세요.")
+                    return@setOnClickListener
+                }
+
                 memberId?.let {
                     val action = UserWorkoutInfoFragmentDirections.actionUserWorkoutInfoFragmentToReportEditFragment(it)
                     findNavController().navigate(action)
@@ -152,6 +190,11 @@ class UserWorkoutInfoFragment : BaseFragment<FragmentUserWorkoutInfoBinding>(
             }
 
             btnSkeletalMuscle.setOnClickListener {
+                if (memberId == null) {
+                    showToast("회원을 선택해주세요.")
+                    return@setOnClickListener
+                }
+
                 btnSkeletalMuscle.isSelected = true
                 btnWeight.isSelected = false
                 btnBmi.isSelected = false
@@ -164,6 +207,11 @@ class UserWorkoutInfoFragment : BaseFragment<FragmentUserWorkoutInfoBinding>(
             }
 
             btnWeight.setOnClickListener {
+                if (memberId == null) {
+                    showToast("회원을 선택해주세요.")
+                    return@setOnClickListener
+                }
+
                 btnWeight.isSelected = true
                 btnSkeletalMuscle.isSelected = false
                 btnBmi.isSelected = false
@@ -176,6 +224,11 @@ class UserWorkoutInfoFragment : BaseFragment<FragmentUserWorkoutInfoBinding>(
             }
 
             btnBmi.setOnClickListener {
+                if (memberId == null) {
+                    showToast("회원을 선택해주세요.")
+                    return@setOnClickListener
+                }
+
                 btnBmi.isSelected = true
                 btnSkeletalMuscle.isSelected = false
                 btnWeight.isSelected = false
@@ -188,6 +241,11 @@ class UserWorkoutInfoFragment : BaseFragment<FragmentUserWorkoutInfoBinding>(
             }
 
             btnBodyFat.setOnClickListener {
+                if (memberId == null) {
+                    showToast("회원을 선택해주세요.")
+                    return@setOnClickListener
+                }
+
                 btnBodyFat.isSelected = true
                 btnSkeletalMuscle.isSelected = false
                 btnWeight.isSelected = false
@@ -201,12 +259,39 @@ class UserWorkoutInfoFragment : BaseFragment<FragmentUserWorkoutInfoBinding>(
         }
     }
 
-    fun initRecyclerView() {
-        val months = listOf("전체", "1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월")
+    private fun updateChartData() {
+        if (composition.isEmpty()) return
 
-        monthAdapter = UserWorkoutInfoMonthAdapter(requireContext(), months) { selectedMonth ->
-            viewModel.setSelectedMonth(selectedMonth)
-            viewModel.filterReportsByYearAndMonth()
+        dateArray = composition.map { TimeUtils.formatDateToMonthDay(it.createdAt) }.toTypedArray()
+
+        when {
+            binding.btnSkeletalMuscle.isSelected -> {
+                dateEntries = composition.map { it.smm }.toTypedArray()
+            }
+            binding.btnWeight.isSelected -> {
+                dateEntries = composition.map { it.weight }.toTypedArray()
+            }
+            binding.btnBmi.isSelected -> {
+                dateEntries = composition.map { it.weight / (memberInfos!!.memberWeight * memberInfos!!.memberWeight) }.toTypedArray()
+            }
+            binding.btnBodyFat.isSelected -> {
+                dateEntries = composition.map { it.bfm }.toTypedArray()
+            }
+        }
+
+        initChart()
+    }
+
+    fun initRecyclerView() {
+        monthAdapter = UserWorkoutInfoMonthAdapter(requireContext(), months) { selectedMonth, position ->
+            if (memberId == null) {
+                showToast("회원을 선택하세요.")
+                false
+            } else {
+                viewModel.setSelectedMonth(selectedMonth)
+                viewModel.filterReportsByYearAndMonth()
+                true
+            }
         }
 
         binding.rvUserReportMonth.apply {
@@ -228,6 +313,14 @@ class UserWorkoutInfoFragment : BaseFragment<FragmentUserWorkoutInfoBinding>(
     }
 
     fun initChart() {
+        Log.d(TAG, "initChart: ${userWorkoutInfoMemberListAdapter.getSelectedItem()}")
+
+        if (userWorkoutInfoMemberListAdapter.getSelectedItem() == null) {
+            composition.clear()
+            dateArray = arrayOf()
+            dateEntries = arrayOf()
+        }
+
         lineChart = binding.chartUserBodyGraph
 
         lineChart.apply {
@@ -272,12 +365,8 @@ class UserWorkoutInfoFragment : BaseFragment<FragmentUserWorkoutInfoBinding>(
                 gridColor = Color.parseColor("#DDDDDD")
                 gridLineWidth = 0.5f
 
-                // Y축 수치 설정 (0, 25, 50, 75, 100)
                 setLabelCount(5, true)
             }
-
-            // 애니메이션 설정
-            //animateX(1000)
         }
 
         val entries = ArrayList<Entry>()

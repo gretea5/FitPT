@@ -6,7 +6,7 @@
         android:id="@+id/item_calendar_day_tv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:textSize="14sp"
+        android:textSize="20sp"
         android:gravity="center"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

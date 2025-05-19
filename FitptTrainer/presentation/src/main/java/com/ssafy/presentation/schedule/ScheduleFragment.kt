@@ -3,6 +3,7 @@ package com.ssafy.presentation.schedule
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
+import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
@@ -17,6 +18,7 @@ import com.ssafy.presentation.base.BaseFragment
 import java.time.YearMonth
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.children
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -68,9 +70,6 @@ class ScheduleFragment : BaseFragment<FragmentScheduleBinding>(
         "18:00",
         "19:00",
         "20:00",
-        "21:00",
-        "22:00",
-        "23:00",
     )
 
     private var selectedButton: Button? = null
@@ -101,15 +100,6 @@ class ScheduleFragment : BaseFragment<FragmentScheduleBinding>(
         fetchMembers()
     }
 
-    private fun addExampleEventList() {
-        val today = LocalDate.now()
-
-        eventsDatesList.add(today.plusDays(3))
-        eventsDatesList.add(today.plusDays(7))
-        eventsDatesList.add(today.plusDays(12))
-        eventsDatesList.add(today.minusDays(2))
-    }
-
     private fun initAdapter() {
         val adapter = ScheduleMemberAdapter(requireContext(), emptyList())
         binding.sMember.adapter = adapter
@@ -117,8 +107,6 @@ class ScheduleFragment : BaseFragment<FragmentScheduleBinding>(
 
     private fun initCalendar() {
         val currentMonth = YearMonth.now()
-
-        addExampleEventList()
 
         val startMonth = currentMonth.minusMonths(120)
         val endMonth = currentMonth.plusMonths(120)
@@ -224,9 +212,18 @@ class ScheduleFragment : BaseFragment<FragmentScheduleBinding>(
                 timeButtonsMap.values.forEach { button ->
                     button.apply {
                         setBackgroundResource(R.drawable.selector_button_time)
-                        setTextColor(Color.BLACK)
+                        typeface = ResourcesCompat.getFont(context, R.font.pretendard_medium)
+                        setTextSize(TypedValue.COMPLEX_UNIT_SP, 24f)
+                        setTextColor(ContextCompat.getColor(context, R.color.main_black))
+                        includeFontPadding = false
                         setOnClickListener(clickListener)
                         isEnabled = true
+
+                        val layoutParams = this.layoutParams as ViewGroup.MarginLayoutParams
+                        val margin8dp = (8 * resources.displayMetrics.density).toInt()
+                        layoutParams.topMargin = margin8dp
+                        layoutParams.bottomMargin = margin8dp
+                        this.layoutParams = layoutParams
                     }
                 }
             }
@@ -271,9 +268,18 @@ class ScheduleFragment : BaseFragment<FragmentScheduleBinding>(
         timeButtons.values.forEach { button ->
             button.apply {
                 setBackgroundResource(R.drawable.selector_button_time)
-                setTextColor(Color.BLACK)
+                typeface = ResourcesCompat.getFont(context, R.font.pretendard_medium)
+                setTextSize(TypedValue.COMPLEX_UNIT_SP, 24f)
+                setTextColor(ContextCompat.getColor(context, R.color.main_black))
+                includeFontPadding = false
                 setOnClickListener(clickListener)
                 isEnabled = true
+
+                val layoutParams = this.layoutParams as ViewGroup.MarginLayoutParams
+                val margin8dp = (8 * resources.displayMetrics.density).toInt()
+                layoutParams.topMargin = margin8dp
+                layoutParams.bottomMargin = margin8dp
+                this.layoutParams = layoutParams
             }
         }
 
@@ -283,8 +289,17 @@ class ScheduleFragment : BaseFragment<FragmentScheduleBinding>(
             timeButtons[timeKey]?.let { button ->
                 button.apply {
                     setBackgroundResource(R.drawable.bg_stroke_gray_8dp)
+                    typeface = ResourcesCompat.getFont(context, R.font.pretendard_medium)
+                    setTextSize(TypedValue.COMPLEX_UNIT_SP, 24f)
                     setTextColor(ContextCompat.getColor(button.context, R.color.main_gray))
+                    includeFontPadding = false
                     isEnabled = false
+
+                    val layoutParams = this.layoutParams as ViewGroup.MarginLayoutParams
+                    val margin8dp = (8 * resources.displayMetrics.density).toInt()
+                    layoutParams.topMargin = margin8dp
+                    layoutParams.bottomMargin = margin8dp
+                    this.layoutParams = layoutParams
                 }
             }
         }
@@ -293,12 +308,6 @@ class ScheduleFragment : BaseFragment<FragmentScheduleBinding>(
     private fun updateMemberAdapter(members: List<MemberInfo>) {
         val adapter = ScheduleMemberAdapter(requireContext(), members)
         binding.sMember.adapter = adapter
-    }
-
-    fun setEventsData(events: List<LocalDate>) {
-        eventsDatesList.clear()
-        eventsDatesList.addAll(events)
-        binding.calendar.notifyCalendarChanged()
     }
 
     private fun initButtonView() {
@@ -310,8 +319,17 @@ class ScheduleFragment : BaseFragment<FragmentScheduleBinding>(
                 }
                 text = time
                 setBackgroundResource(R.drawable.selector_button_time)
-                setTextColor(Color.BLACK)
+                typeface = ResourcesCompat.getFont(context, R.font.pretendard_medium)
+                setTextSize(TypedValue.COMPLEX_UNIT_SP, 24f)
+                setTextColor(ContextCompat.getColor(context, R.color.main_black))
+                includeFontPadding = false
                 setOnClickListener(clickListener)
+
+                val layoutParams = this.layoutParams as ViewGroup.MarginLayoutParams
+                val margin8dp = (8 * resources.displayMetrics.density).toInt()
+                layoutParams.topMargin = margin8dp
+                layoutParams.bottomMargin = margin8dp
+                this.layoutParams = layoutParams
             }
 
             timeButtonsMap[time] = button
@@ -326,8 +344,17 @@ class ScheduleFragment : BaseFragment<FragmentScheduleBinding>(
                 }
                 text = time
                 setBackgroundResource(R.drawable.selector_button_time)
-                setTextColor(Color.BLACK)
+                typeface = ResourcesCompat.getFont(context, R.font.pretendard_medium)
+                setTextSize(TypedValue.COMPLEX_UNIT_SP, 24f)
+                setTextColor(ContextCompat.getColor(context, R.color.main_black))
+                includeFontPadding = false
                 setOnClickListener(clickListener)
+
+                val layoutParams = this.layoutParams as ViewGroup.MarginLayoutParams
+                val margin8dp = (8 * resources.displayMetrics.density).toInt()
+                layoutParams.topMargin = margin8dp
+                layoutParams.bottomMargin = margin8dp
+                this.layoutParams = layoutParams
             }
 
             timeButtonsMap[time] = button
