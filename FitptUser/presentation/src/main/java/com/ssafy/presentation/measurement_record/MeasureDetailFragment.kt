@@ -60,8 +60,8 @@ class MeasureDetailFragment : BaseFragment<FragmentMeasureDetailBinding>(
         binding.tvDateTime.text = CommonUtils.formatCreatedAt(detail.createdAt)
         binding.tvWeightValue.text = detail.weight.toString()
         binding.tvWeightDif.text = formatDiff(detail.weightDif,"kg")
-        binding.tvSmmDif.text = formatDiff(detail.smmDif,"%")
-        binding.tvBfpDif.text = formatDiff(detail.bfpDif,"kg")
+        binding.tvSmmDif.text = formatDiff(detail.bfpDif,"%")
+        binding.tvBfpDif.text = formatDiff(detail.smmDif,"kg")
         lifecycleScope.launch {
             val user = userDataStoreSource.user.first()
             binding.tvName.text = user!!.memberName

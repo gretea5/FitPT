@@ -51,7 +51,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(
             if (!isClick) {
                 isClick = true // 클릭 방지 활성화
                 lifecycleScope.launch {
-                    delay(300)  // 0.3초 대기
+                    delay(300)
                     kakaoLogin()
                 }
             }
