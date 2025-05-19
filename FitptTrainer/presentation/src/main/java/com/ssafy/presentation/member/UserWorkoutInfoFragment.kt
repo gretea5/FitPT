@@ -133,7 +133,9 @@ class UserWorkoutInfoFragment : BaseFragment<FragmentUserWorkoutInfoBinding>(
             viewModel.composition.collect {
                 Log.d(TAG, "initObserver: ${composition.joinToString(", ")}")
                 
-                composition = it.toMutableList()
+                composition = it.groupBy { c -> c.createdAt.substring(0, 10) }
+                    .map { (_, items) -> items.maxByOrNull { c -> c.createdAt } }
+                    .filterNotNull().toMutableList() // null 값 제거
 
                 updateChartData()
             }
