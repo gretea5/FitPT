@@ -2,6 +2,8 @@ package com.ssafy.presentation.login;
 
 import android.content.Intent
 import android.os.Bundle;
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
@@ -24,8 +26,10 @@ import com.ssafy.presentation.databinding.FragmentLoginBinding
 import com.ssafy.presentation.login.viewModel.LoginStatus
 import com.ssafy.presentation.login.viewModel.LoginViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -50,49 +54,71 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(
         binding.ivKakaoMove.setOnClickListener {
             if (!isClick) {
                 isClick = true // 클릭 방지 활성화
-                lifecycleScope.launch {
-                    delay(300)
-                    kakaoLogin()
-                }
+                kakaoLogin()
             }
         }
     }
 
-    private fun kakaoLogin() {
+    private fun kakaoLogin(retryCount: Int = 0) {
         if (UserApiClient.instance.isKakaoTalkLoginAvailable(requireContext())) {
-            // 카카오톡으로만 로그인 시도
             UserApiClient.instance.loginWithKakaoTalk(requireContext()) { token, error ->
                 if (error != null) {
                     if (error is ClientError && error.reason == ClientErrorCause.Cancelled) {
                         isClick = false
                         return@loginWithKakaoTalk
                     }
+
                     showToast("카카오톡 로그인에 실패했습니다. 다시 시도해주세요.")
                     isClick = false
+
+                    // 최대 3회까지 재시도
+                    if (retryCount < 3) {
+                        Handler(Looper.getMainLooper()).postDelayed({
+                            kakaoLogin(retryCount + 1)
+                        }, 1000) // 1초 후 재시도
+                    }
                 } else if (token != null) {
                     lifecycleScope.launch {
-                        Log.d(TAG,"로그인 관련 ${token.accessToken}")
+                        Log.d(TAG, "로그인 관련 ${token.accessToken}")
                         userDataStoreSource.saveKakaoAccessToken(token.accessToken)
+
+                        // FCM 토큰 기다리기
+                        val fcmToken = waitForFcmToken()
+                        Log.d(TAG, "FCM 토큰 확보 완료: $fcmToken")
+                        // 사용자 정보 저장
+                        val userDeferred = CompletableDeferred<Unit>()
                         UserApiClient.instance.me { user, error ->
                             if (error != null) {
                                 Log.e(TAG, "사용자 정보 요청 실패", error)
                             } else if (user != null) {
                                 val nickname = user.kakaoAccount?.profile?.nickname
                                 lifecycleScope.launch {
-                                    userDataStoreSource.saveNickname(nickname!!)
+                                    userDataStoreSource.saveNickname(nickname ?: "")
                                 }
                                 Log.d(TAG, "사용자 이름: $nickname")
                             }
+                            userDeferred.complete(Unit)
                         }
+                        userDeferred.await()
+
                         loginViewModel.login()
+                        isClick = false
                     }
                 }
             }
         } else {
-            //Log.e(TAG, "카카오톡이 설치되어 있지 않습니다.")
             showToast("카카오톡이 설치되어 있지 않습니다. 앱을 설치한 후 다시 시도해주세요.")
-            isClick = false // 클릭 가능 상태로 변경
+            isClick = false
         }
+    }
+
+    private suspend fun waitForFcmToken(): String {
+        var token: String?
+        do {
+            token = userDataStoreSource.fcmToken.firstOrNull()
+            if (token == null) delay(100)
+        } while (token == null)
+        return token
     }
 
     private fun observeLoginState() {
