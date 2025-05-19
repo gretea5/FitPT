@@ -110,7 +110,6 @@ class MeasureFragment : BaseFragment<FragmentMeasureBinding>(
             if (measuring) return@setOnClickListener
             measuring = true
             Log.d(TAG,"클릭하였습니다.")
-
             if (type in listOf("device", "battery", "tempObj"))
                 measureStart()
             else {
