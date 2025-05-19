@@ -48,7 +48,9 @@ class UserWorkoutInfoViewModel @Inject constructor(
 
     private var allReports = listOf<ReportList>()
     private var selectedYear: Int = TimeUtils.getCurrentYear()
-    private var selectedMonth: Int = 0 // 0은 전체 월을 의미
+
+    private val _selectedMonthIndex = MutableStateFlow(0)
+    val selectedMonthIndex: StateFlow<Int> = _selectedMonthIndex
 
     fun getMembers() {
         viewModelScope.launch {
@@ -105,7 +107,7 @@ class UserWorkoutInfoViewModel @Inject constructor(
                 val reportYear = TimeUtils.getYearFromDate(reportDate)
                 val reportMonth = TimeUtils.getMonthFromDate(reportDate)
 
-                (reportYear == selectedYear) && (selectedMonth == 0 || reportMonth == selectedMonth)
+                (reportYear == selectedYear) && (selectedMonthIndex.value == 0 || reportMonth == selectedMonthIndex.value)
             }
             _filteredReports.value = filtered.toList()
         }
@@ -117,9 +119,8 @@ class UserWorkoutInfoViewModel @Inject constructor(
         filterReportsByYearAndMonth()
     }
 
-    // UserWorkoutInfoViewModel에 수정
     fun setSelectedMonth(monthText: String) {
-        selectedMonth = when (monthText) {
+        _selectedMonthIndex.value = when (monthText) {
             "전체" -> 0 // 전체 월을 의미하는 0
             else -> {
                 // "1월", "2월" 등에서 숫자만 추출
@@ -160,9 +161,10 @@ class UserWorkoutInfoViewModel @Inject constructor(
                 getBodyListUseCase(
                     memberId = memberId.toInt(),
                     sort = "createdAt",
-                    order = "desc"
+                    order = "asc"
                 ).collect { response ->
                     Log.d(TAG, "getComposition: ${response}")
+                    _composition.value = emptyList()
 
                     when(response) {
                         is ResponseStatus.Success -> {
