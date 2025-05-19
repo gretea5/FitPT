@@ -14,7 +14,7 @@
 
     <fragment
         android:id="@+id/userWorkoutInfoFragment"
-        android:name="com.ssafy.presentation.user.UserWorkoutInfoFragment"
+        android:name="com.ssafy.presentation.member.UserWorkoutInfoFragment"
         android:label="fragment_userWorkoutInfo"
         tools:layout="@layout/fragment_user_workout_info" >
         <action
@@ -32,6 +32,10 @@
         tools:layout="@layout/fragment_report_edit">
         <argument
             android:name="memberId"
+            app:argType="long" />
+        <argument
+            android:name="reportId"
+            android:defaultValue="-1L"
             app:argType="long" />
         <action
             android:id="@+id/action_reportEditFragment_to_userWorkoutInfoFragment"

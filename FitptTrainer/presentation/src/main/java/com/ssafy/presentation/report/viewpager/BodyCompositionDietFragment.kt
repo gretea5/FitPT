@@ -24,6 +24,7 @@ import com.onesoftdigm.fitrus.device.sdk.FitrusDevice
 import com.onesoftdigm.fitrus.device.sdk.Gender
 import com.ssafy.domain.model.measure.CompositionCondition
 import com.ssafy.domain.model.measure.CompositionDetail
+import com.ssafy.domain.model.measure.CompositionDetailItem
 import com.ssafy.domain.model.measure.CompositionItem
 import com.ssafy.presentation.R
 import com.ssafy.presentation.base.BaseFragment
@@ -254,7 +255,7 @@ class BodyCompositionDietFragment : BaseFragment<FragmentBodyCompositionDietBind
 
     }
 
-    private fun convertToConditionList(data: CompositionItem): List<CompositionCondition> {
+    private fun convertToConditionList(data: CompositionDetailItem): List<CompositionCondition> {
         return listOf(
             //CompositionCondition("몸무게", data.weightLabel, data.weightCount,data.weight.toString()),
             CompositionCondition("체지방량", data.bfmLabel, data.bfmCount,data.bfm.toString()),

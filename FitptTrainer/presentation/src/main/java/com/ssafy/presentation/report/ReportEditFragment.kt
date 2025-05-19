@@ -42,6 +42,8 @@ class ReportEditFragment : BaseFragment<FragmentReportEditBinding>(
     R.layout.fragment_report_edit
 ) {
     private var memberId : Long? = null
+    private var reportId : Long? = null
+
     private val args: ReportEditFragmentArgs by navArgs()
     
     private lateinit var viewPagerAdapter: ReportViewPagerAdapter
@@ -64,6 +66,14 @@ class ReportEditFragment : BaseFragment<FragmentReportEditBinding>(
         super.onDestroy()
         measureViewModel.resetCreateBody()
         //reportViewModel.resetReport()
+        reportId = args.reportId
+
+        if (args.reportId != -1L) {
+            //수정으로 들어왔을때
+        }
+
+        Log.d(TAG, "onViewCreated: $memberId")
+        Log.d(TAG, "onViewCreated: $reportId")
     }
 
     fun initEvent() {

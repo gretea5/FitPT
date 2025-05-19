@@ -6,6 +6,7 @@ import com.ssafy.data.network.common.ApiResponseHandler
 import com.ssafy.data.network.common.ErrorResponse.Companion.toDomainModel
 import com.ssafy.domain.model.base.ResponseStatus
 import com.ssafy.domain.model.measure.CompositionDetail
+import com.ssafy.domain.model.measure.CompositionDetailItem
 import com.ssafy.domain.model.measure.CompositionItem
 import com.ssafy.domain.repository.measure.BodyRepository
 import kotlinx.coroutines.flow.Flow
@@ -17,19 +18,17 @@ internal class BodyRepositoryImpl  @Inject constructor(
     private val bodyService: BodyService,
 ): BodyRepository {
 
-    override suspend fun getBodyList(
+    override suspend fun getComposition(
         memberId: Int,
         sort: String,
         order: String
     ): Flow<ResponseStatus<List<CompositionItem>>> {
         return flow {
             val result = ApiResponseHandler().handle {
-
-                bodyService.getBodyList(memberId,sort,order)
-            }.first() // ✅ 첫 번째 값만 가져옴
+                bodyService.getComposition(memberId,sort,order)
+            }.first()
             when (result) {
-                is ApiResponse.Success ->
-                    emit(ResponseStatus.Success(result.data))
+                is ApiResponse.Success -> emit(ResponseStatus.Success(result.data))
                 is ApiResponse.Error -> emit(ResponseStatus.Error(result.error.toDomainModel()))
             }
         }
@@ -47,7 +46,7 @@ internal class BodyRepositoryImpl  @Inject constructor(
         }
     }
 
-    override suspend fun getBodyDetail(compositionLogId: Int): Flow<ResponseStatus<CompositionItem>> {
+    override suspend fun getBodyDetail(compositionLogId: Int): Flow<ResponseStatus<CompositionDetailItem>> {
         return flow {
             val result = ApiResponseHandler().handle {
                 bodyService.getBodyDetailInfo(compositionLogId)

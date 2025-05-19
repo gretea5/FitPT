@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ssafy.domain.model.base.ResponseStatus
 import com.ssafy.domain.model.measure.CompositionDetail
+import com.ssafy.domain.model.measure.CompositionDetailItem
 import com.ssafy.domain.model.measure.CompositionItem
 import com.ssafy.domain.model.member.MemberInfo
 import com.ssafy.domain.usecase.measure.CreateBodyUsecase
@@ -141,6 +142,6 @@ sealed class UserInfoState {
 sealed class GetBodyDetailInfoState {
     object Initial: GetBodyDetailInfoState()
     object Loading: GetBodyDetailInfoState()
-    data class Success(val getBodydetail: CompositionItem): GetBodyDetailInfoState()
+    data class Success(val getBodydetail: CompositionDetailItem): GetBodyDetailInfoState()
     data class Error(val message: String): GetBodyDetailInfoState()
 }
