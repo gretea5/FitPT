@@ -366,13 +366,15 @@ class ScheduleEditFragment : BaseFragment<FragmentScheduleEditBinding>(
                 val formattedStartDateTime = startDateTime.format(formatter)
                 val formattedEndDateTime = endDateTime.format(formatter)
 
+                val newScheduleContent = binding.etDetail.text.toString()
+
                 viewModel.updateSchedule(
                     scheduledId = it,
                     memberId = memberId!!,
                     trainerId = trainerId!!,
                     startTime = formattedStartDateTime!!,
                     endTime = formattedEndDateTime!!,
-                    scheduleContent = scheduleContent!!
+                    scheduleContent = newScheduleContent
                 )
             }
         }
