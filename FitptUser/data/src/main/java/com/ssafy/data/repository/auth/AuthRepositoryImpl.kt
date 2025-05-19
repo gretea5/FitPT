@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
@@ -29,14 +30,16 @@ internal class AuthRepositoryImpl @Inject constructor(
     override suspend fun login(): Flow<ResponseStatus<JwtToken>> {
         return flow {
             ApiResponseHandler().handle {
-                val kakaoAccess = dataStore.kakaoAccessToken.first()!!
-                val fcmToken = dataStore.fcmToken.first()!!
-                Log.d(TAG,kakaoAccess)
-                Log.d(TAG,fcmToken)
+                Log.d(TAG,"시작")
+                val kakaoAccess = dataStore.kakaoAccessToken.firstOrNull()
+                val fcmToken = dataStore.fcmToken.firstOrNull()
+
+                Log.d(TAG, "kakaoAccess: $kakaoAccess")
+                Log.d(TAG, "fcmToken: $fcmToken")
                 authService.login(
                     UserLoginRequest(
-                        kakaoAccessToken = kakaoAccess,
-                        fcmToken = fcmToken
+                        kakaoAccessToken = kakaoAccess!!,
+                        fcmToken = fcmToken!!
                     )
                 )
             }.onEach { result ->

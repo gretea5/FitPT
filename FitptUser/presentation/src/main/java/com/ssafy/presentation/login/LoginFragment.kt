@@ -24,6 +24,7 @@ import com.ssafy.presentation.databinding.FragmentLoginBinding
 import com.ssafy.presentation.login.viewModel.LoginStatus
 import com.ssafy.presentation.login.viewModel.LoginViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -49,12 +50,10 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(
         binding.ivKakaoMove.setOnClickListener {
             if (!isClick) {
                 isClick = true // 클릭 방지 활성화
-                kakaoLogin()
-                /*val intent = Intent(requireContext(), MainActivity::class.java)
-                startActivity(intent)
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-                requireActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
-                requireActivity().finishAffinity()*/
+                lifecycleScope.launch {
+                    delay(300)  // 0.3초 대기
+                    kakaoLogin()
+                }
             }
         }
     }
@@ -74,7 +73,6 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(
                     lifecycleScope.launch {
                         Log.d(TAG,"로그인 관련 ${token.accessToken}")
                         userDataStoreSource.saveKakaoAccessToken(token.accessToken)
-                        loginViewModel.login()
                         UserApiClient.instance.me { user, error ->
                             if (error != null) {
                                 Log.e(TAG, "사용자 정보 요청 실패", error)
@@ -86,6 +84,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(
                                 Log.d(TAG, "사용자 이름: $nickname")
                             }
                         }
+                        loginViewModel.login()
                     }
                 }
             }

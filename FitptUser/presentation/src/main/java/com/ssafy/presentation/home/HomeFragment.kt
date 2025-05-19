@@ -71,7 +71,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
     private val today = LocalDate.now()
     private val startMonth = YearMonth.of(2020, 1)
     private val endMonth = YearMonth.of(today.year, today.monthValue)
-    private val daysOfWeek = daysOfWeek(DayOfWeek.MONDAY)
+    private val daysOfWeek = daysOfWeek(DayOfWeek.SUNDAY)
     private val format = DateTimeFormatter.ofPattern("yyyy-MM-dd")
     private lateinit var dialog: PtCalendarBottomSheetFragment
     private lateinit var lineChart: LineChart

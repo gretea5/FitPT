@@ -26,7 +26,6 @@ class ApplicationClass : Application() {
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     val token = task.result
-                    Log.d(TAG,"파이어베이스 토큰"+token)
                     CoroutineScope(Dispatchers.IO).launch {
                         userDataStoreSource.saveFcmToken(token)
                     }
