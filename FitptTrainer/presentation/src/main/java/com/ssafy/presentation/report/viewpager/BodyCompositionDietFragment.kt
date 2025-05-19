@@ -256,15 +256,15 @@ class BodyCompositionDietFragment : BaseFragment<FragmentBodyCompositionDietBind
 
     private fun convertToConditionList(data: CompositionItem): List<CompositionCondition> {
         return listOf(
-            CompositionCondition("몸무게", data.weightLabel, data.weightCount),
-            CompositionCondition("체지방량", data.bfmLabel, data.bfmCount),
-            CompositionCondition("체지방률", data.bfpLabel, data.bfpCount),
-            CompositionCondition("골격근량", data.smmLabel, data.smmCount),
-            CompositionCondition("BMI", data.bmiLabel, data.bmiCount),
-            CompositionCondition("체수분량", data.tcwLabel, data.tcwCount),
-            CompositionCondition("단백질", data.proteinLabel, data.proteinCount),
-            CompositionCondition("무기질", data.mineralLabel, data.mineralCount),
-            CompositionCondition("세포외수분비", data.ecwRatioLabel, data.ecwRatioCount)
+            //CompositionCondition("몸무게", data.weightLabel, data.weightCount,data.weight.toString()),
+            CompositionCondition("체지방량", data.bfmLabel, data.bfmCount,data.bfm.toString()),
+            CompositionCondition("체지방률", data.bfpLabel, data.bfpCount,data.bfp.toString()),
+            CompositionCondition("골격근량", data.smmLabel, data.smmCount,data.smm.toString()),
+            //CompositionCondition("BMI", data.bmiLabel, data.bmiCount,),
+            CompositionCondition("체수분량", data.tcwLabel, data.tcwCount,data.icw.toString()),
+            CompositionCondition("단백질", data.proteinLabel, data.proteinCount,data.protein.toString()),
+            CompositionCondition("무기질", data.mineralLabel, data.mineralCount,data.mineral.toString()),
+            CompositionCondition("세포외수분비", data.ecwRatioLabel, data.ecwRatioCount,data.ecw.toString())
         )
     }
 }
