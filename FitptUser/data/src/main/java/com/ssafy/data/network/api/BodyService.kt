@@ -1,6 +1,7 @@
 package com.ssafy.data.network.api
 
 import com.ssafy.domain.model.measure.CompositionDetail
+import com.ssafy.domain.model.measure.CompositionDetailInfo
 import com.ssafy.domain.model.measure.CompositionItem
 import retrofit2.Response
 import retrofit2.http.Body
@@ -17,6 +18,6 @@ interface BodyService {
     suspend fun createBody(@Body compositionDetail: CompositionDetail) : Response<Unit>
 
     @GET("body-composition/{compositionLogId}")
-    suspend fun getBodyDetailInfo(@Path("compositionLogId") compositionLogId: Int) : Response<CompositionItem>
+    suspend fun getBodyDetailInfo(@Path("compositionLogId") compositionLogId: Int) : Response<CompositionDetailInfo>
 
 }

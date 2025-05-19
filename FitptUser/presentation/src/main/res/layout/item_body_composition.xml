@@ -57,7 +57,6 @@
             android:layout_marginStart="4dp"
             android:layout_marginEnd="4dp"
             android:text="보통"
-            android:textColor="#3064D0"
             android:textSize="14sp" />
 
         <ImageView
@@ -248,16 +247,59 @@
                     app:layout_constraintGuide_begin="285dp" />
 
                 <TextView
-                    android:id="@+id/score_botong"
+                    android:id="@+id/tv_score_midal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="79.8"
+                    android:text="55.0"
+                    android:textColor="@android:color/black"
+                    android:visibility="invisible"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@id/btn_midal"
+                    app:layout_constraintStart_toStartOf="@id/btn_midal"
+                    app:layout_constraintEnd_toEndOf="@id/btn_midal"
+                    app:layout_constraintTop_toTopOf="parent" />
+                <TextView
+                    android:id="@+id/tv_score_botong"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="77.8"
+                    android:visibility="invisible"
                     android:textColor="@android:color/black"
                     android:textSize="16sp"
                     android:textStyle="bold"
-                    app:layout_constraintBottom_toTopOf="@+id/btn_botong"
-                    app:layout_constraintEnd_toStartOf="@+id/guideline2"
-                    app:layout_constraintStart_toStartOf="@+id/guideline1"
+                    app:layout_constraintBottom_toTopOf="@id/btn_botong"
+                    app:layout_constraintStart_toStartOf="@id/btn_botong"
+                    app:layout_constraintEnd_toEndOf="@id/btn_botong"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_score_chogwa"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="88.5"
+                    android:visibility="invisible"
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@id/btn_chogwa"
+                    app:layout_constraintStart_toStartOf="@id/btn_chogwa"
+                    app:layout_constraintEnd_toEndOf="@id/btn_chogwa"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <!-- 많이 초과 점수 -->
+                <TextView
+                    android:id="@+id/tv_score_many_chogwa"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="92.1"
+                    android:visibility="invisible"
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@id/btn_many_chogwa"
+                    app:layout_constraintStart_toStartOf="@id/btn_many_chogwa"
+                    app:layout_constraintEnd_toEndOf="@id/btn_many_chogwa"
                     app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>

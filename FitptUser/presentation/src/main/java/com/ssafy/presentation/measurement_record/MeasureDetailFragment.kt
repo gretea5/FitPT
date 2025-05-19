@@ -17,8 +17,13 @@ import com.ssafy.presentation.measurement_record.adapter.BodyInfoAdapter
 import com.ssafy.presentation.measurement_record.viewModel.MeasureViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import android.util.Log
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.ssafy.data.datasource.UserDataStoreSource
+import com.ssafy.domain.model.measure_record.MeasureRecordItem
+import com.ssafy.presentation.measurement_record.viewModel.GetBodyDetailInfoState
+import com.ssafy.presentation.measurement_record.viewModel.GetBodyListInfoState
 import com.ssafy.presentation.util.CommonUtils
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
@@ -37,9 +42,9 @@ class MeasureDetailFragment : BaseFragment<FragmentMeasureDetailBinding>(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        observeBodyDetailList()
         initEvent()
         initView()
-        setupRecyclerView()
     }
 
     fun initEvent(){
@@ -47,6 +52,7 @@ class MeasureDetailFragment : BaseFragment<FragmentMeasureDetailBinding>(
             findNavController().popBackStack()
         }
         Log.d(TAG,measureViewModel.measureDetailInfo.value.toString())
+        measureViewModel.getBodyDetailInfo(measureViewModel.measureDetailInfo.value!!.compositionLogId)
     }
 
     fun initView(){
@@ -62,37 +68,47 @@ class MeasureDetailFragment : BaseFragment<FragmentMeasureDetailBinding>(
         }
     }
 
-    private fun setupRecyclerView() {
-        val info = measureViewModel.measureDetailInfo.value!!
-
-        // 소수점 한 자리로 포맷
-        fun format1(value: Double): String = String.format("%.1f", value)
-
-        val sampleItems = listOf(
-            BodyInfoItem("체중", format1(info.weight) + " kg", "보통"),
-            BodyInfoItem("체지방률", format1(info.bfp) + " %", "위험"),
-            BodyInfoItem("골격근량", format1(info.smm) + " kg", "주의"),
-            BodyInfoItem("체지방량", format1(info.bfm) + " kg", "주의"),
-            BodyInfoItem("기초대사량", format1(info.bmr) + " kcal", "주의"),
-            BodyInfoItem("체수분", format1(info.icw) + " kg", "주의"),
-            BodyInfoItem("단백질", format1(info.protein) + " kg", "주의"),
-            BodyInfoItem("무기질", format1(info.mineral) + " kg", "주의"),
-            BodyInfoItem("세포외수분비", format1(info.ecw) + " kg", "주의"),)
-
-        val adapter = BodyInfoAdapter(sampleItems) {
-
-        }
-
-        binding.rvBodyComposition.adapter = adapter
-        binding.rvBodyComposition.layoutManager = LinearLayoutManager(requireContext())
-    }
-
-
     fun formatDiff(value: Double,expression: String): String {
         return when {
             value > 0 -> "+${String.format("%.1f", value)}${expression}"
             value < 0 -> "${String.format("%.1f", value)}${expression}" // 음수는 자동으로 '-' 붙음
             else -> "0.0${expression}"
+        }
+    }
+
+    private fun observeBodyDetailList() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                measureViewModel.getBodyDetailInfo.collect { state ->
+                    when (state) {
+                        is GetBodyDetailInfoState.Loading -> {
+                        }
+                        is GetBodyDetailInfoState.Success -> {
+                            val info = state.getBodydetail
+                            // 소수점 한 자리로 포맷
+                            fun format1(value: Double): String = String.format("%.1f", value)
+                            val sampleItems = listOf(
+                                BodyInfoItem("체지방률", format1(info.bfp) + " %", info.bfpLabel),
+                                BodyInfoItem("골격근량", format1(info.smm) + " kg", info.smmLabel),
+                                BodyInfoItem("체지방량", format1(info.bfm) + " kg", info.bfmLabel),
+                                BodyInfoItem("기초대사량", format1(info.bmr) + " kcal", "적절"),
+                                BodyInfoItem("단백질", format1(info.protein) + " kg", info.proteinLabel),
+                                BodyInfoItem("무기질", format1(info.mineral) + " kg", info.mineralLabel),
+                                BodyInfoItem("세포외수분비", format1(info.ecw) + " kg", info.ecwRatioLabel),)
+
+                            val adapter = BodyInfoAdapter(sampleItems) {
+
+                            }
+                            binding.rvBodyComposition.adapter = adapter
+                            binding.rvBodyComposition.layoutManager = LinearLayoutManager(requireContext())
+                        }
+                        is GetBodyDetailInfoState.Error -> {
+
+                        }
+                        else -> Unit
+                    }
+                }
+            }
         }
     }
 }

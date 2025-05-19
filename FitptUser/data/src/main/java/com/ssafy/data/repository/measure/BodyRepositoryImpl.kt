@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 import android.util.Log
+import com.ssafy.domain.model.measure.CompositionDetailInfo
 
 private const val TAG = "BodyRepositoryImpl"
 internal class BodyRepositoryImpl  @Inject constructor(
@@ -52,7 +53,7 @@ internal class BodyRepositoryImpl  @Inject constructor(
         }
     }
 
-    override suspend fun getBodyDetail(compositionLogId: Int): Flow<ResponseStatus<CompositionItem>> {
+    override suspend fun getBodyDetail(compositionLogId: Int): Flow<ResponseStatus<CompositionDetailInfo>> {
         return flow {
             val result = ApiResponseHandler().handle {
                 bodyService.getBodyDetailInfo(compositionLogId)

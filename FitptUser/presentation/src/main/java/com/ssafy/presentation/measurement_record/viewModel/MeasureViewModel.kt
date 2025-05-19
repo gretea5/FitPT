@@ -7,6 +7,7 @@ import com.ssafy.data.datasource.UserDataStoreSource
 import com.ssafy.domain.model.base.ResponseStatus
 import com.ssafy.domain.model.login.UserInfo
 import com.ssafy.domain.model.measure.CompositionDetail
+import com.ssafy.domain.model.measure.CompositionDetailInfo
 import com.ssafy.domain.model.measure.CompositionItem
 import com.ssafy.domain.model.measure_record.MesureDetail
 import com.ssafy.domain.usecase.measure.CreateBodyUsecase
@@ -100,6 +101,30 @@ class MeasureViewModel @Inject constructor(
         }
     }
 
+    fun getBodyDetailInfo(compositionLog: Int) {
+        viewModelScope.launch {
+            getBodyDetailUsecase(compositionLog)
+                .onStart { setBodyDetailLoading() }
+                .catch { e ->
+
+                }
+                .firstOrNull()
+                .let { uiState ->
+                    when(uiState) {
+                        is ResponseStatus.Success -> {
+                            Log.d(TAG,uiState.data.toString())
+                            _getBodyDetailInfo.value = GetBodyDetailInfoState.Success(uiState.data)
+                        }
+                        is ResponseStatus.Error -> {
+                            Log.d(TAG,uiState.error.message)
+                            _getBodyDetailInfo.value =
+                                GetBodyDetailInfoState.Error(uiState.error.message)
+                        }
+                        else -> Log.d("MeasureViewModel", "fetchUser: else error")
+                    }
+                }
+        }
+    }
 
     fun setMeasureDetailInfo(measureDetail: MesureDetail) {
         _measureDetailInfo.value = measureDetail
@@ -120,6 +145,6 @@ sealed class GetBodyListInfoState {
 sealed class GetBodyDetailInfoState {
     object Initial: GetBodyDetailInfoState()
     object Loading: GetBodyDetailInfoState()
-    data class Success(val getBodydetail: CompositionDetail): GetBodyDetailInfoState()
+    data class Success(val getBodydetail: CompositionDetailInfo): GetBodyDetailInfoState()
     data class Error(val message: String): GetBodyDetailInfoState()
 }
