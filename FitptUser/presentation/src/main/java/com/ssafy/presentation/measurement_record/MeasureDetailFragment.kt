@@ -91,7 +91,7 @@ class MeasureDetailFragment : BaseFragment<FragmentMeasureDetailBinding>(
                                 BodyInfoItem("체지방률", format1(info.bfp) + " %", info.bfpLabel),
                                 BodyInfoItem("골격근량", format1(info.smm) + " kg", info.smmLabel),
                                 BodyInfoItem("체지방량", format1(info.bfm) + " kg", info.bfmLabel),
-                                BodyInfoItem("기초대사량", format1(info.bmr) + " kcal", "적절"),
+                                BodyInfoItem("기초대사량", format1(info.bmr) + " kcal", "적정"),
                                 BodyInfoItem("단백질", format1(info.protein) + " kg", info.proteinLabel),
                                 BodyInfoItem("무기질", format1(info.mineral) + " kg", info.mineralLabel),
                                 BodyInfoItem("세포외수분비", format1(info.ecw) + " kg", info.ecwRatioLabel),)

@@ -24,6 +24,7 @@ import com.ssafy.presentation.report.viewModel.ReportViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import android.util.Log
+import com.ssafy.presentation.measurement_record.viewModel.MeasureViewModel
 import com.ssafy.presentation.report.viewModel.ReportDetailState
 
 private const val TAG = "ReportDetailFragment"
