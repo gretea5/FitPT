@@ -50,10 +50,16 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(
         observeLoginState()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        isClick = false
+    }
     fun initEvent(){
         binding.ivKakaoMove.setOnClickListener {
+            Log.d(TAG,"카카오 버튼을 클릭하였습니다")
             if (!isClick) {
                 isClick = true // 클릭 방지 활성화
+                Log.d(TAG,"클리이 리셋")
                 kakaoLogin()
             }
         }
@@ -83,7 +89,11 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(
                         userDataStoreSource.saveKakaoAccessToken(token.accessToken)
 
                         // FCM 토큰 기다리기
-                        val fcmToken = waitForFcmToken()
+                        var fcmToken = userDataStoreSource.fcmToken.firstOrNull()
+                        Log.d(TAG, "FCM 토큰: $fcmToken")
+                        if (fcmToken == null) {
+                            fcmToken = waitForFcmToken()
+                        }
                         Log.d(TAG, "FCM 토큰 확보 완료: $fcmToken")
                         // 사용자 정보 저장
                         val userDeferred = CompletableDeferred<Unit>()

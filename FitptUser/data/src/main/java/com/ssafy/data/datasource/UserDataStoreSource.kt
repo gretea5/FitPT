@@ -101,8 +101,12 @@ class UserDataStoreSource @Inject constructor(
 
 
     suspend fun clearAll() {
+        val currentFcmToken = fcmToken.firstOrNull() // 현재 FCM 토큰 유지
         dataStore.edit { preferences ->
             preferences.clear()
+            currentFcmToken?.let {
+                preferences[FCM_TOKEN] = it
+            }
         }
     }
 }

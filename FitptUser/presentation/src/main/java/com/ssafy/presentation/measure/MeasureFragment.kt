@@ -264,7 +264,6 @@ class MeasureFragment : BaseFragment<FragmentMeasureBinding>(
                         is GetBodyDetailInfoState.Error -> {
 
                         }
-
                         else -> Unit
                     }
                 }

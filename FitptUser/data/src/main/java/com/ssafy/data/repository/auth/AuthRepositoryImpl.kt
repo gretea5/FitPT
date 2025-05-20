@@ -46,6 +46,7 @@ internal class AuthRepositoryImpl @Inject constructor(
                 when (result) {
                     is ApiResponse.Success -> {
                         // dataStore.saveUserId(result.data.userId.toLong())
+                        Log.d(TAG,"로그인 성공"+result.data.toDomainModel().toString())
                         emit(ResponseStatus.Success(result.data.toDomainModel()))
                     }
                     is ApiResponse.Error -> {
