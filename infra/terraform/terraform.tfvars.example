@@ -1,0 +1,6 @@
+# aws_Rds_db_password_setup, Route53 hosting Area ID, fileName = terraform.tfvars
+
+# content
+db_password = "password"
+
+route53_zone_id = "eample"

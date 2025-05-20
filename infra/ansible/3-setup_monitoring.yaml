@@ -1,0 +1,79 @@
+- name: Install Prometheus Node Exporter and Grafana Agent
+  hosts: _monitoring
+  become: true
+
+  tasks:
+    - name: Install Prometheus Node Exporter
+      apt:
+        name: prometheus-node-exporter
+        state: present
+        update_cache: yes
+
+    - name: Enable and start node exporter
+      systemd:
+        name: prometheus-node-exporter
+        enabled: true
+        state: started
+
+    - name: Install unzip (required for agent install)
+      apt:
+        name: unzip
+        state: present
+
+    - name: Download Grafana Agent zip
+      get_url:
+        url: https://github.com/grafana/agent/releases/download/v0.40.0/grafana-agent-linux-amd64.zip
+        dest: /tmp/grafana-agent.zip
+
+    - name: Unzip and move grafana-agent binary
+      unarchive:
+        src: /tmp/grafana-agent.zip
+        dest: /usr/local/bin/
+        remote_src: yes
+        mode: '0755'
+
+    - name: Rename extracted binary (if needed)
+      command: mv /usr/local/bin/grafana-agent-linux-amd64 /usr/local/bin/grafana-agent
+      args:
+        creates: /usr/local/bin/grafana-agent
+
+    - name: Upload grafana-agent config
+      copy:
+        dest: /etc/grafana-agent.yaml
+        content: |
+          server:
+            log_level: info
+
+          prometheus:
+            global:
+              scrape_interval: 15s
+            configs:
+              - name: default
+                scrape_configs:
+                  - job_name: 'node'
+                    static_configs:
+                      - targets: ['localhost:9100']
+
+    - name: Upload grafana-agent systemd service
+      copy:
+        dest: /etc/systemd/system/grafana-agent.service
+        content: |
+          [Unit]
+          Description=Grafana Agent
+          After=network.target
+
+          [Service]
+          ExecStart=/usr/local/bin/grafana-agent --config.file=/etc/grafana-agent.yaml
+          Restart=on-failure
+
+          [Install]
+          WantedBy=multi-user.target
+
+    - name: Reload systemd
+      command: systemctl daemon-reexec
+
+    - name: Enable and start grafana-agent
+      systemd:
+        name: grafana-agent
+        enabled: true
+        state: started

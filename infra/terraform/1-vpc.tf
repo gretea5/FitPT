@@ -1,5 +1,7 @@
 ##################################
 # 1-vpc.tf : VPC 및 네트워크 구성
+# Public subnet : Bastion Host EC2
+# private subnet : Server EC2, RDS(MySQL), ElastiCache(Redis)
 ##################################
 
 resource "aws_vpc" "main" {
@@ -40,8 +42,8 @@ resource "aws_key_pair" "app_keypair" {
   public_key = local.app_keypair_public_key
 }
 
-# 퍼블릭 서브넷 (Bastion, NAT 용)
-resource "aws_subnet" "public" {
+# 퍼블릭 서브넷 (Bastion, NAT 용) - AZ a
+resource "aws_subnet" "public_a" {
   vpc_id                  = aws_vpc.main.id
   cidr_block              = cidrsubnet(var.vpc_cidr, 8, 0)
   availability_zone       = "ap-northeast-2a"
@@ -55,7 +57,22 @@ resource "aws_subnet" "public" {
   )
 }
 
-# 프라이빗 서브넷 (RDS용) - AZ a
+# 퍼블릭 서브넷 (Bastion, NAT 용) - AZ c
+resource "aws_subnet" "public_c" {
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = cidrsubnet(var.vpc_cidr, 8, 1)
+  availability_zone       = "ap-northeast-2c"
+  map_public_ip_on_launch = true
+
+  tags = merge(
+    local.common_tags,
+    {
+      Name = "${var.project_name}-${var.customer_id}-public-subnet-c"
+    }
+  )
+}
+
+# 프라이빗 서브넷 (RDS, ElastiCache, Server APP용) - AZ a
 resource "aws_subnet" "private_a" {
   vpc_id            = aws_vpc.main.id
   cidr_block        = cidrsubnet(var.vpc_cidr, 8, 10)
@@ -69,7 +86,7 @@ resource "aws_subnet" "private_a" {
   )
 }
 
-# 프라이빗 서브넷 (RDS용) - AZ c
+# 프라이빗 서브넷 (RDS, ElastiCache,  Server App용) - AZ c
 resource "aws_subnet" "private_c" {
   vpc_id            = aws_vpc.main.id
   cidr_block        = cidrsubnet(var.vpc_cidr, 8, 11)
@@ -91,7 +108,7 @@ resource "aws_eip" "nat_eip" {
 # NAT Gateway
 resource "aws_nat_gateway" "nat" {
   allocation_id = aws_eip.nat_eip.id
-  subnet_id     = aws_subnet.public.id
+  subnet_id     = aws_subnet.public_a.id
 }
 
 resource "aws_internet_gateway" "igw" {
@@ -114,8 +131,13 @@ resource "aws_route_table" "public" {
   }
 }
 
-resource "aws_route_table_association" "public" {
-  subnet_id      = aws_subnet.public.id
+resource "aws_route_table_association" "public_a" {
+  subnet_id      = aws_subnet.public_a.id
+  route_table_id = aws_route_table.public.id
+}
+
+resource "aws_route_table_association" "public_c" {
+  subnet_id      = aws_subnet.public_c.id
   route_table_id = aws_route_table.public.id
 }
 

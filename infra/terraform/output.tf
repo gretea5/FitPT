@@ -1,3 +1,7 @@
+########################################
+# output.tf : terraform apply 후 output 결과 출력
+########################################
+
 output "bastion_public_ip" {
   description = "Bastion Host EIP (운영자 접속용)"
   value       = aws_eip.bastion.public_ip

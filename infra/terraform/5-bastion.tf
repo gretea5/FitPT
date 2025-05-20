@@ -1,5 +1,5 @@
 ###########################################
-# 4-bastion.tf : Bastion Host 구성
+# 5-bastion.tf : Bastion Host 구성 / public subnet
 ###########################################
 
 resource "aws_security_group" "bastion_sg" {
@@ -10,7 +10,7 @@ resource "aws_security_group" "bastion_sg" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = [var.control_cidr]  # 운영자 IP만 허용
+    cidr_blocks = [var.control_cidr] # 운영자 IP만 허용
   }
 
   egress {
@@ -26,13 +26,13 @@ resource "aws_security_group" "bastion_sg" {
 }
 
 resource "aws_instance" "bastion" {
-  ami                         = lookup(var.amis, var.region)
-  instance_type               = var.bastion_instance_type
-  subnet_id                   = aws_subnet.public.id
-  vpc_security_group_ids      = [aws_security_group.bastion_sg.id]
-  key_name                    = var.default_keypair_name
-  iam_instance_profile = aws_iam_instance_profile.ec2_profile.name
-  
+  ami                    = lookup(var.amis, var.region)
+  instance_type          = var.bastion_instance_type
+  subnet_id              = aws_subnet.public_a.id
+  vpc_security_group_ids = [aws_security_group.bastion_sg.id]
+  key_name               = var.default_keypair_name
+  iam_instance_profile   = aws_iam_instance_profile.ec2_profile.name
+
 
   root_block_device {
     volume_size           = 30
@@ -53,7 +53,7 @@ resource "aws_instance" "bastion" {
 # Bastion EC2 고정 IP 지정
 resource "aws_eip" "bastion" {
   instance = aws_instance.bastion.id
-  domain      = "vpc"
+  domain   = "vpc"
 
   tags = merge(local.common_tags, {
     Name = "${var.project_name}-${var.customer_id}-bastion-eip"
