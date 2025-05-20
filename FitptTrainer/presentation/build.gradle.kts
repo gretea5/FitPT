@@ -70,6 +70,9 @@ dependencies {
     //implementation("com.google.firebase:firebase-messaging-ktx")
 
     implementation ("com.google.android.flexbox:flexbox:3.0.0")
+    implementation("com.airbnb.android:lottie:6.1.0")
+    implementation ("com.mikhaellopez:circularprogressbar:3.1.0")
+
 
     implementation(libs.fitrus.est.device)
 }
