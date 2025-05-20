@@ -1,5 +1,7 @@
 package com.ssafy.presentation.common
 
+import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -22,6 +24,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            window.statusBarColor = Color.parseColor("#FF4B28")  // 색상 리소스에 맞게 변경하세요
+        }
         initNavigationBar()
         initEvent()
     }
