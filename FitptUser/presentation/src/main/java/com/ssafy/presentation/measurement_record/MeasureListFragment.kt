@@ -13,11 +13,14 @@ import com.ssafy.presentation.measurement_record.viewModel.MeasureViewModel
 import com.ssafy.presentation.measurement_record.adapter.MeasureListAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import android.util.Log
+import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.ssafy.domain.model.measure_record.MesureDetail
 import com.ssafy.presentation.measurement_record.viewModel.GetBodyListInfoState
+import com.ssafy.presentation.util.CommonUtils
+import com.ssafy.presentation.util.ToastType
 import kotlinx.coroutines.launch
 
 
@@ -28,11 +31,13 @@ class MeasureListFragment : BaseFragment<FragmentMeasureListBinding>(
 ) {
     private val measureViewModel: MeasureViewModel by activityViewModels()
     private lateinit var adapter: MeasureListAdapter
+    private var backPressedTime: Long = 0
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initAdapter()
         observeBodyList()
+        initEvent()
         measureViewModel.getBodyList("createdAt", "desc")
     }
 
@@ -93,6 +98,11 @@ class MeasureListFragment : BaseFragment<FragmentMeasureListBinding>(
         binding.rvMeasureRecord.adapter = adapter
     }
 
+    fun initEvent(){
+        backEvent()
+    }
+
+
     private fun observeBodyList() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -114,5 +124,19 @@ class MeasureListFragment : BaseFragment<FragmentMeasureListBinding>(
                 }
             }
         }
+    }
+
+
+    fun backEvent(){
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (System.currentTimeMillis() - backPressedTime < 2000) {
+                    requireActivity().finish() // 액티비티 종료
+                } else {
+                    backPressedTime = System.currentTimeMillis()
+                    CommonUtils.showSingleLineCustomToast(requireContext(), ToastType.DEFAULT, "한 번 더 누르면 종료됩니다.")
+                }
+            }
+        })
     }
 }

@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewConfiguration
 import android.widget.Button
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.activityViewModels
@@ -51,6 +52,8 @@ import com.ssafy.presentation.home.viewModel.UserInfoViewModel
 import com.ssafy.presentation.measurement_record.adapter.MeasureListAdapter
 import com.ssafy.presentation.measurement_record.viewModel.GetBodyListInfoState
 import com.ssafy.presentation.measurement_record.viewModel.MeasureViewModel
+import com.ssafy.presentation.util.CommonUtils
+import com.ssafy.presentation.util.ToastType
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
@@ -93,6 +96,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
     private val skeletalMuscleEntries = mutableListOf<Entry>()
     private val bodyFatEntries = mutableListOf<Entry>()
     private var click = false
+    private var backPressedTime: Long = 0
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -125,7 +129,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
                 newYearMonth
             )
         }
-
+        backEvent()
         userInfoViewModel.fetchUser()
         measureViewModel.getBodyList("createdAt","asc")
         selectedDayViewModel.initYearMonth()
@@ -569,6 +573,19 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
         binding.tvYearMonth.visibility = View.VISIBLE
         binding.btnNextMonth.visibility = View.VISIBLE
         binding.btnPrevMonth.visibility = View.VISIBLE
+    }
+
+    fun backEvent(){
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (System.currentTimeMillis() - backPressedTime < 2000) {
+                    requireActivity().finish() // 액티비티 종료
+                } else {
+                    backPressedTime = System.currentTimeMillis()
+                    CommonUtils.showSingleLineCustomToast(requireContext(), ToastType.DEFAULT, "한 번 더 누르면 종료됩니다.")
+                }
+            }
+        })
     }
 }
 

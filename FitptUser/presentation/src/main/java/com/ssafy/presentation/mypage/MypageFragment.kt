@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -17,6 +18,7 @@ import com.ssafy.presentation.base.BaseFragment
 import com.ssafy.presentation.databinding.FragmentMypageBinding
 import com.ssafy.presentation.databinding.FragmentNotificationBinding
 import com.ssafy.presentation.util.CommonUtils
+import com.ssafy.presentation.util.ToastType
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -31,6 +33,7 @@ class MypageFragment : BaseFragment<FragmentMypageBinding>(
 ) {
     @Inject
     lateinit var userDataStore: UserDataStoreSource
+    private var backPressedTime: Long = 0
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -39,6 +42,7 @@ class MypageFragment : BaseFragment<FragmentMypageBinding>(
         initView()
     }
     fun initEvent(){
+        backEvent()
         binding.ivEdit.setOnClickListener {
             findNavController().navigate(R.id.action_mypage_fragment_to_edit_user_info_fragment)
         }
@@ -67,5 +71,19 @@ class MypageFragment : BaseFragment<FragmentMypageBinding>(
                 binding.tvValueTrainer.text = it?.trainerName ?: ""
             }
         }
+    }
+
+
+    fun backEvent(){
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (System.currentTimeMillis() - backPressedTime < 2000) {
+                    requireActivity().finish() // 액티비티 종료
+                } else {
+                    backPressedTime = System.currentTimeMillis()
+                    CommonUtils.showSingleLineCustomToast(requireContext(), ToastType.DEFAULT, "한 번 더 누르면 종료됩니다.")
+                }
+            }
+        })
     }
 }

@@ -3,6 +3,7 @@ package com.ssafy.presentation.report
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -16,6 +17,8 @@ import com.ssafy.presentation.databinding.FragmentReportListBinding
 import com.ssafy.presentation.report.adapter.PtReportAdapter
 import com.ssafy.presentation.report.viewModel.ReportListState
 import com.ssafy.presentation.report.viewModel.ReportViewModel
+import com.ssafy.presentation.util.CommonUtils
+import com.ssafy.presentation.util.ToastType
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -26,6 +29,7 @@ class ReportListFragment : BaseFragment<FragmentReportListBinding>(
     R.layout.fragment_report_list
 ) {
     private val reportViewModel : ReportViewModel by activityViewModels()
+    private var backPressedTime: Long = 0
     
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -35,6 +39,7 @@ class ReportListFragment : BaseFragment<FragmentReportListBinding>(
 
     fun initEvent(){
         reportViewModel.getReportList()
+        backEvent()
     }
 
     private fun observeReportList() {
@@ -61,6 +66,20 @@ class ReportListFragment : BaseFragment<FragmentReportListBinding>(
                 }
             }
         }
+    }
+
+
+    fun backEvent(){
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (System.currentTimeMillis() - backPressedTime < 2000) {
+                    requireActivity().finish() // 액티비티 종료
+                } else {
+                    backPressedTime = System.currentTimeMillis()
+                    CommonUtils.showSingleLineCustomToast(requireContext(), ToastType.DEFAULT, "한 번 더 누르면 종료됩니다.")
+                }
+            }
+        })
     }
 }
 

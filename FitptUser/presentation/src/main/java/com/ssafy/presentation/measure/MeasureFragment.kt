@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
@@ -37,6 +38,7 @@ import com.ssafy.presentation.measurement_record.viewModel.CreateBodyInfoState
 import com.ssafy.presentation.measurement_record.viewModel.GetBodyDetailInfoState
 import com.ssafy.presentation.measurement_record.viewModel.MeasureViewModel
 import com.ssafy.presentation.util.CommonUtils
+import com.ssafy.presentation.util.ToastType
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -58,7 +60,7 @@ class MeasureFragment : BaseFragment<FragmentMeasureBinding>(
     private var measuring: Boolean = false
     private var type: String = "comp"
     private lateinit var dialog: ProgressDialog
-
+    private var backPressedTime: Long = 0
     //타이머
     var progress = 0f
     var totalProgress = 0f
@@ -87,6 +89,7 @@ class MeasureFragment : BaseFragment<FragmentMeasureBinding>(
     }
 
     fun initEvent(){
+        backEvent()
         binding.btnBleStart.setOnClickListener {
             bluetoothConnect()
         }
@@ -308,5 +311,19 @@ class MeasureFragment : BaseFragment<FragmentMeasureBinding>(
                 }
             }
         }
+    }
+
+
+    fun backEvent(){
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (System.currentTimeMillis() - backPressedTime < 2000) {
+                    requireActivity().finish() // 액티비티 종료
+                } else {
+                    backPressedTime = System.currentTimeMillis()
+                    CommonUtils.showSingleLineCustomToast(requireContext(), ToastType.DEFAULT, "한 번 더 누르면 종료됩니다.")
+                }
+            }
+        })
     }
 }
