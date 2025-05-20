@@ -23,6 +23,10 @@ class BodyInfoAdapter(
             binding.tvItemName.text = item.name
             binding.tvItemValue.text = item.value
             binding.tvStatus.text = item.status
+            if(item.name=="골격근량"){
+                binding.tvChogwa.text = "높음"
+                binding.tvManyChogwa.text = "매우 높음"
+            }
             when (item.status) {
                 "미만" -> {
                     binding.statusDot.setBackgroundResource(R.drawable.circle_yellow)

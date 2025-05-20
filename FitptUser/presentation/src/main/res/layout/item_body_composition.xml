@@ -112,7 +112,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:text="미달"
+                        android:text="미만"
                         android:textColor="@android:color/white"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -179,10 +179,11 @@
                     app:layout_constraintStart_toEndOf="@+id/guideline2">
 
                     <TextView
+                        android:id="@+id/tv_chogwa"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:text="나쁨"
+                        android:text="초과"
                         android:textColor="@android:color/white"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -215,10 +216,11 @@
                     app:layout_constraintStart_toEndOf="@+id/guideline3">
 
                     <TextView
+                        android:id="@+id/tv_many_chogwa"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:text="매우 나쁨"
+                        android:text="매우 초과"
                         android:textColor="@android:color/white"
                         android:textSize="16sp"
                         android:textStyle="bold" />
