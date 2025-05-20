@@ -88,9 +88,9 @@ class UserWorkoutInfoFragment : BaseFragment<FragmentUserWorkoutInfoBinding>(
 
         val action = UserWorkoutInfoFragmentDirections.actionUserWorkoutInfoFragmentToReportEditFragment(
             memberId = memberId,
-            reportId = reportId
+            reportId = reportId,
+            memberName = memberInfos!!.memberName
         )
-
         findNavController().navigate(action)
     }
 

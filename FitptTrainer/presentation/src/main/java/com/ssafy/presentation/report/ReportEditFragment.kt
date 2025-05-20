@@ -26,12 +26,18 @@ import com.ssafy.presentation.report.adapter.CompositionAdapter
 import com.ssafy.presentation.report.adapter.ReportViewPagerAdapter
 import com.ssafy.presentation.report.viewmodel.CreateBodyInfoState
 import com.ssafy.presentation.report.viewmodel.GetBodyDetailInfoState
+import com.ssafy.presentation.report.viewmodel.GetReportInfoState
+import com.ssafy.presentation.report.viewmodel.HealthReportViewModel
 import com.ssafy.presentation.report.viewmodel.MeasureViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import com.ssafy.presentation.report.viewmodel.ReportViewModel
 import com.ssafy.presentation.report.viewmodel.UserInfoState
+import com.ssafy.presentation.util.CommonUtils
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import javax.inject.Inject
 
 private const val TAG = "ReportEditFragment_FitPT"
@@ -43,12 +49,14 @@ class ReportEditFragment : BaseFragment<FragmentReportEditBinding>(
 ) {
     private var memberId : Long? = null
     private var reportId : Long? = null
+    private var memberName: String? = null
 
     private val args: ReportEditFragmentArgs by navArgs()
     
     private lateinit var viewPagerAdapter: ReportViewPagerAdapter
     private val reportViewModel: ReportViewModel by activityViewModels()
     private val measureViewModel: MeasureViewModel by activityViewModels()
+    private val healthReportViewModel: HealthReportViewModel by activityViewModels()
     @Inject
     lateinit var trainerDataStoreSource: TrainerDataStoreSource
 
@@ -58,19 +66,27 @@ class ReportEditFragment : BaseFragment<FragmentReportEditBinding>(
         observeUserList()
         initEvent()
         memberId = args.memberId
-        measureViewModel.updateMember(memberId!!.toInt())
-        measureViewModel.fetchUser(memberId!!.toInt())
+        reportId = args.reportId
+        memberName = args.memberName
+
+        reportViewModel.setReportId(reportId!!.toInt())
+        if (args.reportId == -1L) {
+            //수정으로 들어왔을때
+            createReportEvent()
+            measureViewModel.updateMember(memberId!!.toInt())
+            measureViewModel.fetchUser(memberId!!.toInt())
+        }
+        else{
+            patchReportEvent()
+            reportViewModel.getReportDetailInfo(reportId!!.toInt())
+        }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
         measureViewModel.resetCreateBody()
-        //reportViewModel.resetReport()
-        reportId = args.reportId
-
-        if (args.reportId != -1L) {
-            //수정으로 들어왔을때
-        }
+        reportViewModel.resetReport()
+        //healthReportViewModel.clearWorkList()
 
         Log.d(TAG, "onViewCreated: $memberId")
         Log.d(TAG, "onViewCreated: $reportId")
@@ -82,6 +98,9 @@ class ReportEditFragment : BaseFragment<FragmentReportEditBinding>(
                 findNavController().navigate(R.id.action_reportEditFragment_to_userWorkoutInfoFragment)
             }
         }
+    }
+
+    fun createReportEvent(){
         binding.btnAddReport.setOnClickListener {
             val state = measureViewModel.measureCreateInfo.value
             if(state is CreateBodyInfoState.Success){
@@ -115,6 +134,39 @@ class ReportEditFragment : BaseFragment<FragmentReportEditBinding>(
             }
         }
     }
+
+    fun patchReportEvent(){
+        binding.btnAddReport.setOnClickListener {
+            lifecycleScope.launch {
+                val trainerId = trainerDataStoreSource.trainerId.first()
+                val state = reportViewModel.getReportDetailInfo.value
+                if(state is GetReportInfoState.Success){
+                    if(!reportViewModel.reportExercises.value!!.isEmpty()&&!reportViewModel.reportComment.value.isNullOrEmpty()){
+                        showToast("수정이 되었습니다.")
+                        reportViewModel.updateReport(reportId!!.toInt(),
+                            Report(
+                                memberId = memberId!!.toInt(),
+                                compositionLogId = state.getReportdetail.compositionResponseDto.compositionLogId,
+                                reportComment = reportViewModel.reportComment.value.toString(),
+                                reportExercises = reportViewModel.reportExercises.value!!,
+                                trainerId = trainerId!!.toInt()
+                            )
+                        )
+                        findNavController().popBackStack()
+                    }
+                    else if(reportViewModel.reportExercises.value!!.isEmpty()){
+                        showToast("수행한 운동을 작성해주세요")
+                    }
+                    else if(reportViewModel.reportComment.value.isNullOrEmpty()){
+                        showToast("식단 코칭을 작성해주세요")
+                    }
+                }
+            }
+        }
+    }
+
+
+
 
     fun initTabLayout() {
         viewPagerAdapter = ReportViewPagerAdapter(requireActivity())
@@ -167,9 +219,33 @@ class ReportEditFragment : BaseFragment<FragmentReportEditBinding>(
                         is UserInfoState.Loading -> {
                         }
                         is UserInfoState.Success -> {
-                            binding.tvReportTitle.text = state.userInfo.memberName
+                            val currentDate = SimpleDateFormat("yyyy/MM/dd", Locale.getDefault()).format(
+                                Date()
+                            )
+                            binding.tvReportTitle.text = "${state.userInfo.memberName} $currentDate 보고서"
                         }
                         is UserInfoState.Error -> {
+
+                        }
+                        else -> Unit
+                    }
+                }
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                reportViewModel.getReportDetailInfo.collect { state ->
+                    when (state) {
+                        is GetReportInfoState.Loading -> {
+                        }
+                        is GetReportInfoState.Success -> {
+                            val currentDate = CommonUtils.formatDateTime(state.getReportdetail.createdAt)
+                            binding.tvReportTitle.text = "$memberName $currentDate 보고서"
+                            reportViewModel.setReportComment(state.getReportdetail.reportComment)
+                            Log.d(TAG,state.getReportdetail.toString())
+                        }
+                        is GetReportInfoState.Error -> {
 
                         }
                         else -> Unit

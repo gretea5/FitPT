@@ -6,7 +6,9 @@ import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import androidx.core.content.ContextCompat
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeParseException
 
 object CommonUtils {
 
@@ -61,5 +63,16 @@ object CommonUtils {
         val outputFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd")
         val date = LocalDate.parse(createdAt, inputFormatter)
         return date.format(outputFormatter)
+    }
+
+    fun formatDateTime(input: String): String? {
+        return try {
+            val dateTime = LocalDateTime.parse(input, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss[.n]"))
+            val formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd")
+            dateTime.format(formatter)
+        } catch (e: DateTimeParseException) {
+            e.printStackTrace()
+            null
+        }
     }
 }

@@ -8,6 +8,6 @@ data class ReportDetail(
     val trainerName: String,
     val createdAt: String,
     val reportComment: String,
-    val compositionLog: CompositionItem,
+    val compositionResponseDto: CompositionResponseDto,
     val reportExercises: List<HealthReportWorkout>
 )

@@ -92,17 +92,29 @@ class HealthReportAdapter(
         }
     }
 
-    fun addEditItem(newId: Long) {
+    fun addEditItem(newId: Long,mode: Int,name: String,score: String) {
         if (items.lastOrNull()?.isEditing == true) return
 
-        items.add(
-            WorkoutNameScoreItem(
-                id = newId,
-                name = "",
-                score = "",
-                isEditing = true
+        if(mode==0){
+            items.add(
+                WorkoutNameScoreItem(
+                    id = newId,
+                    name = "",
+                    score = "",
+                    isEditing = true
+                )
             )
-        )
+        }
+        else{
+            items.add(
+                WorkoutNameScoreItem(
+                    id = newId,
+                    name = name,
+                    score = score,
+                    isEditing = true
+                )
+            )
+        }
         notifyItemInserted(items.lastIndex)
     }
 
