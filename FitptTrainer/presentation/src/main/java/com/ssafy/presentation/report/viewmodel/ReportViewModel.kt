@@ -15,6 +15,7 @@ import com.ssafy.domain.model.report.ReportDetail
 import com.ssafy.domain.model.report.TempHealthReportWorkout
 import com.ssafy.domain.usecase.report.CreateReportUsecase
 import com.ssafy.domain.usecase.report.GetReportDetailUsecase
+import com.ssafy.domain.usecase.report.UpdateReportUsecase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -31,6 +32,7 @@ private const val TAG = "ReportViewModel_FitPT"
 class ReportViewModel @Inject constructor(
     private val createReportUsecase: CreateReportUsecase,
     private val getReportDetailUsecase: GetReportDetailUsecase,
+    private val updateReportUsecase: UpdateReportUsecase,
 ) : ViewModel() {
 
     // 이후 기본 값 삭제 필요
@@ -96,6 +98,25 @@ class ReportViewModel @Inject constructor(
         }
     }
 
+    fun updateReport(reportId: Int,report: Report) {
+        viewModelScope.launch {
+            runCatching {
+                updateReportUsecase(reportId,report).collect { response ->
+                    when (response) {
+                        is ResponseStatus.Success -> {
+                            Log.d("UpdateReport", "Report updated. ID: ${response.data}")
+                        }
+                        is ResponseStatus.Error -> {
+                            Log.e("UpdateReport", "Failed to updated report: ${response.error.message}")
+                        }
+                    }
+                }
+            }.onFailure { e ->
+                Log.e("UpdateReport", "Unexpected error: ${e.message}")
+            }
+        }
+    }
+
     fun getReportDetailInfo(reportId: Int) {
         viewModelScope.launch {
             getReportDetailUsecase(reportId)
@@ -152,7 +173,6 @@ class ReportViewModel @Inject constructor(
         _reportComment.value = ""
         _reportMeasureId.value = 0
         _getReportDetailInfo.value = GetReportInfoState.Initial
-        Log.d(TAG,"부르고 있습니다."+_getReportDetailInfo.value.toString())
     }
 }
 

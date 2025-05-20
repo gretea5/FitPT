@@ -74,6 +74,7 @@ class ReportEditFragment : BaseFragment<FragmentReportEditBinding>(
             measureViewModel.fetchUser(memberId!!.toInt())
         }
         else{
+            patchReportEvent()
             reportViewModel.getReportDetailInfo(reportId!!.toInt())
         }
     }
@@ -130,6 +131,37 @@ class ReportEditFragment : BaseFragment<FragmentReportEditBinding>(
             }
         }
     }
+
+    fun patchReportEvent(){
+        binding.btnAddReport.setOnClickListener {
+            lifecycleScope.launch {
+                val trainerId = trainerDataStoreSource.trainerId.first()
+                val state = reportViewModel.getReportDetailInfo.value
+                if(state is GetReportInfoState.Success){
+                    if(!reportViewModel.reportExercises.value!!.isEmpty()&&!reportViewModel.reportComment.value.isNullOrEmpty()){
+                        showToast("수정이 되었습니다.")
+                        reportViewModel.updateReport(reportId!!.toInt(),
+                            Report(
+                                memberId = memberId!!.toInt(),
+                                compositionLogId = state.getReportdetail.compositionResponseDto.compositionLogId,
+                                reportComment = reportViewModel.reportComment.value.toString(),
+                                reportExercises = reportViewModel.reportExercises.value!!,
+                                trainerId = trainerId!!.toInt()
+                            )
+                        )
+                        findNavController().popBackStack()
+                    }
+                    else if(reportViewModel.reportExercises.value!!.isEmpty()){
+                        showToast("수행한 운동을 작성해주세요")
+                    }
+                    else if(reportViewModel.reportComment.value.isNullOrEmpty()){
+                        showToast("식단 코칭을 작성해주세요")
+                    }
+                }
+            }
+        }
+    }
+
 
 
 
@@ -207,6 +239,7 @@ class ReportEditFragment : BaseFragment<FragmentReportEditBinding>(
                         is GetReportInfoState.Success -> {
                             val currentDate = CommonUtils.formatDateTime(state.getReportdetail.createdAt)
                             binding.tvReportTitle.text = "$currentDate 보고서"
+                            reportViewModel.setReportComment(state.getReportdetail.reportComment)
                             Log.d(TAG,state.getReportdetail.toString())
                         }
                         is GetReportInfoState.Error -> {

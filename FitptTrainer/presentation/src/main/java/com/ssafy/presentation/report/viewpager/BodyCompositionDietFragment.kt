@@ -289,7 +289,6 @@ class BodyCompositionDietFragment : BaseFragment<FragmentBodyCompositionDietBind
                         is GetReportInfoState.Success -> {
                             val reportDetail = state.getReportdetail
                             binding.etReportDietContent.setText(reportDetail.reportComment)
-                            Log.d(TAG,reportDetail.toString())
                             measureViewModel.getBodyDetailInfo(reportDetail.compositionResponseDto.compositionLogId)
                             binding.clWeight.isVisible = false
                             binding.scrollviewMeasureResult.isVisible = true
