@@ -109,6 +109,10 @@ class MeasureFragment : BaseFragment<FragmentMeasureBinding>(
         binding.btnMeasureStart.setOnClickListener {
             if (measuring) return@setOnClickListener
             measuring = true
+            binding.btnMeasureStart.isVisible = false
+            binding.btnMeasureStart.isEnabled = false
+            binding.ivFitrusUse.isVisible = false
+            binding.tvDescription.isVisible = false
             Log.d(TAG,"클릭하였습니다.")
             if (type in listOf("device", "battery", "tempObj"))
                 measureStart()
@@ -116,7 +120,7 @@ class MeasureFragment : BaseFragment<FragmentMeasureBinding>(
                 if (manager.fitrusConnectionState) {
                     object : CountDownTimer(5000, 1000) {
                         override fun onTick(p0: Long) {
-                           dialog.show()
+
                         }
                         override fun onFinish() {
                             measureStart()
@@ -141,7 +145,7 @@ class MeasureFragment : BaseFragment<FragmentMeasureBinding>(
     }
 
     fun measureStart() {
-        dialog.show()
+
         when (type) {
             "comp" -> {
                 lifecycleScope.launch {
@@ -209,10 +213,6 @@ class MeasureFragment : BaseFragment<FragmentMeasureBinding>(
     }
 
     override fun handleFitrusDisconnected() {
-        binding.btnMeasureStart.isVisible = false
-        binding.btnMeasureStart.isEnabled = false
-        binding.ivFitrusUse.isVisible = false
-        binding.tvDescription.isVisible = false
         binding.rvBodyCompositionResult.isVisible = true
         val state = measureViewModel.createBodyInfo.value
         if(state is CreateBodyInfoState.Success){
