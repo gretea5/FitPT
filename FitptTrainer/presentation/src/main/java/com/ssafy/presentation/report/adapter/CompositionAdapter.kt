@@ -43,6 +43,11 @@ class CompositionAdapter(private val items: List<CompositionCondition>) : Recycl
                 tvManyChogwaScore.text = item.bodyScore
                 statusDot.setBackgroundResource(R.drawable.circle_red)
             }
+            if(item.bodyTitle=="골격근량"){
+                tvChogwa.text="높음"
+                tvManyChogwa.text="매우 높음"
+            }
+
             tvStatus.text = "${item.bodyCondition}"
         }
     }
