@@ -3,6 +3,8 @@ package com.ssafy.presentation.measure
 import android.app.ProgressDialog
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -36,7 +38,10 @@ import com.ssafy.presentation.measurement_record.viewModel.GetBodyDetailInfoStat
 import com.ssafy.presentation.measurement_record.viewModel.MeasureViewModel
 import com.ssafy.presentation.util.CommonUtils
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.math.round
@@ -53,6 +58,12 @@ class MeasureFragment : BaseFragment<FragmentMeasureBinding>(
     private var measuring: Boolean = false
     private var type: String = "comp"
     private lateinit var dialog: ProgressDialog
+
+    //타이머
+    var progress = 0f
+    var totalProgress = 0f
+    var progressJob: Job? = null
+    private var measureStartTime: Long = 0L
 
     @Inject
     lateinit var userDataStoreSource: UserDataStoreSource
@@ -113,17 +124,38 @@ class MeasureFragment : BaseFragment<FragmentMeasureBinding>(
             binding.btnMeasureStart.isEnabled = false
             binding.ivFitrusUse.isVisible = false
             binding.tvDescription.isVisible = false
+            var progress = 0f
             Log.d(TAG,"클릭하였습니다.")
+            binding.circularProgressBar.isVisible = true
+            binding.lottie.isVisible = true
+            measureStartTime = System.currentTimeMillis()
             if (type in listOf("device", "battery", "tempObj"))
                 measureStart()
             else {
                 if (manager.fitrusConnectionState) {
                     object : CountDownTimer(5000, 1000) {
-                        override fun onTick(p0: Long) {
-
+                        override fun onTick(millisUntilFinished: Long) {
+                            progress += 6f
+                            binding.circularProgressBar.setProgressWithAnimation(progress, 1000)
                         }
                         override fun onFinish() {
-                            measureStart()
+                            progress = 30f
+                            binding.circularProgressBar.setProgressWithAnimation(progress, 500)
+                            lifecycleScope.launch {
+                                measureStart()
+                            }
+                            progressJob = lifecycleScope.launch {
+                                val totalDuration = 11_500L
+                                val interval = 1000L
+                                val steps = (totalDuration / interval).toInt()
+                                val progressPerStep = (100f - progress) / steps
+                                repeat(steps) {
+                                    if (!isActive) return@launch
+                                    delay(interval)
+                                    progress += progressPerStep
+                                    binding.circularProgressBar.setProgressWithAnimation(progress, 900)
+                                }
+                            }
                         }
                     }.start()
                 } else {
@@ -174,6 +206,11 @@ class MeasureFragment : BaseFragment<FragmentMeasureBinding>(
 
     override fun handleFitrusCompMeasured(result: Map<String, String>) {
         if (dialog.isShowing) dialog.dismiss()
+        val measureEndTime = System.currentTimeMillis()
+        val durationMillis = measureEndTime - measureStartTime
+        val durationSeconds = durationMillis / 1000.0
+
+        Log.d(TAG, "측정 전체 소요 시간: ${durationSeconds}초")
         lifecycleScope.launch {
             val user = userDataStoreSource.user.first()!!
             val detail = CompositionDetail(
@@ -192,6 +229,8 @@ class MeasureFragment : BaseFragment<FragmentMeasureBinding>(
             measureViewModel.createBody(detail) {
                 measuring = false
                 showToast("측정이 완료되어 개인 측정에 추가되었습니다")
+                binding.lottie.visibility = View.GONE
+                binding.circularProgressBar.visibility = View.GONE
                 manager.disconnectFitrus()
             }
         }

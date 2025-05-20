@@ -71,6 +71,8 @@ dependencies {
     implementation("com.google.firebase:firebase-messaging-ktx")
 
     implementation("com.github.LottieFiles:dotlottie-android:0.5.0")
+    implementation("com.airbnb.android:lottie:6.1.0")
+    implementation ("com.mikhaellopez:circularprogressbar:3.1.0")
 
     implementation(libs.fitrus.est.device)
 }
