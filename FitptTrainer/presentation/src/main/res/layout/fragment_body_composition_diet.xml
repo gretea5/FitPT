@@ -51,37 +51,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/et_weight_input" />
-
-        <com.mikhaellopez.circularprogressbar.CircularProgressBar
-            android:id="@+id/circularProgressBar"
-            android:layout_width="350dp"
-            android:layout_height="350dp"
-            android:visibility="gone"
-            app:cpb_background_progressbar_color="#b6bbd8"
-            app:cpb_background_progressbar_width="5dp"
-            app:cpb_progress_direction="to_right"
-            app:cpb_progressbar_color="#3f51b5"
-            app:cpb_progressbar_width="10dp"
-            app:cpb_round_border="false"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/lottie"
-            android:layout_width="400dp"
-            android:layout_height="400dp"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:lottie_autoPlay="true"
-            app:lottie_loop="true"
-            app:lottie_rawRes="@raw/run_loop" />
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -216,6 +185,45 @@
         </com.google.android.material.card.MaterialCardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_progress"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/cl_report_diet"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.mikhaellopez.circularprogressbar.CircularProgressBar
+            android:id="@+id/circularProgressBar"
+            android:layout_width="350dp"
+            android:layout_height="350dp"
+            app:cpb_background_progressbar_color="#b6bbd8"
+            app:cpb_background_progressbar_width="5dp"
+            app:cpb_progress_direction="to_right"
+            app:cpb_progressbar_color="#3f51b5"
+            app:cpb_progressbar_width="10dp"
+            app:cpb_round_border="false"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottie"
+            android:layout_width="400dp"
+            android:layout_height="400dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/run_loop" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 
     <androidx.core.widget.NestedScrollView

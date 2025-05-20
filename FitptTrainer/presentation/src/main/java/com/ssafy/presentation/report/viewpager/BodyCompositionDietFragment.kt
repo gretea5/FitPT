@@ -40,6 +40,9 @@ import com.ssafy.presentation.report.viewmodel.ReportViewModel
 import com.ssafy.presentation.report.viewmodel.UserInfoState
 import com.ssafy.presentation.util.CommonUtils
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
 private const val TAG = "BodyCompositionDietFrag"
@@ -59,6 +62,11 @@ class BodyCompositionDietFragment : BaseFragment<FragmentBodyCompositionDietBind
     private var type: String = "comp"
     private lateinit var dialog: ProgressDialog
     private var memberId : Long? = 0
+    //타이머
+    var progress = 0f
+    var totalProgress = 0f
+    var progressJob: Job? = null
+
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -118,19 +126,38 @@ class BodyCompositionDietFragment : BaseFragment<FragmentBodyCompositionDietBind
         binding.btnMeasureStart.setOnClickListener {
             if (measuring) return@setOnClickListener
             measuring = true
-
+            binding.clProgress.isVisible = true
+            binding.clReportMeasureExplanation.isVisible = false
             if (type in listOf("device", "battery", "tempObj"))
                 measureStart()
             else {
                 if (manager.fitrusConnectionState) {
                     object : CountDownTimer(5000, 1000) {
-                        override fun onTick(p0: Long) {
-                            dialog.show()
+                        override fun onTick(millisUntilFinished: Long) {
+                            progress += 6f
+                            binding.circularProgressBar.setProgressWithAnimation(progress, 1000)
                         }
                         override fun onFinish() {
-                            measureStart()
+                            progress = 30f
+                            binding.circularProgressBar.setProgressWithAnimation(progress, 500)
+                            lifecycleScope.launch {
+                                measureStart()
+                            }
+                            progressJob = lifecycleScope.launch {
+                                val totalDuration = 11_500L
+                                val interval = 1000L
+                                val steps = (totalDuration / interval).toInt()
+                                val progressPerStep = (100f - progress) / steps
+                                repeat(steps) {
+                                    if (!isActive) return@launch
+                                    delay(interval)
+                                    progress += progressPerStep
+                                    binding.circularProgressBar.setProgressWithAnimation(progress, 900)
+                                }
+                            }
                         }
                     }.start()
+
                 } else {
                 }
             }
@@ -150,7 +177,6 @@ class BodyCompositionDietFragment : BaseFragment<FragmentBodyCompositionDietBind
     }
 
     fun measureStart() {
-        dialog.show()
         when (type) {
             "comp" -> {
                 lifecycleScope.launch {
@@ -213,6 +239,7 @@ class BodyCompositionDietFragment : BaseFragment<FragmentBodyCompositionDietBind
     }
 
     override fun handleFitrusDisconnected() {
+        binding.clProgress.isVisible = false
         binding.clReportMeasureExplanation.isVisible = false
         binding.scrollviewMeasureResult.isVisible = true
         val state = measureViewModel.measureCreateInfo.value
