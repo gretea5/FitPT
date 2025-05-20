@@ -149,7 +149,6 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/tab_button_selector"
                     android:paddingHorizontal="20dp"
-                    android:paddingVertical="10dp"
                     android:stateListAnimator="@null"
                     android:text="골격근량"
                     android:textColor="@color/tab_button_selector"
