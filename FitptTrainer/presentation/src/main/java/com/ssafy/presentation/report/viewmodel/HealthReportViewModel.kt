@@ -193,5 +193,9 @@ class HealthReportViewModel @Inject constructor() : ViewModel() {
         _isAnyMuscleSelected.value = false
         _selectedMuscleIds.value = emptyList()
     }
+
+    fun clearWorkList(){
+        _workoutReportList.value = emptyList()
+    }
 }
 

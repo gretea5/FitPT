@@ -24,6 +24,7 @@ import com.ssafy.presentation.report.viewmodel.HealthReportViewModel
 import com.ssafy.presentation.report.viewmodel.ReportViewModel
 import com.ssafy.presentation.report.viewmodel.UserInfoState
 import com.ssafy.presentation.util.CommonUtils
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.observeOn
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -38,22 +39,27 @@ class HealthReportFragment : BaseFragment<FragmentHealthReportBinding>(
 ) {
     private lateinit var healthReportAdapter: HealthReportAdapter
     private lateinit var muscleGroups: List<MuscleGroup>
-    private val reportViewModel: HealthReportViewModel by viewModels()
-    private val viewModel: ReportViewModel by activityViewModels()
+    private val healthReportViewModel: HealthReportViewModel by viewModels()
+    private val reportViewModel: ReportViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initMuscles()
         initEvent()
-        observeReportDetailList()
         initRecyclerView()
         observeViewModel()
-        if(viewModel.reportId.value!=-1){
-            val state = viewModel.getReportDetailInfo.value
+        if( reportViewModel.reportId.value!=-1){
+            observeReportDetailList()
+            val state =  reportViewModel.getReportDetailInfo.value
             if(state is GetReportInfoState.Success){
                 Log.d(TAG,"출력"+state.getReportdetail.toString())
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        reportViewModel.resetReport()
     }
 
     private fun initEvent() {
@@ -100,7 +106,7 @@ class HealthReportFragment : BaseFragment<FragmentHealthReportBinding>(
                 // Edit 모드 아이템 추가
                 val newId = System.currentTimeMillis()
 
-                reportViewModel.setCurrentWorkoutId(newId)
+                healthReportViewModel.setCurrentWorkoutId(newId)
                 healthReportAdapter.addEditItem(newId,0,"","")
             }
 
@@ -109,7 +115,7 @@ class HealthReportFragment : BaseFragment<FragmentHealthReportBinding>(
                 healthReportAdapter.finalizeLastItem()
 
                 // 입력값 ViewModel에 저장
-                reportViewModel.addWorkoutReport()
+                healthReportViewModel.addWorkoutReport()
 
                 // 추가 입력 막기
                 setAllMuscleClickable(false)
@@ -146,18 +152,18 @@ class HealthReportFragment : BaseFragment<FragmentHealthReportBinding>(
 
                 healthReportAdapter.removeEditModeItem()
                 healthReportAdapter.removeSelectedItem()
-                reportViewModel.deleteSelectedWorkout()
+                healthReportViewModel.deleteSelectedWorkout()
             }
 
             // 운동별 성과 상세 기록 텍스트 감지
             etReportHealthContent.addTextChangedListener {
-                reportViewModel.updateDescription(it?.toString() ?: "")
+                healthReportViewModel.updateDescription(it?.toString() ?: "")
             }
         }
     }
 
     private fun observeViewModel() {
-        reportViewModel.isAddButtonEnabled.observe(viewLifecycleOwner) { isEnabled ->
+        healthReportViewModel.isAddButtonEnabled.observe(viewLifecycleOwner) { isEnabled ->
             binding.ibReportHealthWorkoutAdd.apply {
                 isClickable = isEnabled
                 setImageResource(
@@ -167,8 +173,8 @@ class HealthReportFragment : BaseFragment<FragmentHealthReportBinding>(
             }
         }
 
-        reportViewModel.workoutReportList.observe(viewLifecycleOwner) {
-            viewModel.setReportExercises(it)
+        healthReportViewModel.workoutReportList.observe(viewLifecycleOwner) {
+            reportViewModel.setReportExercises(it)
         }
     }
 
@@ -190,9 +196,9 @@ class HealthReportFragment : BaseFragment<FragmentHealthReportBinding>(
     }
 
     private fun updateSelectedWorkoutItem(id: Long, isSelected: Boolean) {
-        reportViewModel.setSelectedWorkoutId(id)
+        healthReportViewModel.setSelectedWorkoutId(id)
 
-        reportViewModel.selectedWorkoutItem.observe(viewLifecycleOwner) { item ->
+        healthReportViewModel.selectedWorkoutItem.observe(viewLifecycleOwner) { item ->
             item?.let {
                 binding.apply {
                     if (isSelected) {
@@ -233,8 +239,8 @@ class HealthReportFragment : BaseFragment<FragmentHealthReportBinding>(
         }
 
         // ViewModel에도 반영
-        reportViewModel.updateName(lastItem?.name ?: "")
-        reportViewModel.updateScore(lastItem?.score ?: "")
+        healthReportViewModel.updateName(lastItem?.name ?: "")
+        healthReportViewModel.updateScore(lastItem?.score ?: "")
     }
 
     // 근육 초기화 설정
@@ -268,7 +274,7 @@ class HealthReportFragment : BaseFragment<FragmentHealthReportBinding>(
     // 선택한 근육 색 변경
     private fun toggleMuscleGroupSelection(group: MuscleGroup) {
         // ViewModel을 통해 상태 업데이트
-        reportViewModel.toggleMuscleSelection(group)
+        healthReportViewModel.toggleMuscleSelection(group)
 
         // ViewModel 호출 후의 상태를 반영해 색상 업데이트
         val color = ContextCompat.getColor(
@@ -329,7 +335,7 @@ class HealthReportFragment : BaseFragment<FragmentHealthReportBinding>(
     private fun observeReportDetailList() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.getReportDetailInfo.collect { state ->
+                reportViewModel.getReportDetailInfo.collectLatest { state ->
                     when (state) {
                         is GetReportInfoState.Loading -> {
                         }
@@ -338,13 +344,13 @@ class HealthReportFragment : BaseFragment<FragmentHealthReportBinding>(
                             reportDetail.reportExercises.forEach { workout ->
                                 Log.d(TAG,workout.toString())
                                 val newId = System.currentTimeMillis()
-                                reportViewModel.setCurrentWorkoutId(newId)
+                                healthReportViewModel.setCurrentWorkoutId(newId)
                                 val name = workout.exerciseName
                                 val score = workout.exerciseAchievement
                                 val comment = workout.exerciseComment
                                 val muscles = workout.activationMuscleId
                                 healthReportAdapter.addEditItem(newId,1,name,score)
-                                reportViewModel.getReportaddWorkoutReport(name, score, comment, muscles)
+                                healthReportViewModel.getReportaddWorkoutReport(name, score, comment, muscles)
                                 healthReportAdapter.finalizeLastItem()
                             }
                         }

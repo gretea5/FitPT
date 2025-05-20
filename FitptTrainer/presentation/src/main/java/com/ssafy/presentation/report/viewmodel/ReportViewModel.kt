@@ -151,6 +151,8 @@ class ReportViewModel @Inject constructor(
         _reportExercises.value = emptyList()
         _reportComment.value = ""
         _reportMeasureId.value = 0
+        _getReportDetailInfo.value = GetReportInfoState.Initial
+        Log.d(TAG,"부르고 있습니다."+_getReportDetailInfo.value.toString())
     }
 }
 

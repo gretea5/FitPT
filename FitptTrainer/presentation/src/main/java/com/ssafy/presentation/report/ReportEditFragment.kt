@@ -27,6 +27,7 @@ import com.ssafy.presentation.report.adapter.ReportViewPagerAdapter
 import com.ssafy.presentation.report.viewmodel.CreateBodyInfoState
 import com.ssafy.presentation.report.viewmodel.GetBodyDetailInfoState
 import com.ssafy.presentation.report.viewmodel.GetReportInfoState
+import com.ssafy.presentation.report.viewmodel.HealthReportViewModel
 import com.ssafy.presentation.report.viewmodel.MeasureViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import com.ssafy.presentation.report.viewmodel.ReportViewModel
@@ -54,6 +55,7 @@ class ReportEditFragment : BaseFragment<FragmentReportEditBinding>(
     private lateinit var viewPagerAdapter: ReportViewPagerAdapter
     private val reportViewModel: ReportViewModel by activityViewModels()
     private val measureViewModel: MeasureViewModel by activityViewModels()
+    private val healthReportViewModel: HealthReportViewModel by activityViewModels()
     @Inject
     lateinit var trainerDataStoreSource: TrainerDataStoreSource
 
@@ -76,10 +78,12 @@ class ReportEditFragment : BaseFragment<FragmentReportEditBinding>(
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
         measureViewModel.resetCreateBody()
-        //reportViewModel.resetReport()
+        reportViewModel.resetReport()
+        //healthReportViewModel.clearWorkList()
+
         Log.d(TAG, "onViewCreated: $memberId")
         Log.d(TAG, "onViewCreated: $reportId")
     }
