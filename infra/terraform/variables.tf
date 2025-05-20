@@ -1,6 +1,10 @@
+########################################
+# variable.tf : AWS terrform 파일 변수 저장
+########################################
+
 locals {
-  vpc_name        = "${var.project_name}-${var.customer_id}-vpc"
-  ansibleFilter   = "${var.project_name}-${var.customer_id}"
+  vpc_name      = "${var.project_name}-${var.customer_id}-vpc"
+  ansibleFilter = "${var.project_name}-${var.customer_id}"
   common_tags = {
     Project     = var.project_name
     Customer    = var.customer_id
@@ -36,6 +40,9 @@ variable "number_of_bastion_nodes" {
   default = 1
 }
 
+variable "number_of_monitor_nodes" {
+  default = 1
+}
 
 # aws_security_ufw_setup
 variable "allowed_ports" {
@@ -61,7 +68,7 @@ variable "db_password" {
 # SaaS 사용자 IP를 등록하여 ssh 또는 접근 제한 가능
 variable "control_cidr" {
   description = "CIDR for maintenance (SSH or admin access control)."
-  default     = "0.0.0.0/0"  # ← 지금은 모든 IP 허용 (개발용)
+  default     = "0.0.0.0/0" # ← 지금은 모든 IP 허용 (개발용)
 }
 
 locals {
@@ -141,15 +148,18 @@ variable "default_instance_user" {
 }
 
 variable "app_instance_type" {
-  default = "t3.xlarge"
+  default = "t3.large"
+}
+
+variable "monitor_instance_type" {
+  default = "t3.small"
 }
 
 variable "bastion_instance_type" {
   default = "t2.micro"
 }
 
-# https 인증
-variable "acm_certificate_arn" {
-  description = "ACM Certificate ARN for HTTPS listener"
+variable "route53_zone_id" {
+  description = "var.route53_zone_id"
   type        = string
 }
