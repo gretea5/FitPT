@@ -49,6 +49,7 @@ class ReportEditFragment : BaseFragment<FragmentReportEditBinding>(
 ) {
     private var memberId : Long? = null
     private var reportId : Long? = null
+    private var memberName: String? = null
 
     private val args: ReportEditFragmentArgs by navArgs()
     
@@ -66,6 +67,8 @@ class ReportEditFragment : BaseFragment<FragmentReportEditBinding>(
         initEvent()
         memberId = args.memberId
         reportId = args.reportId
+        memberName = args.memberName
+
         reportViewModel.setReportId(reportId!!.toInt())
         if (args.reportId == -1L) {
             //수정으로 들어왔을때
@@ -238,7 +241,7 @@ class ReportEditFragment : BaseFragment<FragmentReportEditBinding>(
                         }
                         is GetReportInfoState.Success -> {
                             val currentDate = CommonUtils.formatDateTime(state.getReportdetail.createdAt)
-                            binding.tvReportTitle.text = "$currentDate 보고서"
+                            binding.tvReportTitle.text = "$memberName $currentDate 보고서"
                             reportViewModel.setReportComment(state.getReportdetail.reportComment)
                             Log.d(TAG,state.getReportdetail.toString())
                         }

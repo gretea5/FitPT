@@ -31,7 +31,7 @@
             style="@style/Font_SemiBold_32_main_black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="박장훈 회원 2025.05.09 보고서"
+            android:text=""
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
