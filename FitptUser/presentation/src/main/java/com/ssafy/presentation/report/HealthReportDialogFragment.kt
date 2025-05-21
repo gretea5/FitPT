@@ -1,6 +1,8 @@
 package com.ssafy.presentation.report
 
 import android.content.DialogInterface
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -52,6 +54,7 @@ class HealthReportDialogFragment : DialogFragment() {
                 ViewGroup.LayoutParams.WRAP_CONTENT
             )
             dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
+            dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             arguments?.let {
                 muscleId = it.getLong("muscleId", -1L)
             }

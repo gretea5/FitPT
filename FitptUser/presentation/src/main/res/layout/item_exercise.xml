@@ -61,6 +61,7 @@
         android:text="무게를 잘 못치고 설명 설명 설명 설명 설명..."
         android:textColor="@android:color/black"
         android:textSize="14sp"
+        android:layout_marginBottom="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/tv_exercise_achievement"
         app:layout_constraintStart_toStartOf="@+id/tv_exercise_name"
