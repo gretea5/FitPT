@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".report.viewpager.CoachingFragment">
+
+    <TextView
+        android:id="@+id/tv_coachging"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="📅 [오늘의 PT 맞춤 식단 추천]\n
+    💪 목표: 체지방 감량 / 근육 유지\n
+    🥗 식단 구성 기준: 고단백, 저탄수화물, 저지방\n\n
+    ✅ 아침 (07:00~09:00)\n
+    현미밥 1공기 (150g)\n
+    닭가슴살 구이 100g\n
+    삶은 계란 2개 (노른자 1개 제거)\n
+    방울토마토 + 오이 등 생야채\n
+    블랙커피 또는 녹차 (무가당)\n\n
+    ✅ 점심 (12:00~13:30)\n
+    고구마 100g 또는 현미밥 반공기\n
+    소고기 안심/우둔살 120g or 생선구이\n
+    데친 브로콜리 + 파프리카 + 삶은 달걀 1개\n
+    된장국 (기름기 적게, 짜지 않게)\n\n
+    ✅ 운동 전 간식 (운동 1시간 전)\n
+    바나나 1개 + 그릭 요거트(무가당)\n
+    또는 단백질 쉐이크 1잔\n\n
+    ✅ 운동 후 (30분 이내)\n
+    단백질 쉐이크 1잔 (우유보단 물 또는 무가당 두유에 타기)\n
+    바나나나 꿀 1티스푼으로 당 보충 가능\n\n
+    ✅ 저녁 (18:00~20:00)\n
+    닭가슴살/계란/두부 등 단백질 위주\n
+    샐러드 (드레싱은 올리브오일 + 레몬즙 등으로 대체)\n
+    탄수화물 섭취는 최소화\n\n
+    💡 추가 팁\n
+    하루 물 2L 이상 마시기\n
+    저녁 9시 이후 금식\n
+    주 1~2회 치팅데이 가능 (단, 폭식 금지!)"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

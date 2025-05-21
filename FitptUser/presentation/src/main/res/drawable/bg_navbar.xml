@@ -1,0 +1,38 @@
+<vector
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="411dp"
+    android:height="72dp"
+    android:viewportWidth="411"
+    android:viewportHeight="72">
+
+    <group>
+        <clip-path
+            android:pathData="M30 0H381C397.569 0 411 13.4315 411 30V72H0V30C0 13.4315 13.4315 0 30 0Z"/>
+
+        <!-- 흰색 배경 -->
+        <path
+            android:pathData="M0 0V72H411V0"
+            android:fillColor="#FFFFFF"/>
+    </group>
+
+    <!-- 상단 구분선 추가 (둥근 모서리를 따라 이어지는 path) -->
+    <path
+        android:pathData="M30,0.5 C13.8,0.5 0.5,13.8 0.5,30 L0.5,72 L410.5,72 L410.5,30 C410.5,13.8 397.2,0.5 381,0.5 L30,0.5 Z"
+        android:strokeWidth="1"
+        android:strokeColor="#EEEEEE"
+        android:fillColor="#00000000"/>
+
+    <!-- 미세한 그림자 효과 추가 -->
+    <path
+        android:pathData="M30 0H381C397.569 0 411 13.4315 411 30V30C411 13.4315 397.569 0 381 0H30C13.4315 0 0 13.4315 0 30V30C0 13.4315 13.4315 0 30 0Z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startY="0"
+                android:endY="6"
+                android:startColor="#10000000"
+                android:endColor="#00000000"
+                android:type="linear"/>
+        </aapt:attr>
+    </path>
+</vector>

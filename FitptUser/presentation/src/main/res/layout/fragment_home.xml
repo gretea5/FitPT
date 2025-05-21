@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:id="@+id/home_fragment">
+
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="80dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/ic_home_logo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/tv_body_graph"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text=""
+        android:visibility="invisible"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+    <HorizontalScrollView
+        android:id="@+id/horizontal_scroll_graph"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fillViewport="true"
+        android:scrollbars="none"
+        android:visibility="invisible"
+        android:overScrollMode="never"
+        android:paddingVertical="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/tv_body_graph"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingHorizontal="16dp">
+            <Button
+                android:id="@+id/btn_weight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="몸무게"
+                app:backgroundTint="@null"
+                android:textColor="@color/tab_button_selector"
+                android:background="@drawable/tab_button_selector"
+                android:textSize="16sp"
+                android:paddingHorizontal="20dp"
+                android:stateListAnimator="@null" />
+            <Button
+                android:id="@+id/btn_skeletal_muscle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="골격근량"
+                app:backgroundTint="@null"
+                android:textColor="@color/tab_button_selector"
+                android:background="@drawable/tab_button_selector"
+                android:textSize="16sp"
+                android:paddingHorizontal="20dp"
+                android:stateListAnimator="@null" />
+
+            <Button
+                android:id="@+id/btn_body_fat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="체지방량"
+                android:background="@drawable/tab_button_selector"
+                android:textColor="@color/tab_button_selector"
+                android:textSize="16sp"
+                app:backgroundTint="@null"
+                android:paddingHorizontal="20dp"
+                android:stateListAnimator="@null" />
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/chart_body_graph"
+        android:layout_width="355dp"
+        android:layout_height="236dp"
+        android:paddingBottom="20dp"
+        android:visibility="invisible"
+        app:layout_constraintDimensionRatio="1.3802:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/horizontal_scroll_graph"
+        app:layout_constraintWidth_percent="0.87" />
+
+    <TextView
+        android:id="@+id/tv_pt_calendar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="PT일정"
+        android:visibility="invisible"
+        android:textSize="20sp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="@+id/tv_body_graph"
+        app:layout_constraintTop_toBottomOf="@+id/chart_body_graph" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_calendar"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="20dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_pt_calendar">
+
+        <include
+            android:id="@+id/layout_dow"
+            layout="@layout/calendar_day_titles_container"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <com.kizitonwose.calendar.view.CalendarView
+            android:id="@+id/calendar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            app:cv_daySize="rectangle"
+            app:cv_dayViewResource="@layout/calendar_day"
+            app:cv_outDateStyle="endOfGrid"
+            app:cv_scrollPaged="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layout_dow" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/tv_year_month"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="2025년 5월"
+        android:textSize="20sp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/cl_calendar"
+        app:layout_constraintEnd_toStartOf="@+id/btn_prev_month"
+        app:layout_constraintTop_toBottomOf="@+id/chart_body_graph" />
+
+    <ImageView
+        android:id="@+id/btn_prev_month"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="16dp"
+        android:visibility="invisible"
+        android:src="@drawable/ic_calendar_arrow_left"
+        app:layout_constraintBottom_toTopOf="@+id/cl_calendar"
+        app:layout_constraintEnd_toStartOf="@+id/btn_next_month"
+        app:layout_constraintTop_toBottomOf="@+id/chart_body_graph"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <ImageView
+        android:id="@+id/btn_next_month"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="32dp"
+        android:visibility="invisible"
+        android:src="@drawable/ic_calendar_arrow_right"
+        app:layout_constraintBottom_toTopOf="@+id/cl_calendar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chart_body_graph"
+        tools:srcCompat="@tools:sample/avatars" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
