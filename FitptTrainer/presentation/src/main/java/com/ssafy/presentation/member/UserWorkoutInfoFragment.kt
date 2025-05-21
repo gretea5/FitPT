@@ -64,7 +64,6 @@ class UserWorkoutInfoFragment : BaseFragment<FragmentUserWorkoutInfoBinding>(
 
         binding.btnSkeletalMuscle.isSelected = true
         binding.btnWeight.isSelected = false
-        binding.btnBmi.isSelected = false
         binding.btnBodyFat.isSelected = false
 
         dateArray = arrayOf()
@@ -199,7 +198,6 @@ class UserWorkoutInfoFragment : BaseFragment<FragmentUserWorkoutInfoBinding>(
 
                 btnSkeletalMuscle.isSelected = true
                 btnWeight.isSelected = false
-                btnBmi.isSelected = false
                 btnBodyFat.isSelected = false
 
                 dateArray = composition.map { TimeUtils.formatDateToMonthDay(it.createdAt) }.toTypedArray()
@@ -216,28 +214,10 @@ class UserWorkoutInfoFragment : BaseFragment<FragmentUserWorkoutInfoBinding>(
 
                 btnWeight.isSelected = true
                 btnSkeletalMuscle.isSelected = false
-                btnBmi.isSelected = false
                 btnBodyFat.isSelected = false
 
                 dateArray = composition.map { TimeUtils.formatDateToMonthDay(it.createdAt) }.toTypedArray()
                 dateEntries = composition.map { it.weight }.toTypedArray()
-
-                initChart()
-            }
-
-            btnBmi.setOnClickListener {
-                if (memberId == null) {
-                    showToast("회원을 선택해주세요.")
-                    return@setOnClickListener
-                }
-
-                btnBmi.isSelected = true
-                btnSkeletalMuscle.isSelected = false
-                btnWeight.isSelected = false
-                btnBodyFat.isSelected = false
-
-                dateArray = composition.map { TimeUtils.formatDateToMonthDay(it.createdAt) }.toTypedArray()
-                dateEntries = composition.map { it.weight / (memberInfos!!.memberWeight * memberInfos!!.memberWeight) }.toTypedArray()
 
                 initChart()
             }
@@ -251,7 +231,6 @@ class UserWorkoutInfoFragment : BaseFragment<FragmentUserWorkoutInfoBinding>(
                 btnBodyFat.isSelected = true
                 btnSkeletalMuscle.isSelected = false
                 btnWeight.isSelected = false
-                btnBmi.isSelected = false
 
                 dateArray = composition.map { TimeUtils.formatDateToMonthDay(it.createdAt) }.toTypedArray()
                 dateEntries = composition.map { it.bfm }.toTypedArray()
@@ -272,9 +251,6 @@ class UserWorkoutInfoFragment : BaseFragment<FragmentUserWorkoutInfoBinding>(
             }
             binding.btnWeight.isSelected -> {
                 dateEntries = composition.map { it.weight }.toTypedArray()
-            }
-            binding.btnBmi.isSelected -> {
-                dateEntries = composition.map { it.weight / (memberInfos!!.memberWeight * memberInfos!!.memberWeight) }.toTypedArray()
             }
             binding.btnBodyFat.isSelected -> {
                 dateEntries = composition.map { it.bfm }.toTypedArray()

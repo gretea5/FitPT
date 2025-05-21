@@ -174,22 +174,6 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <Button
-                    android:id="@+id/btn_bmi"
-                    style="@style/Font_Medium_20_main_gray"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:background="@drawable/tab_button_selector"
-                    android:paddingHorizontal="20dp"
-                    android:stateListAnimator="@null"
-                    android:text="BMI"
-                    android:textColor="@color/tab_button_selector"
-                    app:backgroundTint="@null"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/btn_weight"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <Button
                     android:id="@+id/btn_body_fat"
                     style="@style/Font_Medium_20_main_gray"
                     android:layout_width="wrap_content"
@@ -202,7 +186,7 @@
                     android:textColor="@color/tab_button_selector"
                     app:backgroundTint="@null"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/btn_bmi"
+                    app:layout_constraintStart_toEndOf="@+id/btn_weight"
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
