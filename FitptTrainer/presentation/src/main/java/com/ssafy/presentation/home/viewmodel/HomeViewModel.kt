@@ -40,8 +40,8 @@ class HomeViewModel @Inject constructor(
     private val _scheduleItems = MutableStateFlow<List<ScheduleWithMemberInfo>>(emptyList())
     val scheduleItems: StateFlow<List<ScheduleWithMemberInfo>> = _scheduleItems.asStateFlow()
 
-    private val _monthlyScheduleItems = MutableStateFlow<List<Schedule>>(emptyList())
-    val monthlyScheduleItems: StateFlow<List<Schedule>> = _monthlyScheduleItems.asStateFlow()
+    private val _monthlyScheduleItems = MutableStateFlow<List<ScheduleWithMemberInfo>>(emptyList())
+    val monthlyScheduleItems: StateFlow<List<ScheduleWithMemberInfo>> = _monthlyScheduleItems.asStateFlow()
 
     private val _isLogout = MutableStateFlow<Boolean>(false)
     val isLogout: StateFlow<Boolean> = _isLogout.asStateFlow()
@@ -55,7 +55,7 @@ class HomeViewModel @Inject constructor(
                     Log.d(TAG, "getMonthlySchedules 스케쥴 조회: $response")
                     when (response) {
                         is ResponseStatus.Success -> {
-                            _monthlyScheduleItems.value = response.data
+                            fetchMemberInfoForSchedulesByMonth(response.data)
                             _homeState.value = HomeStatus.Success(response.data)
                         }
                         is ResponseStatus.Error -> {
@@ -97,6 +97,56 @@ class HomeViewModel @Inject constructor(
                 _homeState.value = HomeStatus.Error("서버와의 연결에 실패했습니다.")
             }
 
+        }
+    }
+
+    private fun fetchMemberInfoForSchedulesByMonth(schedules: List<Schedule>) {
+        viewModelScope.launch {
+            val memberIds = schedules.map { it.memberId }.distinct()
+
+            val idsToFetch = memberIds.filter { !_memberInfoCache.containsKey(it) }
+
+            Log.d(TAG, "fetchMemberInfoForSchedules: ${idsToFetch.joinToString(", ")}")
+
+            val deferredResults = idsToFetch.map { memberId ->
+                async {
+                    try {
+                        getMemberInfoByIdUseCase(memberId).first().let { response ->
+                            when(response) {
+                                is ResponseStatus.Success -> {
+                                    _memberInfoCache[memberId] = response.data
+                                }
+                                is ResponseStatus.Error -> {
+                                    Log.e(TAG, "ResponseStatus Error: ${response.error.message}")
+                                }
+                            }
+                        }
+                    } catch (e: Exception) {
+                        Log.e(TAG, "사용자 정보 조회 실패: $memberId, ${e.message}")
+                    }
+                }
+            }
+
+            deferredResults.awaitAll()
+
+            Log.d(TAG, "캐시된 멤버 정보: ${_memberInfoCache.keys.joinToString()}")
+            Log.d(TAG, "캐시 상태: ${_memberInfoCache.entries.joinToString { "${it.key}=${it.value.memberName}" }}")
+
+            val items = schedules.map { schedule ->
+                val memberName = schedule.memberId.let { _memberInfoCache[it]?.memberName  }
+                    ?: "알 수 없음"
+                ScheduleWithMemberInfo(
+                    memberName = memberName,
+                    scheduleId = schedule.scheduleId,
+                    startTime = schedule.startTime,
+                    endTime = schedule.endTime,
+                    memberId = schedule.memberId,
+                    trainerId = schedule.trainerId,
+                    scheduleContent = schedule.scheduleContent
+                )
+            }
+
+            _monthlyScheduleItems.value = items
         }
     }
 
@@ -145,8 +195,8 @@ class HomeViewModel @Inject constructor(
                     scheduleContent = schedule.scheduleContent
                 )
             }
-
-            _scheduleItems.value = items
+            
+            _scheduleItems.value = items.filter { it.memberName != "알 수 없음" }
         }
     }
 

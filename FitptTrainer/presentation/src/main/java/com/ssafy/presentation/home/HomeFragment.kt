@@ -23,10 +23,9 @@ import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
 import com.kizitonwose.calendar.view.MonthDayBinder
 import com.kizitonwose.calendar.view.MonthHeaderFooterBinder
 import com.kizitonwose.calendar.view.ViewContainer
-import com.ssafy.domain.model.schedule.Schedule
+import com.ssafy.domain.model.schedule.ScheduleWithMemberInfo
 import com.ssafy.presentation.R
 import com.ssafy.presentation.base.BaseFragment
-import com.ssafy.presentation.common.MainActivity
 import com.ssafy.presentation.databinding.FragmentHomeBinding
 import com.ssafy.presentation.home.adapter.HomeAdapter
 import com.ssafy.presentation.home.viewmodel.HomeStatus
@@ -271,18 +270,21 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
         viewModel.getMonthlySchedules(formattedMonth)
     }
 
-    private fun updateEventsDatesList(scheduleItems: List<Schedule>) {
+    private fun updateEventsDatesList(scheduleItems: List<ScheduleWithMemberInfo>) {
         eventsDatesList.clear()
 
-        val eventDates = scheduleItems.mapNotNull { scheduleItem ->
-            try {
-                val dateStr = TimeUtils.parseDateTime(scheduleItem.startTime).first
-                LocalDate.parse(dateStr)
-            } catch (e: Exception) {
-                Log.e(TAG, "날짜 파싱 오류: ${scheduleItem.startTime}, ${e.message}")
-                null
+        val eventDates = scheduleItems
+            .filter { it.memberName != "알 수 없음" }
+            .mapNotNull { scheduleItem ->
+                try {
+                    val dateStr = TimeUtils.parseDateTime(scheduleItem.startTime).first
+                    LocalDate.parse(dateStr)
+                } catch (e: Exception) {
+                    Log.e(TAG, "날짜 파싱 오류: ${scheduleItem.startTime}, ${e.message}")
+                    null
+                }
             }
-        }.distinct()
+            .distinct()
 
         eventsDatesList.addAll(eventDates)
 
