@@ -11,8 +11,13 @@ import android.view.View
 import android.view.ViewConfiguration
 import android.widget.Button
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
@@ -20,6 +25,7 @@ import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
+import com.github.mikephil.charting.formatter.ValueFormatter
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.DayPosition
 import com.ssafy.presentation.R
@@ -30,11 +36,37 @@ import java.time.YearMonth
 import com.kizitonwose.calendar.core.daysOfWeek
 import com.kizitonwose.calendar.view.MonthDayBinder
 import com.kizitonwose.calendar.view.ViewContainer
+import com.ssafy.data.datasource.UserDataStoreSource
+import com.ssafy.domain.model.home.ScheduleInfo
+import com.ssafy.domain.model.measure_record.MeasureRecordItem
+import com.ssafy.domain.model.measure_record.MesureDetail
 import com.ssafy.locket.utils.CalendarUtils.displayText
 import com.ssafy.presentation.databinding.CalendarDayBinding
+import com.ssafy.presentation.home.viewModel.OpenDialogState
+import com.ssafy.presentation.home.viewModel.ScheduleInfoState
+import com.ssafy.presentation.home.viewModel.ScheduleViewModel
+import com.ssafy.presentation.home.viewModel.SelectedDayState
+import com.ssafy.presentation.home.viewModel.SelectedDayViewModel
+import com.ssafy.presentation.home.viewModel.UserInfoState
+import com.ssafy.presentation.home.viewModel.UserInfoViewModel
+import com.ssafy.presentation.measurement_record.adapter.MeasureListAdapter
+import com.ssafy.presentation.measurement_record.viewModel.GetBodyListInfoState
+import com.ssafy.presentation.measurement_record.viewModel.MeasureViewModel
+import com.ssafy.presentation.util.CommonUtils
+import com.ssafy.presentation.util.ToastType
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.yield
 import java.time.DayOfWeek
+import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import javax.inject.Inject
 
+private const val TAG = "HomeFragment"
+@AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding>(
     FragmentHomeBinding::bind,
     R.layout.fragment_home
@@ -43,34 +75,67 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
     private val today = LocalDate.now()
     private val startMonth = YearMonth.of(2020, 1)
     private val endMonth = YearMonth.of(today.year, today.monthValue)
-    private val daysOfWeek = daysOfWeek(DayOfWeek.MONDAY)
+    private val daysOfWeek = daysOfWeek(DayOfWeek.SUNDAY)
     private val format = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-    val currentMonth = YearMonth.of(2025,5)
     private lateinit var dialog: PtCalendarBottomSheetFragment
     private lateinit var lineChart: LineChart
     private var selectedButton: Button? = null
+    private val selectedDayViewModel: SelectedDayViewModel by activityViewModels()
 
+    private val userInfoViewModel: UserInfoViewModel by activityViewModels()
+    private val measureViewModel: MeasureViewModel by activityViewModels()
+    private val scheduleViewModel : ScheduleViewModel by activityViewModels()
+
+    //일정
+    private val scheduleMap = mutableMapOf<LocalDate, List<ScheduleInfo>>()
+    @Inject
+    lateinit var userDataStoreSource: UserDataStoreSource
+    //차트
+    private val chartDates = mutableListOf<String>() // X축 날짜
+    private val weightEntries = mutableListOf<Entry>()
+    private val skeletalMuscleEntries = mutableListOf<Entry>()
+    private val bodyFatEntries = mutableListOf<Entry>()
+    private var click = false
+    private var backPressedTime: Long = 0
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        observeModel()
         initEvent()
         initCalendar()
-        initView()
         lineChart = binding.chartBodyGraph
-        setupLineChart()
-        setLineChartData()
         setupTabButtons()
         // 초기 선택 버튼 설정 (몸무게)
         selectButton(binding.btnWeight)
         // 차트를 보이게 설정
-        lineChart.visibility = View.VISIBLE
+        lineChart.setScaleEnabled(false)
+        lineChart.setPinchZoom(false)
+        lineChart.setDoubleTapToZoomEnabled(false)
     }
 
     fun initEvent(){
-        binding.ivNotificationMove.setOnClickListener {
-            findNavController().navigate(R.id.action_home_fragment_to_notification_fragment)
+        binding.btnPrevMonth.setOnClickListener {
+            val currentYearMonth = selectedDayViewModel.selectedYearMonth.value
+            val newYearMonth = currentYearMonth.minusMonths(1)
+            selectedDayViewModel.setYearMonth(
+                newYearMonth
+            )
         }
+
+        binding.btnNextMonth.setOnClickListener {
+            val currentYearMonth = selectedDayViewModel.selectedYearMonth.value
+            val newYearMonth = currentYearMonth.plusMonths(1)
+            selectedDayViewModel.setYearMonth(
+                newYearMonth
+            )
+        }
+        backEvent()
+        userInfoViewModel.fetchUser()
+        measureViewModel.getBodyList("createdAt","asc")
+        selectedDayViewModel.initYearMonth()
+        scheduleViewModel.getScheduleList("",selectedDayViewModel.selectedYearMonth.value.toString())
     }
+
 
     private fun updateDayWeekColor() {
         for ((index, dayText) in daysOfWeek.withIndex()) {
@@ -84,25 +149,20 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
         }
     }
 
-    private fun dateClicked(date: LocalDate) {
-        binding.calendar.notifyDateChanged(selectedDate) // 이전 선택값 해제
-        selectedDate = date
-        val existingDialog = childFragmentManager.findFragmentByTag("payment")
-        if (existingDialog == null || !existingDialog.isAdded) {
-            dialog.show(childFragmentManager, "payment")
-        }
-        binding.calendar.notifyDateChanged(date)
-    }
-
     private fun bindDate(
         date: LocalDate,
         dayText: TextView,
-        paymentText: TextView,
+        scheduleText: TextView,
         isSelectable: Boolean
     ) {
         dayText.text = date.dayOfMonth.toString()
         val fonts = arrayOf(R.font.pretendard_regular, R.font.pretendard_bold)
-
+        val schedules = scheduleMap[date]
+        if (!schedules.isNullOrEmpty()) {
+            scheduleText.text = "• ${schedules.size}개"
+        } else {
+            scheduleText.text = ""
+        }
         if (isSelectable) {
             when {
                 date == selectedDate -> {
@@ -120,7 +180,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
             }
         } else {
             dayText.setTextColor(resources.getColor(R.color.disabled))
-            paymentText.setText(null)
+            scheduleText.setText(null)
         }
     }
 
@@ -187,64 +247,100 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
             override fun create(view: View): DayViewContainer = DayViewContainer(view)
         }
         binding.calendar.setup(startMonth, endMonth, daysOfWeek.first())
-        binding.calendar.scrollToMonth(currentMonth)
         updateDayWeekColor()
-
+        initObserver()
     }
 
-
-    fun initView(){
-        val text = "김동현님의 체성분 그래프"
-        val spannableString = SpannableString(text)
-
-        val start = text.indexOf("김동현")
-        val end = start + "김동현".length
-        spannableString.setSpan(
-            ForegroundColorSpan(ContextCompat.getColor(requireContext(), R.color.highlight_green)), // 원하는 색으로 변경
-            start,
-            end,
-            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-        )
-        binding.tvBodyGraph.text = spannableString
-
-        val text2 = "김동현님의 PT 일정"
-        val spannableString2 = SpannableString(text2)
-        val start2 = text2.indexOf("김동현")
-        val end2 = start2 + "김동현".length
-        spannableString2.setSpan(
-            ForegroundColorSpan(ContextCompat.getColor(requireContext(), R.color.highlight_green)), // 원하는 색으로 변경
-            start2,
-            end2,
-            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-        )
-        binding.tvPtCalendar.text = spannableString2
+    private fun dateClicked(date: LocalDate) {
+        if(selectedDayViewModel.selectedDay.value is SelectedDayState.Exist == false) {
+            val schedules = scheduleMap[date]
+            binding.calendar.notifyDateChanged(selectedDate) // 이전 선택값 해제
+            selectedDate = date
+            binding.calendar.notifyDateChanged(date) // 새로운 선택값
+            if (!schedules.isNullOrEmpty()) {
+                selectedDayViewModel.setSelectedDay(date)
+            } else {
+                selectedDayViewModel.clearSelectedDay() // 상태 초기화 (선택만 되고 BottomSheet X)
+                Log.d(TAG, "선택한 날짜($date)에 스케줄 없음 → BottomSheet 열지 않음")
+            }
+        }
     }
+
+    private fun initObserver() {
+        // 선택된 날짜 갱신
+        viewLifecycleOwner.lifecycleScope.launch {
+            selectedDayViewModel.selectedDay.collectLatest { uiState ->
+                if (uiState is SelectedDayState.Exist) {
+                    binding.calendar.notifyDateChanged(selectedDate)
+                }
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            selectedDayViewModel.openDialog.collectLatest { dialogState ->
+                if (dialogState is OpenDialogState.Opened && !dialog.isAdded) {
+                    val schedules = scheduleMap[selectedDate]
+                    if (!schedules.isNullOrEmpty()) {
+                        val dialog = PtCalendarBottomSheetFragment.newInstance(ArrayList(schedules))
+                        dialog.show(childFragmentManager, "payment")
+                    } else {
+                        Log.d(TAG, "openDialog 트리거되었지만 해당 날짜에 스케줄 없음")
+                    }
+                }
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                selectedDayViewModel.selectedYearMonth.collectLatest { yearMonth ->
+                    binding.calendar.scrollToMonth(yearMonth)
+                    scheduleViewModel.getScheduleList("",selectedDayViewModel.selectedYearMonth.value.toString())
+                    if (yearMonth >= YearMonth.of(today.year, today.monthValue)) {
+                        binding.btnNextMonth.isEnabled = false
+                    } else if (yearMonth < YearMonth.of(2020, 2)) {
+                        binding.btnPrevMonth.isEnabled = false
+                    } else {
+                        binding.btnPrevMonth.isEnabled = true
+                        binding.btnNextMonth.isEnabled = true
+                    }
+                    // 상단 텍스트 갱신
+                    binding.tvYearMonth.text = getString(R.string.calendar_year_month, yearMonth.year, yearMonth.monthValue)
+                }
+            }
+        }
+    }
+
+    private fun updateScheduleMap(scheduleList: List<ScheduleInfo>) {
+        scheduleMap.clear()
+        val formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME
+        scheduleMap.putAll(
+            scheduleList.groupBy {
+                LocalDateTime.parse(it.startTime, formatter).toLocalDate()
+            }
+        )
+    }
+
 
     private fun setupTabButtons() {
         val buttons = listOf(
             binding.btnSkeletalMuscle,
             binding.btnWeight,
-            binding.btnBmi,
             binding.btnBodyFat
         )
 
         buttons.forEach { button ->
             button.setOnClickListener {
                 selectButton(button)
-
                 // 여기에 각 버튼에 맞는 데이터/화면 변경 로직 추가
                 when (button.id) {
                     R.id.btn_skeletal_muscle -> {
-                        // 골격근량 데이터 표시
+                      showSkeletalMuscleData()
                     }
                     R.id.btn_weight -> {
-                        // 몸무게 데이터 표시
-                    }
-                    R.id.btn_bmi -> {
-                        // BMI 데이터 표시
+                        showWeightData()
                     }
                     R.id.btn_body_fat -> {
-                        // 체지방량 데이터 표시
+                        showBodyFatData()
                     }
                 }
             }
@@ -256,98 +352,240 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
         selectedButton = button
     }
 
+    private fun showChart(
+        entries: List<Entry>,
+        label: String,
+        colorHex: String,
+        fillDrawableRes: Int,
+        yUnit: String,
+        isPercent: Boolean = false
+    ) {
+        Log.d(TAG, "$label Entries: $entries")
 
-    //차트 관련한 코드
-    private fun setupLineChart() {
-        lineChart.apply {
-            // 차트 설명 텍스트 숨기기
-            description.isEnabled = false
-
-            // 차트 오른쪽 Y축 숨기기
-            axisRight.isEnabled = false
-
-            // 터치 제스처 설정
-            setTouchEnabled(true)
-            setPinchZoom(false)
-            setScaleEnabled(false)
-
-            // 배경 격자 설정
-            setDrawGridBackground(false)
-
-            // 범례 숨기기
-            legend.isEnabled = false
-
-            // X축 설정
-            xAxis.apply {
-                position = XAxis.XAxisPosition.BOTTOM
-                textColor = Color.parseColor("#AAAAAA")
-                textSize = 12f
-                granularity = 1f
-                setDrawGridLines(false)
-
-                // X축 날짜 데이터 설정
-                val dates = arrayOf("01/10", "01/25", "02/11", "02/19", "03/13", "03/27", "04/01", "04/12", "04/22")
-                valueFormatter = IndexAxisValueFormatter(dates)
-            }
-
-            // Y축 설정
-            axisLeft.apply {
-                textColor = Color.parseColor("#AAAAAA")
-                textSize = 12f
-                granularity = 25f
-                axisMinimum = 0f
-                axisMaximum = 100f
-                setDrawGridLines(true)
-                gridColor = Color.parseColor("#DDDDDD")
-                gridLineWidth = 0.5f
-
-                // Y축 수치 설정 (0, 25, 50, 75, 100)
-                setLabelCount(5, true)
-            }
-
-            // 애니메이션 설정
-            //animateX(1000)
-        }
-    }
-
-    private fun setLineChartData() {
-        // 데이터 포인트 생성
-        val entries = ArrayList<Entry>().apply {
-            add(Entry(0f, 10f))    // 01/10, 값: 10
-            add(Entry(1f, 30f))    // 01/25, 값: 30
-            add(Entry(2f, 50f))    // 02/11, 값: 50
-            add(Entry(3f, 45f))    // 02/19, 값: 45
-            add(Entry(4f, 40f))    // 03/13, 값: 40
-            add(Entry(5f, 60f))    // 03/27, 값: 60
-            add(Entry(6f, 80f))    // 04/01, 값: 80
-            add(Entry(7f, 75f))    // 04/12, 값: 75
-            add(Entry(8f, 85f))    // 04/22, 값: 85
-        }
-
-        // 데이터셋 생성 및 스타일 설정
-        val dataSet = LineDataSet(entries, "데이터셋").apply {
-            // 선 스타일 설정
-            color = Color.parseColor("#FF5722")  // 주황-빨강 계열 색상
+        val dataSet = LineDataSet(entries, label).apply {
+            color = Color.parseColor(colorHex)
             lineWidth = 2.5f
-            mode = LineDataSet.Mode.CUBIC_BEZIER  // 곡선으로 표현
-
-            // 선 아래 영역 채우기 설정
+            mode = LineDataSet.Mode.CUBIC_BEZIER
             setDrawFilled(true)
-            fillDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.fade_red)
-
-            // 원형 포인트 설정
+            fillDrawable = ContextCompat.getDrawable(requireContext(), fillDrawableRes)
             setDrawCircles(true)
             setCircleColor(Color.WHITE)
             circleRadius = 4f
-            setCircleHoleColor(Color.parseColor("#FF5722"))
+            setCircleHoleColor(Color.parseColor(colorHex))
             circleHoleRadius = 2f
-
-            // 값 텍스트 숨기기
             setDrawValues(false)
         }
 
-        // 차트에 데이터 설정
-        lineChart.data = LineData(dataSet)
-        lineChart.invalidate()  // 차트 갱신
+        lineChart.apply {
+            data = LineData(dataSet)
+            setupYAxis(entries, yUnit, isPercent)
+            setupXAxis()
+            axisRight.isEnabled = false
+            setDrawGridBackground(false)
+            invalidate()
+        }
+    }
+
+    private fun setupYAxis(entries: List<Entry>, unit: String, isPercent: Boolean = false) {
+        if (entries.isEmpty()) {
+            Log.w(TAG, "setupYAxis: entries가 비어 있습니다.")
+            lineChart.axisLeft.apply {
+                axisMinimum = 0f
+                axisMaximum = 100f // 기본값 설정 (단위나 차트 종류에 따라 조절 가능)
+                granularity = 25f
+                setLabelCount(5, true)
+                valueFormatter = object : ValueFormatter() {
+                    override fun getFormattedValue(value: Float): String {
+                        return if (isPercent) "${value.toInt()}%" else "${value.toInt()} $unit"
+                    }
+                }
+            }
+            return
+        }
+        val minY = entries.minOf { it.y }
+        val maxY = entries.maxOf { it.y }
+        val buffer = (maxY - minY) * 0.2f
+        lineChart.axisLeft.apply {
+            axisMinimum = (minY - buffer).coerceAtLeast(0f)
+            axisMaximum = maxY + buffer
+            granularity = ((maxY - minY) / 4).coerceAtLeast(1f)
+            setLabelCount(5, true)
+            valueFormatter = object : ValueFormatter() {
+                override fun getFormattedValue(value: Float): String {
+                    return if (isPercent) "${value.toInt()}%" else "${value.toInt()} $unit"
+                }
+            }
+        }
+    }
+
+    private fun setupXAxis() {
+        lineChart.xAxis.apply {
+            position = XAxis.XAxisPosition.BOTTOM
+            textColor = Color.parseColor("#AAAAAA")
+            textSize = 12f
+            granularity = 1f
+            setDrawGridLines(false)
+            valueFormatter = IndexAxisValueFormatter(chartDates)
+        }
+    }
+
+    private fun showWeightData() {
+        showChart(
+            entries = weightEntries,
+            label = "체중(kg)",
+            colorHex = "#FF5722",
+            fillDrawableRes = R.drawable.fade_red,
+            yUnit = "kg"
+        )
+    }
+
+    private fun showSkeletalMuscleData() {
+        showChart(
+            entries = skeletalMuscleEntries,
+            label = "골격근량(kg)",
+            colorHex = "#4CAF50",
+            fillDrawableRes = R.drawable.fade_red,
+            yUnit = "kg"
+        )
+    }
+
+    private fun showBodyFatData() {
+        showChart(
+            entries = bodyFatEntries,
+            label = "체지방량(%)",
+            colorHex = "#2196F3",
+            fillDrawableRes = R.drawable.fade_red,
+            yUnit = "%",
+            isPercent = true
+        )
+    }
+
+    fun observeModel() {
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                measureViewModel.getBodyListInfo.collect { state ->
+                    when (state) {
+                        is GetBodyListInfoState.Loading -> {
+                            Log.d(TAG, "로딩 중...")
+                        }
+
+                        is GetBodyListInfoState.Success -> {
+                            val list = state.getBodyList
+                            Log.d(TAG, "데이터 수신 성공: $list")
+
+                            // ✅ 날짜별 가장 늦은 시간 데이터만 추출
+                            val latestPerDate = list
+                                .mapNotNull { item ->
+                                    try {
+                                        val parsedDateTime = LocalDateTime.parse(item.createdAt)
+                                        item to parsedDateTime
+                                    } catch (e: Exception) {
+                                        Log.e(TAG, "날짜 파싱 실패: ${e.message}")
+                                        null
+                                    }
+                                }
+                                .groupBy { (_, dateTime) -> dateTime.toLocalDate() }
+                                .mapValues { (_, entries) -> entries.maxByOrNull { it.second } }
+                                .values
+                                .map { it!!.first }
+
+                            // ✅ 정렬 (원하는 기준 - 예: 날짜 또는 체중)
+                            val sortedList = latestPerDate.sortedBy {
+                                LocalDateTime.parse(it.createdAt) // 날짜 기준 정렬
+                            }
+                            chartDates.clear()
+                            weightEntries.clear()
+                            skeletalMuscleEntries.clear()
+                            bodyFatEntries.clear()
+                            sortedList.forEachIndexed { index, bodyInfo ->
+                                try {
+                                    val outputFormatter = DateTimeFormatter.ofPattern("MM-dd")
+                                    val dateTime = LocalDateTime.parse(bodyInfo.createdAt)
+                                    val formattedDate = dateTime.format(outputFormatter)
+
+                                    chartDates.add(formattedDate)
+                                    weightEntries.add(
+                                        Entry(
+                                            index.toFloat(),
+                                            bodyInfo.weight.toFloat()
+                                        )
+                                    )
+                                    skeletalMuscleEntries.add(
+                                        Entry(
+                                            index.toFloat(),
+                                            bodyInfo.smm.toFloat()
+                                        )
+                                    )
+                                    bodyFatEntries.add(
+                                        Entry(
+                                            index.toFloat(),
+                                            bodyInfo.bfp.toFloat()
+                                        )
+                                    )
+                                } catch (e: Exception) {
+                                    Log.e(TAG, "날짜 파싱 오류: ${e.message}")
+                                }
+                            }
+                            if (!click) {
+                                showWeightData()
+                                click = true
+                                showView()
+                            }
+                        }
+                        is GetBodyListInfoState.Error -> {
+                            Log.d(TAG, "에러: ${state.message}")
+                        }
+                        else -> {
+                            Log.d(TAG, "에러: 문제 발생")
+                        }
+                    }
+                }
+            }
+        }
+        // 일정 관련 코드
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                scheduleViewModel.scheduleInfo.collect { schedule ->
+                    if (schedule is ScheduleInfoState.Success) {
+                        Log.d(TAG, schedule.scheduleList.toString())
+                        updateScheduleMap(schedule.scheduleList)
+                        binding.calendar.notifyCalendarChanged() // 화면 다시 갱신
+                    }
+                    else{
+                        Log.d(TAG,"실패")
+                    }
+                }
+            }
+        }
+    }
+
+    fun showView(){
+        lifecycleScope.launch {
+            val userId = userDataStoreSource.nickname.firstOrNull()
+            binding.tvBodyGraph.text = userId+"님의 체성분 그래프"
+        }
+        binding.horizontalScrollGraph.visibility = View.VISIBLE
+        binding.chartBodyGraph.visibility = View.VISIBLE
+        binding.tvBodyGraph.visibility = View.VISIBLE
+        binding.clCalendar.visibility = View.VISIBLE
+        binding.tvPtCalendar.visibility = View.VISIBLE
+        binding.tvYearMonth.visibility = View.VISIBLE
+        binding.btnNextMonth.visibility = View.VISIBLE
+        binding.btnPrevMonth.visibility = View.VISIBLE
+    }
+
+    fun backEvent(){
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (System.currentTimeMillis() - backPressedTime < 2000) {
+                    requireActivity().finish() // 액티비티 종료
+                } else {
+                    backPressedTime = System.currentTimeMillis()
+                    CommonUtils.showSingleLineCustomToast(requireContext(), ToastType.DEFAULT, "한 번 더 누르면 종료됩니다.")
+                }
+            }
+        })
     }
 }
+

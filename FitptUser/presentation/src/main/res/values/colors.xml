@@ -33,5 +33,7 @@
     <color name="main_blue">#3064D0</color>
     <color name="secondary_red">#FF3B30</color>
 
+    <color name="colorButtonActive">#FF4B28</color>
+    <color name="colorButtonInactive">#C9C9C9</color>
     <color name="main_yellow">#FEE500</color>
 </resources>

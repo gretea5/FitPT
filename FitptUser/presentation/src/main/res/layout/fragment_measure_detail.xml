@@ -49,12 +49,13 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <!-- 날짜 및 이름 정보 -->
+
         <TextView
             android:id="@+id/tv_date_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="20dp"
             android:text="2025년 02월 28일 오후 06:20"
             android:textColor="#757575"
             android:textSize="14sp"
@@ -181,6 +182,7 @@
                             android:textSize="14sp" />
 
                         <TextView
+                            android:id="@+id/tv_weight_dif"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
@@ -210,6 +212,7 @@
                             android:textSize="14sp" />
 
                         <TextView
+                            android:id="@+id/tv_smm_dif"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
@@ -239,6 +242,7 @@
                             android:textSize="14sp" />
 
                         <TextView
+                            android:id="@+id/tv_bfp_dif"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
@@ -317,7 +321,8 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_body_composition"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

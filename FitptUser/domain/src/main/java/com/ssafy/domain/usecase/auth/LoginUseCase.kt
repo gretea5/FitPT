@@ -9,7 +9,7 @@ import javax.inject.Inject
 class LoginUseCase @Inject constructor(
     private val authRepository: AuthRepository
 ) {
-    suspend operator fun invoke(accessToken: String): Flow<ResponseStatus<JwtToken>> {
-        return authRepository.login(accessToken)
+    suspend operator fun invoke(): Flow<ResponseStatus<JwtToken>> {
+        return authRepository.login()
     }
 }

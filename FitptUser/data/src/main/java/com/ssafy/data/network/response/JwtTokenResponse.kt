@@ -9,14 +9,14 @@ import kotlinx.parcelize.Parcelize
 data class JwtTokenResponse(
     val accessToken: String,
     val refreshToken: String,
-    val userId: Int,
-    val userNickname: String,
-    val userProfile: String
+    val memberId: Int,
+    val memberName: String,
 ): BaseResponse {
     companion object: DataMapper<JwtTokenResponse, JwtToken> {
         override fun JwtTokenResponse.toDomainModel(): JwtToken {
             return JwtToken(
                 accessToken = this.accessToken,
+                memberId = this.memberId
             )
         }
     }

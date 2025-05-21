@@ -6,16 +6,26 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Response
+import android.util.Log
+import javax.inject.Inject
 
-class RequestInterceptor constructor(private val dataStore: UserDataStoreSource): Interceptor {
+class RequestInterceptor @Inject constructor(
+    private val dataStore: UserDataStoreSource
+) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val token = runBlocking {
-            dataStore.jwtToken.firstOrNull() ?: ""
+            dataStore.jwtToken.firstOrNull()
         }
-        val requestWithToken = chain.request().newBuilder()
-            .addHeader("Authorization", token)
-            .build()
 
-        return chain.proceed(requestWithToken)
+        val requestBuilder = chain.request().newBuilder()
+
+        if (!token.isNullOrBlank()) {
+            requestBuilder.addHeader("Authorization", token)
+            Log.d("RequestInterceptor", "토큰 추가됨: $token")
+        } else {
+            Log.d("RequestInterceptor", "토큰 없음. 빈 요청")
+        }
+
+        return chain.proceed(requestBuilder.build())
     }
 }

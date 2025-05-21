@@ -5,22 +5,40 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.ssafy.presentation.R
 import com.ssafy.presentation.base.BaseFragment
 import com.ssafy.presentation.common.MainActivity
 import com.ssafy.presentation.databinding.FragmentReportDetailBinding
+import com.ssafy.presentation.report.adapter.PtReportAdapter
 import com.ssafy.presentation.report.adapter.ReportVPAdapter
+import com.ssafy.presentation.report.viewModel.ReportListState
+import com.ssafy.presentation.report.viewModel.ReportViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
+import android.util.Log
+import com.ssafy.presentation.measurement_record.viewModel.MeasureViewModel
+import com.ssafy.presentation.report.viewModel.ReportDetailState
 
+private const val TAG = "ReportDetailFragment"
+@AndroidEntryPoint
 class ReportDetailFragment : BaseFragment<FragmentReportDetailBinding>(
     FragmentReportDetailBinding::bind,
     R.layout.fragment_report_detail
 ) {
+    private val reportViewModel : ReportViewModel by activityViewModels()
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initTabLayout()
+        observeReportDetail()
         initEvent()
     }
 
@@ -76,6 +94,28 @@ class ReportDetailFragment : BaseFragment<FragmentReportDetailBinding>(
     fun initEvent(){
         binding.ivBack.setOnClickListener {
             findNavController().popBackStack()
+        }
+        reportViewModel.getReportDetail(reportViewModel.selectReport.value)
+    }
+
+    private fun observeReportDetail() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                reportViewModel.getReportDetailInfo.collect { state ->
+                    when (state) {
+                        is ReportDetailState.Loading -> {
+                            // 로딩 UI 표시 가능
+                        }
+                        is ReportDetailState.Success -> {
+                            Log.d(TAG,state.reportDetail.toString())
+                        }
+                        is ReportDetailState.Error -> {
+
+                        }
+                        else -> Unit
+                    }
+                }
+            }
         }
     }
 }

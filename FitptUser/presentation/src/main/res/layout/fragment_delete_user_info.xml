@@ -88,6 +88,7 @@
         android:textSize="@dimen/btn_text_size"
         android:textStyle="bold"
         app:cornerRadius="10dp"
+        app:backgroundTint="@color/highlight_orange"
         android:fontFamily="@font/pretendard_medium"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
