@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ssafy.data.datasource.TrainerDataStoreSource
 import com.ssafy.domain.model.base.ResponseStatus
-import com.ssafy.domain.usercase.auth.LoginUseCase
+import com.ssafy.domain.usecase.auth.LoginUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -19,18 +19,18 @@ class LoginViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase,
     private val dataStore: TrainerDataStoreSource
 ) : ViewModel() {
-    // 로그인 상태 Flow (이전 값을 유지하지 않음)
-    private val _loginState = MutableStateFlow<LoginStatus>(LoginStatus.Idle) // 🔥 null 기본값 추가
+    private val _loginState = MutableStateFlow<LoginStatus>(LoginStatus.Idle)
     val loginState : StateFlow<LoginStatus> = _loginState.asStateFlow()
 
-    fun login(accessToken: String) {
+    fun login(trainerLoginId: String, trainerPw: String) {
         viewModelScope.launch {
             try {
-                loginUseCase(accessToken).collect { response ->
+                loginUseCase(trainerLoginId, trainerPw).collect { response ->
+                    Log.d(TAG, "login: $response")
                     when (response) {
                         is ResponseStatus.Success -> {
                             _loginState.value = LoginStatus.Success
-                            //dataStore.saveJwtToken("Bearer " + response.data.accessToken)
+                            dataStore.saveJwtToken("Bearer " + response.data.accessToken)
                         }
                         is ResponseStatus.Error -> {
                             _loginState.value = LoginStatus.Error("로그인에 실패했습니다: ${response.error.message}")

@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
+    id("androidx.navigation.safeargs.kotlin")
 }
 
 android {
@@ -10,7 +11,7 @@ android {
     compileSdk = 35
 
     defaultConfig {
-        minSdk = 24
+        minSdk = 30
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
     }
@@ -67,6 +68,13 @@ dependencies {
 
     // FCM 사용 위한 plugins
     //implementation("com.google.firebase:firebase-messaging-ktx")
+
+    implementation ("com.google.android.flexbox:flexbox:3.0.0")
+    implementation("com.airbnb.android:lottie:6.1.0")
+    implementation ("com.mikhaellopez:circularprogressbar:3.1.0")
+
+
+    implementation(libs.fitrus.est.device)
 }
 
 kapt {

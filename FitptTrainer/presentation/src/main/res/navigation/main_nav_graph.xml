@@ -2,12 +2,94 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    app:startDestination="@id/home_fragment"
-    android:id="@+id/nav_graph">
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/schedulingFragment"
+        android:name="com.ssafy.presentation.schedule.ScheduleFragment"
+        android:label="fragment_scheduling"
+        tools:layout="@layout/fragment_schedule" >
+    </fragment>
+
+    <fragment
+        android:id="@+id/userWorkoutInfoFragment"
+        android:name="com.ssafy.presentation.member.UserWorkoutInfoFragment"
+        android:label="fragment_userWorkoutInfo"
+        tools:layout="@layout/fragment_user_workout_info" >
+        <action
+            android:id="@+id/action_userWorkoutInfoFragment_to_reportEditFragment"
+            app:destination="@id/reportEditFragment" />
+        <action
+            android:id="@+id/action_userWorkoutInfoFragment_to_homeFragment"
+            app:destination="@+id/homeFragment"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/reportEditFragment"
+        android:name="com.ssafy.presentation.report.ReportEditFragment"
+        android:label="fragment_reportEdit"
+        tools:layout="@layout/fragment_report_edit">
+        <argument
+            android:name="memberId"
+            app:argType="long" />
+        <argument
+            android:name="reportId"
+            android:defaultValue="-1L"
+            app:argType="long" />
+        <argument
+            android:name="memberName"
+            android:defaultValue=""
+            app:argType="string"/>
+        <action
+            android:id="@+id/action_reportEditFragment_to_userWorkoutInfoFragment"
+            app:destination="@+id/userWorkoutInfoFragment"/>
+    </fragment>
+
 
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.ssafy.presentation.home.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_schedulingFragment"
+            app:destination="@id/schedulingFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_userWorkoutInfoFragment"
+            app:destination="@id/userWorkoutInfoFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_scheduleEditFragment"
+            app:destination="@id/scheduleEditFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/scheduleEditFragment"
+        android:name="com.ssafy.presentation.schedule.ScheduleEditFragment"
+        android:label="fragment_schedule_edit"
+        tools:layout="@layout/fragment_schedule_edit" >
+            <argument
+                android:name="scheduleId"
+                app:argType="long" />
+            <argument
+                android:name="trainerId"
+                app:argType="long" />
+            <argument
+                android:name="memberId"
+                app:argType="long" />
+            <argument
+                android:name="memberName"
+                app:argType="string" />
+            <argument
+                android:name="startTime"
+                app:argType="string" />
+            <argument
+                android:name="endTime"
+                app:argType="string" />
+            <argument
+                android:name="selectedDate"
+                app:argType="string" />
+            <argument
+                android:name="scheduleContent"
+                app:argType="string" />
+    </fragment>
 </navigation>
