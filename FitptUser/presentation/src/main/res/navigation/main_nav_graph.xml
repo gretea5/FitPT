@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/home_fragment"
+    android:id="@+id/nav_graph">
+
+
+    <fragment
+        android:id="@+id/home_fragment"
+        android:name="com.ssafy.presentation.home.HomeFragment"
+        tools:layout="@layout/fragment_home"
+        android:label="home_fragment">
+        <action
+            android:id="@+id/action_home_fragment_to_notification_fragment"
+            app:destination="@id/notification_fragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/report_detail_fragment"
+        android:name="com.ssafy.presentation.report.ReportDetailFragment"
+        android:label="fragment_report_detail"
+        tools:layout="@layout/fragment_report_detail" />
+
+    <fragment
+        android:id="@+id/delete_user_info_fragment"
+        android:name="com.ssafy.presentation.mypage.DeleteUserInfoFragment"
+        android:label="fragment_delete_user_info"
+        tools:layout="@layout/fragment_delete_user_info" />
+
+    <fragment
+        android:id="@+id/edit_user_info_fragment"
+        android:name="com.ssafy.presentation.mypage.EditUserInfoFragment"
+        android:label="fragment_edit_user_info"
+        tools:layout="@layout/fragment_edit_user_info" >
+        <action
+            android:id="@+id/action_edit_user_info_fragment_to_mypage_fragment"
+            app:destination="@id/mypage_fragment" />
+        <action
+            android:id="@+id/action_edit_user_info_fragment_to_searchGymFragment2"
+            app:destination="@id/searchGymFragment2" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/mypage_fragment"
+        android:name="com.ssafy.presentation.mypage.MypageFragment"
+        android:label="fragment_mypage"
+        tools:layout="@layout/fragment_mypage">
+        <action
+            android:id="@+id/action_mypage_fragment_to_edit_user_info_fragment"
+            app:destination="@id/edit_user_info_fragment" />
+        <action
+            android:id="@+id/action_mypage_fragment_to_delete_user_info_fragment"
+            app:destination="@id/delete_user_info_fragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/report_list_fragment"
+        android:name="com.ssafy.presentation.report.ReportListFragment"
+        android:label="fragment_report_list"
+        tools:layout="@layout/fragment_report_list">
+        <action
+            android:id="@+id/action_report_list_fragment_to_report_detail_fragment"
+            app:destination="@id/report_detail_fragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/measure_list_fragment"
+        android:name="com.ssafy.presentation.measurement_record.MeasureListFragment"
+        android:label="fragment_measure_list"
+        tools:layout="@layout/fragment_measure_list">
+        <action
+            android:id="@+id/action_measure_list_fragment_to_measure_detail_fragment"
+            app:destination="@id/measure_detail_fragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/measure_detail_fragment"
+        android:name="com.ssafy.presentation.measurement_record.MeasureDetailFragment"
+        android:label="fragment_measure_detail"
+        tools:layout="@layout/fragment_measure_detail" />
+
+    <fragment
+        android:id="@+id/measure_fragment"
+        android:name="com.ssafy.presentation.measure.MeasureFragment"
+        android:label="fragment_measure"
+        tools:layout="@layout/fragment_measure">
+        <action
+            android:id="@+id/action_measure_fragment_to_measure_progress_fragment"
+            app:destination="@id/measure_progress_fragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/measure_progress_fragment"
+        android:name="com.ssafy.presentation.measure.MeasureProgressFragment"
+        android:label="fragment_measure_progress"
+        tools:layout="@layout/fragment_measure_progress" />
+
+    <fragment
+        android:id="@+id/notification_fragment"
+        android:name="com.ssafy.presentation.home.notification.NotificationFragment"
+        android:label="fragment_notification"
+        tools:layout="@layout/fragment_notification" />
+    <fragment
+        android:id="@+id/searchGymFragment2"
+        android:name="com.ssafy.presentation.login.SearchGymFragment"
+        android:label="fragment_search_gym"
+        tools:layout="@layout/fragment_search_gym" />
+
+</navigation>

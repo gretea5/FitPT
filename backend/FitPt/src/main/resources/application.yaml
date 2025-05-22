@@ -1,0 +1,68 @@
+spring:
+  application:
+    name: FitPt
+
+  datasource:
+    url: jdbc:mysql://${MYSQL_URL}:${MYSQL_PORT}/${TABLE_NAME}?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: ${MYSQL_ID}
+    password: ${MYSQL_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  data:
+    redis:
+      host: ${REDIS_URL}
+      port: ${REDIS_PORT}
+      password: ${REDIS_PASSWORD}
+      lettuce:
+        client-options:
+          protocol-version: RESP2
+
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: Asia/Seoul
+        format_sql: true
+        show_sql: false
+        dialect: org.hibernate.dialect.MySQLDialect
+    show-sql: true
+    open-in-view: false
+
+logging:
+  level:
+    com.sahur: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.orm.jdbc.bind: TRACE
+
+firebase:
+  config-path: firebase/firebase_service_key.json
+
+fcm:
+  api-url: ${FCM_URL}
+
+jwt:
+  secret: ${ACCESS_SECRET}
+  expiration:
+    access: 3600000 # 1시간
+    refresh: 604800000 #일주일
+
+springdoc:
+  swagger-ui:
+    url: https://k12s208.p.ssafy.io/v3/api-docs
+    path: /swagger
+    tags-sorter: alpha # 알파벳순
+    operations-sorter: alpha
+    groups-order: DESC
+  api-docs:
+    path: /v3/api-docs
+  servers:
+    - url: https://k12s208.p.ssafy.io
+  packages-to-scan: com.sahur.fitpt
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
+
+server:
+  port: 9090

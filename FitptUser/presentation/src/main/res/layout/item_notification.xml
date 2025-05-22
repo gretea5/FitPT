@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:paddingVertical="10dp"
+    android:paddingHorizontal="10dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ImageView
+        android:id="@+id/iv_notification"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/ic_notification_pt"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_notification_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tv_notification_title" />
+
+    <TextView
+        android:id="@+id/tv_notification_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/pretendard_regular"
+        android:textColor="@color/text"
+        android:textSize="16sp"
+        android:letterSpacing="-0.02"
+        android:layout_marginHorizontal="12dp"
+        app:layout_constraintBottom_toTopOf="@+id/tv_notification_content"
+        app:layout_constraintEnd_toStartOf="@+id/tv_notification_date"
+        app:layout_constraintStart_toEndOf="@+id/iv_notification"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="PT 보고서 알림" />
+
+    <TextView
+        android:id="@+id/tv_notification_content"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/pretendard_regular"
+        android:letterSpacing="-0.02"
+        android:textColor="@color/text"
+        android:textSize="14sp"
+        android:maxLines="3"
+        android:ellipsize="end"
+        app:layout_constraintBottom_toBottomOf="@id/iv_notification"
+        app:layout_constraintEnd_toEndOf="@+id/tv_notification_title"
+        app:layout_constraintStart_toStartOf="@+id/tv_notification_title"
+        app:layout_constraintTop_toBottomOf="@+id/tv_notification_title"
+        tools:text="트레이너가 작성한 PT 일일 보고서가 도착했어요.\n확인해 보세요!" />
+
+    <TextView
+        android:id="@+id/tv_notification_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/pretendard_regular"
+        android:textColor="@color/disabled"
+        android:layout_marginRight="15dp"
+        android:letterSpacing="-0.02"
+        android:textSize="13sp"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_notification_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tv_notification_title"
+        tools:text="5월 3일" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

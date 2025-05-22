@@ -1,0 +1,472 @@
+<resources>
+    <!-- Custom font 적용 -->
+    <style name="customTextViewFontStyle" parent="@android:style/Widget.DeviceDefault.TextView">
+        <item name="android:fontFamily">@font/pretendard_regular</item>
+    </style>
+
+    <style name="customButtonFontStyle" parent="@android:style/Widget.DeviceDefault.Button.Borderless">
+        <item name="android:fontFamily">@font/pretendard_regular</item>
+    </style>
+
+    <style name="customEditTextFontStyle" parent="@android:style/Widget.DeviceDefault.EditText">
+        <item name="android:fontFamily">@font/pretendard_regular</item>
+    </style>
+
+    <style name="customRadioButtonFontStyle" parent="@android:style/Widget.DeviceDefault.CompoundButton.RadioButton">
+        <item name="android:fontFamily">@font/pretendard_regular</item>
+    </style>
+
+    <style name="customCheckboxFontStyle" parent="@android:style/Widget.DeviceDefault.CompoundButton.CheckBox">
+        <item name="android:fontFamily">@font/pretendard_regular</item>
+    </style>
+
+    <style name="FABCircleShape" parent="ShapeAppearanceOverlay.Material3.FloatingActionButton">
+        <item name="cornerSize">50%</item>
+    </style>
+
+    <style name="CustomTabTextAppearance" parent="TextAppearance.MaterialComponents.Headline6">
+        <item name="android:textSize">16sp</item>
+<!--        <item name="android:fontFamily">@font/pretendard_semi_bold</item>-->
+        <item name="android:textColor">@color/text</item>
+        <item name="android:letterSpacing">-0.02</item>
+    </style>
+
+    <style name="CustomTabSelectedTextAppearance" parent="TextAppearance.MaterialComponents.Headline6">
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">@font/pretendard_semi_bold</item>
+        <item name="android:textColor">@color/text</item>
+        <item name="android:letterSpacing">-0.02</item>
+    </style>
+
+    <style name="BottomSheetDialogTheme" parent="Theme.Material3.Light.BottomSheetDialog">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
+
+    <style name="DialogNoAnimation">
+        <item name="android:windowEnterAnimation">@null</item>
+        <item name="android:windowExitAnimation">@null</item>
+    </style>
+
+    <!-- 폰트 스타일 정리 -->
+
+    <!-- Regular -->
+    <style name="Font_Regular_14_main_black">
+        <item name="fontFamily">@font/pretendard_regular</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/main_black</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="Font_Regular_14_main_white">
+        <item name="fontFamily">@font/pretendard_regular</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/main_white</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="Font_Regular_14_main_gray">
+        <item name="fontFamily">@font/pretendard_regular</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/main_gray</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="Font_Regular_16_main_black">
+        <item name="fontFamily">@font/pretendard_regular</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/main_black</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="Font_Regular_16_main_white">
+        <item name="fontFamily">@font/pretendard_regular</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/main_white</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="Font_Regular_16_main_gray">
+        <item name="fontFamily">@font/pretendard_regular</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/main_gray</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="Font_Regular_20_main_black">
+        <item name="fontFamily">@font/pretendard_regular</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/main_black</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="Font_Regular_20_main_white">
+        <item name="fontFamily">@font/pretendard_regular</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/main_white</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="Font_Regular_20_main_gray">
+        <item name="fontFamily">@font/pretendard_regular</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/main_gray</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="Font_Regular_24_main_black">
+        <item name="fontFamily">@font/pretendard_regular</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">@color/main_black</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="Font_Regular_24_main_white">
+        <item name="fontFamily">@font/pretendard_regular</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">@color/main_white</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="Font_Regular_24_main_gray">
+        <item name="fontFamily">@font/pretendard_regular</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">@color/main_gray</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <!-- Bold -->
+    <style name="Font_Bold_14_main_black">
+        <item name="fontFamily">@font/pretendard_bold</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/main_black</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="Font_Bold_14_main_white">
+        <item name="fontFamily">@font/pretendard_bold</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/main_white</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="Font_Bold_14_main_gray">
+        <item name="fontFamily">@font/pretendard_bold</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/main_gray</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="Font_Bold_14_highlight_orange">
+        <item name="fontFamily">@font/pretendard_bold</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/highlight_orange</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="Font_Bold_16_main_black">
+        <item name="fontFamily">@font/pretendard_bold</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/main_black</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="Font_Bold_16_main_white">
+        <item name="fontFamily">@font/pretendard_bold</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/main_white</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="Font_Bold_16_main_gray">
+        <item name="fontFamily">@font/pretendard_bold</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/main_gray</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="Font_Bold_20_main_black">
+        <item name="fontFamily">@font/pretendard_bold</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/main_black</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="Font_Bold_20_main_white">
+        <item name="fontFamily">@font/pretendard_bold</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/main_white</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="Font_Bold_20_main_red">
+        <item name="fontFamily">@font/pretendard_bold</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">#FF0000</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="Font_Bold_20_main_blue">
+        <item name="fontFamily">@font/pretendard_bold</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">#0000FF</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="Font_Bold_20_main_gray">
+        <item name="fontFamily">@font/pretendard_bold</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/main_gray</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="Font_Bold_24_main_black">
+        <item name="fontFamily">@font/pretendard_bold</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">@color/main_black</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="Font_Bold_24_main_white">
+        <item name="fontFamily">@font/pretendard_bold</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">@color/main_white</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="Font_Bold_24_main_gray">
+        <item name="fontFamily">@font/pretendard_bold</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">@color/main_gray</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <!-- Normal -->
+    <style name="Font_Normal_16_main_black">
+        <item name="fontFamily">@font/pretendard</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/main_black</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="Font_Normal_16_main_white">
+        <item name="fontFamily">@font/pretendard</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/main_white</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="Font_Normal_16_main_gray">
+        <item name="fontFamily">@font/pretendard</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/main_gray</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="Font_Normal_20_main_black">
+        <item name="fontFamily">@font/pretendard</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/main_black</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="Font_Normal_20_main_white">
+        <item name="fontFamily">@font/pretendard</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/main_white</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="Font_Normal_20_main_gray">
+        <item name="fontFamily">@font/pretendard</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/main_gray</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="Font_Normal_24_main_black">
+        <item name="fontFamily">@font/pretendard</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">@color/main_black</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="Font_Normal_24_main_white">
+        <item name="fontFamily">@font/pretendard</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">@color/main_white</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="Font_Normal_24_main_gray">
+        <item name="fontFamily">@font/pretendard</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">@color/main_gray</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <!-- SemiBold -->
+    <style name="Font_SemiBold_16_main_black">
+        <item name="fontFamily">@font/pretendard_semi_bold</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/main_black</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="Font_SemiBold_16_main_white">
+        <item name="fontFamily">@font/pretendard_semi_bold</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/main_white</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="Font_SemiBold_16_main_gray">
+        <item name="fontFamily">@font/pretendard_semi_bold</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/main_gray</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="Font_SemiBold_20_main_black">
+        <item name="fontFamily">@font/pretendard_semi_bold</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/main_black</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="Font_SemiBold_20_main_white">
+        <item name="fontFamily">@font/pretendard_semi_bold</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/main_white</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="Font_SemiBold_20_main_gray">
+        <item name="fontFamily">@font/pretendard_semi_bold</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/main_gray</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="Font_SemiBold_24_main_black">
+        <item name="fontFamily">@font/pretendard_semi_bold</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">@color/main_black</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="Font_SemiBold_24_main_white">
+        <item name="fontFamily">@font/pretendard_semi_bold</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">@color/main_white</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="Font_SemiBold_24_main_gray">
+        <item name="fontFamily">@font/pretendard_semi_bold</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">@color/main_gray</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="Font_SemiBold_32_main_black">
+        <item name="fontFamily">@font/pretendard_semi_bold</item>
+        <item name="android:textSize">32sp</item>
+        <item name="android:textColor">@color/main_black</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="Font_SemiBold_32_main_white">
+        <item name="fontFamily">@font/pretendard_semi_bold</item>
+        <item name="android:textSize">32sp</item>
+        <item name="android:textColor">@color/main_white</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="Font_SemiBold_32_main_gray">
+        <item name="fontFamily">@font/pretendard_semi_bold</item>
+        <item name="android:textSize">32sp</item>
+        <item name="android:textColor">@color/main_gray</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <!-- Medium -->
+    <style name="Font_Medium_16_main_black">
+        <item name="fontFamily">@font/pretendard_medium</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/main_black</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="Font_Medium_16_main_white">
+        <item name="fontFamily">@font/pretendard_medium</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/main_white</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="Font_Medium_16_main_gray">
+        <item name="fontFamily">@font/pretendard_medium</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/main_gray</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="Font_Medium_16_main_red">
+        <item name="fontFamily">@font/pretendard_medium</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/main_red</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="Font_Medium_16_main_red_bright">
+        <item name="fontFamily">@font/pretendard_medium</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/main_red_bright</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="Font_Medium_20_main_black">
+        <item name="fontFamily">@font/pretendard_medium</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/main_black</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="Font_Medium_20_main_white">
+        <item name="fontFamily">@font/pretendard_medium</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/main_white</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="Font_Medium_20_main_gray">
+        <item name="fontFamily">@font/pretendard_medium</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/main_gray</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="Font_Medium_24_main_black">
+        <item name="fontFamily">@font/pretendard_medium</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">@color/main_black</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="Font_Medium_24_main_white">
+        <item name="fontFamily">@font/pretendard_medium</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">@color/main_white</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="Font_Medium_24_main_gray">
+        <item name="fontFamily">@font/pretendard_medium</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">@color/main_gray</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+</resources>

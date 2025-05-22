@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="primary">#FF4B28</color>
+
+    <color name="text">#030303</color>
+    <color name="disabled">#9E9E9E</color>
+    <color name="highlight_green">#0D9CA4</color>
+    <color name="main_orange">#E84E20</color>
+    <color name="dark_orange">#C24121</color>
+    <color name="light_orange">#FDF0E9</color>
+    <color name="highlight_orange">#FF4B28</color>
+    <color name="main_brown">#B23A16</color>
+    <color name="main_white">#FFFFFF</color>
+
+    <color name="main_black">#101820</color>
+    <color name="secondary_black">#2D3339</color>
+    <color name="main_gray">#89919A</color>
+    <color name="main_red">#9B0000</color>
+    <color name="secondary_gray">#D9D9D9</color>
+    <color name="main_green">#A2D5C6</color>
+
+    <color name="tropical_pink">#FFBCAB</color>
+    <color name="liquid_sunset">#FFBC75</color>
+    <color name="paradise">#784F9A</color>
+    <color name="dark_green">#3A573A</color>
+    <color name="mola">#C9937A</color>
+
+    <color name="main_red_bright">#FF0000</color>
+    <color name="main_pink">#FFB6C1</color>
+    <color name="sky_blue">#5ECBF5</color>
+    <color name="main_blue">#3064D0</color>
+    <color name="secondary_red">#FF3B30</color>
+</resources>
