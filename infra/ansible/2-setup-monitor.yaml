@@ -1,0 +1,30 @@
+- name: Setup Monitoring Node
+  hosts: monitor
+  become: true
+  tasks:
+    - name: Update apt packages
+      apt:
+        update_cache: yes
+
+    - name: Install Docker
+      apt:
+        name: docker.io
+        state: present
+
+    - name: Run Prometheus
+      docker_container:
+        name: prometheus
+        image: prom/prometheus
+        ports:
+          - "9090:9090"
+        volumes:
+          - /opt/prometheus:/etc/prometheus
+        restart_policy: always
+
+    - name: Run Grafana
+      docker_container:
+        name: grafana
+        image: grafana/grafana
+        ports:
+          - "3000:3000"
+        restart_policy: always
