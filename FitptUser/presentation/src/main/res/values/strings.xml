@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">presentation</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="home_bottom_sheet_date">%1$s일 %2$s요일</string>
+    <string name="calendar_year_month">%1$d년 %2$d월</string>
+
+</resources>
