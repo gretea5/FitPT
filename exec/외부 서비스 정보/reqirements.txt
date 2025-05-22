@@ -1,0 +1,13 @@
+Android app
+- firebase.json
+
+fitpt(backend)
+- firebase.json
+
+fitpt-landing(frontend)
+- EmailJS
+- kakaotalk channel url
+
+iac
+- aws credetials access key
+- aws credetials secret key
