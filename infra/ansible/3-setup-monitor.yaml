@@ -1,5 +1,5 @@
 - name: Setup Monitoring Node
-  hosts: monitor
+  hosts: _monitor
   become: true
   tasks:
     - name: Update apt packages

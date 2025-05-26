@@ -48,6 +48,8 @@ resource "aws_instance" "app" {
       Name            = "${var.project_name}-${var.customer_id}-app-${count.index}"
       Role            = "app"
       ansibleNodeType = "app"
+      Owner             = "kkt3289"          # (필터에 쓰는 경우)
+      Environment       = "dev"
     }
   )
 }
