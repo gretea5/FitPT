@@ -1,0 +1,30 @@
+- name: Setup Bastion Host with user and SSM
+  hosts: _bastion
+  connection: aws_ssm
+  remote_user: ubuntu
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+  gather_facts: yes
+  become: yes
+  become_method: sudo
+
+  tasks:
+    - name: Update apt packages
+      apt:
+        update_cache: yes
+
+    - name: Install snapd
+      apt:
+        name: snapd
+        state: present
+
+    - name: Install amazon-ssm-agent via snap
+      community.general.snap:
+        name: amazon-ssm-agent
+        classic: yes
+
+    - name: Enable and start amazon-ssm-agent
+      shell: |
+        snap start amazon-ssm-agent
+      args:
+        executable: /bin/bash

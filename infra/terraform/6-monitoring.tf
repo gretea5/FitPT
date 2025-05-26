@@ -53,8 +53,14 @@ resource "aws_instance" "monitor" {
     volume_type = "gp3"
   }
 
-  tags = {
-    Name = "${var.project_name}-${var.customer_id}-monitor"
-    Role = "monitor"
-  }
+  tags = merge(
+    local.common_tags,
+    {
+      Name              = "${var.project_name}-${var.customer_id}-monitor"
+      Role              = "monitor"
+      ansibleNodeType   = "monitor"
+      Owner             = "kkt3289"
+      Environment       = "dev"
+    }
+  )
 }
