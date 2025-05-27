@@ -270,7 +270,7 @@ FitPT는 트레이너와 회원 모두를 위한 운동 기록 플랫폼입니�
         김기훈<br />App & UI/UX
     </td>
     <td align="center">
-        김동현<br />UI/UX
+        김동현<br />App & UI/UX
     </td>
     <td align="center">
         권경탁<br />FE & Infra
