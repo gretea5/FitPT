@@ -1,7 +1,15 @@
 - name: Setup Monitoring Node
-  hosts: _monitor
-  become: true
+  hosts: monitor
+  remote_user: ubuntu
+  gather_facts: yes
+  become: yes
   tasks:
+    - name: Install Python Docker SDK
+      apt:
+        name: python3-docker
+        state: present
+        update_cache: yes
+        
     - name: Update apt packages
       apt:
         update_cache: yes
