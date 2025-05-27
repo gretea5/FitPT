@@ -1,30 +1,28 @@
-- name: Setup Bastion Host with user and SSM
-  hosts: _bastion
-  connection: aws_ssm
-  remote_user: ubuntu
-  vars:
-    ansible_python_interpreter: /usr/bin/python3
+---
+- name: Install SSM Agent on Bastion Host
+  hosts: bastion  # 또는 베스천 호스트의 Name 태그값
   gather_facts: yes
   become: yes
-  become_method: sudo
+
+  pre_tasks:
+    - name: Test SSH connectivity
+      ping:
 
   tasks:
-    - name: Update apt packages
-      apt:
-        update_cache: yes
-
-    - name: Install snapd
+    - name: Ensure snapd is installed
       apt:
         name: snapd
         state: present
+        update_cache: yes
 
     - name: Install amazon-ssm-agent via snap
-      community.general.snap:
+      snap:
         name: amazon-ssm-agent
-        classic: yes
+        classic: true
+        state: present
 
-    - name: Enable and start amazon-ssm-agent
-      shell: |
-        snap start amazon-ssm-agent
-      args:
-        executable: /bin/bash
+    - name: Ensure amazon-ssm-agent snap service is running
+      service:
+        name: snap.amazon-ssm-agent.amazon-ssm-agent.service
+        state: started
+        enabled: yes

@@ -1,0 +1,28 @@
+# hosts/inventory_aws_ec2.aws_ec2.yaml
+plugin: amazon.aws.aws_ec2
+regions: 
+  - ap-northeast-2
+
+filters:
+  instance-state-name: running
+  tag:Owner: kkt3289
+  # 퍼블릭 IP가 없는 인스턴스 (프라이빗)
+  network-interface.association.public-ip: false
+
+keyed_groups:
+  # ansibleNodeType 태그로 그룹 생성
+  - key: tags.ansibleNodeType
+    prefix: ""
+    separator: ""
+
+
+hostnames: 
+  - instance-id
+
+compose:
+  ansible_host: "{{ instance_id }}"
+  ansible_connection: aws_ssm
+  ansible_aws_ssm_bucket_name: my-ansible-ssm-bucket
+  ansible_aws_ssm_region: ap-northeast-2
+
+strict: True
