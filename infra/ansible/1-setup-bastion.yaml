@@ -1,0 +1,28 @@
+---
+- name: Install SSM Agent on Bastion Host
+  hosts: bastion  # 또는 베스천 호스트의 Name 태그값
+  gather_facts: yes
+  become: yes
+
+  pre_tasks:
+    - name: Test SSH connectivity
+      ping:
+
+  tasks:
+    - name: Ensure snapd is installed
+      apt:
+        name: snapd
+        state: present
+        update_cache: yes
+
+    - name: Install amazon-ssm-agent via snap
+      snap:
+        name: amazon-ssm-agent
+        classic: true
+        state: present
+
+    - name: Ensure amazon-ssm-agent snap service is running
+      service:
+        name: snap.amazon-ssm-agent.amazon-ssm-agent.service
+        state: started
+        enabled: yes

@@ -45,6 +45,9 @@ resource "aws_instance" "bastion" {
     {
       Name = "${var.project_name}-${var.customer_id}-bastion"
       Role = "bastion"
+      ansibleNodeType   = "bastion"          # ✅ 반드시 이 키로 지정돼야 함
+      Owner             = "kkt3289"          # (필터에 쓰는 경우)
+      Environment       = "dev"
     }
   )
 
