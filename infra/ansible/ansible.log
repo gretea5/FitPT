@@ -3979,3 +3979,201 @@ while templating string: expected token ':', got '}'. String: {{{{ 'aws_ssm' }}}
 2025-05-28 12:50:49,128 p=48541 u=kkt3289 n=ansible INFO| fatal: [i-0ecddbb237f168fbf]: FAILED! => {"msg": "Unexpected failure during module execution: An error occurred (403) when calling the HeadBucket operation: Forbidden", "stdout": ""}
 2025-05-28 12:50:49,129 p=48541 u=kkt3289 n=ansible INFO| PLAY RECAP *****************************************************************************************************************************************
 2025-05-28 12:50:49,129 p=48541 u=kkt3289 n=ansible INFO| i-0ecddbb237f168fbf        : ok=0    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2025-05-29 16:46:59,704 p=176239 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 16:47:01,101 p=176239 u=kkt3289 n=ansible INFO| PLAY [Setup Monitoring Node] *******************************************************************************************
+2025-05-29 16:47:01,129 p=176239 u=kkt3289 n=ansible WARNING| [WARNING]: Found variable using reserved name: tags
+
+2025-05-29 16:47:01,131 p=176239 u=kkt3289 n=ansible INFO| TASK [Gathering Facts] *************************************************************************************************
+2025-05-29 16:47:01,268 p=176275 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 16:47:02,399 p=176275 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 16:47:04,366 p=176275 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 16:47:08,486 p=176275 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 16:47:09,461 p=176239 u=kkt3289 n=ansible INFO| An exception occurred during task execution. To see the full traceback, use -vvv. The error was: botocore.exceptions.ClientError: An error occurred (403) when calling the HeadBucket operation: Forbidden
+2025-05-29 16:47:09,463 p=176239 u=kkt3289 n=ansible INFO| fatal: [i-0ecddbb237f168fbf]: FAILED! => {"msg": "Unexpected failure during module execution: An error occurred (403) when calling the HeadBucket operation: Forbidden", "stdout": ""}
+2025-05-29 16:47:09,465 p=176239 u=kkt3289 n=ansible INFO| PLAY RECAP *************************************************************************************************************
+2025-05-29 16:47:09,465 p=176239 u=kkt3289 n=ansible INFO| i-0ecddbb237f168fbf        : ok=0    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2025-05-29 16:52:13,781 p=176704 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 16:52:15,029 p=176704 u=kkt3289 n=ansible INFO| PLAY [Setup Monitoring Node] *******************************************************************************************
+2025-05-29 16:52:15,053 p=176704 u=kkt3289 n=ansible WARNING| [WARNING]: Found variable using reserved name: gather_facts
+
+2025-05-29 16:52:15,054 p=176704 u=kkt3289 n=ansible WARNING| [WARNING]: Found variable using reserved name: tags
+
+2025-05-29 16:52:15,056 p=176704 u=kkt3289 n=ansible INFO| TASK [Gathering Facts] *************************************************************************************************
+2025-05-29 16:52:15,179 p=176730 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 16:52:15,462 p=176730 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 16:52:16,688 p=176730 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 16:52:19,901 p=176730 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 16:52:20,131 p=176704 u=kkt3289 n=ansible INFO| An exception occurred during task execution. To see the full traceback, use -vvv. The error was: TypeError: expected string or bytes-like object, got 'NoneType'
+2025-05-29 16:52:20,132 p=176704 u=kkt3289 n=ansible INFO| fatal: [i-0ecddbb237f168fbf]: FAILED! => {"msg": "Unexpected failure during module execution: expected string or bytes-like object, got 'NoneType'", "stdout": ""}
+2025-05-29 16:52:20,134 p=176704 u=kkt3289 n=ansible INFO| PLAY RECAP *************************************************************************************************************
+2025-05-29 16:52:20,135 p=176704 u=kkt3289 n=ansible INFO| i-0ecddbb237f168fbf        : ok=0    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2025-05-29 16:54:12,025 p=176842 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 16:54:12,835 p=176842 u=kkt3289 n=ansible INFO| PLAY [Setup Monitoring Node] *******************************************************************************************
+2025-05-29 16:54:12,851 p=176842 u=kkt3289 n=ansible WARNING| [WARNING]: Found variable using reserved name: tags
+
+2025-05-29 16:54:12,851 p=176842 u=kkt3289 n=ansible WARNING| [WARNING]: Found variable using reserved name: gather_facts
+
+2025-05-29 16:54:12,852 p=176842 u=kkt3289 n=ansible INFO| TASK [Gathering Facts] *************************************************************************************************
+2025-05-29 16:54:12,975 p=176862 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 16:54:13,221 p=176862 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 16:54:14,430 p=176862 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 16:54:17,627 p=176862 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 16:54:17,828 p=176842 u=kkt3289 n=ansible INFO| An exception occurred during task execution. To see the full traceback, use -vvv. The error was: TypeError: expected string or bytes-like object, got 'NoneType'
+2025-05-29 16:54:17,829 p=176842 u=kkt3289 n=ansible INFO| fatal: [i-0ecddbb237f168fbf]: FAILED! => {"msg": "Unexpected failure during module execution: expected string or bytes-like object, got 'NoneType'", "stdout": ""}
+2025-05-29 16:54:17,830 p=176842 u=kkt3289 n=ansible INFO| PLAY RECAP *************************************************************************************************************
+2025-05-29 16:54:17,831 p=176842 u=kkt3289 n=ansible INFO| i-0ecddbb237f168fbf        : ok=0    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2025-05-29 16:56:31,746 p=176949 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 16:56:32,681 p=176949 u=kkt3289 n=ansible INFO| PLAY [Setup Monitoring Node] *******************************************************************************************
+2025-05-29 16:56:32,704 p=176949 u=kkt3289 n=ansible WARNING| [WARNING]: Found variable using reserved name: tags
+
+2025-05-29 16:56:32,706 p=176949 u=kkt3289 n=ansible INFO| TASK [Gathering Facts] *************************************************************************************************
+2025-05-29 16:56:32,833 p=176971 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 16:56:33,095 p=176971 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 16:56:34,333 p=176971 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 16:56:37,541 p=176971 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 16:56:37,744 p=176949 u=kkt3289 n=ansible INFO| An exception occurred during task execution. To see the full traceback, use -vvv. The error was: TypeError: expected string or bytes-like object, got 'NoneType'
+2025-05-29 16:56:37,745 p=176949 u=kkt3289 n=ansible INFO| fatal: [i-0ecddbb237f168fbf]: FAILED! => {"msg": "Unexpected failure during module execution: expected string or bytes-like object, got 'NoneType'", "stdout": ""}
+2025-05-29 16:56:37,747 p=176949 u=kkt3289 n=ansible INFO| PLAY RECAP *************************************************************************************************************
+2025-05-29 16:56:37,747 p=176949 u=kkt3289 n=ansible INFO| i-0ecddbb237f168fbf        : ok=0    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2025-05-29 16:57:44,464 p=177032 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 16:57:45,215 p=177032 u=kkt3289 n=ansible INFO| PLAY [Setup Monitoring Node] *******************************************************************************************
+2025-05-29 16:57:45,229 p=177032 u=kkt3289 n=ansible WARNING| [WARNING]: Found variable using reserved name: tags
+
+2025-05-29 16:57:45,230 p=177032 u=kkt3289 n=ansible INFO| TASK [Gathering Facts] *************************************************************************************************
+2025-05-29 16:57:45,354 p=177046 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 16:57:45,773 p=177046 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 16:57:45,985 p=177046 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 16:57:47,903 p=177032 u=kkt3289 n=ansible INFO| fatal: [i-0ecddbb237f168fbf]: UNREACHABLE! => {"changed": false, "msg": "Failed to create temporary directory. In some cases, you may have been able to authenticate and did not have permissions on the target directory. Consider changing the remote tmp path in ansible.cfg to a path rooted in \"/tmp\", for more error information use -vvv. Failed command was: ( umask 77 && mkdir -p \"` echo /home/ubuntu/.ansible/tmp `\"&& mkdir \"` echo /home/ubuntu/.ansible/tmp/ansible-tmp-1748505467.7446282-177046-274276106044849 `\" && echo ansible-tmp-1748505467.7446282-177046-274276106044849=\"` echo /home/ubuntu/.ansible/tmp/ansible-tmp-1748505467.7446282-177046-274276106044849 `\" ), exited with result 1, stdout output: mkdir: cannot create directory ‘/home/ubuntu’: Permission denied\r\r", "unreachable": true}
+2025-05-29 16:57:47,905 p=177032 u=kkt3289 n=ansible INFO| PLAY RECAP *************************************************************************************************************
+2025-05-29 16:57:47,906 p=177032 u=kkt3289 n=ansible INFO| i-0ecddbb237f168fbf        : ok=0    changed=0    unreachable=1    failed=0    skipped=0    rescued=0    ignored=0   
+2025-05-29 16:59:40,695 p=177151 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 16:59:41,542 p=177151 u=kkt3289 n=ansible INFO| PLAY [Setup Monitoring Node] *******************************************************************************************
+2025-05-29 16:59:41,556 p=177151 u=kkt3289 n=ansible WARNING| [WARNING]: Found variable using reserved name: tags
+
+2025-05-29 16:59:41,557 p=177151 u=kkt3289 n=ansible INFO| TASK [Gathering Facts] *************************************************************************************************
+2025-05-29 16:59:41,682 p=177165 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 16:59:42,089 p=177165 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 16:59:42,362 p=177165 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 16:59:46,501 p=177151 u=kkt3289 n=ansible WARNING| [WARNING]: Platform linux on host i-0ecddbb237f168fbf is using the discovered Python interpreter at
+/usr/bin/python3.10, but future installation of another Python interpreter could change the meaning of that path. See
+https://docs.ansible.com/ansible-core/2.18/reference_appendices/interpreter_discovery.html for more information.
+
+2025-05-29 16:59:46,502 p=177151 u=kkt3289 n=ansible INFO| ok: [i-0ecddbb237f168fbf]
+2025-05-29 16:59:46,511 p=177151 u=kkt3289 n=ansible INFO| TASK [Install Python Docker SDK] ***************************************************************************************
+2025-05-29 16:59:46,636 p=177219 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 16:59:47,037 p=177219 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 16:59:47,241 p=177219 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 17:01:34,994 p=177151 u=kkt3289 n=ansible INFO| changed: [i-0ecddbb237f168fbf]
+2025-05-29 17:01:35,008 p=177151 u=kkt3289 n=ansible INFO| TASK [Update apt packages] *********************************************************************************************
+2025-05-29 17:01:35,129 p=177302 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 17:01:35,588 p=177302 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 17:01:35,771 p=177302 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 17:02:22,905 p=177151 u=kkt3289 n=ansible INFO| changed: [i-0ecddbb237f168fbf]
+2025-05-29 17:02:22,916 p=177151 u=kkt3289 n=ansible INFO| TASK [Install Docker] **************************************************************************************************
+2025-05-29 17:02:23,030 p=177370 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 17:02:23,429 p=177370 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 17:02:23,611 p=177370 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 17:02:38,205 p=177151 u=kkt3289 n=ansible INFO| changed: [i-0ecddbb237f168fbf]
+2025-05-29 17:02:38,217 p=177151 u=kkt3289 n=ansible INFO| TASK [Run Prometheus] **************************************************************************************************
+2025-05-29 17:02:38,327 p=177438 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 17:02:38,714 p=177438 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 17:02:38,901 p=177438 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 17:02:50,077 p=177151 u=kkt3289 n=ansible INFO| changed: [i-0ecddbb237f168fbf]
+2025-05-29 17:02:50,089 p=177151 u=kkt3289 n=ansible INFO| TASK [Run Grafana] *****************************************************************************************************
+2025-05-29 17:02:50,197 p=177499 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 17:02:50,592 p=177499 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 17:02:50,771 p=177499 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 17:03:08,554 p=177151 u=kkt3289 n=ansible INFO| changed: [i-0ecddbb237f168fbf]
+2025-05-29 17:03:08,557 p=177151 u=kkt3289 n=ansible INFO| PLAY RECAP *************************************************************************************************************
+2025-05-29 17:03:08,558 p=177151 u=kkt3289 n=ansible INFO| i-0ecddbb237f168fbf        : ok=6    changed=5    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2025-05-29 17:17:15,996 p=178370 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 17:17:17,252 p=178370 u=kkt3289 n=ansible INFO| PLAY [Setup Monitoring Node] *******************************************************************************************
+2025-05-29 17:17:17,279 p=178370 u=kkt3289 n=ansible WARNING| [WARNING]: Found variable using reserved name: tags
+
+2025-05-29 17:17:17,282 p=178370 u=kkt3289 n=ansible INFO| TASK [Gathering Facts] *************************************************************************************************
+2025-05-29 17:17:17,423 p=178393 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 17:17:17,891 p=178393 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 17:17:18,101 p=178393 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 17:17:22,241 p=178370 u=kkt3289 n=ansible WARNING| [WARNING]: Platform linux on host i-0ecddbb237f168fbf is using the discovered Python interpreter at
+/usr/bin/python3.10, but future installation of another Python interpreter could change the meaning of that path. See
+https://docs.ansible.com/ansible-core/2.18/reference_appendices/interpreter_discovery.html for more information.
+
+2025-05-29 17:17:22,242 p=178370 u=kkt3289 n=ansible INFO| ok: [i-0ecddbb237f168fbf]
+2025-05-29 17:17:22,253 p=178370 u=kkt3289 n=ansible INFO| TASK [Install Python Docker SDK] ***************************************************************************************
+2025-05-29 17:17:22,368 p=178444 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 17:17:22,809 p=178444 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 17:17:22,989 p=178444 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 17:17:41,204 p=178370 u=kkt3289 n=ansible INFO| ok: [i-0ecddbb237f168fbf]
+2025-05-29 17:17:41,216 p=178370 u=kkt3289 n=ansible INFO| TASK [Update apt packages] *********************************************************************************************
+2025-05-29 17:17:41,327 p=178488 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 17:17:41,715 p=178488 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 17:17:41,896 p=178488 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 17:20:00,039 p=178370 u=kkt3289 n=ansible INFO| changed: [i-0ecddbb237f168fbf]
+2025-05-29 17:20:00,051 p=178370 u=kkt3289 n=ansible INFO| TASK [Install Docker] **************************************************************************************************
+2025-05-29 17:20:00,166 p=178607 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 17:20:00,629 p=178607 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 17:20:00,821 p=178607 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 17:20:04,123 p=178370 u=kkt3289 n=ansible INFO| ok: [i-0ecddbb237f168fbf]
+2025-05-29 17:20:04,135 p=178370 u=kkt3289 n=ansible INFO| TASK [Prepare Prometheus config directory] *****************************************************************************
+2025-05-29 17:20:04,237 p=178648 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 17:20:04,656 p=178648 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 17:20:04,838 p=178648 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 17:20:07,687 p=178370 u=kkt3289 n=ansible INFO| ok: [i-0ecddbb237f168fbf]
+2025-05-29 17:20:07,706 p=178370 u=kkt3289 n=ansible INFO| TASK [Upload Prometheus configuration] *********************************************************************************
+2025-05-29 17:20:07,818 p=178697 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 17:20:08,525 p=178697 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 17:20:08,727 p=178697 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 17:20:10,963 p=178370 u=kkt3289 n=ansible INFO| An exception occurred during task execution. To see the full traceback, use -vvv. The error was: If you are using a module and expect the file to exist on the remote, see the remote_src option
+2025-05-29 17:20:10,965 p=178370 u=kkt3289 n=ansible INFO| fatal: [i-0ecddbb237f168fbf]: FAILED! => {"changed": false, "msg": "Could not find or access 'files/prometheus.yml'\nSearched in:\n\t/home/kkt3289/S12P31S208/infra/ansible/files/files/prometheus.yml\n\t/home/kkt3289/S12P31S208/infra/ansible/files/prometheus.yml\n\t/home/kkt3289/S12P31S208/infra/ansible/files/files/prometheus.yml\n\t/home/kkt3289/S12P31S208/infra/ansible/files/prometheus.yml on the Ansible Controller.\nIf you are using a module and expect the file to exist on the remote, see the remote_src option"}
+2025-05-29 17:20:10,968 p=178370 u=kkt3289 n=ansible INFO| PLAY RECAP *************************************************************************************************************
+2025-05-29 17:20:10,968 p=178370 u=kkt3289 n=ansible INFO| i-0ecddbb237f168fbf        : ok=5    changed=1    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2025-05-29 17:26:23,023 p=178861 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 17:26:24,255 p=178861 u=kkt3289 n=ansible INFO| PLAY [Setup Monitoring Node] *******************************************************************************************
+2025-05-29 17:26:24,281 p=178861 u=kkt3289 n=ansible WARNING| [WARNING]: Found variable using reserved name: tags
+
+2025-05-29 17:26:24,283 p=178861 u=kkt3289 n=ansible INFO| TASK [Gathering Facts] *************************************************************************************************
+2025-05-29 17:26:24,416 p=178887 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 17:26:24,857 p=178887 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 17:26:25,074 p=178887 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 17:26:29,244 p=178861 u=kkt3289 n=ansible WARNING| [WARNING]: Platform linux on host i-0ecddbb237f168fbf is using the discovered Python interpreter at
+/usr/bin/python3.10, but future installation of another Python interpreter could change the meaning of that path. See
+https://docs.ansible.com/ansible-core/2.18/reference_appendices/interpreter_discovery.html for more information.
+
+2025-05-29 17:26:29,245 p=178861 u=kkt3289 n=ansible INFO| ok: [i-0ecddbb237f168fbf]
+2025-05-29 17:26:29,256 p=178861 u=kkt3289 n=ansible INFO| TASK [Install Python Docker SDK] ***************************************************************************************
+2025-05-29 17:26:29,380 p=178932 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 17:26:29,820 p=178932 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 17:26:30,004 p=178932 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 17:27:18,275 p=178861 u=kkt3289 n=ansible INFO| ok: [i-0ecddbb237f168fbf]
+2025-05-29 17:27:18,285 p=178861 u=kkt3289 n=ansible INFO| TASK [Update apt packages] *********************************************************************************************
+2025-05-29 17:27:18,393 p=178988 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 17:27:18,777 p=178988 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 17:27:18,969 p=178988 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 17:27:45,410 p=178861 u=kkt3289 n=ansible INFO| changed: [i-0ecddbb237f168fbf]
+2025-05-29 17:27:45,428 p=178861 u=kkt3289 n=ansible INFO| TASK [Install Docker] **************************************************************************************************
+2025-05-29 17:27:45,555 p=179049 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 17:27:46,006 p=179049 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 17:27:46,196 p=179049 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 17:27:49,521 p=178861 u=kkt3289 n=ansible INFO| ok: [i-0ecddbb237f168fbf]
+2025-05-29 17:27:49,535 p=178861 u=kkt3289 n=ansible INFO| TASK [Prepare Prometheus config directory] *****************************************************************************
+2025-05-29 17:27:49,650 p=179088 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 17:27:50,040 p=179088 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 17:27:50,227 p=179088 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 17:27:52,813 p=178861 u=kkt3289 n=ansible INFO| ok: [i-0ecddbb237f168fbf]
+2025-05-29 17:27:52,831 p=178861 u=kkt3289 n=ansible INFO| TASK [Upload Prometheus configuration] *********************************************************************************
+2025-05-29 17:27:52,946 p=179135 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 17:27:53,368 p=179135 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 17:27:53,568 p=179135 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 17:27:56,986 p=178861 u=kkt3289 n=ansible INFO| changed: [i-0ecddbb237f168fbf]
+2025-05-29 17:27:56,998 p=178861 u=kkt3289 n=ansible INFO| TASK [Run Prometheus] **************************************************************************************************
+2025-05-29 17:27:57,111 p=179170 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 17:27:57,525 p=179170 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 17:27:57,726 p=179170 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 17:28:01,021 p=178861 u=kkt3289 n=ansible INFO| ok: [i-0ecddbb237f168fbf]
+2025-05-29 17:28:01,043 p=178861 u=kkt3289 n=ansible INFO| TASK [Run Grafana] *****************************************************************************************************
+2025-05-29 17:28:01,177 p=179198 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 17:28:01,564 p=179198 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 17:28:01,770 p=179198 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-29 17:28:04,578 p=178861 u=kkt3289 n=ansible INFO| ok: [i-0ecddbb237f168fbf]
+2025-05-29 17:28:04,581 p=178861 u=kkt3289 n=ansible INFO| PLAY RECAP *************************************************************************************************************
+2025-05-29 17:28:04,581 p=178861 u=kkt3289 n=ansible INFO| i-0ecddbb237f168fbf        : ok=8    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
