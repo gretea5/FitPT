@@ -1,6 +1,6 @@
 ---
 - name: Manage Private Instances via SSM
-  hosts: app_servers  # 또는 프라이빗 인스턴스들의 그룹명
+  hosts: app  # 또는 프라이빗 인스턴스들의 그룹명
   gather_facts: yes
   become: yes
 
