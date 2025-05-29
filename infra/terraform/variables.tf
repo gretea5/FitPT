@@ -58,6 +58,13 @@ variable "db_password" {
   sensitive   = true
 }
 
+# Ansible-SSM 모듈 스테이징용 S3 버킷 이름
+variable "ssm_bucket_name" {
+  description = "SSM용 Ansible 모듈 스테이징 S3 버킷 이름"
+  type        = string
+  default     = "ansible-ssm-bucket"
+}
+
 
 ##########################
 # Default variables (you can change for customizing)
@@ -157,9 +164,4 @@ variable "monitor_instance_type" {
 
 variable "bastion_instance_type" {
   default = "t2.micro"
-}
-
-variable "route53_zone_id" {
-  description = "var.route53_zone_id"
-  type        = string
 }
