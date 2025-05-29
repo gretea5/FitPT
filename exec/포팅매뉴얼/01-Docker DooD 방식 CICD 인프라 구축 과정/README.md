@@ -53,7 +53,7 @@ ssh -i ~/.ssh/J12D109T.pem ubuntu@j12d109.p.ssafy.io
 
 1. EC2 접속 화면
 
-![image.png](image.png)
+![image.png](./img/image.png)
 
 ## **2. 리눅스 방화벽 설정**
 
@@ -164,7 +164,7 @@ sudo ufw allow 8080  # Jenkins
 
 **ufw 적용 후 ufw 상태**
 
-![image.png](image%201.png)
+![image.png](./img/image%201.png)
 
 ## 3. 도커 설치 및 설정
 
@@ -290,7 +290,7 @@ vi config.xml
 
 1. **Install suggeted plugins : 초기 플러그인 모두 설치**
 
-![image.png](image%202.png)
+![image.png](./img/image%202.png)
 
 1. **Getting Started - 계정 생성**
 
@@ -299,12 +299,12 @@ vi config.xml
 이름 : d109
 이메일주소 : [user@example.com](mailto:user@example.com) (실제 본인 이메일)
 
-![image.png](image%203.png)
+![image.png](./img/image%203.png)
 
 1. **초기 Jenkins URL은 주소 고정**
     1. **현재는 http 이지만 추후 nginx로 https 리다이렉션할 예정.**
 
-![image.png](image%204.png)
+![image.png](./img/image%204.png)
 
 1. **Jenkins plugin 설치하기**
     
@@ -364,7 +364,7 @@ apt-get install -y docker-ce-cli
 
 Jenkins관리  →  Plugins 클릭 ( stage view 추가 )
 
-![image.png](image%205.png)
+![image.png](./img/image%205.png)
 
 ### 5.2. Gitlab 연결 Personal Access Token 발급하기
 
@@ -386,7 +386,7 @@ Jenkins관리  →  Plugins 클릭 ( stage view 추가 )
     txo_ohx5VGDhCRmE-nJw
     
 
-![image.png](image%206.png)
+![image.png](./img/image%206.png)
 
 ### 5.3. Gitlab 연결 Gitlab API Token 발급하기
 
@@ -417,19 +417,19 @@ Jenkins관리  →  Plugins 클릭 ( stage view 추가 )
 
  **→  주로 웹훅, Merge Request 처리 등 GitLab 플러그인의 기능에 사용**
 
-![image.png](image%207.png)
+![image.png](./img/image%207.png)
 
 **로컬 관리할 자격증명은 Secret file로 만들어 따로 등록함.**
 
-![image.png](image%208.png)
+![image.png](./img/image%208.png)
 
 ### 5.5. Pipline 생성
 
 **jenkins  : 새로운 item → pipeline**
 
-![image.png](image%209.png)
+![image.png](./img/image%209.png)
 
-![image.png](image%2010.png)
+![image.png](./img/image%2010.png)
 
 - 고급  →  시크릿 토큰 생성  →  Generate 버튼을 클릭 후
     - jenkins secret token 생성
@@ -438,7 +438,7 @@ GitLab : 해당 프로젝트 → setting → webhook
 
 - URL과 jenkins Secret token 입력
 
-![image.png](image%2011.png)
+![image.png](./img/image%2011.png)
 
 ### 5.6. Jenkins-Gitlab 연결 확인
 
@@ -446,7 +446,7 @@ GitLab : 해당 프로젝트 → setting → webhook
 
 **Jenkins관리  →  System  →  GitLab 섹션**
 
-![image.png](image%2012.png)
+![image.png](./img/image%2012.png)
 
 1. **GitLab에서 웹훅 테스트**
 
@@ -454,4 +454,4 @@ GitLab : 해당 프로젝트 → setting → webhook
 
 **성공 화면**
 
-![image.png](image%2013.png)
+![image.png](./img/image%2013.png)
