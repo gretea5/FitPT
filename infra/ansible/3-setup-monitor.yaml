@@ -1,5 +1,6 @@
 - name: Setup Monitoring Node
   hosts: monitor
+  connection: aws_ssm
   remote_user: ubuntu
   gather_facts: yes
   become: yes
@@ -18,6 +19,22 @@
       apt:
         name: docker.io
         state: present
+
+    - name: Prepare Prometheus config directory
+      file:
+        path: /opt/prometheus
+        state: directory
+        owner: root
+        group: root
+        mode: '0755'
+
+    - name: Upload Prometheus configuration
+      copy:
+        src: "{{ playbook_dir }}/files/prometheus.yml"
+        dest: /opt/prometheus/prometheus.yml
+        owner: root
+        group: root
+        mode: '0644'
 
     - name: Run Prometheus
       docker_container:

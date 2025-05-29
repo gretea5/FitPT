@@ -8,7 +8,7 @@ resource "aws_iam_user" "ansible_controller" {
   name = "ansible-controller"
 }
 
-# 1) S3 버킷 생성 (전역 고유 이름 필요)
+# 1- S3 버킷 생성 (전역 고유 이름 필요)
 resource "aws_s3_bucket" "ansible_ssm" {
   bucket        = "${var.project_name}-${var.customer_id}-${var.ssm_bucket_name}"
   force_destroy = true
@@ -18,7 +18,7 @@ resource "aws_s3_bucket" "ansible_ssm" {
   )
 }
 
-# 2) 퍼블릭 액세스 완전 차단
+# 2- 퍼블릭 액세스 완전 차단
 resource "aws_s3_bucket_public_access_block" "ansible_ssm_block" {
   bucket                  = aws_s3_bucket.ansible_ssm.id
   block_public_acls       = true
@@ -27,31 +27,53 @@ resource "aws_s3_bucket_public_access_block" "ansible_ssm_block" {
   restrict_public_buckets = true
 }
 
-# 3) 버킷 정책: 제어 노드에는 전체 권한, 인스턴스에는 읽기 권한만
+# 3- 버킷 정책: 제어 노드에는 전체 권한, 인스턴스에는 읽기 권한만
 data "aws_iam_policy_document" "ansible_ssm_bucket_policy" {
   statement {
-    sid     = "ControllerFullAccess"
+    sid     = "ControllerListBucket"
+    effect  = "Allow"
+    actions = ["s3:ListBucket"]
+    resources = [ aws_s3_bucket.ansible_ssm.arn ]
+    principals {
+      type        = "AWS"
+      identifiers = [ aws_iam_user.ansible_controller.arn ]
+    }
+  }
+
+  statement {
+    sid     = "ControllerObjectAccess"
     effect  = "Allow"
     actions = [
       "s3:PutObject",
       "s3:GetObject",
       "s3:DeleteObject",
     ]
-    resources = ["${aws_s3_bucket.ansible_ssm.arn}/*"]
+    resources = [ "${aws_s3_bucket.ansible_ssm.arn}/*" ]
     principals {
       type        = "AWS"
-      identifiers = [aws_iam_user.ansible_controller.arn]
+      identifiers = [ aws_iam_user.ansible_controller.arn ]
     }
   }
 
   statement {
-    sid     = "InstanceReadOnly"
+    sid     = "InstanceListBucket"
     effect  = "Allow"
-    actions = ["s3:GetObject"]
-    resources = ["${aws_s3_bucket.ansible_ssm.arn}/*"]
+    actions = ["s3:ListBucket"]
+    resources = [ aws_s3_bucket.ansible_ssm.arn ]
     principals {
       type        = "AWS"
-      identifiers = [aws_iam_role.ec2_role.arn]
+      identifiers = [ aws_iam_role.ec2_role.arn ]
+    }
+  }
+
+  statement {
+    sid     = "InstanceGetObject"
+    effect  = "Allow"
+    actions = ["s3:GetObject"]
+    resources = [ "${aws_s3_bucket.ansible_ssm.arn}/*" ]
+    principals {
+      type        = "AWS"
+      identifiers = [ aws_iam_role.ec2_role.arn ]
     }
   }
 }

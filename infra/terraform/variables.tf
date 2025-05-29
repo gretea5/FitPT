@@ -52,9 +52,16 @@ variable "allowed_ports" {
 }
 
 
-# aws_Rds_db_password_setup
+# AWS_Rds_db_password_setup
 variable "db_password" {
   description = "RDS root password"
+  sensitive   = true
+}
+
+# AWS_Elasticache_Redis_password_setup
+variable "redis_auth_token" {
+  description = "ElastiCache Redis AUTH 토큰 (16~128자, 공백·'/', '\"', '@', '%' 제외)"
+  type        = string
   sensitive   = true
 }
 
