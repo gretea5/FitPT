@@ -1,39 +1,46 @@
 ---
-- name: Manage Private Instances via SSM
+- name: Setup app Node
   hosts: app  # 또는 프라이빗 인스턴스들의 그룹명
+  connection: aws_ssm
+  remote_user: ubuntu
   gather_facts: yes
   become: yes
 
-  pre_tasks:
-    - name: Test SSM connectivity
-      ping:
+  vars:
+    containers:
+      - name: fitpt-app
+        repo_url: "{{ ecr_app_repo_url }}"
+        port: "9090:9090"
+      - name: fitpt-admin
+        repo_url: "{{ ecr_admin_repo_url }}"
+        port: "9091:9091"
 
   tasks:
-    - name: Update system packages
-      apt:
-        update_cache: yes
-        upgrade: dist
-        autoremove: yes
-        autoclean: yes
+    - name: Pull & run Docker container
+      community.docker.docker_container:
+        name: "{{ item.name }}"
+        image: "{{ item.repo_url }}:{{ image_tag }}"
+        pull: yes
+        env:
+          DB_HOST:    "{{ app_config.db_host }}"
+          DB_PORT:    "{{ app_config.db_port }}"
+          DB_USER:    "{{ app_config.db_user }}"
+          DB_PASS:    "{{ app_config.db_pass }}"
+          REDIS_HOST: "{{ app_config.redis_host }}"
+          REDIS_PORT: "{{ app_config.redis_port }}"
+          REDIS_PASS: "{{ app_config.redis_pass }}"
+        ports:
+          - "{{ item.port }}"
+        restart_policy: always
+      loop: "{{ containers }}"
+      loop_control:
+        label: "{{ item.name }}"
 
-    - name: Install required packages
-      apt:
-        name:
-          - curl
-          - wget
-          - unzip
-          - htop
-        state: present
-
-    - name: Create application directory
-      file:
-        path: /opt/myapp
-        state: directory
-        mode: '0755'
-
-    - name: Check system information
-      debug:
-        msg: 
-          - "Hostname: {{ inventory_hostname }}"
-          - "Private IP: {{ ansible_default_ipv4.address }}"
-          - "OS: {{ ansible_distribution }} {{ ansible_distribution_version }}"
+    - name: Run Prometheus Node Exporter
+      community.docker.docker_container:
+        name: node-exporter
+        image: prom/node-exporter:latest
+        pull: yes
+        ports:
+          - "9100:9100"
+        restart_policy: always

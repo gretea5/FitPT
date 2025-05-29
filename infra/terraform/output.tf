@@ -27,3 +27,13 @@ output "rds_port" {
   description = "RDS MySQL 포트 번호"
   value       = aws_db_instance.mysql.port
 }
+
+output "redis_endpoint" {
+  description = "ElastiCache Redis Endpoint 주소"
+  value = aws_elasticache_replication_group.redis.primary_endpoint_address
+}
+
+output "redis_port" {
+  description = "ElastiCache Redis 포트 번호"
+  value = aws_elasticache_replication_group.redis.port
+}

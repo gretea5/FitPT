@@ -1,4 +1,5 @@
 # AWS_Rds_db_password_setup = terraform.tfvars
 
 # content
-db_password = "password"
+db_password = "DB_password"
+redis_auth_token = "redis_password"

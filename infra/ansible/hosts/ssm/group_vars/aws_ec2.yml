@@ -1,5 +1,22 @@
 # hosts/ssm/group_vars/aws_ec2.yml
+
+# 1) SSH 대신 SSM으로 연결
 ansible_connection: aws_ssm
-ansible_aws_ssm_bucket_name: my-ansible-ssm-bucket
+
+# 2) 모듈 전송용 S3 버킷 이름 (inventory나 환경변수 대신 여기서 지정) (Terraform에서 만든 네임스페이스 버킷)
+ansible_aws_ssm_bucket_name: fitpt-gym001-ansible-ssm-bucket
+
+# 3) S3 내에 파일을 올릴 Prefix (필요하다면)
+ansible_aws_ssm_prefix: ansible/
+
+# 4) AWS 리전 (버킷+SSM API 호출 대상)
 ansible_aws_ssm_region: ap-northeast-2
+
+# 5) 원격 사용자
 ansible_user: ubuntu
+
+# 6) 필요 시 권한 상승
+ansible_become: yes
+
+# 7) 원격 임시 디렉토리 위치 설정
+ansible_remote_tmp: /tmp/.ansible/tmp
