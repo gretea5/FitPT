@@ -1167,3 +1167,2815 @@ inventory source
         ]
     }
 }
+2025-05-28 10:27:37,354 p=19953 u=kkt3289 n=ansible | ERROR! the playbook: 3-setup_monitor.yaml could not be found
+2025-05-28 10:28:48,885 p=20234 u=kkt3289 n=ansible | [WARNING]: Unable to parse /home/kkt3289/S12P31S208/infra/ansible/hosts/inventory.aws_ec2.yaml as an inventory source
+
+2025-05-28 10:28:48,888 p=20234 u=kkt3289 n=ansible | [WARNING]: No inventory was parsed, only implicit localhost is available
+
+2025-05-28 10:28:48,901 p=20234 u=kkt3289 n=ansible | [WARNING]: provided hosts list is empty, only localhost is available. Note that the implicit localhost does not match 'all'
+
+2025-05-28 10:28:49,547 p=20234 u=kkt3289 n=ansible | [WARNING]: Could not match supplied host pattern, ignoring: monitor
+
+2025-05-28 10:28:49,549 p=20234 u=kkt3289 n=ansible | PLAY [Setup Monitoring Node] ***********************************************************************************************************************
+2025-05-28 10:28:49,549 p=20234 u=kkt3289 n=ansible | skipping: no hosts matched
+2025-05-28 10:28:49,549 p=20234 u=kkt3289 n=ansible | PLAY RECAP *****************************************************************************************************************************************
+2025-05-28 10:30:22,394 p=20547 u=kkt3289 n=ansible | [WARNING]:  * Failed to parse /home/kkt3289/S12P31S208/infra/ansible/hosts/ssm/inventory.aws_ec2.yaml with
+ansible_collections.amazon.aws.plugins.inventory.aws_ec2 plugin: Failed to import the required Python library (botocore and boto3) on KT-GRAM17's
+Python /usr/bin/python3. Please read the module documentation and install it in the appropriate location. If the required library is installed, but
+Ansible is using the wrong Python interpreter, please consult the documentation on ansible_python_interpreter
+
+2025-05-28 10:30:22,396 p=20547 u=kkt3289 n=ansible | [WARNING]: Unable to parse /home/kkt3289/S12P31S208/infra/ansible/hosts/ssm/inventory.aws_ec2.yaml as an inventory source
+
+2025-05-28 10:30:22,396 p=20547 u=kkt3289 n=ansible | [WARNING]: No inventory was parsed, only implicit localhost is available
+
+2025-05-28 10:30:22,407 p=20547 u=kkt3289 n=ansible | [WARNING]: provided hosts list is empty, only localhost is available. Note that the implicit localhost does not match 'all'
+
+2025-05-28 10:30:23,040 p=20547 u=kkt3289 n=ansible | [WARNING]: Could not match supplied host pattern, ignoring: monitor
+
+2025-05-28 10:30:23,041 p=20547 u=kkt3289 n=ansible | PLAY [Setup Monitoring Node] ***********************************************************************************************************************
+2025-05-28 10:30:23,041 p=20547 u=kkt3289 n=ansible | skipping: no hosts matched
+2025-05-28 10:30:23,041 p=20547 u=kkt3289 n=ansible | PLAY RECAP *****************************************************************************************************************************************
+2025-05-28 10:35:44,947 p=21893 u=kkt3289 n=ansible INFO| Starting galaxy collection install process
+2025-05-28 10:35:45,328 p=21893 u=kkt3289 n=ansible INFO| Nothing to do. All requested collections are already installed. If you want to reinstall them, consider using `--force`.
+2025-05-28 10:36:40,471 p=22256 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-28 10:36:41,250 p=22256 u=kkt3289 n=ansible WARNING| [WARNING]: provided hosts list is empty, only localhost is available. Note that the implicit localhost does not match 'all'
+
+2025-05-28 10:36:41,436 p=22256 u=kkt3289 n=ansible WARNING| [WARNING]: Could not match supplied host pattern, ignoring: monitor
+
+2025-05-28 10:36:41,438 p=22256 u=kkt3289 n=ansible INFO| PLAY [Setup Monitoring Node] ***********************************************************************************************************************
+2025-05-28 10:36:41,438 p=22256 u=kkt3289 n=ansible INFO| skipping: no hosts matched
+2025-05-28 10:36:41,439 p=22256 u=kkt3289 n=ansible INFO| PLAY RECAP *****************************************************************************************************************************************
+2025-05-28 11:14:35,821 p=29298 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-28 11:14:36,895 p=29298 u=kkt3289 n=ansible WARNING| [WARNING]:  * Failed to parse /home/kkt3289/S12P31S208/infra/ansible/hosts/ssm/inventory.aws_ec2.yaml with
+ansible_collections.amazon.aws.plugins.inventory.aws_ec2 plugin: Could not set ansible_host for host i-009d282150c1121ae: template error while
+templating string: expected token ':', got '}'. String: {{{{ instance_id }}}}. expected token ':', got '}'
+
+2025-05-28 11:14:36,895 p=29298 u=kkt3289 n=ansible WARNING| [WARNING]: Unable to parse /home/kkt3289/S12P31S208/infra/ansible/hosts/ssm/inventory.aws_ec2.yaml as an inventory source
+
+2025-05-28 11:14:36,896 p=29298 u=kkt3289 n=ansible WARNING| [WARNING]: No inventory was parsed, only implicit localhost is available
+
+2025-05-28 11:14:36,906 p=29298 u=kkt3289 n=ansible INFO| {
+    "_meta": {
+        "hostvars": {}
+    },
+    "all": {
+        "children": [
+            "ungrouped"
+        ]
+    }
+}
+2025-05-28 11:15:13,330 p=29459 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-28 11:15:13,678 p=29459 u=kkt3289 n=ansible WARNING| [WARNING]:  * Failed to parse /home/kkt3289/S12P31S208/infra/ansible/hosts/ssm/inventory.aws_ec2.yaml with
+ansible_collections.amazon.aws.plugins.inventory.aws_ec2 plugin: Failed to describe instances: Parameter validation failed: Invalid type for
+parameter Filters[2].Values, value: None, type: <class 'NoneType'>, valid types: <class 'list'>, <class 'tuple'>
+
+2025-05-28 11:15:13,679 p=29459 u=kkt3289 n=ansible WARNING| [WARNING]: Unable to parse /home/kkt3289/S12P31S208/infra/ansible/hosts/ssm/inventory.aws_ec2.yaml as an inventory source
+
+2025-05-28 11:15:13,679 p=29459 u=kkt3289 n=ansible WARNING| [WARNING]: No inventory was parsed, only implicit localhost is available
+
+2025-05-28 11:15:13,684 p=29459 u=kkt3289 n=ansible INFO| {
+    "_meta": {
+        "hostvars": {}
+    },
+    "all": {
+        "children": [
+            "ungrouped"
+        ]
+    }
+}
+2025-05-28 11:15:43,395 p=29588 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-28 11:15:44,163 p=29588 u=kkt3289 n=ansible WARNING| [WARNING]: Found variable using reserved name: tags
+
+2025-05-28 11:15:44,165 p=29588 u=kkt3289 n=ansible INFO| {
+    "_meta": {
+        "hostvars": {
+            "fitpt-gym001-bastion": {
+                "ami_launch_index": 0,
+                "ansible_host": "52.78.18.0",
+                "architecture": "x86_64",
+                "block_device_mappings": [
+                    {
+                        "device_name": "/dev/sda1",
+                        "ebs": {
+                            "attach_time": "2025-05-21T13:52:17+00:00",
+                            "delete_on_termination": true,
+                            "status": "attached",
+                            "volume_id": "vol-0904d9a1fc28a9f21"
+                        }
+                    }
+                ],
+                "boot_mode": "uefi-preferred",
+                "capacity_reservation_specification": {
+                    "capacity_reservation_preference": "open"
+                },
+                "client_token": "terraform-20250521135215974700000007",
+                "cpu_options": {
+                    "core_count": 1,
+                    "threads_per_core": 1
+                },
+                "current_instance_boot_mode": "legacy-bios",
+                "ebs_optimized": false,
+                "ena_support": true,
+                "enclave_options": {
+                    "enabled": false
+                },
+                "hibernation_options": {
+                    "configured": false
+                },
+                "hypervisor": "xen",
+                "iam_instance_profile": {
+                    "arn": "arn:aws:iam::692859908382:instance-profile/fitpt-gym001-ec2-profile",
+                    "id": "AIPA2CUNLGEPKGRB6KIMK"
+                },
+                "image_id": "ami-05a7f3469a7653972",
+                "instance_id": "i-009d282150c1121ae",
+                "instance_type": "t2.micro",
+                "key_name": "tf-fitpt",
+                "launch_time": "2025-05-21T13:52:17+00:00",
+                "maintenance_options": {
+                    "auto_recovery": "default"
+                },
+                "metadata_options": {
+                    "http_endpoint": "enabled",
+                    "http_protocol_ipv6": "disabled",
+                    "http_put_response_hop_limit": 1,
+                    "http_tokens": "optional",
+                    "instance_metadata_tags": "disabled",
+                    "state": "applied"
+                },
+                "monitoring": {
+                    "state": "disabled"
+                },
+                "network_interfaces": [
+                    {
+                        "association": {
+                            "ip_owner_id": "692859908382",
+                            "public_dns_name": "ec2-52-78-18-0.ap-northeast-2.compute.amazonaws.com",
+                            "public_ip": "52.78.18.0"
+                        },
+                        "attachment": {
+                            "attach_time": "2025-05-21T13:52:17+00:00",
+                            "attachment_id": "eni-attach-074e2aebf18f13352",
+                            "delete_on_termination": true,
+                            "device_index": 0,
+                            "network_card_index": 0,
+                            "status": "attached"
+                        },
+                        "description": "",
+                        "groups": [
+                            {
+                                "group_id": "sg-0bea5c90cd33282b1",
+                                "group_name": "fitpt-gym001-bastion-sg"
+                            }
+                        ],
+                        "interface_type": "interface",
+                        "ipv6_addresses": [],
+                        "mac_address": "02:c2:a3:68:7c:0b",
+                        "network_interface_id": "eni-0cc1600688d2c07d8",
+                        "operator": {
+                            "managed": false
+                        },
+                        "owner_id": "692859908382",
+                        "private_dns_name": "ip-10-43-0-149.ap-northeast-2.compute.internal",
+                        "private_ip_address": "10.43.0.149",
+                        "private_ip_addresses": [
+                            {
+                                "association": {
+                                    "ip_owner_id": "692859908382",
+                                    "public_dns_name": "ec2-52-78-18-0.ap-northeast-2.compute.amazonaws.com",
+                                    "public_ip": "52.78.18.0"
+                                },
+                                "primary": true,
+                                "private_dns_name": "ip-10-43-0-149.ap-northeast-2.compute.internal",
+                                "private_ip_address": "10.43.0.149"
+                            }
+                        ],
+                        "source_dest_check": true,
+                        "status": "in-use",
+                        "subnet_id": "subnet-012bcb619cf2bddb5",
+                        "vpc_id": "vpc-0852a3cc502464a70"
+                    }
+                ],
+                "network_performance_options": {
+                    "bandwidth_weighting": "default"
+                },
+                "operator": {
+                    "managed": false
+                },
+                "owner_id": "692859908382",
+                "placement": {
+                    "availability_zone": "ap-northeast-2a",
+                    "group_name": "",
+                    "region": "ap-northeast-2",
+                    "tenancy": "default"
+                },
+                "platform_details": "Linux/UNIX",
+                "private_dns_name": "ip-10-43-0-149.ap-northeast-2.compute.internal",
+                "private_dns_name_options": {
+                    "enable_resource_name_dns_a_record": false,
+                    "enable_resource_name_dns_aaaa_record": false,
+                    "hostname_type": "ip-name"
+                },
+                "private_ip_address": "10.43.0.149",
+                "product_codes": [],
+                "public_dns_name": "ec2-52-78-18-0.ap-northeast-2.compute.amazonaws.com",
+                "public_ip_address": "52.78.18.0",
+                "requester_id": "",
+                "reservation_id": "r-061903ce81ac5d5ac",
+                "root_device_name": "/dev/sda1",
+                "root_device_type": "ebs",
+                "security_groups": [
+                    {
+                        "group_id": "sg-0bea5c90cd33282b1",
+                        "group_name": "fitpt-gym001-bastion-sg"
+                    }
+                ],
+                "source_dest_check": true,
+                "state": {
+                    "code": 16,
+                    "name": "running"
+                },
+                "state_transition_reason": "",
+                "subnet_id": "subnet-012bcb619cf2bddb5",
+                "tags": {
+                    "Customer": "gym001",
+                    "Environment": "dev",
+                    "Name": "fitpt-gym001-bastion",
+                    "Owner": "kkt3289",
+                    "Project": "fitpt",
+                    "Role": "bastion",
+                    "ansibleNodeType": "bastion"
+                },
+                "usage_operation": "RunInstances",
+                "usage_operation_update_time": "2025-05-21T13:52:17+00:00",
+                "virtualization_type": "hvm",
+                "vpc_id": "vpc-0852a3cc502464a70"
+            }
+        }
+    },
+    "all": {
+        "children": [
+            "ungrouped",
+            "aws_ec2",
+            "fitpt_gym001_bastion",
+            "bastion"
+        ]
+    },
+    "aws_ec2": {
+        "hosts": [
+            "fitpt-gym001-bastion"
+        ]
+    },
+    "bastion": {
+        "hosts": [
+            "fitpt-gym001-bastion"
+        ]
+    },
+    "fitpt_gym001_bastion": {
+        "hosts": [
+            "fitpt-gym001-bastion"
+        ]
+    }
+}
+2025-05-28 11:16:17,124 p=29734 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-28 11:16:17,872 p=29734 u=kkt3289 n=ansible WARNING| [WARNING]: Found variable using reserved name: tags
+
+2025-05-28 11:16:17,875 p=29734 u=kkt3289 n=ansible INFO| {
+    "_meta": {
+        "hostvars": {
+            "fitpt-gym001-bastion": {
+                "ami_launch_index": 0,
+                "ansible_host": "52.78.18.0",
+                "architecture": "x86_64",
+                "block_device_mappings": [
+                    {
+                        "device_name": "/dev/sda1",
+                        "ebs": {
+                            "attach_time": "2025-05-21T13:52:17+00:00",
+                            "delete_on_termination": true,
+                            "status": "attached",
+                            "volume_id": "vol-0904d9a1fc28a9f21"
+                        }
+                    }
+                ],
+                "boot_mode": "uefi-preferred",
+                "capacity_reservation_specification": {
+                    "capacity_reservation_preference": "open"
+                },
+                "client_token": "terraform-20250521135215974700000007",
+                "cpu_options": {
+                    "core_count": 1,
+                    "threads_per_core": 1
+                },
+                "current_instance_boot_mode": "legacy-bios",
+                "ebs_optimized": false,
+                "ena_support": true,
+                "enclave_options": {
+                    "enabled": false
+                },
+                "hibernation_options": {
+                    "configured": false
+                },
+                "hypervisor": "xen",
+                "iam_instance_profile": {
+                    "arn": "arn:aws:iam::692859908382:instance-profile/fitpt-gym001-ec2-profile",
+                    "id": "AIPA2CUNLGEPKGRB6KIMK"
+                },
+                "image_id": "ami-05a7f3469a7653972",
+                "instance_id": "i-009d282150c1121ae",
+                "instance_type": "t2.micro",
+                "key_name": "tf-fitpt",
+                "launch_time": "2025-05-21T13:52:17+00:00",
+                "maintenance_options": {
+                    "auto_recovery": "default"
+                },
+                "metadata_options": {
+                    "http_endpoint": "enabled",
+                    "http_protocol_ipv6": "disabled",
+                    "http_put_response_hop_limit": 1,
+                    "http_tokens": "optional",
+                    "instance_metadata_tags": "disabled",
+                    "state": "applied"
+                },
+                "monitoring": {
+                    "state": "disabled"
+                },
+                "network_interfaces": [
+                    {
+                        "association": {
+                            "ip_owner_id": "692859908382",
+                            "public_dns_name": "ec2-52-78-18-0.ap-northeast-2.compute.amazonaws.com",
+                            "public_ip": "52.78.18.0"
+                        },
+                        "attachment": {
+                            "attach_time": "2025-05-21T13:52:17+00:00",
+                            "attachment_id": "eni-attach-074e2aebf18f13352",
+                            "delete_on_termination": true,
+                            "device_index": 0,
+                            "network_card_index": 0,
+                            "status": "attached"
+                        },
+                        "description": "",
+                        "groups": [
+                            {
+                                "group_id": "sg-0bea5c90cd33282b1",
+                                "group_name": "fitpt-gym001-bastion-sg"
+                            }
+                        ],
+                        "interface_type": "interface",
+                        "ipv6_addresses": [],
+                        "mac_address": "02:c2:a3:68:7c:0b",
+                        "network_interface_id": "eni-0cc1600688d2c07d8",
+                        "operator": {
+                            "managed": false
+                        },
+                        "owner_id": "692859908382",
+                        "private_dns_name": "ip-10-43-0-149.ap-northeast-2.compute.internal",
+                        "private_ip_address": "10.43.0.149",
+                        "private_ip_addresses": [
+                            {
+                                "association": {
+                                    "ip_owner_id": "692859908382",
+                                    "public_dns_name": "ec2-52-78-18-0.ap-northeast-2.compute.amazonaws.com",
+                                    "public_ip": "52.78.18.0"
+                                },
+                                "primary": true,
+                                "private_dns_name": "ip-10-43-0-149.ap-northeast-2.compute.internal",
+                                "private_ip_address": "10.43.0.149"
+                            }
+                        ],
+                        "source_dest_check": true,
+                        "status": "in-use",
+                        "subnet_id": "subnet-012bcb619cf2bddb5",
+                        "vpc_id": "vpc-0852a3cc502464a70"
+                    }
+                ],
+                "network_performance_options": {
+                    "bandwidth_weighting": "default"
+                },
+                "operator": {
+                    "managed": false
+                },
+                "owner_id": "692859908382",
+                "placement": {
+                    "availability_zone": "ap-northeast-2a",
+                    "group_name": "",
+                    "region": "ap-northeast-2",
+                    "tenancy": "default"
+                },
+                "platform_details": "Linux/UNIX",
+                "private_dns_name": "ip-10-43-0-149.ap-northeast-2.compute.internal",
+                "private_dns_name_options": {
+                    "enable_resource_name_dns_a_record": false,
+                    "enable_resource_name_dns_aaaa_record": false,
+                    "hostname_type": "ip-name"
+                },
+                "private_ip_address": "10.43.0.149",
+                "product_codes": [],
+                "public_dns_name": "ec2-52-78-18-0.ap-northeast-2.compute.amazonaws.com",
+                "public_ip_address": "52.78.18.0",
+                "requester_id": "",
+                "reservation_id": "r-061903ce81ac5d5ac",
+                "root_device_name": "/dev/sda1",
+                "root_device_type": "ebs",
+                "security_groups": [
+                    {
+                        "group_id": "sg-0bea5c90cd33282b1",
+                        "group_name": "fitpt-gym001-bastion-sg"
+                    }
+                ],
+                "source_dest_check": true,
+                "state": {
+                    "code": 16,
+                    "name": "running"
+                },
+                "state_transition_reason": "",
+                "subnet_id": "subnet-012bcb619cf2bddb5",
+                "tags": {
+                    "Customer": "gym001",
+                    "Environment": "dev",
+                    "Name": "fitpt-gym001-bastion",
+                    "Owner": "kkt3289",
+                    "Project": "fitpt",
+                    "Role": "bastion",
+                    "ansibleNodeType": "bastion"
+                },
+                "usage_operation": "RunInstances",
+                "usage_operation_update_time": "2025-05-21T13:52:17+00:00",
+                "virtualization_type": "hvm",
+                "vpc_id": "vpc-0852a3cc502464a70"
+            }
+        }
+    },
+    "all": {
+        "children": [
+            "ungrouped",
+            "aws_ec2",
+            "fitpt_gym001_bastion",
+            "bastion"
+        ]
+    },
+    "aws_ec2": {
+        "hosts": [
+            "fitpt-gym001-bastion"
+        ]
+    },
+    "bastion": {
+        "hosts": [
+            "fitpt-gym001-bastion"
+        ]
+    },
+    "fitpt_gym001_bastion": {
+        "hosts": [
+            "fitpt-gym001-bastion"
+        ]
+    }
+}
+2025-05-28 11:16:22,878 p=29771 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-28 11:16:23,229 p=29771 u=kkt3289 n=ansible WARNING| [WARNING]:  * Failed to parse /home/kkt3289/S12P31S208/infra/ansible/hosts/ssm/inventory.aws_ec2.yaml with
+ansible_collections.amazon.aws.plugins.inventory.aws_ec2 plugin: Failed to describe instances: Parameter validation failed: Invalid type for
+parameter Filters[2].Values, value: None, type: <class 'NoneType'>, valid types: <class 'list'>, <class 'tuple'>
+
+2025-05-28 11:16:23,230 p=29771 u=kkt3289 n=ansible WARNING| [WARNING]: Unable to parse /home/kkt3289/S12P31S208/infra/ansible/hosts/ssm/inventory.aws_ec2.yaml as an inventory source
+
+2025-05-28 11:16:23,230 p=29771 u=kkt3289 n=ansible WARNING| [WARNING]: No inventory was parsed, only implicit localhost is available
+
+2025-05-28 11:16:23,235 p=29771 u=kkt3289 n=ansible INFO| {
+    "_meta": {
+        "hostvars": {}
+    },
+    "all": {
+        "children": [
+            "ungrouped"
+        ]
+    }
+}
+2025-05-28 11:16:32,215 p=29853 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-28 11:16:32,669 p=29853 u=kkt3289 n=ansible WARNING| [WARNING]:  * Failed to parse /home/kkt3289/S12P31S208/infra/ansible/hosts/ssm/inventory.aws_ec2.yaml with
+ansible_collections.amazon.aws.plugins.inventory.aws_ec2 plugin: Failed to describe instances: Parameter validation failed: Invalid type for
+parameter Filters[2].Values, value: None, type: <class 'NoneType'>, valid types: <class 'list'>, <class 'tuple'>
+
+2025-05-28 11:16:32,671 p=29853 u=kkt3289 n=ansible WARNING| [WARNING]: Unable to parse /home/kkt3289/S12P31S208/infra/ansible/hosts/ssm/inventory.aws_ec2.yaml as an inventory source
+
+2025-05-28 11:16:32,672 p=29853 u=kkt3289 n=ansible WARNING| [WARNING]: No inventory was parsed, only implicit localhost is available
+
+2025-05-28 11:16:32,678 p=29853 u=kkt3289 n=ansible INFO| {
+    "_meta": {
+        "hostvars": {}
+    },
+    "all": {
+        "children": [
+            "ungrouped"
+        ]
+    }
+}
+2025-05-28 11:16:51,587 p=29948 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-28 11:16:51,943 p=29948 u=kkt3289 n=ansible WARNING| [WARNING]:  * Failed to parse /home/kkt3289/S12P31S208/infra/ansible/hosts/ssm/inventory.aws_ec2.yaml with
+ansible_collections.amazon.aws.plugins.inventory.aws_ec2 plugin: Failed to describe instances: Parameter validation failed: Invalid type for
+parameter Filters[2].Values, value: None, type: <class 'NoneType'>, valid types: <class 'list'>, <class 'tuple'>
+
+2025-05-28 11:16:51,943 p=29948 u=kkt3289 n=ansible WARNING| [WARNING]: Unable to parse /home/kkt3289/S12P31S208/infra/ansible/hosts/ssm/inventory.aws_ec2.yaml as an inventory source
+
+2025-05-28 11:16:51,944 p=29948 u=kkt3289 n=ansible WARNING| [WARNING]: No inventory was parsed, only implicit localhost is available
+
+2025-05-28 11:16:51,949 p=29948 u=kkt3289 n=ansible INFO| {
+    "_meta": {
+        "hostvars": {}
+    },
+    "all": {
+        "children": [
+            "ungrouped"
+        ]
+    }
+}
+2025-05-28 11:18:47,651 p=30353 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-28 11:18:48,417 p=30353 u=kkt3289 n=ansible WARNING| [WARNING]:  * Failed to parse /home/kkt3289/S12P31S208/infra/ansible/hosts/ssm/inventory.aws_ec2.yaml with
+ansible_collections.amazon.aws.plugins.inventory.aws_ec2 plugin: Could not set ansible_connection for host i-0ecddbb237f168fbf: 'aws_ssm' is
+undefined
+
+2025-05-28 11:18:48,417 p=30353 u=kkt3289 n=ansible WARNING| [WARNING]: Unable to parse /home/kkt3289/S12P31S208/infra/ansible/hosts/ssm/inventory.aws_ec2.yaml as an inventory source
+
+2025-05-28 11:18:48,418 p=30353 u=kkt3289 n=ansible WARNING| [WARNING]: No inventory was parsed, only implicit localhost is available
+
+2025-05-28 11:18:48,423 p=30353 u=kkt3289 n=ansible INFO| {
+    "_meta": {
+        "hostvars": {}
+    },
+    "all": {
+        "children": [
+            "ungrouped"
+        ]
+    }
+}
+2025-05-28 11:19:23,820 p=30510 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-28 11:19:24,465 p=30510 u=kkt3289 n=ansible WARNING| [WARNING]:  * Failed to parse /home/kkt3289/S12P31S208/infra/ansible/hosts/ssm/inventory.aws_ec2.yaml with
+ansible_collections.amazon.aws.plugins.inventory.aws_ec2 plugin: Could not set ansible_host for host i-0ecddbb237f168fbf: template error while
+templating string: expected token ':', got '}'. String: {{{{ instance_id }}}}. expected token ':', got '}'
+
+2025-05-28 11:19:24,465 p=30510 u=kkt3289 n=ansible WARNING| [WARNING]: Unable to parse /home/kkt3289/S12P31S208/infra/ansible/hosts/ssm/inventory.aws_ec2.yaml as an inventory source
+
+2025-05-28 11:19:24,465 p=30510 u=kkt3289 n=ansible WARNING| [WARNING]: No inventory was parsed, only implicit localhost is available
+
+2025-05-28 11:19:24,470 p=30510 u=kkt3289 n=ansible INFO| {
+    "_meta": {
+        "hostvars": {}
+    },
+    "all": {
+        "children": [
+            "ungrouped"
+        ]
+    }
+}
+2025-05-28 11:19:47,828 p=30617 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-28 11:19:48,469 p=30617 u=kkt3289 n=ansible WARNING| [WARNING]:  * Failed to parse /home/kkt3289/S12P31S208/infra/ansible/hosts/ssm/inventory.aws_ec2.yaml with
+ansible_collections.amazon.aws.plugins.inventory.aws_ec2 plugin: Could not set ansible_host for host i-0ecddbb237f168fbf: template error while
+templating string: expected token ':', got '}'. String: {{{ instance_id }}}. expected token ':', got '}'
+
+2025-05-28 11:19:48,469 p=30617 u=kkt3289 n=ansible WARNING| [WARNING]: Unable to parse /home/kkt3289/S12P31S208/infra/ansible/hosts/ssm/inventory.aws_ec2.yaml as an inventory source
+
+2025-05-28 11:19:48,470 p=30617 u=kkt3289 n=ansible WARNING| [WARNING]: No inventory was parsed, only implicit localhost is available
+
+2025-05-28 11:19:48,475 p=30617 u=kkt3289 n=ansible INFO| {
+    "_meta": {
+        "hostvars": {}
+    },
+    "all": {
+        "children": [
+            "ungrouped"
+        ]
+    }
+}
+2025-05-28 11:19:59,473 p=30700 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-28 11:20:00,213 p=30700 u=kkt3289 n=ansible WARNING| [WARNING]:  * Failed to parse /home/kkt3289/S12P31S208/infra/ansible/hosts/ssm/inventory.aws_ec2.yaml with
+ansible_collections.amazon.aws.plugins.inventory.aws_ec2 plugin: Could not set ansible_connection for host i-0ecddbb237f168fbf: 'aws_ssm' is
+undefined
+
+2025-05-28 11:20:00,213 p=30700 u=kkt3289 n=ansible WARNING| [WARNING]: Unable to parse /home/kkt3289/S12P31S208/infra/ansible/hosts/ssm/inventory.aws_ec2.yaml as an inventory source
+
+2025-05-28 11:20:00,214 p=30700 u=kkt3289 n=ansible WARNING| [WARNING]: No inventory was parsed, only implicit localhost is available
+
+2025-05-28 11:20:00,219 p=30700 u=kkt3289 n=ansible INFO| {
+    "_meta": {
+        "hostvars": {}
+    },
+    "all": {
+        "children": [
+            "ungrouped"
+        ]
+    }
+}
+2025-05-28 11:20:14,866 p=30783 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-28 11:20:15,557 p=30783 u=kkt3289 n=ansible WARNING| [WARNING]:  * Failed to parse /home/kkt3289/S12P31S208/infra/ansible/hosts/ssm/inventory.aws_ec2.yaml with
+ansible_collections.amazon.aws.plugins.inventory.aws_ec2 plugin: Could not set ansible_connection for host i-0ecddbb237f168fbf: 'aws_ssm' is
+undefined
+
+2025-05-28 11:20:15,558 p=30783 u=kkt3289 n=ansible WARNING| [WARNING]: Unable to parse /home/kkt3289/S12P31S208/infra/ansible/hosts/ssm/inventory.aws_ec2.yaml as an inventory source
+
+2025-05-28 11:20:15,558 p=30783 u=kkt3289 n=ansible WARNING| [WARNING]: No inventory was parsed, only implicit localhost is available
+
+2025-05-28 11:20:15,578 p=30783 u=kkt3289 n=ansible INFO| {
+    "_meta": {
+        "hostvars": {}
+    },
+    "all": {
+        "children": [
+            "ungrouped"
+        ]
+    }
+}
+2025-05-28 11:20:26,749 p=30866 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-28 11:20:27,391 p=30866 u=kkt3289 n=ansible WARNING| [WARNING]:  * Failed to parse /home/kkt3289/S12P31S208/infra/ansible/hosts/ssm/inventory.aws_ec2.yaml with
+ansible_collections.amazon.aws.plugins.inventory.aws_ec2 plugin: Could not set ansible_host for host i-0ecddbb237f168fbf: 'instance' is undefined
+
+2025-05-28 11:20:27,391 p=30866 u=kkt3289 n=ansible WARNING| [WARNING]: Unable to parse /home/kkt3289/S12P31S208/infra/ansible/hosts/ssm/inventory.aws_ec2.yaml as an inventory source
+
+2025-05-28 11:20:27,392 p=30866 u=kkt3289 n=ansible WARNING| [WARNING]: No inventory was parsed, only implicit localhost is available
+
+2025-05-28 11:20:27,397 p=30866 u=kkt3289 n=ansible INFO| {
+    "_meta": {
+        "hostvars": {}
+    },
+    "all": {
+        "children": [
+            "ungrouped"
+        ]
+    }
+}
+2025-05-28 11:24:33,047 p=31659 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-28 11:24:33,780 p=31659 u=kkt3289 n=ansible WARNING| [WARNING]:  * Failed to parse /home/kkt3289/S12P31S208/infra/ansible/hosts/ssm/inventory.aws_ec2.yaml with
+ansible_collections.amazon.aws.plugins.inventory.aws_ec2 plugin: Could not set ansible_host for host i-0ecddbb237f168fbf: template error while
+templating string: expected token ':', got '}'. String: {{{{ instance_id }}}}. expected token ':', got '}'
+
+2025-05-28 11:24:33,780 p=31659 u=kkt3289 n=ansible WARNING| [WARNING]: Unable to parse /home/kkt3289/S12P31S208/infra/ansible/hosts/ssm/inventory.aws_ec2.yaml as an inventory source
+
+2025-05-28 11:24:33,780 p=31659 u=kkt3289 n=ansible WARNING| [WARNING]: No inventory was parsed, only implicit localhost is available
+
+2025-05-28 11:24:33,786 p=31659 u=kkt3289 n=ansible INFO| {
+    "_meta": {
+        "hostvars": {}
+    },
+    "all": {
+        "children": [
+            "ungrouped"
+        ]
+    }
+}
+2025-05-28 11:24:55,881 p=31772 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-28 11:24:56,516 p=31772 u=kkt3289 n=ansible WARNING| [WARNING]:  * Failed to parse /home/kkt3289/S12P31S208/infra/ansible/hosts/ssm/inventory.aws_ec2.yaml with
+ansible_collections.amazon.aws.plugins.inventory.aws_ec2 plugin: Could not set ansible_host for host i-0ecddbb237f168fbf: template error while
+templating string: expected token ':', got '}'. String: {{{ instance_id }}}. expected token ':', got '}'
+
+2025-05-28 11:24:56,516 p=31772 u=kkt3289 n=ansible WARNING| [WARNING]: Unable to parse /home/kkt3289/S12P31S208/infra/ansible/hosts/ssm/inventory.aws_ec2.yaml as an inventory source
+
+2025-05-28 11:24:56,517 p=31772 u=kkt3289 n=ansible WARNING| [WARNING]: No inventory was parsed, only implicit localhost is available
+
+2025-05-28 11:24:56,522 p=31772 u=kkt3289 n=ansible INFO| {
+    "_meta": {
+        "hostvars": {}
+    },
+    "all": {
+        "children": [
+            "ungrouped"
+        ]
+    }
+}
+2025-05-28 11:25:18,933 p=31879 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-28 11:25:19,562 p=31879 u=kkt3289 n=ansible WARNING| [WARNING]:  * Failed to parse /home/kkt3289/S12P31S208/infra/ansible/hosts/ssm/inventory.aws_ec2.yaml with
+ansible_collections.amazon.aws.plugins.inventory.aws_ec2 plugin: Could not set ansible_connection for host i-0ecddbb237f168fbf: 'aws_ssm' is
+undefined
+
+2025-05-28 11:25:19,563 p=31879 u=kkt3289 n=ansible WARNING| [WARNING]: Unable to parse /home/kkt3289/S12P31S208/infra/ansible/hosts/ssm/inventory.aws_ec2.yaml as an inventory source
+
+2025-05-28 11:25:19,563 p=31879 u=kkt3289 n=ansible WARNING| [WARNING]: No inventory was parsed, only implicit localhost is available
+
+2025-05-28 11:25:19,569 p=31879 u=kkt3289 n=ansible INFO| {
+    "_meta": {
+        "hostvars": {}
+    },
+    "all": {
+        "children": [
+            "ungrouped"
+        ]
+    }
+}
+2025-05-28 11:26:57,688 p=32227 u=kkt3289 n=ansible WARNING| [WARNING]: While constructing a mapping from /home/kkt3289/S12P31S208/infra/ansible/hosts/ssm/inventory.aws_ec2.yaml, line 2, column 1, found a
+duplicate dict key (compose). Using last defined value only.
+
+2025-05-28 11:26:57,811 p=32227 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-28 11:26:58,478 p=32227 u=kkt3289 n=ansible WARNING| [WARNING]:  * Failed to parse /home/kkt3289/S12P31S208/infra/ansible/hosts/ssm/inventory.aws_ec2.yaml with
+ansible_collections.amazon.aws.plugins.inventory.aws_ec2 plugin: Could not set ansible_host for host i-0ecddbb237f168fbf: template error while
+templating string: expected token ':', got '}'. String: {{{{ instance_id }}}}. expected token ':', got '}'
+
+2025-05-28 11:26:58,479 p=32227 u=kkt3289 n=ansible WARNING| [WARNING]: Unable to parse /home/kkt3289/S12P31S208/infra/ansible/hosts/ssm/inventory.aws_ec2.yaml as an inventory source
+
+2025-05-28 11:26:58,479 p=32227 u=kkt3289 n=ansible WARNING| [WARNING]: No inventory was parsed, only implicit localhost is available
+
+2025-05-28 11:26:58,484 p=32227 u=kkt3289 n=ansible INFO| {
+    "_meta": {
+        "hostvars": {}
+    },
+    "all": {
+        "children": [
+            "ungrouped"
+        ]
+    }
+}
+2025-05-28 11:33:02,357 p=33388 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-28 11:33:03,419 p=33388 u=kkt3289 n=ansible WARNING| [WARNING]:  * Failed to parse /home/kkt3289/S12P31S208/infra/ansible/hosts/ssm/inventory.aws_ec2.yaml with
+ansible_collections.amazon.aws.plugins.inventory.aws_ec2 plugin: Could not set ansible_host for host i-0ecddbb237f168fbf: template error while
+templating string: expected token ':', got '}'. String: {{{{ instance_id }}}}. expected token ':', got '}'
+
+2025-05-28 11:33:03,420 p=33388 u=kkt3289 n=ansible WARNING| [WARNING]: Unable to parse /home/kkt3289/S12P31S208/infra/ansible/hosts/ssm/inventory.aws_ec2.yaml as an inventory source
+
+2025-05-28 11:33:03,420 p=33388 u=kkt3289 n=ansible WARNING| [WARNING]: No inventory was parsed, only implicit localhost is available
+
+2025-05-28 11:33:03,429 p=33388 u=kkt3289 n=ansible INFO| {
+    "_meta": {
+        "hostvars": {}
+    },
+    "all": {
+        "children": [
+            "ungrouped"
+        ]
+    }
+}
+2025-05-28 11:34:50,140 p=33770 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-28 11:34:50,994 p=33770 u=kkt3289 n=ansible WARNING| [WARNING]:  * Failed to parse /home/kkt3289/S12P31S208/infra/ansible/hosts/ssm/inventory.aws_ec2.yaml with
+ansible_collections.amazon.aws.plugins.inventory.aws_ec2 plugin: Could not set ansible_host for host i-0ecddbb237f168fbf: template error while
+templating string: expected token ':', got '}'. String: {{{{instance_id}}}}. expected token ':', got '}'
+
+2025-05-28 11:34:50,995 p=33770 u=kkt3289 n=ansible WARNING| [WARNING]: Unable to parse /home/kkt3289/S12P31S208/infra/ansible/hosts/ssm/inventory.aws_ec2.yaml as an inventory source
+
+2025-05-28 11:34:50,995 p=33770 u=kkt3289 n=ansible WARNING| [WARNING]: No inventory was parsed, only implicit localhost is available
+
+2025-05-28 11:34:51,006 p=33770 u=kkt3289 n=ansible INFO| {
+    "_meta": {
+        "hostvars": {}
+    },
+    "all": {
+        "children": [
+            "ungrouped"
+        ]
+    }
+}
+2025-05-28 11:35:08,358 p=33851 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-28 11:35:08,945 p=33851 u=kkt3289 n=ansible WARNING| [WARNING]:  * Failed to parse /home/kkt3289/S12P31S208/infra/ansible/hosts/ssm/inventory.aws_ec2.yaml with
+ansible_collections.amazon.aws.plugins.inventory.aws_ec2 plugin: Could not set ansible_host for host i-0ecddbb237f168fbf: template error while
+templating string: expected token ':', got '}'. String: {{{{ instance_id }}}}. expected token ':', got '}'
+
+2025-05-28 11:35:08,946 p=33851 u=kkt3289 n=ansible WARNING| [WARNING]: Unable to parse /home/kkt3289/S12P31S208/infra/ansible/hosts/ssm/inventory.aws_ec2.yaml as an inventory source
+
+2025-05-28 11:35:08,946 p=33851 u=kkt3289 n=ansible WARNING| [WARNING]: No inventory was parsed, only implicit localhost is available
+
+2025-05-28 11:35:08,950 p=33851 u=kkt3289 n=ansible INFO| {
+    "_meta": {
+        "hostvars": {}
+    },
+    "all": {
+        "children": [
+            "ungrouped"
+        ]
+    }
+}
+2025-05-28 11:35:31,621 p=33959 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-28 11:35:32,222 p=33959 u=kkt3289 n=ansible WARNING| [WARNING]:  * Failed to parse /home/kkt3289/S12P31S208/infra/ansible/hosts/ssm/inventory.aws_ec2.yaml with
+ansible_collections.amazon.aws.plugins.inventory.aws_ec2 plugin: Could not set ansible_host for host i-0ecddbb237f168fbf: template error while
+templating string: expected token ':', got '}'. String: {{{{ instance_id }}}}. expected token ':', got '}'
+
+2025-05-28 11:35:32,223 p=33959 u=kkt3289 n=ansible WARNING| [WARNING]: Unable to parse /home/kkt3289/S12P31S208/infra/ansible/hosts/ssm/inventory.aws_ec2.yaml as an inventory source
+
+2025-05-28 11:35:32,223 p=33959 u=kkt3289 n=ansible WARNING| [WARNING]: No inventory was parsed, only implicit localhost is available
+
+2025-05-28 11:35:32,227 p=33959 u=kkt3289 n=ansible INFO| {
+    "_meta": {
+        "hostvars": {}
+    },
+    "all": {
+        "children": [
+            "ungrouped"
+        ]
+    }
+}
+2025-05-28 11:37:45,895 p=34437 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-28 11:37:47,061 p=34437 u=kkt3289 n=ansible WARNING| [WARNING]:  * Failed to parse /home/kkt3289/S12P31S208/infra/ansible/hosts/ssm/inventory.aws_ec2.yaml with
+ansible_collections.amazon.aws.plugins.inventory.aws_ec2 plugin: Could not set ansible_host for host i-0ecddbb237f168fbf: template error while
+templating string: expected token ':', got '}'. String: {{{{ instance_id }}}}. expected token ':', got '}'
+
+2025-05-28 11:37:47,061 p=34437 u=kkt3289 n=ansible WARNING| [WARNING]: Unable to parse /home/kkt3289/S12P31S208/infra/ansible/hosts/ssm/inventory.aws_ec2.yaml as an inventory source
+
+2025-05-28 11:37:47,062 p=34437 u=kkt3289 n=ansible WARNING| [WARNING]: No inventory was parsed, only implicit localhost is available
+
+2025-05-28 11:37:47,071 p=34437 u=kkt3289 n=ansible INFO| {
+    "_meta": {
+        "hostvars": {}
+    },
+    "all": {
+        "children": [
+            "ungrouped"
+        ]
+    }
+}
+2025-05-28 11:40:31,382 p=34998 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-28 11:40:32,261 p=34998 u=kkt3289 n=ansible WARNING| [WARNING]:  * Failed to parse /home/kkt3289/S12P31S208/infra/ansible/hosts/ssm/inventory.aws_ec2.yaml with
+ansible_collections.amazon.aws.plugins.inventory.aws_ec2 plugin: Could not set ansible_host for host i-0ecddbb237f168fbf: template error while
+templating string: expected token ':', got '}'. String: {{{{ instance_id }}}}. expected token ':', got '}'
+
+2025-05-28 11:40:32,261 p=34998 u=kkt3289 n=ansible WARNING| [WARNING]: Unable to parse /home/kkt3289/S12P31S208/infra/ansible/hosts/ssm/inventory.aws_ec2.yaml as an inventory source
+
+2025-05-28 11:40:32,262 p=34998 u=kkt3289 n=ansible WARNING| [WARNING]: No inventory was parsed, only implicit localhost is available
+
+2025-05-28 11:40:32,267 p=34998 u=kkt3289 n=ansible INFO| {
+    "_meta": {
+        "hostvars": {}
+    },
+    "all": {
+        "children": [
+            "ungrouped"
+        ]
+    }
+}
+2025-05-28 11:44:22,549 p=35766 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-28 11:44:23,294 p=35766 u=kkt3289 n=ansible WARNING| [WARNING]:  * Failed to parse /home/kkt3289/S12P31S208/infra/ansible/hosts/ssm/inventory.aws_ec2.yaml with
+ansible_collections.amazon.aws.plugins.inventory.aws_ec2 plugin: Could not set ansible_connection for host i-0ecddbb237f168fbf: 'aws_ssm' is
+undefined
+
+2025-05-28 11:44:23,295 p=35766 u=kkt3289 n=ansible WARNING| [WARNING]: Unable to parse /home/kkt3289/S12P31S208/infra/ansible/hosts/ssm/inventory.aws_ec2.yaml as an inventory source
+
+2025-05-28 11:44:23,295 p=35766 u=kkt3289 n=ansible WARNING| [WARNING]: No inventory was parsed, only implicit localhost is available
+
+2025-05-28 11:44:23,307 p=35766 u=kkt3289 n=ansible INFO| {
+    "_meta": {
+        "hostvars": {}
+    },
+    "all": {
+        "children": [
+            "ungrouped"
+        ]
+    }
+}
+2025-05-28 11:47:41,634 p=36424 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-28 11:47:42,638 p=36424 u=kkt3289 n=ansible WARNING| [WARNING]:  * Failed to parse /home/kkt3289/S12P31S208/infra/ansible/hosts/ssm/inventory.aws_ec2.yaml with
+ansible_collections.amazon.aws.plugins.inventory.aws_ec2 plugin: Could not set ansible_connection for host i-0ecddbb237f168fbf: template error
+while templating string: expected token ':', got '}'. String: {{{{ 'aws_ssm' }}}}. expected token ':', got '}'
+
+2025-05-28 11:47:42,638 p=36424 u=kkt3289 n=ansible WARNING| [WARNING]: Unable to parse /home/kkt3289/S12P31S208/infra/ansible/hosts/ssm/inventory.aws_ec2.yaml as an inventory source
+
+2025-05-28 11:47:42,639 p=36424 u=kkt3289 n=ansible WARNING| [WARNING]: No inventory was parsed, only implicit localhost is available
+
+2025-05-28 11:47:42,650 p=36424 u=kkt3289 n=ansible INFO| {
+    "_meta": {
+        "hostvars": {}
+    },
+    "all": {
+        "children": [
+            "ungrouped"
+        ]
+    }
+}
+2025-05-28 11:50:36,693 p=37024 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-28 11:50:37,880 p=37024 u=kkt3289 n=ansible WARNING| [WARNING]: Found variable using reserved name: tags
+
+2025-05-28 11:50:37,881 p=37024 u=kkt3289 n=ansible INFO| {
+    "_meta": {
+        "hostvars": {
+            "i-0ecddbb237f168fbf": {
+                "ami_launch_index": 0,
+                "ansible_aws_ssm_bucket_name": "my-ansible-ssm-bucket",
+                "ansible_aws_ssm_region": "ap-northeast-2",
+                "ansible_connection": "aws_ssm",
+                "ansible_host": "i-0ecddbb237f168fbf",
+                "ansible_user": "ubuntu",
+                "architecture": "x86_64",
+                "block_device_mappings": [
+                    {
+                        "device_name": "/dev/sda1",
+                        "ebs": {
+                            "attach_time": "2025-05-21T13:52:10+00:00",
+                            "delete_on_termination": true,
+                            "status": "attached",
+                            "volume_id": "vol-04b741408359ea39b"
+                        }
+                    }
+                ],
+                "boot_mode": "uefi-preferred",
+                "capacity_reservation_specification": {
+                    "capacity_reservation_preference": "open"
+                },
+                "client_token": "terraform-20250521135208399400000005",
+                "cpu_options": {
+                    "core_count": 1,
+                    "threads_per_core": 2
+                },
+                "current_instance_boot_mode": "uefi",
+                "ebs_optimized": false,
+                "ena_support": true,
+                "enclave_options": {
+                    "enabled": false
+                },
+                "hibernation_options": {
+                    "configured": false
+                },
+                "hypervisor": "xen",
+                "iam_instance_profile": {
+                    "arn": "arn:aws:iam::692859908382:instance-profile/fitpt-gym001-ec2-profile",
+                    "id": "AIPA2CUNLGEPKGRB6KIMK"
+                },
+                "image_id": "ami-05a7f3469a7653972",
+                "instance_id": "i-0ecddbb237f168fbf",
+                "instance_type": "t3.small",
+                "key_name": "tf-fitpt-private",
+                "launch_time": "2025-05-21T13:52:09+00:00",
+                "maintenance_options": {
+                    "auto_recovery": "default"
+                },
+                "metadata_options": {
+                    "http_endpoint": "enabled",
+                    "http_protocol_ipv6": "disabled",
+                    "http_put_response_hop_limit": 1,
+                    "http_tokens": "optional",
+                    "instance_metadata_tags": "disabled",
+                    "state": "applied"
+                },
+                "monitoring": {
+                    "state": "disabled"
+                },
+                "network_interfaces": [
+                    {
+                        "attachment": {
+                            "attach_time": "2025-05-21T13:52:09+00:00",
+                            "attachment_id": "eni-attach-0cdbcaf6874bbfe50",
+                            "delete_on_termination": true,
+                            "device_index": 0,
+                            "network_card_index": 0,
+                            "status": "attached"
+                        },
+                        "description": "",
+                        "groups": [
+                            {
+                                "group_id": "sg-054fd59847fe7c010",
+                                "group_name": "fitpt-gym001-monitor-sg"
+                            }
+                        ],
+                        "interface_type": "interface",
+                        "ipv6_addresses": [],
+                        "mac_address": "02:61:38:ab:66:91",
+                        "network_interface_id": "eni-0ac6b8dc52b6a4fe5",
+                        "operator": {
+                            "managed": false
+                        },
+                        "owner_id": "692859908382",
+                        "private_dns_name": "ip-10-43-10-240.ap-northeast-2.compute.internal",
+                        "private_ip_address": "10.43.10.240",
+                        "private_ip_addresses": [
+                            {
+                                "primary": true,
+                                "private_dns_name": "ip-10-43-10-240.ap-northeast-2.compute.internal",
+                                "private_ip_address": "10.43.10.240"
+                            }
+                        ],
+                        "source_dest_check": true,
+                        "status": "in-use",
+                        "subnet_id": "subnet-0947c7307b1214cb5",
+                        "vpc_id": "vpc-0852a3cc502464a70"
+                    }
+                ],
+                "network_performance_options": {
+                    "bandwidth_weighting": "default"
+                },
+                "operator": {
+                    "managed": false
+                },
+                "owner_id": "692859908382",
+                "placement": {
+                    "availability_zone": "ap-northeast-2a",
+                    "group_name": "",
+                    "region": "ap-northeast-2",
+                    "tenancy": "default"
+                },
+                "platform_details": "Linux/UNIX",
+                "private_dns_name": "ip-10-43-10-240.ap-northeast-2.compute.internal",
+                "private_dns_name_options": {
+                    "enable_resource_name_dns_a_record": false,
+                    "enable_resource_name_dns_aaaa_record": false,
+                    "hostname_type": "ip-name"
+                },
+                "private_ip_address": "10.43.10.240",
+                "product_codes": [],
+                "public_dns_name": "",
+                "requester_id": "",
+                "reservation_id": "r-015c9bee20b4c5f43",
+                "root_device_name": "/dev/sda1",
+                "root_device_type": "ebs",
+                "security_groups": [
+                    {
+                        "group_id": "sg-054fd59847fe7c010",
+                        "group_name": "fitpt-gym001-monitor-sg"
+                    }
+                ],
+                "source_dest_check": true,
+                "state": {
+                    "code": 16,
+                    "name": "running"
+                },
+                "state_transition_reason": "",
+                "subnet_id": "subnet-0947c7307b1214cb5",
+                "tags": {
+                    "Customer": "gym001",
+                    "Environment": "dev",
+                    "Name": "fitpt-gym001-monitor",
+                    "Owner": "kkt3289",
+                    "Project": "fitpt",
+                    "Role": "monitor",
+                    "ansibleNodeType": "monitor"
+                },
+                "usage_operation": "RunInstances",
+                "usage_operation_update_time": "2025-05-21T13:52:09+00:00",
+                "virtualization_type": "hvm",
+                "vpc_id": "vpc-0852a3cc502464a70"
+            }
+        }
+    },
+    "all": {
+        "children": [
+            "ungrouped",
+            "aws_ec2",
+            "monitor"
+        ]
+    },
+    "aws_ec2": {
+        "hosts": [
+            "i-0ecddbb237f168fbf"
+        ]
+    },
+    "monitor": {
+        "hosts": [
+            "i-0ecddbb237f168fbf"
+        ]
+    }
+}
+2025-05-28 11:50:58,499 p=37143 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-28 11:50:59,512 p=37143 u=kkt3289 n=ansible WARNING| [WARNING]: Found variable using reserved name: tags
+
+2025-05-28 11:50:59,532 p=37143 u=kkt3289 n=ansible INFO| {
+    "_meta": {
+        "hostvars": {
+            "i-009d282150c1121ae": {
+                "ami_launch_index": 0,
+                "ansible_aws_ssm_bucket_name": "my-ansible-ssm-bucket",
+                "ansible_aws_ssm_region": "ap-northeast-2",
+                "ansible_connection": "aws_ssm",
+                "ansible_host": "i-009d282150c1121ae",
+                "ansible_user": "ubuntu",
+                "architecture": "x86_64",
+                "block_device_mappings": [
+                    {
+                        "device_name": "/dev/sda1",
+                        "ebs": {
+                            "attach_time": "2025-05-21T13:52:17+00:00",
+                            "delete_on_termination": true,
+                            "status": "attached",
+                            "volume_id": "vol-0904d9a1fc28a9f21"
+                        }
+                    }
+                ],
+                "boot_mode": "uefi-preferred",
+                "capacity_reservation_specification": {
+                    "capacity_reservation_preference": "open"
+                },
+                "client_token": "terraform-20250521135215974700000007",
+                "cpu_options": {
+                    "core_count": 1,
+                    "threads_per_core": 1
+                },
+                "current_instance_boot_mode": "legacy-bios",
+                "ebs_optimized": false,
+                "ena_support": true,
+                "enclave_options": {
+                    "enabled": false
+                },
+                "hibernation_options": {
+                    "configured": false
+                },
+                "hypervisor": "xen",
+                "iam_instance_profile": {
+                    "arn": "arn:aws:iam::692859908382:instance-profile/fitpt-gym001-ec2-profile",
+                    "id": "AIPA2CUNLGEPKGRB6KIMK"
+                },
+                "image_id": "ami-05a7f3469a7653972",
+                "instance_id": "i-009d282150c1121ae",
+                "instance_type": "t2.micro",
+                "key_name": "tf-fitpt",
+                "launch_time": "2025-05-21T13:52:17+00:00",
+                "maintenance_options": {
+                    "auto_recovery": "default"
+                },
+                "metadata_options": {
+                    "http_endpoint": "enabled",
+                    "http_protocol_ipv6": "disabled",
+                    "http_put_response_hop_limit": 1,
+                    "http_tokens": "optional",
+                    "instance_metadata_tags": "disabled",
+                    "state": "applied"
+                },
+                "monitoring": {
+                    "state": "disabled"
+                },
+                "network_interfaces": [
+                    {
+                        "association": {
+                            "ip_owner_id": "692859908382",
+                            "public_dns_name": "ec2-52-78-18-0.ap-northeast-2.compute.amazonaws.com",
+                            "public_ip": "52.78.18.0"
+                        },
+                        "attachment": {
+                            "attach_time": "2025-05-21T13:52:17+00:00",
+                            "attachment_id": "eni-attach-074e2aebf18f13352",
+                            "delete_on_termination": true,
+                            "device_index": 0,
+                            "network_card_index": 0,
+                            "status": "attached"
+                        },
+                        "description": "",
+                        "groups": [
+                            {
+                                "group_id": "sg-0bea5c90cd33282b1",
+                                "group_name": "fitpt-gym001-bastion-sg"
+                            }
+                        ],
+                        "interface_type": "interface",
+                        "ipv6_addresses": [],
+                        "mac_address": "02:c2:a3:68:7c:0b",
+                        "network_interface_id": "eni-0cc1600688d2c07d8",
+                        "operator": {
+                            "managed": false
+                        },
+                        "owner_id": "692859908382",
+                        "private_dns_name": "ip-10-43-0-149.ap-northeast-2.compute.internal",
+                        "private_ip_address": "10.43.0.149",
+                        "private_ip_addresses": [
+                            {
+                                "association": {
+                                    "ip_owner_id": "692859908382",
+                                    "public_dns_name": "ec2-52-78-18-0.ap-northeast-2.compute.amazonaws.com",
+                                    "public_ip": "52.78.18.0"
+                                },
+                                "primary": true,
+                                "private_dns_name": "ip-10-43-0-149.ap-northeast-2.compute.internal",
+                                "private_ip_address": "10.43.0.149"
+                            }
+                        ],
+                        "source_dest_check": true,
+                        "status": "in-use",
+                        "subnet_id": "subnet-012bcb619cf2bddb5",
+                        "vpc_id": "vpc-0852a3cc502464a70"
+                    }
+                ],
+                "network_performance_options": {
+                    "bandwidth_weighting": "default"
+                },
+                "operator": {
+                    "managed": false
+                },
+                "owner_id": "692859908382",
+                "placement": {
+                    "availability_zone": "ap-northeast-2a",
+                    "group_name": "",
+                    "region": "ap-northeast-2",
+                    "tenancy": "default"
+                },
+                "platform_details": "Linux/UNIX",
+                "private_dns_name": "ip-10-43-0-149.ap-northeast-2.compute.internal",
+                "private_dns_name_options": {
+                    "enable_resource_name_dns_a_record": false,
+                    "enable_resource_name_dns_aaaa_record": false,
+                    "hostname_type": "ip-name"
+                },
+                "private_ip_address": "10.43.0.149",
+                "product_codes": [],
+                "public_dns_name": "ec2-52-78-18-0.ap-northeast-2.compute.amazonaws.com",
+                "public_ip_address": "52.78.18.0",
+                "requester_id": "",
+                "reservation_id": "r-061903ce81ac5d5ac",
+                "root_device_name": "/dev/sda1",
+                "root_device_type": "ebs",
+                "security_groups": [
+                    {
+                        "group_id": "sg-0bea5c90cd33282b1",
+                        "group_name": "fitpt-gym001-bastion-sg"
+                    }
+                ],
+                "source_dest_check": true,
+                "state": {
+                    "code": 16,
+                    "name": "running"
+                },
+                "state_transition_reason": "",
+                "subnet_id": "subnet-012bcb619cf2bddb5",
+                "tags": {
+                    "Customer": "gym001",
+                    "Environment": "dev",
+                    "Name": "fitpt-gym001-bastion",
+                    "Owner": "kkt3289",
+                    "Project": "fitpt",
+                    "Role": "bastion",
+                    "ansibleNodeType": "bastion"
+                },
+                "usage_operation": "RunInstances",
+                "usage_operation_update_time": "2025-05-21T13:52:17+00:00",
+                "virtualization_type": "hvm",
+                "vpc_id": "vpc-0852a3cc502464a70"
+            },
+            "i-0bf9fcd562ff589d9": {
+                "ami_launch_index": 0,
+                "ansible_aws_ssm_bucket_name": "my-ansible-ssm-bucket",
+                "ansible_aws_ssm_region": "ap-northeast-2",
+                "ansible_connection": "aws_ssm",
+                "ansible_host": "i-0bf9fcd562ff589d9",
+                "ansible_user": "ubuntu",
+                "architecture": "x86_64",
+                "block_device_mappings": [
+                    {
+                        "device_name": "/dev/sda1",
+                        "ebs": {
+                            "attach_time": "2025-05-21T13:52:10+00:00",
+                            "delete_on_termination": true,
+                            "status": "attached",
+                            "volume_id": "vol-0ca46492d239b52da"
+                        }
+                    }
+                ],
+                "boot_mode": "uefi-preferred",
+                "capacity_reservation_specification": {
+                    "capacity_reservation_preference": "open"
+                },
+                "client_token": "terraform-20250521135208399400000004",
+                "cpu_options": {
+                    "core_count": 1,
+                    "threads_per_core": 2
+                },
+                "current_instance_boot_mode": "uefi",
+                "ebs_optimized": false,
+                "ena_support": true,
+                "enclave_options": {
+                    "enabled": false
+                },
+                "hibernation_options": {
+                    "configured": false
+                },
+                "hypervisor": "xen",
+                "iam_instance_profile": {
+                    "arn": "arn:aws:iam::692859908382:instance-profile/fitpt-gym001-ec2-profile",
+                    "id": "AIPA2CUNLGEPKGRB6KIMK"
+                },
+                "image_id": "ami-05a7f3469a7653972",
+                "instance_id": "i-0bf9fcd562ff589d9",
+                "instance_type": "t3.large",
+                "key_name": "tf-fitpt-private",
+                "launch_time": "2025-05-21T13:52:09+00:00",
+                "maintenance_options": {
+                    "auto_recovery": "default"
+                },
+                "metadata_options": {
+                    "http_endpoint": "enabled",
+                    "http_protocol_ipv6": "disabled",
+                    "http_put_response_hop_limit": 1,
+                    "http_tokens": "optional",
+                    "instance_metadata_tags": "disabled",
+                    "state": "applied"
+                },
+                "monitoring": {
+                    "state": "disabled"
+                },
+                "network_interfaces": [
+                    {
+                        "attachment": {
+                            "attach_time": "2025-05-21T13:52:09+00:00",
+                            "attachment_id": "eni-attach-08bf1cdc0349a3208",
+                            "delete_on_termination": true,
+                            "device_index": 0,
+                            "network_card_index": 0,
+                            "status": "attached"
+                        },
+                        "description": "",
+                        "groups": [
+                            {
+                                "group_id": "sg-05d38d93fd75e5bf1",
+                                "group_name": "fitpt-gym001-app-sg"
+                            }
+                        ],
+                        "interface_type": "interface",
+                        "ipv6_addresses": [],
+                        "mac_address": "02:b6:39:e8:24:7d",
+                        "network_interface_id": "eni-0afd4d302e1ba6c5d",
+                        "operator": {
+                            "managed": false
+                        },
+                        "owner_id": "692859908382",
+                        "private_dns_name": "ip-10-43-10-176.ap-northeast-2.compute.internal",
+                        "private_ip_address": "10.43.10.176",
+                        "private_ip_addresses": [
+                            {
+                                "primary": true,
+                                "private_dns_name": "ip-10-43-10-176.ap-northeast-2.compute.internal",
+                                "private_ip_address": "10.43.10.176"
+                            }
+                        ],
+                        "source_dest_check": true,
+                        "status": "in-use",
+                        "subnet_id": "subnet-0947c7307b1214cb5",
+                        "vpc_id": "vpc-0852a3cc502464a70"
+                    }
+                ],
+                "network_performance_options": {
+                    "bandwidth_weighting": "default"
+                },
+                "operator": {
+                    "managed": false
+                },
+                "owner_id": "692859908382",
+                "placement": {
+                    "availability_zone": "ap-northeast-2a",
+                    "group_name": "",
+                    "region": "ap-northeast-2",
+                    "tenancy": "default"
+                },
+                "platform_details": "Linux/UNIX",
+                "private_dns_name": "ip-10-43-10-176.ap-northeast-2.compute.internal",
+                "private_dns_name_options": {
+                    "enable_resource_name_dns_a_record": false,
+                    "enable_resource_name_dns_aaaa_record": false,
+                    "hostname_type": "ip-name"
+                },
+                "private_ip_address": "10.43.10.176",
+                "product_codes": [],
+                "public_dns_name": "",
+                "requester_id": "",
+                "reservation_id": "r-03a6d8b98c2e3ad04",
+                "root_device_name": "/dev/sda1",
+                "root_device_type": "ebs",
+                "security_groups": [
+                    {
+                        "group_id": "sg-05d38d93fd75e5bf1",
+                        "group_name": "fitpt-gym001-app-sg"
+                    }
+                ],
+                "source_dest_check": true,
+                "state": {
+                    "code": 16,
+                    "name": "running"
+                },
+                "state_transition_reason": "",
+                "subnet_id": "subnet-0947c7307b1214cb5",
+                "tags": {
+                    "Customer": "gym001",
+                    "Environment": "dev",
+                    "Name": "fitpt-gym001-app-0",
+                    "Owner": "kkt3289",
+                    "Project": "fitpt",
+                    "Role": "app",
+                    "ansibleNodeType": "app"
+                },
+                "usage_operation": "RunInstances",
+                "usage_operation_update_time": "2025-05-21T13:52:09+00:00",
+                "virtualization_type": "hvm",
+                "vpc_id": "vpc-0852a3cc502464a70"
+            },
+            "i-0ecddbb237f168fbf": {
+                "ami_launch_index": 0,
+                "ansible_aws_ssm_bucket_name": "my-ansible-ssm-bucket",
+                "ansible_aws_ssm_region": "ap-northeast-2",
+                "ansible_connection": "aws_ssm",
+                "ansible_host": "i-0ecddbb237f168fbf",
+                "ansible_user": "ubuntu",
+                "architecture": "x86_64",
+                "block_device_mappings": [
+                    {
+                        "device_name": "/dev/sda1",
+                        "ebs": {
+                            "attach_time": "2025-05-21T13:52:10+00:00",
+                            "delete_on_termination": true,
+                            "status": "attached",
+                            "volume_id": "vol-04b741408359ea39b"
+                        }
+                    }
+                ],
+                "boot_mode": "uefi-preferred",
+                "capacity_reservation_specification": {
+                    "capacity_reservation_preference": "open"
+                },
+                "client_token": "terraform-20250521135208399400000005",
+                "cpu_options": {
+                    "core_count": 1,
+                    "threads_per_core": 2
+                },
+                "current_instance_boot_mode": "uefi",
+                "ebs_optimized": false,
+                "ena_support": true,
+                "enclave_options": {
+                    "enabled": false
+                },
+                "hibernation_options": {
+                    "configured": false
+                },
+                "hypervisor": "xen",
+                "iam_instance_profile": {
+                    "arn": "arn:aws:iam::692859908382:instance-profile/fitpt-gym001-ec2-profile",
+                    "id": "AIPA2CUNLGEPKGRB6KIMK"
+                },
+                "image_id": "ami-05a7f3469a7653972",
+                "instance_id": "i-0ecddbb237f168fbf",
+                "instance_type": "t3.small",
+                "key_name": "tf-fitpt-private",
+                "launch_time": "2025-05-21T13:52:09+00:00",
+                "maintenance_options": {
+                    "auto_recovery": "default"
+                },
+                "metadata_options": {
+                    "http_endpoint": "enabled",
+                    "http_protocol_ipv6": "disabled",
+                    "http_put_response_hop_limit": 1,
+                    "http_tokens": "optional",
+                    "instance_metadata_tags": "disabled",
+                    "state": "applied"
+                },
+                "monitoring": {
+                    "state": "disabled"
+                },
+                "network_interfaces": [
+                    {
+                        "attachment": {
+                            "attach_time": "2025-05-21T13:52:09+00:00",
+                            "attachment_id": "eni-attach-0cdbcaf6874bbfe50",
+                            "delete_on_termination": true,
+                            "device_index": 0,
+                            "network_card_index": 0,
+                            "status": "attached"
+                        },
+                        "description": "",
+                        "groups": [
+                            {
+                                "group_id": "sg-054fd59847fe7c010",
+                                "group_name": "fitpt-gym001-monitor-sg"
+                            }
+                        ],
+                        "interface_type": "interface",
+                        "ipv6_addresses": [],
+                        "mac_address": "02:61:38:ab:66:91",
+                        "network_interface_id": "eni-0ac6b8dc52b6a4fe5",
+                        "operator": {
+                            "managed": false
+                        },
+                        "owner_id": "692859908382",
+                        "private_dns_name": "ip-10-43-10-240.ap-northeast-2.compute.internal",
+                        "private_ip_address": "10.43.10.240",
+                        "private_ip_addresses": [
+                            {
+                                "primary": true,
+                                "private_dns_name": "ip-10-43-10-240.ap-northeast-2.compute.internal",
+                                "private_ip_address": "10.43.10.240"
+                            }
+                        ],
+                        "source_dest_check": true,
+                        "status": "in-use",
+                        "subnet_id": "subnet-0947c7307b1214cb5",
+                        "vpc_id": "vpc-0852a3cc502464a70"
+                    }
+                ],
+                "network_performance_options": {
+                    "bandwidth_weighting": "default"
+                },
+                "operator": {
+                    "managed": false
+                },
+                "owner_id": "692859908382",
+                "placement": {
+                    "availability_zone": "ap-northeast-2a",
+                    "group_name": "",
+                    "region": "ap-northeast-2",
+                    "tenancy": "default"
+                },
+                "platform_details": "Linux/UNIX",
+                "private_dns_name": "ip-10-43-10-240.ap-northeast-2.compute.internal",
+                "private_dns_name_options": {
+                    "enable_resource_name_dns_a_record": false,
+                    "enable_resource_name_dns_aaaa_record": false,
+                    "hostname_type": "ip-name"
+                },
+                "private_ip_address": "10.43.10.240",
+                "product_codes": [],
+                "public_dns_name": "",
+                "requester_id": "",
+                "reservation_id": "r-015c9bee20b4c5f43",
+                "root_device_name": "/dev/sda1",
+                "root_device_type": "ebs",
+                "security_groups": [
+                    {
+                        "group_id": "sg-054fd59847fe7c010",
+                        "group_name": "fitpt-gym001-monitor-sg"
+                    }
+                ],
+                "source_dest_check": true,
+                "state": {
+                    "code": 16,
+                    "name": "running"
+                },
+                "state_transition_reason": "",
+                "subnet_id": "subnet-0947c7307b1214cb5",
+                "tags": {
+                    "Customer": "gym001",
+                    "Environment": "dev",
+                    "Name": "fitpt-gym001-monitor",
+                    "Owner": "kkt3289",
+                    "Project": "fitpt",
+                    "Role": "monitor",
+                    "ansibleNodeType": "monitor"
+                },
+                "usage_operation": "RunInstances",
+                "usage_operation_update_time": "2025-05-21T13:52:09+00:00",
+                "virtualization_type": "hvm",
+                "vpc_id": "vpc-0852a3cc502464a70"
+            }
+        }
+    },
+    "all": {
+        "children": [
+            "ungrouped",
+            "aws_ec2",
+            "bastion",
+            "app",
+            "monitor"
+        ]
+    },
+    "app": {
+        "hosts": [
+            "i-0bf9fcd562ff589d9"
+        ]
+    },
+    "aws_ec2": {
+        "hosts": [
+            "i-009d282150c1121ae",
+            "i-0bf9fcd562ff589d9",
+            "i-0ecddbb237f168fbf"
+        ]
+    },
+    "bastion": {
+        "hosts": [
+            "i-009d282150c1121ae"
+        ]
+    },
+    "monitor": {
+        "hosts": [
+            "i-0ecddbb237f168fbf"
+        ]
+    }
+}
+2025-05-28 11:52:20,393 p=37472 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-28 11:52:21,039 p=37472 u=kkt3289 n=ansible INFO| {
+    "_meta": {
+        "hostvars": {}
+    },
+    "all": {
+        "children": [
+            "ungrouped",
+            "aws_ec2"
+        ]
+    }
+}
+2025-05-28 11:52:44,931 p=37585 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-28 11:52:45,958 p=37585 u=kkt3289 n=ansible INFO| {
+    "_meta": {
+        "hostvars": {}
+    },
+    "all": {
+        "children": [
+            "ungrouped",
+            "aws_ec2"
+        ]
+    }
+}
+2025-05-28 11:52:56,048 p=37663 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-28 11:52:56,877 p=37663 u=kkt3289 n=ansible WARNING| [WARNING]: Found variable using reserved name: tags
+
+2025-05-28 11:52:56,879 p=37663 u=kkt3289 n=ansible INFO| {
+    "_meta": {
+        "hostvars": {
+            "i-0ecddbb237f168fbf": {
+                "ami_launch_index": 0,
+                "ansible_aws_ssm_bucket_name": "my-ansible-ssm-bucket",
+                "ansible_aws_ssm_region": "ap-northeast-2",
+                "ansible_connection": "aws_ssm",
+                "ansible_host": "i-0ecddbb237f168fbf",
+                "ansible_user": "ubuntu",
+                "architecture": "x86_64",
+                "block_device_mappings": [
+                    {
+                        "device_name": "/dev/sda1",
+                        "ebs": {
+                            "attach_time": "2025-05-21T13:52:10+00:00",
+                            "delete_on_termination": true,
+                            "status": "attached",
+                            "volume_id": "vol-04b741408359ea39b"
+                        }
+                    }
+                ],
+                "boot_mode": "uefi-preferred",
+                "capacity_reservation_specification": {
+                    "capacity_reservation_preference": "open"
+                },
+                "client_token": "terraform-20250521135208399400000005",
+                "cpu_options": {
+                    "core_count": 1,
+                    "threads_per_core": 2
+                },
+                "current_instance_boot_mode": "uefi",
+                "ebs_optimized": false,
+                "ena_support": true,
+                "enclave_options": {
+                    "enabled": false
+                },
+                "hibernation_options": {
+                    "configured": false
+                },
+                "hypervisor": "xen",
+                "iam_instance_profile": {
+                    "arn": "arn:aws:iam::692859908382:instance-profile/fitpt-gym001-ec2-profile",
+                    "id": "AIPA2CUNLGEPKGRB6KIMK"
+                },
+                "image_id": "ami-05a7f3469a7653972",
+                "instance_id": "i-0ecddbb237f168fbf",
+                "instance_type": "t3.small",
+                "key_name": "tf-fitpt-private",
+                "launch_time": "2025-05-21T13:52:09+00:00",
+                "maintenance_options": {
+                    "auto_recovery": "default"
+                },
+                "metadata_options": {
+                    "http_endpoint": "enabled",
+                    "http_protocol_ipv6": "disabled",
+                    "http_put_response_hop_limit": 1,
+                    "http_tokens": "optional",
+                    "instance_metadata_tags": "disabled",
+                    "state": "applied"
+                },
+                "monitoring": {
+                    "state": "disabled"
+                },
+                "network_interfaces": [
+                    {
+                        "attachment": {
+                            "attach_time": "2025-05-21T13:52:09+00:00",
+                            "attachment_id": "eni-attach-0cdbcaf6874bbfe50",
+                            "delete_on_termination": true,
+                            "device_index": 0,
+                            "network_card_index": 0,
+                            "status": "attached"
+                        },
+                        "description": "",
+                        "groups": [
+                            {
+                                "group_id": "sg-054fd59847fe7c010",
+                                "group_name": "fitpt-gym001-monitor-sg"
+                            }
+                        ],
+                        "interface_type": "interface",
+                        "ipv6_addresses": [],
+                        "mac_address": "02:61:38:ab:66:91",
+                        "network_interface_id": "eni-0ac6b8dc52b6a4fe5",
+                        "operator": {
+                            "managed": false
+                        },
+                        "owner_id": "692859908382",
+                        "private_dns_name": "ip-10-43-10-240.ap-northeast-2.compute.internal",
+                        "private_ip_address": "10.43.10.240",
+                        "private_ip_addresses": [
+                            {
+                                "primary": true,
+                                "private_dns_name": "ip-10-43-10-240.ap-northeast-2.compute.internal",
+                                "private_ip_address": "10.43.10.240"
+                            }
+                        ],
+                        "source_dest_check": true,
+                        "status": "in-use",
+                        "subnet_id": "subnet-0947c7307b1214cb5",
+                        "vpc_id": "vpc-0852a3cc502464a70"
+                    }
+                ],
+                "network_performance_options": {
+                    "bandwidth_weighting": "default"
+                },
+                "operator": {
+                    "managed": false
+                },
+                "owner_id": "692859908382",
+                "placement": {
+                    "availability_zone": "ap-northeast-2a",
+                    "group_name": "",
+                    "region": "ap-northeast-2",
+                    "tenancy": "default"
+                },
+                "platform_details": "Linux/UNIX",
+                "private_dns_name": "ip-10-43-10-240.ap-northeast-2.compute.internal",
+                "private_dns_name_options": {
+                    "enable_resource_name_dns_a_record": false,
+                    "enable_resource_name_dns_aaaa_record": false,
+                    "hostname_type": "ip-name"
+                },
+                "private_ip_address": "10.43.10.240",
+                "product_codes": [],
+                "public_dns_name": "",
+                "requester_id": "",
+                "reservation_id": "r-015c9bee20b4c5f43",
+                "root_device_name": "/dev/sda1",
+                "root_device_type": "ebs",
+                "security_groups": [
+                    {
+                        "group_id": "sg-054fd59847fe7c010",
+                        "group_name": "fitpt-gym001-monitor-sg"
+                    }
+                ],
+                "source_dest_check": true,
+                "state": {
+                    "code": 16,
+                    "name": "running"
+                },
+                "state_transition_reason": "",
+                "subnet_id": "subnet-0947c7307b1214cb5",
+                "tags": {
+                    "Customer": "gym001",
+                    "Environment": "dev",
+                    "Name": "fitpt-gym001-monitor",
+                    "Owner": "kkt3289",
+                    "Project": "fitpt",
+                    "Role": "monitor",
+                    "ansibleNodeType": "monitor"
+                },
+                "usage_operation": "RunInstances",
+                "usage_operation_update_time": "2025-05-21T13:52:09+00:00",
+                "virtualization_type": "hvm",
+                "vpc_id": "vpc-0852a3cc502464a70"
+            }
+        }
+    },
+    "all": {
+        "children": [
+            "ungrouped",
+            "aws_ec2",
+            "monitor"
+        ]
+    },
+    "aws_ec2": {
+        "hosts": [
+            "i-0ecddbb237f168fbf"
+        ]
+    },
+    "monitor": {
+        "hosts": [
+            "i-0ecddbb237f168fbf"
+        ]
+    }
+}
+2025-05-28 12:49:01,985 p=48111 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-28 12:49:03,231 p=48111 u=kkt3289 n=ansible WARNING| [WARNING]: Found variable using reserved name: tags
+
+2025-05-28 12:49:03,239 p=48111 u=kkt3289 n=ansible INFO| {
+    "_meta": {
+        "hostvars": {
+            "i-009d282150c1121ae": {
+                "ami_launch_index": 0,
+                "ansible_aws_ssm_bucket_name": "my-ansible-ssm-bucket",
+                "ansible_aws_ssm_region": "ap-northeast-2",
+                "ansible_connection": "aws_ssm",
+                "ansible_host": "i-009d282150c1121ae",
+                "ansible_user": "ubuntu",
+                "architecture": "x86_64",
+                "block_device_mappings": [
+                    {
+                        "device_name": "/dev/sda1",
+                        "ebs": {
+                            "attach_time": "2025-05-21T13:52:17+00:00",
+                            "delete_on_termination": true,
+                            "status": "attached",
+                            "volume_id": "vol-0904d9a1fc28a9f21"
+                        }
+                    }
+                ],
+                "boot_mode": "uefi-preferred",
+                "capacity_reservation_specification": {
+                    "capacity_reservation_preference": "open"
+                },
+                "client_token": "terraform-20250521135215974700000007",
+                "cpu_options": {
+                    "core_count": 1,
+                    "threads_per_core": 1
+                },
+                "current_instance_boot_mode": "legacy-bios",
+                "ebs_optimized": false,
+                "ena_support": true,
+                "enclave_options": {
+                    "enabled": false
+                },
+                "hibernation_options": {
+                    "configured": false
+                },
+                "hypervisor": "xen",
+                "iam_instance_profile": {
+                    "arn": "arn:aws:iam::692859908382:instance-profile/fitpt-gym001-ec2-profile",
+                    "id": "AIPA2CUNLGEPKGRB6KIMK"
+                },
+                "image_id": "ami-05a7f3469a7653972",
+                "instance_id": "i-009d282150c1121ae",
+                "instance_type": "t2.micro",
+                "key_name": "tf-fitpt",
+                "launch_time": "2025-05-21T13:52:17+00:00",
+                "maintenance_options": {
+                    "auto_recovery": "default"
+                },
+                "metadata_options": {
+                    "http_endpoint": "enabled",
+                    "http_protocol_ipv6": "disabled",
+                    "http_put_response_hop_limit": 1,
+                    "http_tokens": "optional",
+                    "instance_metadata_tags": "disabled",
+                    "state": "applied"
+                },
+                "monitoring": {
+                    "state": "disabled"
+                },
+                "network_interfaces": [
+                    {
+                        "association": {
+                            "ip_owner_id": "692859908382",
+                            "public_dns_name": "ec2-52-78-18-0.ap-northeast-2.compute.amazonaws.com",
+                            "public_ip": "52.78.18.0"
+                        },
+                        "attachment": {
+                            "attach_time": "2025-05-21T13:52:17+00:00",
+                            "attachment_id": "eni-attach-074e2aebf18f13352",
+                            "delete_on_termination": true,
+                            "device_index": 0,
+                            "network_card_index": 0,
+                            "status": "attached"
+                        },
+                        "description": "",
+                        "groups": [
+                            {
+                                "group_id": "sg-0bea5c90cd33282b1",
+                                "group_name": "fitpt-gym001-bastion-sg"
+                            }
+                        ],
+                        "interface_type": "interface",
+                        "ipv6_addresses": [],
+                        "mac_address": "02:c2:a3:68:7c:0b",
+                        "network_interface_id": "eni-0cc1600688d2c07d8",
+                        "operator": {
+                            "managed": false
+                        },
+                        "owner_id": "692859908382",
+                        "private_dns_name": "ip-10-43-0-149.ap-northeast-2.compute.internal",
+                        "private_ip_address": "10.43.0.149",
+                        "private_ip_addresses": [
+                            {
+                                "association": {
+                                    "ip_owner_id": "692859908382",
+                                    "public_dns_name": "ec2-52-78-18-0.ap-northeast-2.compute.amazonaws.com",
+                                    "public_ip": "52.78.18.0"
+                                },
+                                "primary": true,
+                                "private_dns_name": "ip-10-43-0-149.ap-northeast-2.compute.internal",
+                                "private_ip_address": "10.43.0.149"
+                            }
+                        ],
+                        "source_dest_check": true,
+                        "status": "in-use",
+                        "subnet_id": "subnet-012bcb619cf2bddb5",
+                        "vpc_id": "vpc-0852a3cc502464a70"
+                    }
+                ],
+                "network_performance_options": {
+                    "bandwidth_weighting": "default"
+                },
+                "operator": {
+                    "managed": false
+                },
+                "owner_id": "692859908382",
+                "placement": {
+                    "availability_zone": "ap-northeast-2a",
+                    "group_name": "",
+                    "region": "ap-northeast-2",
+                    "tenancy": "default"
+                },
+                "platform_details": "Linux/UNIX",
+                "private_dns_name": "ip-10-43-0-149.ap-northeast-2.compute.internal",
+                "private_dns_name_options": {
+                    "enable_resource_name_dns_a_record": false,
+                    "enable_resource_name_dns_aaaa_record": false,
+                    "hostname_type": "ip-name"
+                },
+                "private_ip_address": "10.43.0.149",
+                "product_codes": [],
+                "public_dns_name": "ec2-52-78-18-0.ap-northeast-2.compute.amazonaws.com",
+                "public_ip_address": "52.78.18.0",
+                "requester_id": "",
+                "reservation_id": "r-061903ce81ac5d5ac",
+                "root_device_name": "/dev/sda1",
+                "root_device_type": "ebs",
+                "security_groups": [
+                    {
+                        "group_id": "sg-0bea5c90cd33282b1",
+                        "group_name": "fitpt-gym001-bastion-sg"
+                    }
+                ],
+                "source_dest_check": true,
+                "state": {
+                    "code": 16,
+                    "name": "running"
+                },
+                "state_transition_reason": "",
+                "subnet_id": "subnet-012bcb619cf2bddb5",
+                "tags": {
+                    "Customer": "gym001",
+                    "Environment": "dev",
+                    "Name": "fitpt-gym001-bastion",
+                    "Owner": "kkt3289",
+                    "Project": "fitpt",
+                    "Role": "bastion",
+                    "ansibleNodeType": "bastion"
+                },
+                "usage_operation": "RunInstances",
+                "usage_operation_update_time": "2025-05-21T13:52:17+00:00",
+                "virtualization_type": "hvm",
+                "vpc_id": "vpc-0852a3cc502464a70"
+            },
+            "i-0bf9fcd562ff589d9": {
+                "ami_launch_index": 0,
+                "ansible_aws_ssm_bucket_name": "my-ansible-ssm-bucket",
+                "ansible_aws_ssm_region": "ap-northeast-2",
+                "ansible_connection": "aws_ssm",
+                "ansible_host": "i-0bf9fcd562ff589d9",
+                "ansible_user": "ubuntu",
+                "architecture": "x86_64",
+                "block_device_mappings": [
+                    {
+                        "device_name": "/dev/sda1",
+                        "ebs": {
+                            "attach_time": "2025-05-21T13:52:10+00:00",
+                            "delete_on_termination": true,
+                            "status": "attached",
+                            "volume_id": "vol-0ca46492d239b52da"
+                        }
+                    }
+                ],
+                "boot_mode": "uefi-preferred",
+                "capacity_reservation_specification": {
+                    "capacity_reservation_preference": "open"
+                },
+                "client_token": "terraform-20250521135208399400000004",
+                "cpu_options": {
+                    "core_count": 1,
+                    "threads_per_core": 2
+                },
+                "current_instance_boot_mode": "uefi",
+                "ebs_optimized": false,
+                "ena_support": true,
+                "enclave_options": {
+                    "enabled": false
+                },
+                "hibernation_options": {
+                    "configured": false
+                },
+                "hypervisor": "xen",
+                "iam_instance_profile": {
+                    "arn": "arn:aws:iam::692859908382:instance-profile/fitpt-gym001-ec2-profile",
+                    "id": "AIPA2CUNLGEPKGRB6KIMK"
+                },
+                "image_id": "ami-05a7f3469a7653972",
+                "instance_id": "i-0bf9fcd562ff589d9",
+                "instance_type": "t3.large",
+                "key_name": "tf-fitpt-private",
+                "launch_time": "2025-05-21T13:52:09+00:00",
+                "maintenance_options": {
+                    "auto_recovery": "default"
+                },
+                "metadata_options": {
+                    "http_endpoint": "enabled",
+                    "http_protocol_ipv6": "disabled",
+                    "http_put_response_hop_limit": 1,
+                    "http_tokens": "optional",
+                    "instance_metadata_tags": "disabled",
+                    "state": "applied"
+                },
+                "monitoring": {
+                    "state": "disabled"
+                },
+                "network_interfaces": [
+                    {
+                        "attachment": {
+                            "attach_time": "2025-05-21T13:52:09+00:00",
+                            "attachment_id": "eni-attach-08bf1cdc0349a3208",
+                            "delete_on_termination": true,
+                            "device_index": 0,
+                            "network_card_index": 0,
+                            "status": "attached"
+                        },
+                        "description": "",
+                        "groups": [
+                            {
+                                "group_id": "sg-05d38d93fd75e5bf1",
+                                "group_name": "fitpt-gym001-app-sg"
+                            }
+                        ],
+                        "interface_type": "interface",
+                        "ipv6_addresses": [],
+                        "mac_address": "02:b6:39:e8:24:7d",
+                        "network_interface_id": "eni-0afd4d302e1ba6c5d",
+                        "operator": {
+                            "managed": false
+                        },
+                        "owner_id": "692859908382",
+                        "private_dns_name": "ip-10-43-10-176.ap-northeast-2.compute.internal",
+                        "private_ip_address": "10.43.10.176",
+                        "private_ip_addresses": [
+                            {
+                                "primary": true,
+                                "private_dns_name": "ip-10-43-10-176.ap-northeast-2.compute.internal",
+                                "private_ip_address": "10.43.10.176"
+                            }
+                        ],
+                        "source_dest_check": true,
+                        "status": "in-use",
+                        "subnet_id": "subnet-0947c7307b1214cb5",
+                        "vpc_id": "vpc-0852a3cc502464a70"
+                    }
+                ],
+                "network_performance_options": {
+                    "bandwidth_weighting": "default"
+                },
+                "operator": {
+                    "managed": false
+                },
+                "owner_id": "692859908382",
+                "placement": {
+                    "availability_zone": "ap-northeast-2a",
+                    "group_name": "",
+                    "region": "ap-northeast-2",
+                    "tenancy": "default"
+                },
+                "platform_details": "Linux/UNIX",
+                "private_dns_name": "ip-10-43-10-176.ap-northeast-2.compute.internal",
+                "private_dns_name_options": {
+                    "enable_resource_name_dns_a_record": false,
+                    "enable_resource_name_dns_aaaa_record": false,
+                    "hostname_type": "ip-name"
+                },
+                "private_ip_address": "10.43.10.176",
+                "product_codes": [],
+                "public_dns_name": "",
+                "requester_id": "",
+                "reservation_id": "r-03a6d8b98c2e3ad04",
+                "root_device_name": "/dev/sda1",
+                "root_device_type": "ebs",
+                "security_groups": [
+                    {
+                        "group_id": "sg-05d38d93fd75e5bf1",
+                        "group_name": "fitpt-gym001-app-sg"
+                    }
+                ],
+                "source_dest_check": true,
+                "state": {
+                    "code": 16,
+                    "name": "running"
+                },
+                "state_transition_reason": "",
+                "subnet_id": "subnet-0947c7307b1214cb5",
+                "tags": {
+                    "Customer": "gym001",
+                    "Environment": "dev",
+                    "Name": "fitpt-gym001-app-0",
+                    "Owner": "kkt3289",
+                    "Project": "fitpt",
+                    "Role": "app",
+                    "ansibleNodeType": "app"
+                },
+                "usage_operation": "RunInstances",
+                "usage_operation_update_time": "2025-05-21T13:52:09+00:00",
+                "virtualization_type": "hvm",
+                "vpc_id": "vpc-0852a3cc502464a70"
+            },
+            "i-0ecddbb237f168fbf": {
+                "ami_launch_index": 0,
+                "ansible_aws_ssm_bucket_name": "my-ansible-ssm-bucket",
+                "ansible_aws_ssm_region": "ap-northeast-2",
+                "ansible_connection": "aws_ssm",
+                "ansible_host": "i-0ecddbb237f168fbf",
+                "ansible_user": "ubuntu",
+                "architecture": "x86_64",
+                "block_device_mappings": [
+                    {
+                        "device_name": "/dev/sda1",
+                        "ebs": {
+                            "attach_time": "2025-05-21T13:52:10+00:00",
+                            "delete_on_termination": true,
+                            "status": "attached",
+                            "volume_id": "vol-04b741408359ea39b"
+                        }
+                    }
+                ],
+                "boot_mode": "uefi-preferred",
+                "capacity_reservation_specification": {
+                    "capacity_reservation_preference": "open"
+                },
+                "client_token": "terraform-20250521135208399400000005",
+                "cpu_options": {
+                    "core_count": 1,
+                    "threads_per_core": 2
+                },
+                "current_instance_boot_mode": "uefi",
+                "ebs_optimized": false,
+                "ena_support": true,
+                "enclave_options": {
+                    "enabled": false
+                },
+                "hibernation_options": {
+                    "configured": false
+                },
+                "hypervisor": "xen",
+                "iam_instance_profile": {
+                    "arn": "arn:aws:iam::692859908382:instance-profile/fitpt-gym001-ec2-profile",
+                    "id": "AIPA2CUNLGEPKGRB6KIMK"
+                },
+                "image_id": "ami-05a7f3469a7653972",
+                "instance_id": "i-0ecddbb237f168fbf",
+                "instance_type": "t3.small",
+                "key_name": "tf-fitpt-private",
+                "launch_time": "2025-05-21T13:52:09+00:00",
+                "maintenance_options": {
+                    "auto_recovery": "default"
+                },
+                "metadata_options": {
+                    "http_endpoint": "enabled",
+                    "http_protocol_ipv6": "disabled",
+                    "http_put_response_hop_limit": 1,
+                    "http_tokens": "optional",
+                    "instance_metadata_tags": "disabled",
+                    "state": "applied"
+                },
+                "monitoring": {
+                    "state": "disabled"
+                },
+                "network_interfaces": [
+                    {
+                        "attachment": {
+                            "attach_time": "2025-05-21T13:52:09+00:00",
+                            "attachment_id": "eni-attach-0cdbcaf6874bbfe50",
+                            "delete_on_termination": true,
+                            "device_index": 0,
+                            "network_card_index": 0,
+                            "status": "attached"
+                        },
+                        "description": "",
+                        "groups": [
+                            {
+                                "group_id": "sg-054fd59847fe7c010",
+                                "group_name": "fitpt-gym001-monitor-sg"
+                            }
+                        ],
+                        "interface_type": "interface",
+                        "ipv6_addresses": [],
+                        "mac_address": "02:61:38:ab:66:91",
+                        "network_interface_id": "eni-0ac6b8dc52b6a4fe5",
+                        "operator": {
+                            "managed": false
+                        },
+                        "owner_id": "692859908382",
+                        "private_dns_name": "ip-10-43-10-240.ap-northeast-2.compute.internal",
+                        "private_ip_address": "10.43.10.240",
+                        "private_ip_addresses": [
+                            {
+                                "primary": true,
+                                "private_dns_name": "ip-10-43-10-240.ap-northeast-2.compute.internal",
+                                "private_ip_address": "10.43.10.240"
+                            }
+                        ],
+                        "source_dest_check": true,
+                        "status": "in-use",
+                        "subnet_id": "subnet-0947c7307b1214cb5",
+                        "vpc_id": "vpc-0852a3cc502464a70"
+                    }
+                ],
+                "network_performance_options": {
+                    "bandwidth_weighting": "default"
+                },
+                "operator": {
+                    "managed": false
+                },
+                "owner_id": "692859908382",
+                "placement": {
+                    "availability_zone": "ap-northeast-2a",
+                    "group_name": "",
+                    "region": "ap-northeast-2",
+                    "tenancy": "default"
+                },
+                "platform_details": "Linux/UNIX",
+                "private_dns_name": "ip-10-43-10-240.ap-northeast-2.compute.internal",
+                "private_dns_name_options": {
+                    "enable_resource_name_dns_a_record": false,
+                    "enable_resource_name_dns_aaaa_record": false,
+                    "hostname_type": "ip-name"
+                },
+                "private_ip_address": "10.43.10.240",
+                "product_codes": [],
+                "public_dns_name": "",
+                "requester_id": "",
+                "reservation_id": "r-015c9bee20b4c5f43",
+                "root_device_name": "/dev/sda1",
+                "root_device_type": "ebs",
+                "security_groups": [
+                    {
+                        "group_id": "sg-054fd59847fe7c010",
+                        "group_name": "fitpt-gym001-monitor-sg"
+                    }
+                ],
+                "source_dest_check": true,
+                "state": {
+                    "code": 16,
+                    "name": "running"
+                },
+                "state_transition_reason": "",
+                "subnet_id": "subnet-0947c7307b1214cb5",
+                "tags": {
+                    "Customer": "gym001",
+                    "Environment": "dev",
+                    "Name": "fitpt-gym001-monitor",
+                    "Owner": "kkt3289",
+                    "Project": "fitpt",
+                    "Role": "monitor",
+                    "ansibleNodeType": "monitor"
+                },
+                "usage_operation": "RunInstances",
+                "usage_operation_update_time": "2025-05-21T13:52:09+00:00",
+                "virtualization_type": "hvm",
+                "vpc_id": "vpc-0852a3cc502464a70"
+            }
+        }
+    },
+    "all": {
+        "children": [
+            "ungrouped",
+            "aws_ec2",
+            "bastion",
+            "app",
+            "monitor"
+        ]
+    },
+    "app": {
+        "hosts": [
+            "i-0bf9fcd562ff589d9"
+        ]
+    },
+    "aws_ec2": {
+        "hosts": [
+            "i-009d282150c1121ae",
+            "i-0bf9fcd562ff589d9",
+            "i-0ecddbb237f168fbf"
+        ]
+    },
+    "bastion": {
+        "hosts": [
+            "i-009d282150c1121ae"
+        ]
+    },
+    "monitor": {
+        "hosts": [
+            "i-0ecddbb237f168fbf"
+        ]
+    }
+}
+2025-05-28 12:50:26,061 p=48447 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-28 12:50:27,525 p=48447 u=kkt3289 n=ansible WARNING| [WARNING]: Found variable using reserved name: tags
+
+2025-05-28 12:50:27,534 p=48447 u=kkt3289 n=ansible INFO| {
+    "_meta": {
+        "hostvars": {
+            "i-009d282150c1121ae": {
+                "ami_launch_index": 0,
+                "ansible_aws_ssm_bucket_name": "my-ansible-ssm-bucket",
+                "ansible_aws_ssm_region": "ap-northeast-2",
+                "ansible_connection": "aws_ssm",
+                "ansible_host": "i-009d282150c1121ae",
+                "ansible_user": "ubuntu",
+                "architecture": "x86_64",
+                "block_device_mappings": [
+                    {
+                        "device_name": "/dev/sda1",
+                        "ebs": {
+                            "attach_time": "2025-05-21T13:52:17+00:00",
+                            "delete_on_termination": true,
+                            "status": "attached",
+                            "volume_id": "vol-0904d9a1fc28a9f21"
+                        }
+                    }
+                ],
+                "boot_mode": "uefi-preferred",
+                "capacity_reservation_specification": {
+                    "capacity_reservation_preference": "open"
+                },
+                "client_token": "terraform-20250521135215974700000007",
+                "cpu_options": {
+                    "core_count": 1,
+                    "threads_per_core": 1
+                },
+                "current_instance_boot_mode": "legacy-bios",
+                "ebs_optimized": false,
+                "ena_support": true,
+                "enclave_options": {
+                    "enabled": false
+                },
+                "hibernation_options": {
+                    "configured": false
+                },
+                "hypervisor": "xen",
+                "iam_instance_profile": {
+                    "arn": "arn:aws:iam::692859908382:instance-profile/fitpt-gym001-ec2-profile",
+                    "id": "AIPA2CUNLGEPKGRB6KIMK"
+                },
+                "image_id": "ami-05a7f3469a7653972",
+                "instance_id": "i-009d282150c1121ae",
+                "instance_type": "t2.micro",
+                "key_name": "tf-fitpt",
+                "launch_time": "2025-05-21T13:52:17+00:00",
+                "maintenance_options": {
+                    "auto_recovery": "default"
+                },
+                "metadata_options": {
+                    "http_endpoint": "enabled",
+                    "http_protocol_ipv6": "disabled",
+                    "http_put_response_hop_limit": 1,
+                    "http_tokens": "optional",
+                    "instance_metadata_tags": "disabled",
+                    "state": "applied"
+                },
+                "monitoring": {
+                    "state": "disabled"
+                },
+                "network_interfaces": [
+                    {
+                        "association": {
+                            "ip_owner_id": "692859908382",
+                            "public_dns_name": "ec2-52-78-18-0.ap-northeast-2.compute.amazonaws.com",
+                            "public_ip": "52.78.18.0"
+                        },
+                        "attachment": {
+                            "attach_time": "2025-05-21T13:52:17+00:00",
+                            "attachment_id": "eni-attach-074e2aebf18f13352",
+                            "delete_on_termination": true,
+                            "device_index": 0,
+                            "network_card_index": 0,
+                            "status": "attached"
+                        },
+                        "description": "",
+                        "groups": [
+                            {
+                                "group_id": "sg-0bea5c90cd33282b1",
+                                "group_name": "fitpt-gym001-bastion-sg"
+                            }
+                        ],
+                        "interface_type": "interface",
+                        "ipv6_addresses": [],
+                        "mac_address": "02:c2:a3:68:7c:0b",
+                        "network_interface_id": "eni-0cc1600688d2c07d8",
+                        "operator": {
+                            "managed": false
+                        },
+                        "owner_id": "692859908382",
+                        "private_dns_name": "ip-10-43-0-149.ap-northeast-2.compute.internal",
+                        "private_ip_address": "10.43.0.149",
+                        "private_ip_addresses": [
+                            {
+                                "association": {
+                                    "ip_owner_id": "692859908382",
+                                    "public_dns_name": "ec2-52-78-18-0.ap-northeast-2.compute.amazonaws.com",
+                                    "public_ip": "52.78.18.0"
+                                },
+                                "primary": true,
+                                "private_dns_name": "ip-10-43-0-149.ap-northeast-2.compute.internal",
+                                "private_ip_address": "10.43.0.149"
+                            }
+                        ],
+                        "source_dest_check": true,
+                        "status": "in-use",
+                        "subnet_id": "subnet-012bcb619cf2bddb5",
+                        "vpc_id": "vpc-0852a3cc502464a70"
+                    }
+                ],
+                "network_performance_options": {
+                    "bandwidth_weighting": "default"
+                },
+                "operator": {
+                    "managed": false
+                },
+                "owner_id": "692859908382",
+                "placement": {
+                    "availability_zone": "ap-northeast-2a",
+                    "group_name": "",
+                    "region": "ap-northeast-2",
+                    "tenancy": "default"
+                },
+                "platform_details": "Linux/UNIX",
+                "private_dns_name": "ip-10-43-0-149.ap-northeast-2.compute.internal",
+                "private_dns_name_options": {
+                    "enable_resource_name_dns_a_record": false,
+                    "enable_resource_name_dns_aaaa_record": false,
+                    "hostname_type": "ip-name"
+                },
+                "private_ip_address": "10.43.0.149",
+                "product_codes": [],
+                "public_dns_name": "ec2-52-78-18-0.ap-northeast-2.compute.amazonaws.com",
+                "public_ip_address": "52.78.18.0",
+                "requester_id": "",
+                "reservation_id": "r-061903ce81ac5d5ac",
+                "root_device_name": "/dev/sda1",
+                "root_device_type": "ebs",
+                "security_groups": [
+                    {
+                        "group_id": "sg-0bea5c90cd33282b1",
+                        "group_name": "fitpt-gym001-bastion-sg"
+                    }
+                ],
+                "source_dest_check": true,
+                "state": {
+                    "code": 16,
+                    "name": "running"
+                },
+                "state_transition_reason": "",
+                "subnet_id": "subnet-012bcb619cf2bddb5",
+                "tags": {
+                    "Customer": "gym001",
+                    "Environment": "dev",
+                    "Name": "fitpt-gym001-bastion",
+                    "Owner": "kkt3289",
+                    "Project": "fitpt",
+                    "Role": "bastion",
+                    "ansibleNodeType": "bastion"
+                },
+                "usage_operation": "RunInstances",
+                "usage_operation_update_time": "2025-05-21T13:52:17+00:00",
+                "virtualization_type": "hvm",
+                "vpc_id": "vpc-0852a3cc502464a70"
+            },
+            "i-0bf9fcd562ff589d9": {
+                "ami_launch_index": 0,
+                "ansible_aws_ssm_bucket_name": "my-ansible-ssm-bucket",
+                "ansible_aws_ssm_region": "ap-northeast-2",
+                "ansible_connection": "aws_ssm",
+                "ansible_host": "i-0bf9fcd562ff589d9",
+                "ansible_user": "ubuntu",
+                "architecture": "x86_64",
+                "block_device_mappings": [
+                    {
+                        "device_name": "/dev/sda1",
+                        "ebs": {
+                            "attach_time": "2025-05-21T13:52:10+00:00",
+                            "delete_on_termination": true,
+                            "status": "attached",
+                            "volume_id": "vol-0ca46492d239b52da"
+                        }
+                    }
+                ],
+                "boot_mode": "uefi-preferred",
+                "capacity_reservation_specification": {
+                    "capacity_reservation_preference": "open"
+                },
+                "client_token": "terraform-20250521135208399400000004",
+                "cpu_options": {
+                    "core_count": 1,
+                    "threads_per_core": 2
+                },
+                "current_instance_boot_mode": "uefi",
+                "ebs_optimized": false,
+                "ena_support": true,
+                "enclave_options": {
+                    "enabled": false
+                },
+                "hibernation_options": {
+                    "configured": false
+                },
+                "hypervisor": "xen",
+                "iam_instance_profile": {
+                    "arn": "arn:aws:iam::692859908382:instance-profile/fitpt-gym001-ec2-profile",
+                    "id": "AIPA2CUNLGEPKGRB6KIMK"
+                },
+                "image_id": "ami-05a7f3469a7653972",
+                "instance_id": "i-0bf9fcd562ff589d9",
+                "instance_type": "t3.large",
+                "key_name": "tf-fitpt-private",
+                "launch_time": "2025-05-21T13:52:09+00:00",
+                "maintenance_options": {
+                    "auto_recovery": "default"
+                },
+                "metadata_options": {
+                    "http_endpoint": "enabled",
+                    "http_protocol_ipv6": "disabled",
+                    "http_put_response_hop_limit": 1,
+                    "http_tokens": "optional",
+                    "instance_metadata_tags": "disabled",
+                    "state": "applied"
+                },
+                "monitoring": {
+                    "state": "disabled"
+                },
+                "network_interfaces": [
+                    {
+                        "attachment": {
+                            "attach_time": "2025-05-21T13:52:09+00:00",
+                            "attachment_id": "eni-attach-08bf1cdc0349a3208",
+                            "delete_on_termination": true,
+                            "device_index": 0,
+                            "network_card_index": 0,
+                            "status": "attached"
+                        },
+                        "description": "",
+                        "groups": [
+                            {
+                                "group_id": "sg-05d38d93fd75e5bf1",
+                                "group_name": "fitpt-gym001-app-sg"
+                            }
+                        ],
+                        "interface_type": "interface",
+                        "ipv6_addresses": [],
+                        "mac_address": "02:b6:39:e8:24:7d",
+                        "network_interface_id": "eni-0afd4d302e1ba6c5d",
+                        "operator": {
+                            "managed": false
+                        },
+                        "owner_id": "692859908382",
+                        "private_dns_name": "ip-10-43-10-176.ap-northeast-2.compute.internal",
+                        "private_ip_address": "10.43.10.176",
+                        "private_ip_addresses": [
+                            {
+                                "primary": true,
+                                "private_dns_name": "ip-10-43-10-176.ap-northeast-2.compute.internal",
+                                "private_ip_address": "10.43.10.176"
+                            }
+                        ],
+                        "source_dest_check": true,
+                        "status": "in-use",
+                        "subnet_id": "subnet-0947c7307b1214cb5",
+                        "vpc_id": "vpc-0852a3cc502464a70"
+                    }
+                ],
+                "network_performance_options": {
+                    "bandwidth_weighting": "default"
+                },
+                "operator": {
+                    "managed": false
+                },
+                "owner_id": "692859908382",
+                "placement": {
+                    "availability_zone": "ap-northeast-2a",
+                    "group_name": "",
+                    "region": "ap-northeast-2",
+                    "tenancy": "default"
+                },
+                "platform_details": "Linux/UNIX",
+                "private_dns_name": "ip-10-43-10-176.ap-northeast-2.compute.internal",
+                "private_dns_name_options": {
+                    "enable_resource_name_dns_a_record": false,
+                    "enable_resource_name_dns_aaaa_record": false,
+                    "hostname_type": "ip-name"
+                },
+                "private_ip_address": "10.43.10.176",
+                "product_codes": [],
+                "public_dns_name": "",
+                "requester_id": "",
+                "reservation_id": "r-03a6d8b98c2e3ad04",
+                "root_device_name": "/dev/sda1",
+                "root_device_type": "ebs",
+                "security_groups": [
+                    {
+                        "group_id": "sg-05d38d93fd75e5bf1",
+                        "group_name": "fitpt-gym001-app-sg"
+                    }
+                ],
+                "source_dest_check": true,
+                "state": {
+                    "code": 16,
+                    "name": "running"
+                },
+                "state_transition_reason": "",
+                "subnet_id": "subnet-0947c7307b1214cb5",
+                "tags": {
+                    "Customer": "gym001",
+                    "Environment": "dev",
+                    "Name": "fitpt-gym001-app-0",
+                    "Owner": "kkt3289",
+                    "Project": "fitpt",
+                    "Role": "app",
+                    "ansibleNodeType": "app"
+                },
+                "usage_operation": "RunInstances",
+                "usage_operation_update_time": "2025-05-21T13:52:09+00:00",
+                "virtualization_type": "hvm",
+                "vpc_id": "vpc-0852a3cc502464a70"
+            },
+            "i-0ecddbb237f168fbf": {
+                "ami_launch_index": 0,
+                "ansible_aws_ssm_bucket_name": "my-ansible-ssm-bucket",
+                "ansible_aws_ssm_region": "ap-northeast-2",
+                "ansible_connection": "aws_ssm",
+                "ansible_host": "i-0ecddbb237f168fbf",
+                "ansible_user": "ubuntu",
+                "architecture": "x86_64",
+                "block_device_mappings": [
+                    {
+                        "device_name": "/dev/sda1",
+                        "ebs": {
+                            "attach_time": "2025-05-21T13:52:10+00:00",
+                            "delete_on_termination": true,
+                            "status": "attached",
+                            "volume_id": "vol-04b741408359ea39b"
+                        }
+                    }
+                ],
+                "boot_mode": "uefi-preferred",
+                "capacity_reservation_specification": {
+                    "capacity_reservation_preference": "open"
+                },
+                "client_token": "terraform-20250521135208399400000005",
+                "cpu_options": {
+                    "core_count": 1,
+                    "threads_per_core": 2
+                },
+                "current_instance_boot_mode": "uefi",
+                "ebs_optimized": false,
+                "ena_support": true,
+                "enclave_options": {
+                    "enabled": false
+                },
+                "hibernation_options": {
+                    "configured": false
+                },
+                "hypervisor": "xen",
+                "iam_instance_profile": {
+                    "arn": "arn:aws:iam::692859908382:instance-profile/fitpt-gym001-ec2-profile",
+                    "id": "AIPA2CUNLGEPKGRB6KIMK"
+                },
+                "image_id": "ami-05a7f3469a7653972",
+                "instance_id": "i-0ecddbb237f168fbf",
+                "instance_type": "t3.small",
+                "key_name": "tf-fitpt-private",
+                "launch_time": "2025-05-21T13:52:09+00:00",
+                "maintenance_options": {
+                    "auto_recovery": "default"
+                },
+                "metadata_options": {
+                    "http_endpoint": "enabled",
+                    "http_protocol_ipv6": "disabled",
+                    "http_put_response_hop_limit": 1,
+                    "http_tokens": "optional",
+                    "instance_metadata_tags": "disabled",
+                    "state": "applied"
+                },
+                "monitoring": {
+                    "state": "disabled"
+                },
+                "network_interfaces": [
+                    {
+                        "attachment": {
+                            "attach_time": "2025-05-21T13:52:09+00:00",
+                            "attachment_id": "eni-attach-0cdbcaf6874bbfe50",
+                            "delete_on_termination": true,
+                            "device_index": 0,
+                            "network_card_index": 0,
+                            "status": "attached"
+                        },
+                        "description": "",
+                        "groups": [
+                            {
+                                "group_id": "sg-054fd59847fe7c010",
+                                "group_name": "fitpt-gym001-monitor-sg"
+                            }
+                        ],
+                        "interface_type": "interface",
+                        "ipv6_addresses": [],
+                        "mac_address": "02:61:38:ab:66:91",
+                        "network_interface_id": "eni-0ac6b8dc52b6a4fe5",
+                        "operator": {
+                            "managed": false
+                        },
+                        "owner_id": "692859908382",
+                        "private_dns_name": "ip-10-43-10-240.ap-northeast-2.compute.internal",
+                        "private_ip_address": "10.43.10.240",
+                        "private_ip_addresses": [
+                            {
+                                "primary": true,
+                                "private_dns_name": "ip-10-43-10-240.ap-northeast-2.compute.internal",
+                                "private_ip_address": "10.43.10.240"
+                            }
+                        ],
+                        "source_dest_check": true,
+                        "status": "in-use",
+                        "subnet_id": "subnet-0947c7307b1214cb5",
+                        "vpc_id": "vpc-0852a3cc502464a70"
+                    }
+                ],
+                "network_performance_options": {
+                    "bandwidth_weighting": "default"
+                },
+                "operator": {
+                    "managed": false
+                },
+                "owner_id": "692859908382",
+                "placement": {
+                    "availability_zone": "ap-northeast-2a",
+                    "group_name": "",
+                    "region": "ap-northeast-2",
+                    "tenancy": "default"
+                },
+                "platform_details": "Linux/UNIX",
+                "private_dns_name": "ip-10-43-10-240.ap-northeast-2.compute.internal",
+                "private_dns_name_options": {
+                    "enable_resource_name_dns_a_record": false,
+                    "enable_resource_name_dns_aaaa_record": false,
+                    "hostname_type": "ip-name"
+                },
+                "private_ip_address": "10.43.10.240",
+                "product_codes": [],
+                "public_dns_name": "",
+                "requester_id": "",
+                "reservation_id": "r-015c9bee20b4c5f43",
+                "root_device_name": "/dev/sda1",
+                "root_device_type": "ebs",
+                "security_groups": [
+                    {
+                        "group_id": "sg-054fd59847fe7c010",
+                        "group_name": "fitpt-gym001-monitor-sg"
+                    }
+                ],
+                "source_dest_check": true,
+                "state": {
+                    "code": 16,
+                    "name": "running"
+                },
+                "state_transition_reason": "",
+                "subnet_id": "subnet-0947c7307b1214cb5",
+                "tags": {
+                    "Customer": "gym001",
+                    "Environment": "dev",
+                    "Name": "fitpt-gym001-monitor",
+                    "Owner": "kkt3289",
+                    "Project": "fitpt",
+                    "Role": "monitor",
+                    "ansibleNodeType": "monitor"
+                },
+                "usage_operation": "RunInstances",
+                "usage_operation_update_time": "2025-05-21T13:52:09+00:00",
+                "virtualization_type": "hvm",
+                "vpc_id": "vpc-0852a3cc502464a70"
+            }
+        }
+    },
+    "all": {
+        "children": [
+            "ungrouped",
+            "aws_ec2",
+            "bastion",
+            "app",
+            "monitor"
+        ]
+    },
+    "app": {
+        "hosts": [
+            "i-0bf9fcd562ff589d9"
+        ]
+    },
+    "aws_ec2": {
+        "hosts": [
+            "i-009d282150c1121ae",
+            "i-0bf9fcd562ff589d9",
+            "i-0ecddbb237f168fbf"
+        ]
+    },
+    "bastion": {
+        "hosts": [
+            "i-009d282150c1121ae"
+        ]
+    },
+    "monitor": {
+        "hosts": [
+            "i-0ecddbb237f168fbf"
+        ]
+    }
+}
+2025-05-28 12:50:39,569 p=48541 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-28 12:50:40,550 p=48541 u=kkt3289 n=ansible INFO| PLAY [Setup Monitoring Node] ***********************************************************************************************************************
+2025-05-28 12:50:40,580 p=48541 u=kkt3289 n=ansible WARNING| [WARNING]: Found variable using reserved name: tags
+
+2025-05-28 12:50:40,583 p=48541 u=kkt3289 n=ansible INFO| TASK [Gathering Facts] *****************************************************************************************************************************
+2025-05-28 12:50:40,743 p=48568 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-28 12:50:42,005 p=48568 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-28 12:50:44,080 p=48568 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-28 12:50:48,112 p=48568 u=kkt3289 n=botocore.credentials INFO| Found credentials in shared credentials file: ~/.aws/credentials
+2025-05-28 12:50:49,127 p=48541 u=kkt3289 n=ansible INFO| An exception occurred during task execution. To see the full traceback, use -vvv. The error was: botocore.exceptions.ClientError: An error occurred (403) when calling the HeadBucket operation: Forbidden
+2025-05-28 12:50:49,128 p=48541 u=kkt3289 n=ansible INFO| fatal: [i-0ecddbb237f168fbf]: FAILED! => {"msg": "Unexpected failure during module execution: An error occurred (403) when calling the HeadBucket operation: Forbidden", "stdout": ""}
+2025-05-28 12:50:49,129 p=48541 u=kkt3289 n=ansible INFO| PLAY RECAP *****************************************************************************************************************************************
+2025-05-28 12:50:49,129 p=48541 u=kkt3289 n=ansible INFO| i-0ecddbb237f168fbf        : ok=0    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
