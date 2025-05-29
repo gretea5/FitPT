@@ -1,0 +1,23 @@
+# hosts/inventory_aws_ec2.aws_ec2.yaml
+plugin: amazon.aws.aws_ec2
+regions: 
+  - ap-northeast-2
+
+filters:
+  instance-state-name: running
+  tag:Owner: kkt3289
+
+keyed_groups:
+  # ansibleNodeType 태그로 그룹 생성
+  - key: tags.ansibleNodeType
+    prefix: ""
+    separator: ""
+
+
+hostnames: 
+  - instance-id
+
+compose:
+  ansible_host: instance_id
+
+strict: True

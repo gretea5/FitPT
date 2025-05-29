@@ -1,7 +1,6 @@
 ansible>=2.10
 boto3
 botocore
-openshift
-kubernetes
-jmespath
+docker
 netaddr
+jmespath
