@@ -1,0 +1,33 @@
+# hosts/ssh/inventory.aws_ec2.yaml - 퍼블릭 인스턴스용 (SSH 접속)
+plugin: amazon.aws.aws_ec2
+regions: 
+  - ap-northeast-2
+
+filters:
+  instance-state-name: running
+  tag:Owner: kkt3289
+  # 퍼블릭 IP가 있는 인스턴스만 (베스천 호스트)
+  network-interface.association.public-ip: "*"
+
+keyed_groups:
+  # Name 태그로 그룹 생성
+  - key: tags.Name
+    prefix: ""
+    separator: ""
+  # 역할별 그룹 생성  
+  - key: tags.Role
+    prefix: ""
+    separator: ""
+
+hostnames: 
+  - tag:Name
+  - instance-id
+
+compose:
+  ansible_host: public_ip_address
+  ansible_connection: ssh
+  ansible_user: ubuntu
+  ansible_ssh_private_key_file: ../keys/tf-fitpt
+  ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
+
+strict: False

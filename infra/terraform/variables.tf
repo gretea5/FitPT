@@ -52,10 +52,24 @@ variable "allowed_ports" {
 }
 
 
-# aws_Rds_db_password_setup
+# AWS_Rds_db_password_setup
 variable "db_password" {
   description = "RDS root password"
   sensitive   = true
+}
+
+# AWS_Elasticache_Redis_password_setup
+variable "redis_auth_token" {
+  description = "ElastiCache Redis AUTH 토큰 (16~128자, 공백·'/', '\"', '@', '%' 제외)"
+  type        = string
+  sensitive   = true
+}
+
+# Ansible-SSM 모듈 스테이징용 S3 버킷 이름
+variable "ssm_bucket_name" {
+  description = "SSM용 Ansible 모듈 스테이징 S3 버킷 이름"
+  type        = string
+  default     = "ansible-ssm-bucket"
 }
 
 
@@ -157,9 +171,4 @@ variable "monitor_instance_type" {
 
 variable "bastion_instance_type" {
   default = "t2.micro"
-}
-
-variable "route53_zone_id" {
-  description = "var.route53_zone_id"
-  type        = string
 }

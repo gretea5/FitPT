@@ -85,6 +85,11 @@ resource "aws_iam_role_policy" "ec2_policy" {
           "route53:ListResourceRecordSets"
         ],
         "Resource" : "*"
+      },
+      { # [6] Ansible-SSM 모듈 스테이징용 S3 버킷 읽기 권한
+        Effect   = "Allow"
+        Action   = ["s3:GetObject"]
+        Resource = "arn:aws:s3:::${var.project_name}-${var.customer_id}-${var.ssm_bucket_name}/*"
       }
     ]
   })
