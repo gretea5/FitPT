@@ -13,6 +13,15 @@ resource "aws_security_group" "app_sg" {
     security_groups = [aws_security_group.bastion_sg.id]
   }
 
+  # Prometheus Node Exporter port open
+  ingress {
+    from_port   = 9100
+    to_port     = 9100
+    protocol    = "tcp"
+    self        = true                # 같은 SG 내 인스턴스 간 허용
+    description = "Allow Prometheus scrape from App nodes"
+  }
+
   # Outbound: SaaS API 호출 (443 외부 허용, NAT 통해)
   egress {
     from_port   = 0
@@ -48,6 +57,8 @@ resource "aws_instance" "app" {
       Name            = "${var.project_name}-${var.customer_id}-app-${count.index}"
       Role            = "app"
       ansibleNodeType = "app"
+      Owner             = "kkt3289"          # (필터에 쓰는 경우)
+      Environment       = "dev"
     }
   )
 }
