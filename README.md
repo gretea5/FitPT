@@ -88,6 +88,8 @@ FitPT는 트레이너와 회원 모두를 위한 운동 기록 플랫폼입니�
       <td><strong>Front-end</strong></td>
       <td>
         <img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black">
+        <img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white" />
+        <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" />
       </td>
     </tr>
     <tr>
@@ -102,12 +104,26 @@ FitPT는 트레이너와 회원 모두를 위한 운동 기록 플랫폼입니�
       </td>
     </tr>
     <tr>
-      <td><strong>DevOps</strong></td>
+      <td><strong>DevOps/Infra</strong></td>
       <td>
-        <img src="https://img.shields.io/badge/AWS_EC2-FF9900?style=for-the-badge&logo=amazon-ec2&logoColor=white">
         <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white">
         <img src="https://img.shields.io/badge/Jenkins-D24939?style=for-the-badge&logo=jenkins&logoColor=white">
         <img src="https://img.shields.io/badge/Nginx-009639?style=for-the-badge&logo=nginx&logoColor=white">
+      </td>
+    </tr>
+    <tr>
+      <td><strong>IaC/Cloud/CD</strong></td>
+      <td>
+        <img src="https://img.shields.io/badge/Terraform-7B42BC?style=for-the-badge&logo=terraform&logoColor=white">
+        <img src="https://img.shields.io/badge/Ansible-EE0000?style=for-the-badge&logo=ansible&logoColor=white">
+        <img src="https://img.shields.io/badge/AWS_EC2-FF9900?style=for-the-badge&logo=amazon-ec2&logoColor=white">
+        <img src="https://img.shields.io/badge/AWS_RDS-527FFE?style=for-the-badge&logo=amazon-rds&logoColor=white">
+        <img src="https://img.shields.io/badge/AWS_ElastiCache-4263FF?style=for-the-badge&logo=amazon-aws&logoColor=white" />
+        <img src="https://img.shields.io/badge/AWS_Route53-4285F4?style=for-the-badge&logo=amazon-route-53&logoColor=white" />
+        <img src="https://img.shields.io/badge/AWS_ALB-FF9900?style=for-the-badge&logo=aws-elastic-load-balancing&logoColor=white" />
+        <img src="https://img.shields.io/badge/Amazon_S3-569A31?style=for-the-badge&logo=amazon-s3&logoColor=white" />
+        <img src="https://img.shields.io/badge/AWS_ECR-E75219?style=for-the-badge&logo=amazon-ecr&logoColor=white" />
+        <img src="https://img.shields.io/badge/Amazon_DynamoDB-4053D6?style=for-the-badge&logo=amazondynamodb&logoColor=white" />
       </td>
     </tr>
     <tr>
@@ -131,6 +147,13 @@ FitPT는 트레이너와 회원 모두를 위한 운동 기록 플랫폼입니�
         <img src="https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=notion&logoColor=white">
         <img src="https://img.shields.io/badge/Mattermost-0058CC?style=for-the-badge&logo=mattermost&logoColor=white">
         <img src="https://img.shields.io/badge/Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white">
+      </td>
+    </tr>
+    <tr>
+      <td><strong>Monitoring 도구</strong></td>
+      <td>
+        <img src="https://img.shields.io/badge/Prometheus-E6522C?style=for-the-badge&logo=prometheus&logoColor=white" />
+        <img src="https://img.shields.io/badge/Grafana-F46800?style=for-the-badge&logo=grafana&logoColor=white" />
       </td>
     </tr>
   </tbody>
@@ -197,7 +220,19 @@ FitPT는 트레이너와 회원 모두를 위한 운동 기록 플랫폼입니�
 
 #### 1️⃣ 서비스 홍보
 <img src="./assets/gif/intro.gif" alt="intro" width="1000px" />
+<br>
 
+### IaC 기반 IaaS 인프라 - Terraform & Ansible
+
+#### 1️⃣ Terraform 자동화
+<img src="./assets/gif/infra_terrraform.gif" alt="infra_terrraform" width="1000px" />
+<br>
+
+#### 2️⃣ Ansible 자동화
+<img src="./assets/img/ansible_ssm_tunnel.png" alt="ansible_ssm_tunnel" width="1000px" />
+<br>
+
+<img src="./assets/img/ansible_ssm_tunnel_grafana.png" alt="ansible_ssm_tunnel_grafana" width="1000px" />
 
 <div id="4"></div>
 
