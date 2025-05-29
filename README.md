@@ -40,15 +40,15 @@
 
 ## 📍 목차
 
-1. [**서비스 소개 및 기획배경**](#section1)
-1. [**기술 스택**](#section2)
-1. [**주요 기능**](#section3)
-1. [**프로젝트 구조**](#section4)
-1. [**영상 포트폴리오**](#section5)
-1. [**개발 팀 소개**](#section6)
-1. [**개발 기간 및 일정**](#section7)
+1. [**서비스 소개 및 기획배경**](#service-intro)
+1. [**기술 스택**](#tech-stack)
+1. [**주요 기능**](#main-features)
+1. [**프로젝트 구조**](#project-structure)
+1. [**영상 포트폴리오**](#video-portfolio)
+1. [**개발 팀 소개**](#team-intro)
+1. [**개발 기간 및 일정**](#schedule)
 
-<div id="section1"></div>
+<a id="service-intro"></a>
 
 <br/>
 
@@ -69,7 +69,7 @@ FitPT는 트레이너와 회원 모두를 위한 운동 기록 플랫폼입니�
 
 <br/>
 
-<div id="section2"></div>
+<a id="tech-stack"></a>
 
 <br/>
 
@@ -162,7 +162,7 @@ FitPT는 트레이너와 회원 모두를 위한 운동 기록 플랫폼입니�
 
 <br/>
 
-<div id="section3"></div>
+<a id="main-features"></a>
 
 <br/>
 
@@ -235,7 +235,7 @@ FitPT는 트레이너와 회원 모두를 위한 운동 기록 플랫폼입니�
 
 <img src="./assets/img/ansible_ssm_tunnel_grafana.png" alt="ansible_ssm_tunnel_grafana" width="1000px" />
 
-<div id="section4"></div>
+<a id="project-structure"></a>
 
 <br/>
 
@@ -251,7 +251,7 @@ FitPT는 트레이너와 회원 모두를 위한 운동 기록 플랫폼입니�
 
 <br/>
 
-<div id="section5"></div>
+<a id="video-portfolio"></a>
 
 <br/>
 
@@ -259,7 +259,7 @@ FitPT는 트레이너와 회원 모두를 위한 운동 기록 플랫폼입니�
 
 [**FitPT 영상 포트폴리오 바로가기**](https://youtu.be/2N8RxNAllYU?si=pZgSMSYyC_Fl471M)
 
-<div id="section6"></div>
+<a id="team-intro"></a>
 
 <br/>
 
@@ -322,7 +322,7 @@ FitPT는 트레이너와 회원 모두를 위한 운동 기록 플랫폼입니�
 
 <br/>
 
-<div id="section7"></div>
+<a id="schedule"></a>
 
 <br/>
 
