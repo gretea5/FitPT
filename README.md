@@ -108,6 +108,7 @@ FitPT는 트레이너와 회원 모두를 위한 운동 기록 플랫폼입니�
       <td>
         <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white">
         <img src="https://img.shields.io/badge/Jenkins-D24939?style=for-the-badge&logo=jenkins&logoColor=white">
+        <img src="https://img.shields.io/badge/Portainer-00A7E1?style=for-the-badge&logo=portainer&logoColor=white" />
         <img src="https://img.shields.io/badge/Nginx-009639?style=for-the-badge&logo=nginx&logoColor=white">
       </td>
     </tr>
