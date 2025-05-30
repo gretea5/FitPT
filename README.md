@@ -51,7 +51,7 @@
 
 <br/>
 
-<h2 id="service-intro">🕵️ 서비스 소개 및 기획배경</h2>
+<h2 id="service-intro">서비스 소개 및 기획배경</h2>
 
 "운동한 부위, 무게, 트레이너 피드백… 아직도 종이에 적고 있나요?"
 **Fitpt**는 바로 이 불편함에서 출발했습니다.
@@ -71,7 +71,7 @@ FitPT는 트레이너와 회원 모두를 위한 운동 기록 플랫폼입니�
 
 <br/>
 
-<h2 id="tech-stack">🛠 기술 스택</h2>
+<h2 id="tech-stack">기술 스택</h2>
 
 <table>
   <tbody>
