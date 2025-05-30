@@ -40,15 +40,14 @@
 
 ## 📍 목차
 
-1. [**서비스 소개 및 기획배경**](#1)
-1. [**기술 스택**](#2)
-1. [**주요 기능**](#3)
-1. [**프로젝트 구조**](#4)
-1. [**영상 포트폴리오**](#5)
-1. [**개발 팀 소개**](#6)
-1. [**개발 기간 및 일정**](#7)
+1. [**서비스 소개 및 기획배경**](#🕵️-서비스-소개-및-기획배경)
+1. [**기술 스택**](#🛠-기술-스택)
+1. [**주요 기능**](#📌-주요-기능)
+1. [**프로젝트 구조**](#📁-프로젝트-구조)
+1. [**영상 포트폴리오**](#🎥-영상-포트폴리오)
+1. [**개발 팀 소개**](#🏅-개발-팀-소개)
+1. [**개발 기간 및 일정**](#⏰-개발-기간-및-일정)
 
-<div id="1"></div>
 
 <br/>
 
@@ -69,7 +68,6 @@ FitPT는 트레이너와 회원 모두를 위한 운동 기록 플랫폼입니�
 
 <br/>
 
-<div id="2"></div>
 
 <br/>
 
@@ -88,6 +86,8 @@ FitPT는 트레이너와 회원 모두를 위한 운동 기록 플랫폼입니�
       <td><strong>Front-end</strong></td>
       <td>
         <img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black">
+        <img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white" />
+        <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" />
       </td>
     </tr>
     <tr>
@@ -102,12 +102,27 @@ FitPT는 트레이너와 회원 모두를 위한 운동 기록 플랫폼입니�
       </td>
     </tr>
     <tr>
-      <td><strong>DevOps</strong></td>
+      <td><strong>DevOps/Infra</strong></td>
       <td>
-        <img src="https://img.shields.io/badge/AWS_EC2-FF9900?style=for-the-badge&logo=amazon-ec2&logoColor=white">
         <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white">
         <img src="https://img.shields.io/badge/Jenkins-D24939?style=for-the-badge&logo=jenkins&logoColor=white">
+        <img src="https://img.shields.io/badge/Portainer-00A7E1?style=for-the-badge&logo=portainer&logoColor=white" />
         <img src="https://img.shields.io/badge/Nginx-009639?style=for-the-badge&logo=nginx&logoColor=white">
+      </td>
+    </tr>
+    <tr>
+      <td><strong>IaC/Cloud/CD</strong></td>
+      <td>
+        <img src="https://img.shields.io/badge/Terraform-7B42BC?style=for-the-badge&logo=terraform&logoColor=white">
+        <img src="https://img.shields.io/badge/Ansible-EE0000?style=for-the-badge&logo=ansible&logoColor=white">
+        <img src="https://img.shields.io/badge/AWS_EC2-FF9900?style=for-the-badge&logo=amazon-ec2&logoColor=white">
+        <img src="https://img.shields.io/badge/AWS_RDS-527FFE?style=for-the-badge&logo=amazon-rds&logoColor=white">
+        <img src="https://img.shields.io/badge/AWS_ElastiCache-4263FF?style=for-the-badge&logo=amazon-aws&logoColor=white" />
+        <img src="https://img.shields.io/badge/AWS_Route53-4285F4?style=for-the-badge&logo=amazon-route-53&logoColor=white" />
+        <img src="https://img.shields.io/badge/AWS_ALB-FF9900?style=for-the-badge&logo=aws-elastic-load-balancing&logoColor=white" />
+        <img src="https://img.shields.io/badge/Amazon_S3-569A31?style=for-the-badge&logo=amazon-s3&logoColor=white" />
+        <img src="https://img.shields.io/badge/AWS_ECR-E75219?style=for-the-badge&logo=amazon-ecr&logoColor=white" />
+        <img src="https://img.shields.io/badge/Amazon_DynamoDB-4053D6?style=for-the-badge&logo=amazondynamodb&logoColor=white" />
       </td>
     </tr>
     <tr>
@@ -133,12 +148,18 @@ FitPT는 트레이너와 회원 모두를 위한 운동 기록 플랫폼입니�
         <img src="https://img.shields.io/badge/Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white">
       </td>
     </tr>
+    <tr>
+      <td><strong>Monitoring 도구</strong></td>
+      <td>
+        <img src="https://img.shields.io/badge/Prometheus-E6522C?style=for-the-badge&logo=prometheus&logoColor=white" />
+        <img src="https://img.shields.io/badge/Grafana-F46800?style=for-the-badge&logo=grafana&logoColor=white" />
+      </td>
+    </tr>
   </tbody>
 </table>
 
 <br/>
 
-<div id="3"></div>
 
 <br/>
 
@@ -197,9 +218,20 @@ FitPT는 트레이너와 회원 모두를 위한 운동 기록 플랫폼입니�
 
 #### 1️⃣ 서비스 홍보
 <img src="./assets/gif/intro.gif" alt="intro" width="1000px" />
+<br>
 
+### IaC 기반 IaaS 인프라 - Terraform & Ansible
 
-<div id="4"></div>
+#### 1️⃣ Terraform 자동화
+<img src="./assets/gif/infra_terrraform.gif" alt="infra_terrraform" width="1000px" />
+<br>
+
+#### 2️⃣ Ansible 자동화
+<img src="./assets/img/ansible_ssm_tunnel.png" alt="ansible_ssm_tunnel" width="1000px" />
+<br>
+
+<img src="./assets/img/ansible_ssm_tunnel_grafana.png" alt="ansible_ssm_tunnel_grafana" width="1000px" />
+
 
 <br/>
 
@@ -215,7 +247,6 @@ FitPT는 트레이너와 회원 모두를 위한 운동 기록 플랫폼입니�
 
 <br/>
 
-<div id="5"></div>
 
 <br/>
 
@@ -223,7 +254,6 @@ FitPT는 트레이너와 회원 모두를 위한 운동 기록 플랫폼입니�
 
 [**FitPT 영상 포트폴리오 바로가기**](https://youtu.be/2N8RxNAllYU?si=pZgSMSYyC_Fl471M)
 
-<div id="6"></div>
 
 <br/>
 
@@ -286,7 +316,6 @@ FitPT는 트레이너와 회원 모두를 위한 운동 기록 플랫폼입니�
 
 <br/>
 
-<div id="7"></div>
 
 <br/>
 
@@ -315,13 +344,16 @@ FitPT는 트레이너와 회원 모두를 위한 운동 기록 플랫폼입니�
 - 사용자 App 개발(카카오 로그인, 측정 기능,FCM 기능)
 - 백엔드 API 개발
 - 관리자 웹페이지 제작
+- 개발 인프라 구축
 
 ### [5/12 ~ 5/19] PJT 5주차
 - 트레이너 App 개발(측정 기능,보고서 작성 기능)
 - 사용자 App 개발(캘린더 기능)
 - 랜딩페이지 제작
+- 개발 인프라 DR(Disaster Recovery) 대비 로컬 이중화 서버 구축
+- Terraform - AWS 기반 구축
 
 ### [5/19 ~ 5/22] PJT 6주차
 - 발표 자료 제작
 - 자체 QA 진행
->>>>>>> README.md
+- Ansible SSM 및 서비스 설치 자동화 구축
