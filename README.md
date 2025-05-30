@@ -49,10 +49,9 @@
 1. [**개발 기간 및 일정**](#schedule)
 
 
-
 <br/>
-<a id="service-intro"></a>
-## 🕵️ 서비스 소개 및 기획배경
+
+<h2 id="service-intro">🕵️ 서비스 소개 및 기획배경</h2>
 
 "운동한 부위, 무게, 트레이너 피드백… 아직도 종이에 적고 있나요?"
 **Fitpt**는 바로 이 불편함에서 출발했습니다.
@@ -70,10 +69,9 @@ FitPT는 트레이너와 회원 모두를 위한 운동 기록 플랫폼입니�
 <br/>
 
 
-
 <br/>
-<a id="tech-stack"></a>
-## 🛠 기술 스택
+
+<h2 id="tech-stack">🛠 기술 스택</h2>
 
 <table>
   <tbody>
@@ -162,10 +160,10 @@ FitPT는 트레이너와 회원 모두를 위한 운동 기록 플랫폼입니�
 
 <br/>
 
-
+<div id="section3"></div>
 
 <br/>
-<a id="main-features"></a>
+
 ## 📌 주요 기능
 
 ### 트레이너 앱
@@ -235,10 +233,10 @@ FitPT는 트레이너와 회원 모두를 위한 운동 기록 플랫폼입니�
 
 <img src="./assets/img/ansible_ssm_tunnel_grafana.png" alt="ansible_ssm_tunnel_grafana" width="1000px" />
 
-
+<div id="section4"></div>
 
 <br/>
-<a id="project-structure"></a>
+
 ## 📁 프로젝트 구조
 
 |                                    Architecture                                    |
@@ -251,18 +249,18 @@ FitPT는 트레이너와 회원 모두를 위한 운동 기록 플랫폼입니�
 
 <br/>
 
-
+<div id="section5"></div>
 
 <br/>
-<a id="video-portfolio"></a>
+
 ## 🎥 영상 포트폴리오
 
 [**FitPT 영상 포트폴리오 바로가기**](https://youtu.be/2N8RxNAllYU?si=pZgSMSYyC_Fl471M)
 
-
+<div id="section6"></div>
 
 <br/>
-<a id="team-intro"></a>
+
 ## 🏅 개발 팀 소개
 
 <table align="center">
@@ -322,10 +320,10 @@ FitPT는 트레이너와 회원 모두를 위한 운동 기록 플랫폼입니�
 
 <br/>
 
-
+<div id="section7"></div>
 
 <br/>
-<a id="schedule"></a>
+
 ## ⏰ 개발 기간 및 일정
 
 ### [4/14 ~ 4/20] PJT 1주차
