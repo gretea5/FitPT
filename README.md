@@ -27,11 +27,11 @@
       🪞 소개 자료
     </a>
     <span> | </span>
-    <a href="https://gretea5.notion.site/Rest-API-1d7c0da1cd4680c99631ffa41ba89ee9">
+    <a href="https://www.notion.so/gretea5/API-1d5c0da1cd46813eb9e2f97fc8a0b6ff">
       📜 API 명세서
     </a>
     <span> | </span>
-    <a href="https://gretea5.notion.site/1d7c0da1cd46805ca1a8d26b54abd6d3">
+    <a href="https://www.notion.so/gretea5/1d5c0da1cd468108be93cc5ad53aded9">
       📜 요구사항 명세서
     </a>
   </h3>
