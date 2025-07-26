@@ -1,0 +1,88 @@
+pipeline {
+    agent any
+
+    environment {
+        EC2_IP = '43.202.61.150'
+        DOCKER_IMAGE_NAME = 'kyeungtak/fitptadmin'
+        DOCKER_IMAGE_TAG = "${BUILD_NUMBER}"
+    }
+
+    stages {
+        stage('Checkout master') {
+            steps {
+                git branch: 'master', url: 'https://lab.ssafy.com/s12-final/S12P31S208.git', credentialsId: 'SSAFY_GITLAB'
+            }
+        }
+
+        stage('Prepare Secrets') {
+            steps {
+                withCredentials([
+                    file(credentialsId: 'ADMIN_APPLICATION_YAML', variable: 'APPLICATION_YAML_FILE'),
+                    file(credentialsId: 'FITPT_ADMIN_DOCKERFILE', variable: 'DOCKERFILE_SECRET')
+                ]) {
+                    sh """
+                        chmod -R u+w backend/FitPtAdmin
+                        cp ${DOCKERFILE_SECRET} backend/FitPtAdmin/Dockerfile
+                        cp ${APPLICATION_YAML_FILE} backend/FitPtAdmin/src/main/resources/application.yaml
+                    """
+                }
+            }
+        }
+        
+        stage('Build JAR after yaml override') {
+            steps {
+                dir('backend/FitPtAdmin') {
+                    sh """
+                        chmod +x gradlew
+                        ./gradlew clean build -x test
+                    """
+                }
+            }
+        }
+        
+        stage('Build & Push Docker Image') {
+            steps {
+                withCredentials([
+                    usernamePassword(credentialsId: 'fitpt-dockerhub', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')
+                ]) {
+                    dir('backend/FitPtAdmin') {
+                        sh """
+                            docker build -t ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG} .
+                            docker tag ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG} ${DOCKER_IMAGE_NAME}:latest
+        
+                            echo ${DOCKERHUB_PASSWORD} | docker login -u ${DOCKERHUB_USERNAME} --password-stdin
+                            docker push ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}
+                            docker push ${DOCKER_IMAGE_NAME}:latest
+                        """
+                    }
+                }
+            }
+        }
+
+        stage('Deploy to EC2') {
+            steps {
+                sshagent(['SSH_KEY']) {
+                    sh """
+                        ssh -o StrictHostKeyChecking=no ubuntu@${EC2_IP} '
+                            docker pull ${DOCKER_IMAGE_NAME}:latest
+
+                            docker stop fitptadmin-app || true
+                            docker rm fitptadmin-app || true
+
+                            docker run -d --name fitptadmin-app --network fitpt-net -p 9091:9091 ${DOCKER_IMAGE_NAME}:latest
+                        '
+                    """
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Deployment Success!'
+        }
+        failure {
+            echo 'Deployment Failed!'
+        }
+    }
+}

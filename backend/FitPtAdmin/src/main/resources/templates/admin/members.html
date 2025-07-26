@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>회원 목록</title>
+    <style>
+        h2 {
+            font-weight: 700;
+            font-size: 1.75rem;
+            color: #343a40;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #D24726;
+            padding-bottom: 0.5rem;
+        }
+
+        .table thead {
+            background-color: #f8f9fa;
+        }
+
+        .table th {
+            color: #6c757d;
+            font-weight: 600;
+        }
+
+        .table-hover tbody tr:hover {
+            background-color: rgba(210, 71, 38, 0.08);
+        }
+
+        .no-data {
+            text-align: center;
+            color: #888;
+            padding: 40px 0;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+<section layout:fragment="content">
+    <h2>회원 목록</h2>
+
+    <!-- 성공 메시지 -->
+    <div th:if="${successMsg}" class="alert alert-success alert-dismissible fade show" role="alert">
+        <span th:text="${successMsg}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <div th:if="${#lists.isEmpty(memberList)}" class="no-data">
+        등록된 회원이 없습니다.
+    </div>
+
+    <div th:if="${not #lists.isEmpty(memberList)}" class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead class="table-light">
+            <tr>
+                <th scope="col">번호</th>
+                <th scope="col">이름</th>
+                <th scope="col">성별</th>
+                <th scope="col">생년월일</th>
+                <th scope="col">키</th>
+                <th scope="col">몸무게</th>
+                <th scope="col">담당 트레이너</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="member, iterStat : ${memberList}">
+                <td th:text="${iterStat.index + 1}">1</td>
+                <td th:text="${member.memberName}">홍길동</td>
+                <td th:text="${member.memberGender}">남</td>
+                <td th:text="${member.memberBirth}">1995-01-01</td>
+                <td th:text="${member.memberHeight} + 'cm'">175</td>
+                <td th:text="${member.memberWeight} + 'kg'">68</td>
+                <td style="min-width: 200px;">
+                    <form th:action="@{/admin/members/{id}/update-trainer(id=${member.memberId})}"
+                          method="post"
+                          class="d-flex align-items-center gap-2">
+                        <select name="trainerId" class="form-select form-select-sm w-auto" style="min-width: 120px;">
+                            <option value="">없음</option>
+                            <option th:each="trainer : ${trainerList}"
+                                    th:value="${trainer.trainerId}"
+                                    th:selected="${trainer.trainerName == member.trainerName}"
+                                    th:text="${trainer.trainerName}">
+                            </option>
+                        </select>
+                        <button type="submit" class="btn btn-sm btn-outline-primary px-3">
+                            변경
+                        </button>
+                    </form>
+                </td>
+
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <!-- 회원 목록 테이블 등 모든 HTML 요소 아래에 -->
+<!--    <script th:if="${successMsg}" th:inline="javascript">-->
+<!--        alert([[${successMsg}]]);-->
+<!--    </script>-->
+</section>
+</body>
+</html>
