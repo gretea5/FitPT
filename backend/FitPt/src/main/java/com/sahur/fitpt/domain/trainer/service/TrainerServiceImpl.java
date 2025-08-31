@@ -1,6 +1,5 @@
 package com.sahur.fitpt.domain.trainer.service;
 
-import com.sahur.fitpt.core.auth.jwt.JWTUtil;
 import com.sahur.fitpt.core.constant.ErrorCode;
 import com.sahur.fitpt.core.constant.Role;
 import com.sahur.fitpt.core.exception.CustomException;
@@ -25,9 +24,7 @@ import java.util.concurrent.TimeUnit;
 public class TrainerServiceImpl implements TrainerService {
     private final TrainerRepository trainerRepository;
     private final AdminRepository adminRepository;
-    private final JWTUtil jwtUtil;
     private final RedisTemplate<String, String> redisTemplate;
-    private final PasswordEncoder passwordEncoder;
 
     @Override
     @Transactional
@@ -39,12 +36,9 @@ public class TrainerServiceImpl implements TrainerService {
         Trainer trainer = trainerRepository.findByTrainerLoginId(trainerLoginId)
                 .orElseThrow(() -> new CustomException(ErrorCode.TRAINER_NOT_FOUND));
 
-        if (!passwordEncoder.matches(trainerPassword, trainer.getTrainerPw())) {
-            throw new CustomException(ErrorCode.UNAUTHORIZED);
-        }
 
-        String accessToken = jwtUtil.createAccessToken(trainer.getTrainerId(), Role.TRAINER.getKey());
-        String refreshToken = jwtUtil.createRefreshToken();
+        String accessToken = "";
+        String refreshToken = "";
 
         redisTemplate.opsForValue().set(
                 "RT:TRAINER:" + trainer.getTrainerId(),
@@ -77,7 +71,7 @@ public class TrainerServiceImpl implements TrainerService {
         }
 
         //String encodedPassword = Base64Util.encode(dto.getTrainerPw());
-        String encodedPassword = passwordEncoder.encode(dto.getTrainerPw());
+        String encodedPassword = "";
 
 
 //        Admin admin = adminRepository.findById(dto.getAdminId())
@@ -92,8 +86,8 @@ public class TrainerServiceImpl implements TrainerService {
 
         Trainer savedTrainer = trainerRepository.save(trainer);
 
-        String accessToken = jwtUtil.createAccessToken(savedTrainer.getTrainerId(), Role.TRAINER.getKey());
-        String refreshToken = jwtUtil.createRefreshToken();
+        String accessToken = "";
+        String refreshToken = "";
 
         redisTemplate.opsForValue().set(
                 "RT:TRAINER:" + savedTrainer.getTrainerId(),
@@ -137,6 +131,6 @@ public class TrainerServiceImpl implements TrainerService {
                 .orElseThrow(() -> new CustomException(ErrorCode.TRAINER_NOT_FOUND));
 
         // 새로운 액세스 토큰 발급
-        return jwtUtil.createAccessToken(trainerId, Role.TRAINER.getKey());
+        return "";
     }
 }
