@@ -38,3 +38,6 @@ out/
 
 ### env 무시
 .env
+
+##application.yaml 무시
+*.yaml
