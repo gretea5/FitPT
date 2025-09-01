@@ -19,17 +19,6 @@ import java.util.Arrays;
 public class SwaggerConfig {
     @Bean
     public OpenAPI openAPI() {
-        // JWT 인증 스키마 정의
-        SecurityScheme securityScheme = new SecurityScheme()
-                .type(SecurityScheme.Type.HTTP)        // HTTP 인증 방식
-                .scheme("bearer")                      // Bearer 인증
-                .bearerFormat("JWT")                   // JWT 형식
-                .in(SecurityScheme.In.HEADER)          // 헤더에 포함
-                .name("Authorization");                // 헤더 이름
-
-        // 보안 요구사항 정의
-        SecurityRequirement securityRequirement = new SecurityRequirement()
-                .addList("bearerAuth");               // 모든 API에 JWT 인증 필요
 
         // OpenAPI 설정
         return new OpenAPI()
@@ -37,12 +26,9 @@ public class SwaggerConfig {
                         .title("FitPt API")           // API 제목
                         .description("FitPt API 문서") // API 설명
                         .version("1.0"))              // API 버전
-                .addSecurityItem(securityRequirement) // 보안 요구사항 추가
-                .components(new Components()
-                        .addSecuritySchemes("bearerAuth", securityScheme)) // 보안 스키마 추가
+                .components(new Components()) // 보안 스키마 추가
                 .servers(Arrays.asList(               // 서버 목록 추가
-                        new Server().url("http://localhost:8080").description("Local Server"),
-                        new Server().url("https://k12s208.p.ssafy.io").description("Production Server")
+                        new Server().url("http://localhost:8080").description("Local Server")
                 ));
     }
 }
