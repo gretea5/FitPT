@@ -9,6 +9,10 @@ import java.util.List;
 
 public interface AdminRepository extends JpaRepository<Admin, Long> {
 
-    @Query("SELECT a FROM Admin a WHERE a.gymName LIKE %:keyword% ORDER BY a.gymName ASC")
+//    @Query("SELECT a FROM Admin a WHERE a.gymName LIKE %:keyword% ORDER BY a.gymName ASC")
+    @Query(value = "SELECT * FROM admin " +
+            "WHERE MATCH(gym_name) AGAINST(CONCAT(:keyword, '*') IN BOOLEAN MODE) " +
+            "ORDER BY gym_name ASC",
+            nativeQuery = true)
     List<Admin> findByGymNameContainingOrderByGymNameAsc(@Param("keyword") String keyword);
 }
